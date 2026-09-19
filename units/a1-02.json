@@ -6,8 +6,8 @@
   "reviewed": false,
   "newVocab": ["zero", "deu", "vint", "trenta", "quaranta", "cinquanta", "seixanta", "setanta", "vuitanta", "noranta", "cent", "euros", "cèntims", "quant costa"],
   "voices": {
-    "narrator": "AUTO",
-    "venedor": "AUTO"
+    "narrator": "Xb7hH8MSUJpSbSDYk0k2",
+    "venedor": "onwK4e9ZLuTAKqWW03F9"
   },
   "monologue": {
     "modelVoice": "narrator",

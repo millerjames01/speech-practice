@@ -34,9 +34,16 @@ If a call is blocked by CORS, tick **route calls through the dev proxy** in
 Settings. That uses the Vite dev-server proxy in `vite.config.ts`; it is still
 not a real backend.
 
-Voice ids need no setup. Units carry `"AUTO"` for each speaker, and the app
-fills those in from your account's voices on first use (`src/voices.ts`). Put a
-real voice id in a unit file and it wins.
+Voice ids need no setup. The shipped units name real voices; any unit that
+carries `"AUTO"` instead is resolved from your account's own voices on first
+use (`src/voices.ts`), so generated units work without hand-editing.
+
+**The shipped voices are all English-accented**, because that is what the
+account they were chosen on had. A voice carries its accent even when the model
+speaks Catalan, and model audio is what you imitate, so this is a real
+compromise rather than a cosmetic one. Add a Catalan or Spanish voice from the
+ElevenLabs Voice Library and paste its id into `units/*.json` — it is the single
+biggest quality win available here.
 
 An ElevenLabs voice is a timbre, not a language, so there is no such thing as a
 "Catalan voice" to hunt for — what matters is that the **model** speaks Catalan.

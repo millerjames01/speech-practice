@@ -6,8 +6,8 @@
   "reviewed": false,
   "newVocab": ["voldria", "un cafè amb llet", "un tallat", "una aigua", "un croissant", "si us plau", "gràcies", "el compte"],
   "voices": {
-    "narrator": "AUTO",
-    "cambrera": "AUTO"
+    "narrator": "Xb7hH8MSUJpSbSDYk0k2",
+    "cambrera": "pFZP5JQG7iQjIQuC4Bku"
   },
   "monologue": {
     "modelVoice": "narrator",
