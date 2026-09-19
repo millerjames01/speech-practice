@@ -48,6 +48,65 @@ export async function textToSpeech(text: string, voiceId: string): Promise<Blob>
   return res.blob();
 }
 
+export interface CharacterAlignment {
+  characters: string[];
+  startSeconds: number[];
+  endSeconds: number[];
+}
+
+export interface TimedSpeech {
+  audio: Blob;
+  alignment: CharacterAlignment;
+}
+
+function base64ToBlob(base64: string, type: string): Blob {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+  return new Blob([bytes], { type });
+}
+
+/**
+ * Speech plus per-character timings.
+ *
+ * This is what makes single-word playback usable: rather than synthesising a
+ * word on its own - which strips it of sentence prosody and sounds nothing like
+ * speech - we generate the whole line once and slice the word out of it.
+ */
+export async function textToSpeechWithTimestamps(
+  text: string,
+  voiceId: string,
+): Promise<TimedSpeech> {
+  const res = await elevenFetch(
+    `/v1/text-to-speech/${encodeURIComponent(voiceId)}/with-timestamps`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, model_id: config.elevenlabs.ttsModel }),
+    },
+  );
+
+  const json = (await res.json()) as {
+    audio_base64?: string;
+    alignment?: {
+      characters?: string[];
+      character_start_times_seconds?: number[];
+      character_end_times_seconds?: number[];
+    };
+  };
+
+  if (!json.audio_base64) throw new Error('ElevenLabs returned no audio');
+
+  return {
+    audio: base64ToBlob(json.audio_base64, 'audio/mpeg'),
+    alignment: {
+      characters: json.alignment?.characters ?? [],
+      startSeconds: json.alignment?.character_start_times_seconds ?? [],
+      endSeconds: json.alignment?.character_end_times_seconds ?? [],
+    },
+  };
+}
+
 export interface ScribeWord {
   text: string;
   start: number;

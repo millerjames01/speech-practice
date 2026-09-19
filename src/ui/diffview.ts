@@ -7,6 +7,7 @@
  */
 
 import { sliceAudio } from '../audio/slice';
+import { getWordAudio } from '../audio/wordaudio';
 import { playBlob, playLine } from '../audio/player';
 import type { JudgedWord } from '../judge/types';
 import { button, el, errorBox } from './dom';
@@ -50,9 +51,19 @@ function wordDetail(word: JudgedWord, opts: DiffViewOptions): HTMLElement {
   const actions: HTMLElement[] = [];
 
   if (expected && opts.modelVoiceId) {
+    // Cut from the full line rather than synthesised alone: a bare word has no
+    // sentence prosody and makes the voice's own accent far more obvious.
+    const index = signal.expectedIndex;
     actions.push(
-      button('Hear the model', () => {
-        void playLine(expected, opts.modelVoiceId!, true);
+      button('Hear this word', () => {
+        void (index === undefined
+          ? playLine(expected, opts.modelVoiceId!, true)
+          : getWordAudio(opts.target, opts.modelVoiceId!, index).then((b) => playBlob(b)));
+      }),
+    );
+    actions.push(
+      button('Hear it in the line', () => {
+        void playLine(opts.target, opts.modelVoiceId!, true);
       }),
     );
   }
