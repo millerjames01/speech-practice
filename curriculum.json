@@ -1,0 +1,124 @@
+{
+  "language": "ca",
+  "variety": "Central Catalan, Girona-leaning",
+  "voices": {
+    "narrator": "REPLACE_WITH_VOICE_ID",
+    "counterpart": "REPLACE_WITH_VOICE_ID"
+  },
+  "pronunciationTargets": [
+    "neutral vowel [ə] in unstressed a/e",
+    "open vs closed è/é and ò/ó",
+    "final consonant devoicing",
+    "ll vs l·l",
+    "x and ix",
+    "r vs rr, and silent final r",
+    "stressed í in -ia endings"
+  ],
+  "levels": [
+    {
+      "level": "A1",
+      "units": [
+        {
+          "id": "a1-01",
+          "title": "Greetings and introductions",
+          "type": "scenario",
+          "situation": "Meeting someone for the first time: greeting, name, where you are from.",
+          "grammar": ["ser vs estar in introductions", "sóc de + place", "em dic"],
+          "newVocab": ["bon dia", "bona tarda", "com et dius", "em dic", "sóc de", "encantat", "adéu"],
+          "focus": ["dic", "encantat", "adéu"],
+          "unlocks": "Names, origin, sóc de…"
+        },
+        {
+          "id": "a1-02",
+          "title": "Numbers 0-100 and prices",
+          "type": "vocabulary",
+          "situation": "Saying and hearing numbers and prices.",
+          "grammar": ["cardinal numbers", "euros amb cèntims"],
+          "newVocab": ["zero", "deu", "vint", "trenta", "quaranta", "cinquanta", "seixanta", "setanta", "vuitanta", "noranta", "cent", "euros", "cèntims", "quant costa"],
+          "focus": ["setanta", "seixanta", "quaranta", "cèntims"],
+          "unlocks": "Every quant costa? unit"
+        },
+        {
+          "id": "a1-03",
+          "title": "Ordering at a café",
+          "type": "scenario",
+          "situation": "Ordering a drink and something to eat at a café counter, then paying.",
+          "grammar": ["voldria + noun", "polite requests with si us plau", "definite articles"],
+          "newVocab": ["voldria", "un cafè amb llet", "un tallat", "una aigua", "un croissant", "si us plau", "gràcies", "el compte"],
+          "focus": ["voldria", "tallat", "compte"],
+          "unlocks": "Polite requests, voldria…"
+        },
+        {
+          "id": "a1-04",
+          "title": "Food and quantities",
+          "type": "vocabulary",
+          "situation": "Naming foods and the quantities you buy them in.",
+          "grammar": ["un quilo de + noun", "partitive de"],
+          "newVocab": ["pa", "llet", "ous", "pomes", "tomàquets", "enciam", "formatge", "un quilo", "mig quilo", "una dotzena"],
+          "focus": ["tomàquets", "ous", "enciam"],
+          "unlocks": "Grocery and restaurant units"
+        },
+        {
+          "id": "a1-05",
+          "title": "At the grocery store and market",
+          "type": "scenario",
+          "situation": "Buying fruit and vegetables at a market stall by weight, and paying.",
+          "grammar": ["quant costa / quant és", "demonstratives aquest/aquell"],
+          "newVocab": ["quant costa", "un quilo de", "això és tot", "res més", "madur"],
+          "focus": ["quilo", "tomàquets", "costa"],
+          "unlocks": "Weights, quant costa?"
+        },
+        {
+          "id": "a1-06",
+          "title": "Ordering at a restaurant",
+          "type": "scenario",
+          "situation": "A sit-down lunch: the menu del dia, choosing courses, asking for the bill.",
+          "grammar": ["de primer / de segon", "per beure", "m'agrada / no m'agrada"],
+          "newVocab": ["la carta", "el menú del dia", "de primer", "de segon", "les postres", "per beure", "el compte"],
+          "focus": ["postres", "segon", "carta"],
+          "unlocks": "Menu, the bill, preferences"
+        },
+        {
+          "id": "a1-07",
+          "title": "Places and directions vocabulary",
+          "type": "vocabulary",
+          "situation": "Naming places in town and the words for giving directions.",
+          "grammar": ["a l'esquerra / a la dreta", "tot recte", "al costat de"],
+          "newVocab": ["l'esquerra", "la dreta", "tot recte", "la cantonada", "la plaça", "el carrer", "l'estació", "la farmàcia", "al costat de"],
+          "focus": ["esquerra", "plaça", "cantonada"],
+          "unlocks": "Left/right, landmarks"
+        },
+        {
+          "id": "a1-08",
+          "title": "Asking for directions",
+          "type": "scenario",
+          "situation": "Stopping someone in the street to find a place, and following what they tell you.",
+          "grammar": ["on és…?", "imperatives: gira, segueix, travessa", "està lluny?"],
+          "newVocab": ["on és", "perdoni", "gira", "segueix", "travessa", "lluny", "a prop"],
+          "focus": ["on és", "gira", "travessa"],
+          "unlocks": "Imperatives, on és…?"
+        },
+        {
+          "id": "a1-09",
+          "title": "Colours, sizes and clothes",
+          "type": "vocabulary",
+          "situation": "Naming clothes, colours and sizes.",
+          "grammar": ["adjective agreement in gender and number"],
+          "newVocab": ["vermell", "blau", "verd", "negre", "blanc", "groc", "la camisa", "els pantalons", "la jaqueta", "la talla", "gran", "petit"],
+          "focus": ["vermell", "groc", "jaqueta"],
+          "unlocks": "Shopping units"
+        },
+        {
+          "id": "a1-10",
+          "title": "Shopping for clothes",
+          "type": "scenario",
+          "situation": "In a clothes shop: asking for a size, trying something on, and returning it.",
+          "grammar": ["em va bé / em va petit", "puc emprovar-m'ho?", "voldria canviar"],
+          "newVocab": ["la talla", "emprovar", "el emprovador", "em va bé", "canviar", "el tiquet"],
+          "focus": ["emprovar", "talla", "tiquet"],
+          "unlocks": "Sizes, trying on, returns"
+        }
+      ]
+    }
+  ]
+}
