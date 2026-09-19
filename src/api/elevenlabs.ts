@@ -19,6 +19,18 @@ async function elevenFetch(path: string, init: RequestInit): Promise<Response> {
   });
   if (!res.ok) {
     const detail = await res.text().catch(() => '');
+    if (res.status === 401 || res.status === 403) {
+      throw new Error('ElevenLabs rejected the key. Check it in Settings.');
+    }
+    if (res.status === 400 && path.includes('speech-to-text')) {
+      throw new Error(
+        'That recording could not be transcribed — it was probably too short ' +
+          'or silent. Hold the button down while you speak, then release.',
+      );
+    }
+    if (res.status === 429) {
+      throw new Error('ElevenLabs rate limit or quota reached. Wait a moment and retry.');
+    }
     throw new Error(
       `ElevenLabs ${path} failed (${res.status}). ${detail.slice(0, 300)}`,
     );
