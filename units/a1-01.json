@@ -1,0 +1,102 @@
+{
+  "id": "a1-01",
+  "title": "Greetings and introductions",
+  "level": "A1",
+  "type": "scenario",
+  "reviewed": false,
+  "newVocab": ["bon dia", "bona tarda", "com et dius", "em dic", "sóc de", "encantat", "adéu"],
+  "voices": {
+    "narrator": "REPLACE_WITH_VOICE_ID",
+    "veí": "REPLACE_WITH_VOICE_ID"
+  },
+  "monologue": {
+    "modelVoice": "narrator",
+    "sentences": [
+      { "text": "Bon dia. Em dic Jordi.", "cue": "Good morning. My name is Jordi." },
+      { "text": "Sóc de Girona.", "cue": "I am from Girona." },
+      { "text": "Cada matí saludo els veïns.", "cue": "Every morning I greet the neighbours." },
+      { "text": "A la tarda dic bona tarda.", "cue": "In the afternoon I say good afternoon." },
+      { "text": "Quan conec algú, dic encantat.", "cue": "When I meet someone, I say pleased to meet you." },
+      { "text": "I al final dic adéu.", "cue": "And at the end I say goodbye." }
+    ]
+  },
+  "dialogues": [
+    {
+      "id": "d1",
+      "turns": [
+        { "speaker": "veí", "text": "Bon dia! Com estàs?" },
+        {
+          "speaker": "learner",
+          "cue": "Say good morning and that you are well, thank you",
+          "accept": ["Bon dia! Estic bé, gràcies", "Bon dia, estic bé", "Molt bé, gràcies"],
+          "focus": ["bon dia"]
+        },
+        { "speaker": "veí", "text": "Com et dius?" },
+        {
+          "speaker": "learner",
+          "cue": "Say your name is Jordi",
+          "accept": ["Em dic Jordi", "Jo em dic Jordi"],
+          "focus": ["dic"]
+        },
+        { "speaker": "veí", "text": "D'on ets?" },
+        {
+          "speaker": "learner",
+          "cue": "Say you are from Girona",
+          "accept": ["Sóc de Girona", "Jo sóc de Girona"],
+          "focus": ["sóc"]
+        },
+        { "speaker": "veí", "text": "Molt de gust!" },
+        {
+          "speaker": "learner",
+          "cue": "Say pleased to meet you too",
+          "accept": ["Encantat!", "Encantat, igualment", "Igualment!"],
+          "focus": ["encantat"]
+        },
+        { "speaker": "veí", "text": "Fins després!" },
+        {
+          "speaker": "learner",
+          "cue": "Say goodbye",
+          "accept": ["Adéu!", "Adéu, fins després", "Fins després!"],
+          "focus": ["adéu"]
+        }
+      ]
+    },
+    {
+      "id": "d2",
+      "turns": [
+        { "speaker": "veí", "text": "Bona tarda!" },
+        {
+          "speaker": "learner",
+          "cue": "Greet them back — good afternoon",
+          "accept": ["Bona tarda!", "Bona tarda, com estàs?"],
+          "focus": ["bona tarda"]
+        },
+        { "speaker": "veí", "text": "Aquesta és la Marta. És de Barcelona." },
+        {
+          "speaker": "learner",
+          "cue": "Tell Marta you are pleased to meet her",
+          "accept": ["Encantat, Marta", "Molt de gust, Marta", "Encantat!"],
+          "focus": ["encantat"]
+        },
+        { "speaker": "veí", "text": "I tu, d'on ets?" },
+        {
+          "speaker": "learner",
+          "cue": "Say you are from Girona",
+          "accept": ["Sóc de Girona", "Jo sóc de Girona"],
+          "focus": ["sóc"]
+        },
+        { "speaker": "veí", "text": "Molt bé. Fins demà!" },
+        {
+          "speaker": "learner",
+          "cue": "Say goodbye and good afternoon",
+          "accept": ["Adéu, bona tarda!", "Adéu!", "Fins demà!"],
+          "focus": ["adéu"]
+        }
+      ]
+    }
+  ],
+  "freeform": {
+    "scenario": "You are a neighbour in a block of flats in Girona, meeting the learner on the stairs for the first time. Greet them, ask their name and where they are from, and tell them a little about yourself. Keep to greetings and introductions.",
+    "maxTurns": 12
+  }
+}

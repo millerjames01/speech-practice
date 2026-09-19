@@ -1,0 +1,102 @@
+{
+  "id": "a1-03",
+  "title": "Ordering at a café",
+  "level": "A1",
+  "type": "scenario",
+  "reviewed": false,
+  "newVocab": ["voldria", "un cafè amb llet", "un tallat", "una aigua", "un croissant", "si us plau", "gràcies", "el compte"],
+  "voices": {
+    "narrator": "REPLACE_WITH_VOICE_ID",
+    "cambrera": "REPLACE_WITH_VOICE_ID"
+  },
+  "monologue": {
+    "modelVoice": "narrator",
+    "sentences": [
+      { "text": "Cada matí vaig al mateix cafè.", "cue": "Every morning I go to the same café." },
+      { "text": "Bon dia, voldria un cafè amb llet, si us plau.", "cue": "Good morning, I would like a coffee with milk, please." },
+      { "text": "De vegades demano un tallat.", "cue": "Sometimes I order a cortado." },
+      { "text": "També voldria un croissant.", "cue": "I would also like a croissant." },
+      { "text": "I una aigua, si us plau.", "cue": "And a water, please." },
+      { "text": "Al final demano el compte i dic gràcies.", "cue": "At the end I ask for the bill and say thank you." }
+    ]
+  },
+  "dialogues": [
+    {
+      "id": "d1",
+      "turns": [
+        { "speaker": "cambrera", "text": "Bon dia! Què li poso?" },
+        {
+          "speaker": "learner",
+          "cue": "Say you would like a coffee with milk, please",
+          "accept": ["Voldria un cafè amb llet, si us plau", "Voldria un cafè amb llet"],
+          "focus": ["voldria"]
+        },
+        { "speaker": "cambrera", "text": "Molt bé. Alguna cosa per menjar?" },
+        {
+          "speaker": "learner",
+          "cue": "Say you would like a croissant, please",
+          "accept": ["Voldria un croissant, si us plau", "Un croissant, si us plau"],
+          "focus": ["croissant", "si us plau"]
+        },
+        { "speaker": "cambrera", "text": "Perfecte. Res més?" },
+        {
+          "speaker": "learner",
+          "cue": "Ask for a water as well",
+          "accept": ["I una aigua, si us plau", "Una aigua, si us plau", "També voldria una aigua"],
+          "focus": ["aigua"]
+        },
+        { "speaker": "cambrera", "text": "Ara mateix!" },
+        {
+          "speaker": "learner",
+          "cue": "Say thank you",
+          "accept": ["Gràcies", "Moltes gràcies"],
+          "focus": ["gràcies"]
+        },
+        { "speaker": "cambrera", "text": "Aquí té." },
+        {
+          "speaker": "learner",
+          "cue": "Ask for the bill, please",
+          "accept": ["El compte, si us plau", "Voldria el compte, si us plau"],
+          "focus": ["compte"]
+        }
+      ]
+    },
+    {
+      "id": "d2",
+      "turns": [
+        { "speaker": "cambrera", "text": "Bona tarda! Digui'm." },
+        {
+          "speaker": "learner",
+          "cue": "Say you would like a cortado, please",
+          "accept": ["Voldria un tallat, si us plau", "Un tallat, si us plau"],
+          "focus": ["tallat"]
+        },
+        { "speaker": "cambrera", "text": "Un tallat. Res més?" },
+        {
+          "speaker": "learner",
+          "cue": "Say no thank you, that is all",
+          "accept": ["No, gràcies", "Res més, gràcies"],
+          "focus": ["gràcies"]
+        },
+        { "speaker": "cambrera", "text": "Són un euro amb vuitanta." },
+        {
+          "speaker": "learner",
+          "cue": "Ask for the bill",
+          "accept": ["El compte, si us plau", "Voldria el compte"],
+          "focus": ["compte"]
+        },
+        { "speaker": "cambrera", "text": "Gràcies a vostè. Adéu!" },
+        {
+          "speaker": "learner",
+          "cue": "Say goodbye",
+          "accept": ["Adéu!", "Adéu, gràcies"],
+          "focus": ["adéu"]
+        }
+      ]
+    }
+  ],
+  "freeform": {
+    "scenario": "You work behind the counter of a busy café in Girona. The learner is a customer ordering breakfast. Take their order, offer them something to eat, tell them the price, and say goodbye. Stay on café ordering.",
+    "maxTurns": 12
+  }
+}

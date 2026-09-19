@@ -1,0 +1,109 @@
+{
+  "id": "a1-02",
+  "title": "Numbers 0-100 and prices",
+  "level": "A1",
+  "type": "vocabulary",
+  "reviewed": false,
+  "newVocab": ["zero", "deu", "vint", "trenta", "quaranta", "cinquanta", "seixanta", "setanta", "vuitanta", "noranta", "cent", "euros", "cèntims", "quant costa"],
+  "voices": {
+    "narrator": "REPLACE_WITH_VOICE_ID",
+    "venedor": "REPLACE_WITH_VOICE_ID"
+  },
+  "monologue": {
+    "modelVoice": "narrator",
+    "sentences": [
+      { "text": "Zero, deu, vint, trenta.", "cue": "Zero, ten, twenty, thirty." },
+      { "text": "Quaranta, cinquanta, seixanta.", "cue": "Forty, fifty, sixty." },
+      { "text": "Setanta, vuitanta, noranta, cent.", "cue": "Seventy, eighty, ninety, a hundred." },
+      { "text": "Aquest val dos euros amb cinquanta cèntims.", "cue": "This one costs two euros fifty." },
+      { "text": "Aquell val vint euros.", "cue": "That one costs twenty euros." },
+      { "text": "Sempre pregunto quant costa.", "cue": "I always ask how much it costs." }
+    ]
+  },
+  "dialogues": [
+    {
+      "id": "d1",
+      "turns": [
+        { "speaker": "narrator", "text": "Repeteix els números. Zero." },
+        {
+          "speaker": "learner",
+          "cue": "Repeat: zero",
+          "accept": ["Zero"],
+          "focus": ["zero"]
+        },
+        { "speaker": "narrator", "text": "Quaranta." },
+        {
+          "speaker": "learner",
+          "cue": "Repeat: forty",
+          "accept": ["Quaranta"],
+          "focus": ["quaranta"]
+        },
+        { "speaker": "narrator", "text": "Seixanta." },
+        {
+          "speaker": "learner",
+          "cue": "Repeat: sixty",
+          "accept": ["Seixanta"],
+          "focus": ["seixanta"]
+        },
+        { "speaker": "narrator", "text": "Setanta. Compte: no és setenta." },
+        {
+          "speaker": "learner",
+          "cue": "Repeat: seventy",
+          "accept": ["Setanta"],
+          "focus": ["setanta"]
+        },
+        { "speaker": "narrator", "text": "Noranta." },
+        {
+          "speaker": "learner",
+          "cue": "Repeat: ninety",
+          "accept": ["Noranta"],
+          "focus": ["noranta"]
+        },
+        { "speaker": "narrator", "text": "Cent." },
+        {
+          "speaker": "learner",
+          "cue": "Repeat: one hundred",
+          "accept": ["Cent"],
+          "focus": ["cent"]
+        }
+      ]
+    },
+    {
+      "id": "d2",
+      "turns": [
+        { "speaker": "venedor", "text": "Bon dia! Què vols?" },
+        {
+          "speaker": "learner",
+          "cue": "Ask how much it costs",
+          "accept": ["Quant costa?", "Quant costa això?"],
+          "focus": ["quant costa"]
+        },
+        { "speaker": "venedor", "text": "Són tres euros amb setanta cèntims." },
+        {
+          "speaker": "learner",
+          "cue": "Repeat the price back: three euros seventy",
+          "accept": ["Tres euros amb setanta cèntims", "Tres euros setanta"],
+          "focus": ["setanta", "cèntims"]
+        },
+        { "speaker": "venedor", "text": "I aquest val vuitanta cèntims." },
+        {
+          "speaker": "learner",
+          "cue": "Repeat the price back: eighty cents",
+          "accept": ["Vuitanta cèntims"],
+          "focus": ["vuitanta", "cèntims"]
+        },
+        { "speaker": "venedor", "text": "En total, quaranta euros." },
+        {
+          "speaker": "learner",
+          "cue": "Repeat the total back: forty euros",
+          "accept": ["Quaranta euros"],
+          "focus": ["quaranta", "euros"]
+        }
+      ]
+    }
+  ],
+  "freeform": {
+    "scenario": "You run a small stall and the learner is asking prices. Give prices in euros and cèntims using numbers between zero and a hundred, and ask them to repeat the ones they get wrong. Keep every reply to numbers and prices.",
+    "maxTurns": 12
+  }
+}
