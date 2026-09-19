@@ -8,7 +8,15 @@ export const config = {
   language: 'ca' as const,
 
   elevenlabs: {
-    ttsModel: 'eleven_multilingual_v2',
+    /**
+     * Must be a model that actually speaks Catalan. eleven_multilingual_v2
+     * covers 29 languages and Catalan is NOT among them, nor is it in the
+     * 32 of flash/turbo v2.5 - those would read Catalan text with Spanish or
+     * Italian phonology, teaching the exact Castilianisms this app exists to
+     * catch. eleven_v3 covers 70+ languages including Catalan. Do not swap
+     * this for a faster model without checking its language list first.
+     */
+    ttsModel: 'eleven_v3',
     sttModel: 'scribe_v1',
     baseUrl: 'https://api.elevenlabs.io',
     proxyUrl: '/proxy/elevenlabs',

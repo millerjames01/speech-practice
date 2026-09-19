@@ -7,7 +7,7 @@
  * built from all of it at the end.
  */
 
-import { forcedAlignment, transcribe, type ScribeWord } from './api/elevenlabs';
+import { transcribe, type ScribeWord } from './api/elevenlabs';
 import { chat, parseJsonReply } from './api/llm';
 import { config } from './config';
 import type { Unit } from './types';
@@ -154,24 +154,12 @@ export async function buildReport(
     (e) => typeof e.said === 'string' && typeof e.correct === 'string',
   );
 
-  // For the corrected sentences, re-align the original audio against the
-  // CORRECTED text. High loss on those words confirms a pronunciation problem,
-  // not just a grammar one.
-  await Promise.all(
-    errors.map(async (error) => {
-      const turn = turns[error.turnIndex];
-      if (!turn) return;
-      const alignment = await forcedAlignment(turn.audio, error.correct).catch(() => null);
-      if (!alignment) return;
-      const worst = alignment.words
-        .map((w) => w.loss)
-        .filter((l): l is number => l !== undefined);
-      if (worst.length === 0) return;
-      error.pronunciationConfirmed =
-        Math.max(...worst) >= config.judge.alignmentLossFail;
-    }),
-  );
-
+  // The design re-aligns the original audio against the CORRECTED text here, so
+  // that high loss on those words confirms a pronunciation problem rather than
+  // only a grammar one. ElevenLabs forced alignment does not support Catalan,
+  // so that call would fail once per error for nothing; it is not made, and
+  // `pronunciationConfirmed` stays undefined. The report renders without that
+  // line. Restoring it means a provider that supports Catalan.
   return { errors, summary: parsed.summary ?? '' };
 }
 

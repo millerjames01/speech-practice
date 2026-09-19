@@ -2,8 +2,8 @@
   "language": "ca",
   "variety": "Central Catalan, Girona-leaning",
   "voices": {
-    "narrator": "REPLACE_WITH_VOICE_ID",
-    "counterpart": "REPLACE_WITH_VOICE_ID"
+    "narrator": "AUTO",
+    "counterpart": "AUTO"
   },
   "pronunciationTargets": [
     "neutral vowel [ə] in unstressed a/e",

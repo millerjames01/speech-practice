@@ -6,8 +6,8 @@
   "reviewed": false,
   "newVocab": ["bon dia", "bona tarda", "com et dius", "em dic", "sóc de", "encantat", "adéu"],
   "voices": {
-    "narrator": "REPLACE_WITH_VOICE_ID",
-    "veí": "REPLACE_WITH_VOICE_ID"
+    "narrator": "AUTO",
+    "veí": "AUTO"
   },
   "monologue": {
     "modelVoice": "narrator",

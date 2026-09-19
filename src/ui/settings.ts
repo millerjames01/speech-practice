@@ -6,6 +6,7 @@
 import { config } from '../config';
 import { getSettings, isRemembering, setSettings, type LlmProvider } from '../keys';
 import { button, el } from './dom';
+import { clearResolvedVoices } from '../voices';
 
 export function openSettings(onSaved: () => void): void {
   const current = getSettings();
@@ -67,6 +68,8 @@ export function openSettings(onSaved: () => void): void {
       },
       rememberBox.checked,
     );
+    // A new key may be a different account, whose voice ids differ.
+    clearResolvedVoices();
     close();
     onSaved();
   };

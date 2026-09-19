@@ -15,6 +15,7 @@ import { renderFreeform } from './ui/freeform';
 import { renderMonologue } from './ui/monologue';
 import { renderReport } from './ui/report';
 import { openSettings } from './ui/settings';
+import { resolveVoices } from './voices';
 
 const root = document.getElementById('app');
 if (!root) throw new Error('Missing #app');
@@ -98,7 +99,12 @@ function renderUnitList(): void {
 }
 
 function startUnit(unit: Unit): void {
-  runPhase(unit, 'guided');
+  // Units ship without account-specific voice ids, so fill them in once here
+  // and hand the phases a unit whose voices are real. Resolution failure is not
+  // fatal: the phases render and the TTS error surfaces where it can be read.
+  void resolveVoices(unit)
+    .then((voices) => runPhase({ ...unit, voices }, 'guided'))
+    .catch(() => runPhase(unit, 'guided'));
 }
 
 function phaseNav(current: Phase): HTMLElement {

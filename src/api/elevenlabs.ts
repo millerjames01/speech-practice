@@ -26,6 +26,18 @@ async function elevenFetch(path: string, init: RequestInit): Promise<Response> {
   return res;
 }
 
+export interface Voice {
+  voiceId: string;
+  name: string;
+}
+
+/** The voices on the account, used to fill in units that name no real voice. */
+export async function listVoices(): Promise<Voice[]> {
+  const res = await elevenFetch('/v1/voices', { method: 'GET' });
+  const json = (await res.json()) as { voices?: { voice_id: string; name: string }[] };
+  return (json.voices ?? []).map((v) => ({ voiceId: v.voice_id, name: v.name }));
+}
+
 /** Generates speech for one line. Callers should go through audio/cache.ts. */
 export async function textToSpeech(text: string, voiceId: string): Promise<Blob> {
   const res = await elevenFetch(`/v1/text-to-speech/${encodeURIComponent(voiceId)}`, {

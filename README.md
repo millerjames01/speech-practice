@@ -34,8 +34,16 @@ If a call is blocked by CORS, tick **route calls through the dev proxy** in
 Settings. That uses the Vite dev-server proxy in `vite.config.ts`; it is still
 not a real backend.
 
-Before practising, replace the `REPLACE_WITH_VOICE_ID` placeholders in
-`curriculum.json` and in each file under `units/` with ElevenLabs voice ids.
+Voice ids need no setup. Units carry `"AUTO"` for each speaker, and the app
+fills those in from your account's voices on first use (`src/voices.ts`). Put a
+real voice id in a unit file and it wins.
+
+An ElevenLabs voice is a timbre, not a language, so there is no such thing as a
+"Catalan voice" to hunt for — what matters is that the **model** speaks Catalan.
+That is why `config.elevenlabs.ttsModel` is `eleven_v3`: it covers 70+ languages
+including Catalan, while `eleven_multilingual_v2` (29 languages) and the faster
+Flash/Turbo v2.5 models (32) do not. Swapping in a faster model would silently
+read Catalan with Spanish phonology.
 
 ## The three phases
 
@@ -57,15 +65,17 @@ Before practising, replace the `REPLACE_WITH_VOICE_ID` placeholders in
 `src/judge/` combines four independent signals, so no single model gets to decide
 what you meant:
 
-| Signal | Source | Catches |
-| --- | --- | --- |
-| Word diff | Scribe transcript vs the turn's `accept` list | Wrong, missing, extra words |
-| Alignment loss | `POST /v1/forced-alignment` vs the expected text | Mispronounced *correct* words |
-| Word logprob | Scribe, per word | Words it was unsure it heard |
-| Language drift | Sampled second Scribe pass with auto-detect | Castilian accent, code-switching |
+| Signal | Source | Catches | Live for Catalan |
+| --- | --- | --- | --- |
+| Word diff | Scribe transcript vs the turn's `accept` list | Wrong, missing, extra words | yes |
+| Word logprob | Scribe, per word | Words it was unsure it heard | yes |
+| Language drift | Sampled second Scribe pass with auto-detect | Castilian accent, code-switching | yes |
+| Alignment loss | `POST /v1/forced-alignment` vs the expected text | Mispronounced *correct* words | **no — see Known limits** |
 
-Scribe answers *what did you say*; forced alignment answers *how well did your
-audio match what you should have said*. Both calls run in parallel per attempt.
+Scribe answers *what did you say*. The signal that would answer *how well did
+you say it* is unavailable for Catalan, so judging currently runs on the first
+three rows. `WordSignal.alignmentLoss` and the threshold logic behind it are
+kept intact, so a provider that does support Catalan drops straight in.
 
 **The hard floor lives in code.** `applyHardFloor` in `src/judge/index.ts` fails
 any wrong, missing or extra word whatever the judge said, and refuses a
@@ -112,9 +122,13 @@ ELEVENLABS_API_KEY=... npm run spike -- ./recordings
 Record ten sentences including deliberate mistakes and Castilian-sounding
 vowels. `deliberateErrors` is what makes the result readable: the script
 compares alignment loss on those words against the rest and tells you whether
-the two separate. If they do not, pronunciation feedback should degrade to
-confidence flags only — and the UI should say so rather than implying a
-precision it does not have.
+the two separate.
+
+For Catalan the alignment half will not return anything — the endpoint does not
+support it, and the script reports the failure rather than pretending. What the
+spike still answers, and what it is worth running for, is whether Scribe hears
+your Catalan faithfully including your errors, and whether per-word logprobs
+come back at all. Those two are the whole judging signal now.
 
 ## Units and generation
 
@@ -162,11 +176,22 @@ the unit schema rejects malformed content.
 
 ## Known limits
 
+- **No pronunciation scoring at all, for Catalan.** ElevenLabs forced alignment
+  covers the same 29 languages as multilingual v2, and Catalan is not among
+  them, so the call is not made. Judging runs on word diff, logprob and drift:
+  wrong words still always fail, but *right word said badly* will pass. The app
+  does not announce this — it is a deliberate choice for a personal demo, not an
+  oversight. If this ever becomes more than that, put the disclaimer back.
 - **STT auto-correction.** Scribe may output the correct word for one you
-  mispronounced. Run the spike to find out how much this happens to you; the
-  word diff cannot catch what Scribe silently fixes.
-- **No true pronunciation scoring.** Alignment loss is a word-level proxy, not
-  phoneme grading. It will not reliably separate subtle vowel errors. The UI
-  labels these words *unclear*, not *wrong*, for that reason.
+  mispronounced. Without alignment there is now no second signal to catch it,
+  which makes this limitation bite harder than the brief assumed.
+- **If you want the pronunciation signal back**, Azure Speech pronunciation
+  assessment supports `ca-ES` and returns phoneme-level accuracy — better than
+  the alignment-loss proxy this was designed around. Two caveats worth knowing
+  before committing: **prosody** assessment (intonation, stress, rhythm) is
+  `en-US` only, and so are **spoken phonemes in IPA** and syllable groups. So
+  for Catalan you would learn that a word's phonemes scored badly, but not get
+  them named in IPA. Wire it into `WordSignal.alignmentLoss` and the existing
+  threshold logic takes it from there.
 - Desktop Chrome only. No mobile layout, no accounts, no spaced repetition, and
   no progress history beyond the calibration data.
