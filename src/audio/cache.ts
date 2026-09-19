@@ -22,8 +22,13 @@ function hash(input: string): string {
   return h.toString(16).padStart(8, '0');
 }
 
+/**
+ * The language is part of the key: the same text in the same voice is a
+ * different recording once the model is told which language to read it as, so
+ * audio cached before language enforcement must not be served afterwards.
+ */
 export const cacheKey = (text: string, voiceId: string): string =>
-  `${voiceId}:${config.elevenlabs.ttsModel}:${hash(text)}`;
+  `${voiceId}:${config.elevenlabs.ttsModel}:${config.language}:${hash(text)}`;
 
 /** In-flight requests, so two views asking for the same line pay once. */
 const pending = new Map<string, Promise<Blob>>();

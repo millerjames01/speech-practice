@@ -50,14 +50,77 @@ export async function listVoices(): Promise<Voice[]> {
   return (json.voices ?? []).map((v) => ({ voiceId: v.voice_id, name: v.name }));
 }
 
+/**
+ * Whether the model accepted an explicit language code.
+ *
+ * eleven_v3 supports language enforcement and ERRORS on a code it does not
+ * know, rather than ignoring it. The parameter is documented as ISO 639-1
+ * ("ca"), but Catalan is also written "cat" (639-3) in places, so rather than
+ * betting on one we try, and remember what worked for the rest of the session.
+ */
+/**
+ * Codes to try, in order, ending in no enforcement at all. The parameter is
+ * documented as ISO 639-1 ("ca"), but Catalan appears as "cat" (639-3) in
+ * places, and the model errors on a code it does not know rather than ignoring
+ * it. Trying beats betting.
+ */
+const LANGUAGE_CANDIDATES: (string | null)[] = [config.language, 'cat', null];
+
+/** Settles to the code that worked, so later lines pay no retry cost. */
+let languageCode: string | null | undefined;
+
+function speechBody(text: string, language: string | null): string {
+  return JSON.stringify({
+    text,
+    model_id: config.elevenlabs.ttsModel,
+    // Without this the model infers the language from the text, and a short
+    // line in an English-accented voice is read with English letter rules -
+    // "seixanta" comes out "sexanta" rather than "seshanta". For a
+    // pronunciation trainer that is the model teaching the error.
+    ...(language !== null ? { language_code: language } : {}),
+  });
+}
+
+/** True when the failure is the language code specifically, not the request. */
+const isLanguageRejection = (err: unknown): boolean =>
+  err instanceof Error && /language/i.test(err.message);
+
+/**
+ * Runs a speech request with language enforcement, walking the candidate codes
+ * until one is accepted. Better an unenforced line than no line at all.
+ */
+async function withLanguageEnforcement<T>(
+  run: (language: string | null) => Promise<T>,
+): Promise<T> {
+  if (languageCode !== undefined) return run(languageCode);
+
+  let lastError: unknown;
+  for (const candidate of LANGUAGE_CANDIDATES) {
+    try {
+      const result = await run(candidate);
+      languageCode = candidate;
+      return result;
+    } catch (err) {
+      if (!isLanguageRejection(err)) throw err;
+      lastError = err;
+    }
+  }
+  throw lastError instanceof Error ? lastError : new Error('Speech request failed');
+}
+
+/** Which language code the model accepted, once anything has been spoken. */
+export const acceptedLanguageCode = (): string | null | undefined => languageCode;
+
 /** Generates speech for one line. Callers should go through audio/cache.ts. */
 export async function textToSpeech(text: string, voiceId: string): Promise<Blob> {
-  const res = await elevenFetch(`/v1/text-to-speech/${encodeURIComponent(voiceId)}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Accept: 'audio/mpeg' },
-    body: JSON.stringify({ text, model_id: config.elevenlabs.ttsModel }),
+  return withLanguageEnforcement(async (language) => {
+    const res = await elevenFetch(`/v1/text-to-speech/${encodeURIComponent(voiceId)}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'audio/mpeg' },
+      body: speechBody(text, language),
+    });
+    return res.blob();
   });
-  return res.blob();
 }
 
 export interface CharacterAlignment {
@@ -89,13 +152,12 @@ export async function textToSpeechWithTimestamps(
   text: string,
   voiceId: string,
 ): Promise<TimedSpeech> {
-  const res = await elevenFetch(
-    `/v1/text-to-speech/${encodeURIComponent(voiceId)}/with-timestamps`,
-    {
+  const res = await withLanguageEnforcement((language) =>
+    elevenFetch(`/v1/text-to-speech/${encodeURIComponent(voiceId)}/with-timestamps`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text, model_id: config.elevenlabs.ttsModel }),
-    },
+      body: speechBody(text, language),
+    }),
   );
 
   const json = (await res.json()) as {

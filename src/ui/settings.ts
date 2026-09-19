@@ -7,6 +7,7 @@ import { config } from '../config';
 import { getSettings, isRemembering, setSettings, type LlmProvider } from '../keys';
 import { button, el } from './dom';
 import { clearResolvedVoices } from '../voices';
+import { clearAudioCache } from '../audio/cache';
 
 export function openSettings(onSaved: () => void): void {
   const current = getSettings();
@@ -110,7 +111,24 @@ export function openSettings(onSaved: () => void): void {
         proxyBox,
         el('span', {}, 'Route calls through the dev proxy (use if a call is blocked by CORS)'),
       ),
-      el('div', { class: 'row' }, button('Save', save, 'btn primary'), button('Cancel', close)),
+      el(
+        'div',
+        { class: 'row' },
+        button('Save', save, 'btn primary'),
+        button('Cancel', close),
+        button('Clear audio cache', () => {
+          void clearAudioCache().then(() => {
+            clearResolvedVoices();
+            window.location.reload();
+          });
+        }),
+      ),
+      el(
+        'p',
+        { class: 'hint' },
+        'Clear the cache after changing a voice or the model, so lines are ' +
+          'regenerated rather than replayed from the old recording.',
+      ),
     ),
   );
 
