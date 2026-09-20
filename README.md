@@ -52,20 +52,34 @@ including Catalan, while `eleven_multilingual_v2` (29 languages) and the faster
 Flash/Turbo v2.5 models (32) do not. Swapping in a faster model would silently
 read Catalan with Spanish phonology.
 
-## The three phases
+## The five phases
 
-1. **Guided conversation.** The counterpart's line plays; you see an English cue
-   (the target Catalan is behind a toggle, off by default) and record. A turn
-   passes only when it matches. After three failures the answer is shown, and
-   one clean repeat is still required.
-2. **Monologue.** You deliver a longer script in one take, judged per sentence.
+Support falls away one step at a time: produce the sounds, say the line with it
+in front of you, retrieve it from meaning alone, sustain it, then use it
+unscripted.
+
+1. **Vocabulary.** Each new word is heard, then repeated. No English at all —
+   before you can map meaning to speech you have to make the sounds, and a gloss
+   at this stage invites translating instead of imitating. Judged by the same
+   strict engine; after three misses the word is revealed and one clean repeat
+   is required.
+2. **Follow along.** The dialogue runs with the Catalan in front of you, so the
+   work is producing it accurately rather than recalling it.
+3. **From the cue.** The same dialogues with only the English instruction. This
+   is the pass that proves you know it rather than can read it. A turn passes
+   only when it matches; after three failures the answer is shown, and one clean
+   repeat is still required.
+4. **Monologue.** You deliver a longer script in one take, judged per sentence.
    Failed sentences are replayed and redone individually, then the full take
    again. Three passes of fading support: full text, every other sentence
    hidden, then English cues only.
-3. **Free form.** Open conversation with the LLM counterpart, in Catalan, on
+5. **Free form.** Open conversation with the LLM counterpart, in Catalan, on
    theme. Nothing is corrected during the conversation. At the end you get one
    report, grouped by grammar, vocabulary, Castilianisms and pronunciation, with
    playback of the correct version and a slice of your own audio.
+
+The interface ships light and dark, following your system on first load and
+remembering the choice after that (`◐` in the header).
 
 ## The correction engine
 
@@ -189,6 +203,11 @@ the unit schema rejects malformed content.
   wrong words still always fail, but *right word said badly* will pass. The app
   does not announce this — it is a deliberate choice for a personal demo, not an
   oversight. If this ever becomes more than that, put the disclaimer back.
+- **Accents are judged by the 2016 orthography.** An accent-only difference is
+  forgiven, because the transcriber picks the spelling and its training data
+  spans both sides of the reform — except on the 15 words where Catalan uses the
+  accent to distinguish words (`és`, `sí`, `són`, `bé`, `més`, `té`, `què`…),
+  where it stays strict. A wrong *letter* always fails.
 - **STT auto-correction.** Scribe may output the correct word for one you
   mispronounced. Without alignment there is now no second signal to catch it,
   which makes this limitation bite harder than the brief assumed.

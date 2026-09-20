@@ -1,10 +1,13 @@
 /**
- * Phase 1 - guided conversation, strict.
+ * Guided conversation, strict - run twice per unit with different support.
  *
- * The counterpart's line plays, the learner sees an English cue (target text
- * behind a toggle), records, and is judged against the turn's accept list. A
- * turn passes only when it matches; after three failures the answer is shown
- * and one clean repeat is required before moving on.
+ * "follow" shows the Catalan you are aiming for, so the work is producing it
+ * accurately. "cue" shows only the English instruction, so the work is
+ * retrieving it. Same dialogues, same judging; the second pass is the one that
+ * proves you know it rather than can read it.
+ *
+ * A turn passes only when it matches. After three failures the answer is shown
+ * and one clean repeat is still required before moving on.
  */
 
 import { playLine } from '../audio/player';
@@ -15,9 +18,12 @@ import { renderDiff } from './diffview';
 import { button, clear, el, errorBox } from './dom';
 import { recordButton } from './recordbutton';
 
+export type GuidedSupport = 'follow' | 'cue';
+
 export function renderDialogues(
   root: HTMLElement,
   unit: Unit,
+  support: GuidedSupport,
   onComplete: () => void,
 ): void {
   let dialogueIndex = 0;
@@ -28,7 +34,7 @@ export function renderDialogues(
       onComplete();
       return;
     }
-    renderDialogue(root, unit, dialogue, dialogueIndex, () => {
+    renderDialogue(root, unit, dialogue, dialogueIndex, support, () => {
       dialogueIndex += 1;
       next();
     });
@@ -42,12 +48,15 @@ function renderDialogue(
   unit: Unit,
   dialogue: Dialogue,
   index: number,
+  support: GuidedSupport,
   onDone: () => void,
 ): void {
   let turnIndex = 0;
   let attempts = 0;
   let answerShown = false;
-  let showTarget = config.ui.showTargetTextByDefault;
+  // Follow-along shows the Catalan outright; the cue pass earns it back only
+  // after three failed attempts.
+  let showTarget = support === 'follow';
 
   const transcript = el('div', { class: 'transcript' });
   const stage = el('div', { class: 'stage' });
@@ -65,7 +74,7 @@ function renderDialogue(
 
     if (!turn) {
       stage.append(
-        el('p', { class: 'done' }, 'Dialogue complete.'),
+        el('p', { class: 'verdict done' }, 'Dialogue complete.'),
         button('Continue', onDone, 'btn primary'),
       );
       return;
@@ -73,11 +82,10 @@ function renderDialogue(
 
     if (!isLearnerTurn(turn)) {
       const voiceId = unit.voices[turn.speaker] ?? '';
-      transcript.append(
-        el('p', { class: 'line counterpart' }, el('strong', {}, `${turn.speaker}: `), turn.text),
-      );
+      transcript.append(el('p', { class: 'line counterpart' }, turn.text));
       stage.append(
-        el('p', { class: 'cue' }, `${turn.speaker} speaks.`),
+        el('p', { class: 'speaker-label' }, turn.speaker),
+        el('p', { class: 'target' }, turn.text),
         el(
           'div',
           { class: 'row' },
@@ -133,10 +141,14 @@ function renderDialogue(
 
         if (result.passed) {
           transcript.append(
-            el('p', { class: 'line learner' }, el('strong', {}, 'you: '), result.target),
+            el('p', { class: 'line learner' }, result.target),
           );
           feedback.append(
-            el('p', { class: 'pass' }, answerShown ? 'Clean repeat. Moving on.' : 'Correct.'),
+            el(
+              'p',
+              { class: 'verdict pass' },
+              answerShown ? 'Clean repeat. Moving on.' : 'Correct.',
+            ),
             button('Next', advance, 'btn primary'),
           );
           control.setDisabled(true);
@@ -154,7 +166,7 @@ function renderDialogue(
           feedback.append(
             el(
               'p',
-              { class: 'reveal' },
+              { class: 'verdict reveal' },
               `The answer is: ${target}. Say it once cleanly to move on.`,
             ),
           );
@@ -173,14 +185,21 @@ function renderDialogue(
       }
     });
 
-    stage.append(
-      el('p', { class: 'cue' }, turn.cue),
-      targetLine,
-      button(showTarget ? 'Hide target text' : 'Show target text', function toggle(this: void) {
+    const toggle = button(
+      showTarget ? 'Hide the Catalan' : 'Show the Catalan',
+      () => {
         showTarget = !showTarget;
         targetLine.hidden = !showTarget;
-        step();
-      }),
+        toggle.textContent = showTarget ? 'Hide the Catalan' : 'Show the Catalan';
+      },
+      'btn quiet',
+    );
+
+    stage.append(
+      el('p', { class: 'speaker-label' }, 'Your turn'),
+      el('p', { class: 'cue' }, turn.cue),
+      targetLine,
+      toggle,
       control.node,
       feedback,
     );
@@ -188,12 +207,22 @@ function renderDialogue(
 
   clear(root);
   root.append(
-    el('h2', {}, `Guided conversation ${index + 1} of ${unit.dialogues.length}`),
     el(
-      'p',
-      { class: 'hint' },
-      'A turn passes only when it matches. Wrong words always fail; unclear ' +
-        'pronunciation is flagged separately.',
+      'div',
+      { class: 'phases' },
+      el(
+        'span',
+        { class: 'phase-name' },
+        support === 'follow' ? 'Follow along' : 'From the cue',
+      ),
+      el(
+        'span',
+        {},
+        support === 'follow'
+          ? 'the Catalan is in front of you'
+          : 'English prompt only — recall it',
+      ),
+      el('span', { class: 'phase-count' }, `${index + 1} of ${unit.dialogues.length}`),
     ),
     stage,
     transcript,

@@ -47,8 +47,10 @@ export const config = {
   },
 
   ui: {
-    /** Cue-only by default: the target Catalan sits behind a toggle. */
-    showTargetTextByDefault: false,
+    /**
+     * Whether the Catalan is shown is decided by the phase now - follow-along
+     * shows it, the cue pass hides it - so there is no global default.
+     */
     slowPlaybackRate: 0.75,
   },
 

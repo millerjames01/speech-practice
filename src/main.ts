@@ -1,5 +1,5 @@
 /**
- * App shell: unit list, then the three phases in fixed order.
+ * App shell: unit list, then the phases in fixed order.
  *
  * A phase unlocks when the previous one is finished, not passed - the learner
  * is never stuck, but nothing is skipped either.
@@ -8,13 +8,15 @@
 import { hasElevenLabsKey, loadRemembered } from './keys';
 import type { LearnerTurnLog } from './freeform';
 import { loadUnits } from './units';
-import type { Phase, Unit } from './types';
+import { PHASE_ORDER, type Phase, type Unit } from './types';
 import { renderDialogues } from './ui/dialogue';
 import { button, clear, el, errorBox } from './ui/dom';
 import { renderFreeform } from './ui/freeform';
 import { renderMonologue } from './ui/monologue';
 import { renderReport } from './ui/report';
 import { openSettings } from './ui/settings';
+import { initTheme, toggleTheme } from './ui/theme';
+import { renderVocab } from './ui/vocab';
 import { resolveVoices } from './voices';
 
 const root = document.getElementById('app');
@@ -23,19 +25,31 @@ if (!root) throw new Error('Missing #app');
 const { units, errors } = loadUnits();
 
 const PHASE_LABELS: Record<Phase, string> = {
-  guided: '1. Guided conversation',
-  monologue: '2. Monologue',
-  freeform: '3. Free form',
-  report: 'Correction report',
+  vocab: 'Vocabulary',
+  guidedFollow: 'Follow along',
+  guidedCue: 'From the cue',
+  monologue: 'Monologue',
+  freeform: 'Free form',
+  report: 'Report',
 };
 
 function header(subtitle?: string): HTMLElement {
+  const themeBtn = button('◐', () => {
+    toggleTheme();
+  }, 'btn quiet');
+  themeBtn.title = 'Switch between light and dark';
+
   return el(
     'header',
     { class: 'app-header' },
-    el('h1', {}, 'Conversation Trainer — Catalan'),
-    subtitle ? el('p', { class: 'subtitle' }, subtitle) : null,
-    button('Settings', () => openSettings(renderUnitList)),
+    el('h1', {}, 'Conversation Trainer'),
+    el('p', { class: 'subtitle' }, subtitle ?? 'Catalan'),
+    el(
+      'div',
+      { class: 'header-actions' },
+      themeBtn,
+      button('Settings', () => openSettings(renderUnitList), 'btn quiet'),
+    ),
   );
 }
 
@@ -45,11 +59,7 @@ function renderUnitList(): void {
 
   if (!hasElevenLabsKey()) {
     root!.append(
-      el(
-        'div',
-        { class: 'notice' },
-        'No ElevenLabs key set. Open Settings before starting a unit.',
-      ),
+      el('div', { class: 'notice' }, 'No ElevenLabs key set. Open Settings before starting.'),
     );
   }
 
@@ -61,7 +71,7 @@ function renderUnitList(): void {
     root!.append(
       el(
         'p',
-        {},
+        { class: 'hint' },
         'No units found. Generate some with `npm run generate -- <unit-id>`, or add ' +
           'JSON files to /units.',
       ),
@@ -81,15 +91,10 @@ function renderUnitList(): void {
             'div',
             {},
             el('h3', {}, unit.title),
-            el('p', { class: 'hint' }, `${unit.level} · ${unit.type} · ${unit.id}`),
+            el('p', { class: 'meta' }, `${unit.level} · ${unit.type} · ${unit.newVocab.length} words`),
             unit.reviewed
               ? null
-              : el(
-                  'p',
-                  { class: 'warning' },
-                  'Not reviewed. Wrong Catalan in the accepted answers would train ' +
-                    'errors — check this unit before practising it.',
-                ),
+              : el('p', { class: 'warning' }, 'Not reviewed by a Catalan speaker'),
           ),
           button('Start', () => startUnit(unit), 'btn primary'),
         ),
@@ -103,41 +108,65 @@ function startUnit(unit: Unit): void {
   // and hand the phases a unit whose voices are real. Resolution failure is not
   // fatal: the phases render and the TTS error surfaces where it can be read.
   void resolveVoices(unit)
-    .then((voices) => runPhase({ ...unit, voices }, 'guided'))
-    .catch(() => runPhase(unit, 'guided'));
+    .then((voices) => runPhase({ ...unit, voices }, 'vocab'))
+    .catch(() => runPhase(unit, 'vocab'));
 }
 
-function phaseNav(current: Phase): HTMLElement {
-  const phases: Phase[] = ['guided', 'monologue', 'freeform'];
+/** Dots for the phases done, current and still to come. */
+function phaseProgress(current: Phase): HTMLElement {
+  const index = PHASE_ORDER.indexOf(current);
   return el(
-    'nav',
-    { class: 'phases' },
-    ...phases.map((phase) =>
-      el('span', { class: `phase ${phase === current ? 'current' : ''}` }, PHASE_LABELS[phase]),
+    'div',
+    { class: 'phase-dots' },
+    ...PHASE_ORDER.map((phase, i) =>
+      el('span', {
+        class: `dot ${i < index ? 'done' : ''} ${i === index ? 'current' : ''}`,
+        title: PHASE_LABELS[phase],
+      }),
     ),
-    button('Leave unit', renderUnitList),
   );
 }
 
+function unitBar(unit: Unit, phase: Phase): HTMLElement {
+  return el(
+    'div',
+    { class: 'phases' },
+    phaseProgress(phase),
+    el('span', { class: 'phase-name' }, unit.title),
+    // Quiet, one line, and only where it belongs - a full banner on every
+    // phase reads as chrome and stops being seen.
+    unit.reviewed ? null : el('span', { class: 'warning' }, 'unreviewed'),
+    el('span', { class: 'push-right' }, button('Leave', renderUnitList, 'btn quiet')),
+  );
+}
+
+const nextPhase = (phase: Phase): Phase => {
+  const next = PHASE_ORDER[PHASE_ORDER.indexOf(phase) + 1];
+  return next ?? 'report';
+};
+
 function runPhase(unit: Unit, phase: Phase, turns: LearnerTurnLog[] = []): void {
   clear(root!);
-  root!.append(header(unit.title), phaseNav(phase));
+  // The unit's name lives in the bar below; repeating it in the header subtitle
+  // says the same thing twice.
+  root!.append(header(), unitBar(unit, phase));
 
-  if (!unit.reviewed) {
-    root!.append(
-      el('div', { class: 'notice warning' }, 'This unit has not been reviewed.'),
-    );
-  }
-
-  const stage = el('main', { class: 'phase-stage' });
+  const stage = el('main', {});
   root!.append(stage);
+  const advance = () => runPhase(unit, nextPhase(phase));
 
   switch (phase) {
-    case 'guided':
-      renderDialogues(stage, unit, () => runPhase(unit, 'monologue'));
+    case 'vocab':
+      renderVocab(stage, unit, advance);
+      break;
+    case 'guidedFollow':
+      renderDialogues(stage, unit, 'follow', advance);
+      break;
+    case 'guidedCue':
+      renderDialogues(stage, unit, 'cue', advance);
       break;
     case 'monologue':
-      renderMonologue(stage, unit, () => runPhase(unit, 'freeform'));
+      renderMonologue(stage, unit, advance);
       break;
     case 'freeform':
       renderFreeform(stage, unit, (logs) => runPhase(unit, 'report', logs));
@@ -148,6 +177,7 @@ function runPhase(unit: Unit, phase: Phase, turns: LearnerTurnLog[] = []): void 
   }
 }
 
+initTheme();
 loadRemembered();
 renderUnitList();
 if (!hasElevenLabsKey()) openSettings(renderUnitList);

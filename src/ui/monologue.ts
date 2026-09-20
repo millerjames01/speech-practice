@@ -8,7 +8,6 @@
  */
 
 import { playLine } from '../audio/player';
-import { config } from '../config';
 import { judgeAttempt, type AttemptResult } from '../judge';
 import type { MonologueSentence, Unit } from '../types';
 import { renderDiff } from './diffview';
@@ -65,7 +64,7 @@ export function renderMonologue(root: HTMLElement, unit: Unit, onComplete: () =>
 
     if (!pass) {
       stage.append(
-        el('p', { class: 'done' }, 'Monologue complete.'),
+        el('p', { class: 'verdict done' }, 'Monologue complete.'),
         button('Continue to free form', onComplete, 'btn primary'),
       );
       return;
@@ -108,12 +107,11 @@ export function renderMonologue(root: HTMLElement, unit: Unit, onComplete: () =>
 
   clear(root);
   root.append(
-    el('h2', {}, 'Monologue'),
     el(
-      'p',
-      { class: 'hint' },
-      'Model audio for each sentence is available before you attempt it, at ' +
-        `${config.ui.slowPlaybackRate}× too.`,
+      'div',
+      { class: 'phases' },
+      el('span', { class: 'phase-name' }, 'Monologue'),
+      el('span', {}, 'deliver it in one take'),
     ),
     stage,
   );
@@ -151,7 +149,7 @@ function renderResults(
 
   if (failedIndexes.length === 0) {
     feedback.append(
-      el('p', { class: 'pass' }, 'Clean take.'),
+      el('p', { class: 'verdict pass' }, 'Clean take.'),
       button('Next pass', onPassComplete, 'btn primary'),
     );
     return;
@@ -162,7 +160,7 @@ function renderResults(
   feedback.append(
     el(
       'p',
-      { class: 'reveal' },
+      { class: 'verdict reveal' },
       `${failedIndexes.length} sentence(s) to redo before the full take again.`,
     ),
     renderRetries(failedIndexes, sentences, voiceId, onPassComplete),
@@ -181,7 +179,7 @@ function renderRetries(
   const checkDone = () => {
     if (remaining.size === 0) {
       container.append(
-        el('p', { class: 'pass' }, 'All sentences clean. Do the full take once more.'),
+        el('p', { class: 'verdict pass' }, 'All sentences clean. Do the full take once more.'),
         button('Full take again', onAllFixed, 'btn primary'),
       );
     }
@@ -206,7 +204,7 @@ function renderRetries(
           }),
         );
         if (result.passed) {
-          status.append(el('p', { class: 'pass' }, 'Clean.'));
+          status.append(el('p', { class: 'verdict pass' }, 'Clean.'));
           remaining.delete(index);
           control.setDisabled(true);
           checkDone();
