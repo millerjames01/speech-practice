@@ -1,12 +1,18 @@
 /**
  * The correction engine.
  *
- * Per attempt: Scribe and forced alignment run in parallel, the closest accept
- * variant is chosen, one signal packet is built per word, the active judge
- * rules on pronunciation, and then the hard floor is applied in code.
+ * Per attempt: Scribe transcribes, the closest accept variant is chosen, one
+ * signal packet is built per word, the active judge rules, and then the hard
+ * floor is applied in code.
+ *
+ * The design calls for a second parallel call - forced alignment - to give a
+ * per-word pronunciation signal. ElevenLabs does not support Catalan there, so
+ * that call is not made and `WordSignal.alignmentLoss` is always undefined.
+ * What remains is word diff, per-word logprob and sampled language drift; the
+ * hard floor on vocabulary is untouched by any of this.
  */
 
-import { forcedAlignment, transcribe, type ScribeResult } from '../api/elevenlabs';
+import { transcribe, type ScribeResult } from '../api/elevenlabs';
 import { config } from '../config';
 import { recordAttempt } from '../calibration';
 import type { CefrLevel } from '../types';
@@ -96,11 +102,15 @@ export async function judgeAttempt(
   const scribe = await transcribe(audio);
   const variant = chooseVariant(opts.accept, scribe.text);
 
-  // Alignment runs against the variant the learner actually aimed at.
-  const [alignment, drift] = await Promise.all([
-    forcedAlignment(audio, variant.target).catch(() => null),
-    checkDrift ? transcribe(audio, { detectLanguage: true }).catch(() => null) : null,
-  ]);
+  // No forced alignment here. It is the pronunciation signal the design wants,
+  // but ElevenLabs forced alignment covers the same 29 languages as
+  // multilingual v2 and Catalan is not among them, so the call could only fail.
+  // Judging therefore runs on word diff, per-word logprob and language drift.
+  // A pronunciation signal would mean a provider that supports Catalan - Azure
+  // Speech pronunciation assessment does - feeding WordSignal.alignmentLoss.
+  const drift = checkDrift
+    ? await transcribe(audio, { detectLanguage: true }).catch(() => null)
+    : null;
 
   const driftDetected =
     drift != null &&
@@ -108,7 +118,7 @@ export async function judgeAttempt(
     (drift.languageCode !== config.language ||
       (drift.languageProbability ?? 1) < config.judge.driftProbabilityFloor);
 
-  const signals = assembleSignals(variant.diff, scribe, alignment, {
+  const signals = assembleSignals(variant.diff, scribe, null, {
     focus: opts.focus ?? [],
     level: opts.level,
     ...(drift ? { languageDrift: driftDetected } : {}),

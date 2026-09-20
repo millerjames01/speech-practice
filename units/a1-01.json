@@ -4,20 +4,20 @@
   "level": "A1",
   "type": "scenario",
   "reviewed": false,
-  "newVocab": ["bon dia", "bona tarda", "com et dius", "em dic", "sóc de", "encantat", "adéu"],
+  "newVocab": ["bon dia", "bona tarda", "com et dius", "em dic", "soc de", "encantat", "adeu"],
   "voices": {
-    "narrator": "REPLACE_WITH_VOICE_ID",
-    "veí": "REPLACE_WITH_VOICE_ID"
+    "narrator": "JBFqnCBsd6RMkjVDRZzb",
+    "veí": "JBFqnCBsd6RMkjVDRZzb"
   },
   "monologue": {
     "modelVoice": "narrator",
     "sentences": [
       { "text": "Bon dia. Em dic Jordi.", "cue": "Good morning. My name is Jordi." },
-      { "text": "Sóc de Girona.", "cue": "I am from Girona." },
+      { "text": "Soc de Girona.", "cue": "I am from Girona." },
       { "text": "Cada matí saludo els veïns.", "cue": "Every morning I greet the neighbours." },
       { "text": "A la tarda dic bona tarda.", "cue": "In the afternoon I say good afternoon." },
       { "text": "Quan conec algú, dic encantat.", "cue": "When I meet someone, I say pleased to meet you." },
-      { "text": "I al final dic adéu.", "cue": "And at the end I say goodbye." }
+      { "text": "I al final dic adeu.", "cue": "And at the end I say goodbye." }
     ]
   },
   "dialogues": [
@@ -42,8 +42,8 @@
         {
           "speaker": "learner",
           "cue": "Say you are from Girona",
-          "accept": ["Sóc de Girona", "Jo sóc de Girona"],
-          "focus": ["sóc"]
+          "accept": ["Soc de Girona", "Jo soc de Girona"],
+          "focus": ["soc"]
         },
         { "speaker": "veí", "text": "Molt de gust!" },
         {
@@ -56,8 +56,8 @@
         {
           "speaker": "learner",
           "cue": "Say goodbye",
-          "accept": ["Adéu!", "Adéu, fins després", "Fins després!"],
-          "focus": ["adéu"]
+          "accept": ["Adeu!", "Adeu, fins després", "Fins després!"],
+          "focus": ["adeu"]
         }
       ]
     },
@@ -82,15 +82,15 @@
         {
           "speaker": "learner",
           "cue": "Say you are from Girona",
-          "accept": ["Sóc de Girona", "Jo sóc de Girona"],
-          "focus": ["sóc"]
+          "accept": ["Soc de Girona", "Jo soc de Girona"],
+          "focus": ["soc"]
         },
         { "speaker": "veí", "text": "Molt bé. Fins demà!" },
         {
           "speaker": "learner",
           "cue": "Say goodbye and good afternoon",
-          "accept": ["Adéu, bona tarda!", "Adéu!", "Fins demà!"],
-          "focus": ["adéu"]
+          "accept": ["Adeu, bona tarda!", "Adeu!", "Fins demà!"],
+          "focus": ["adeu"]
         }
       ]
     }

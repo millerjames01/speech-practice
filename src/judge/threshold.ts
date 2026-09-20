@@ -56,10 +56,16 @@ function judgeWord(signal: WordSignal): WordVerdict {
     return { verdict: 'unclear', confidence: 0.6, reason: 'Hard to make out' };
   }
 
-  // No alignment signal at all means we have one signal, not four. Say so
-  // rather than implying a precision we do not have.
+  // No pronunciation signal at all. This is the normal case for Catalan, where
+  // forced alignment is unavailable and Scribe may not return a logprob either.
+  //
+  // Such a word PASSES. The word diff has already established it is the right
+  // word in the right place; with no evidence of a pronunciation problem there
+  // is nothing to hold it on. Returning `unclear` here would be worse than
+  // strict - unclear never passes a turn, so an absent signal would make every
+  // turn permanently unpassable rather than merely unpoliced.
   if (loss === undefined && logprob === undefined) {
-    return { verdict: 'unclear', confidence: 0.4, reason: 'No pronunciation signal available' };
+    return { verdict: 'pass', confidence: 0.75, reason: 'Matched' };
   }
 
   return { verdict: 'pass', confidence: 0.9, reason: 'Matched' };

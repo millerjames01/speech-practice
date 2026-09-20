@@ -62,7 +62,7 @@ export function renderFreeform(
       updateStatus();
 
       if (logs.length >= maxTurns) {
-        stage.append(el('p', { class: 'done' }, 'That is the last turn.'));
+        stage.append(el('p', { class: 'verdict done' }, 'That is the last turn.'));
         finish();
         return;
       }
@@ -79,9 +79,14 @@ export function renderFreeform(
 
   clear(root);
   root.append(
-    el('h2', {}, 'Free form'),
+    el(
+      'div',
+      { class: 'phases' },
+      el('span', { class: 'phase-name' }, 'Free form'),
+      el('span', {}, 'nothing is corrected until the end'),
+      status,
+    ),
     el('p', { class: 'scenario' }, unit.freeform.scenario),
-    status,
     thread,
     stage,
     el(

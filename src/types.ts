@@ -63,4 +63,23 @@ export interface Unit {
   freeform: Freeform;
 }
 
-export type Phase = 'guided' | 'monologue' | 'freeform' | 'report';
+/**
+ * The order is the pedagogy: produce the sounds, then say the line with it in
+ * front of you, then retrieve it from meaning alone, then sustain it, then use
+ * it unscripted.
+ */
+export type Phase =
+  | 'vocab'
+  | 'guidedFollow'
+  | 'guidedCue'
+  | 'monologue'
+  | 'freeform'
+  | 'report';
+
+export const PHASE_ORDER: Phase[] = [
+  'vocab',
+  'guidedFollow',
+  'guidedCue',
+  'monologue',
+  'freeform',
+];

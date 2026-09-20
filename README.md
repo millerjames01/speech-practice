@@ -34,38 +34,69 @@ If a call is blocked by CORS, tick **route calls through the dev proxy** in
 Settings. That uses the Vite dev-server proxy in `vite.config.ts`; it is still
 not a real backend.
 
-Before practising, replace the `REPLACE_WITH_VOICE_ID` placeholders in
-`curriculum.json` and in each file under `units/` with ElevenLabs voice ids.
+Voice ids need no setup. The shipped units name real voices; any unit that
+carries `"AUTO"` instead is resolved from your account's own voices on first
+use (`src/voices.ts`), so generated units work without hand-editing.
 
-## The three phases
+**The shipped voices are all English-accented**, because that is what the
+account they were chosen on had. A voice carries its accent even when the model
+speaks Catalan, and model audio is what you imitate, so this is a real
+compromise rather than a cosmetic one. Add a Catalan or Spanish voice from the
+ElevenLabs Voice Library and paste its id into `units/*.json` — it is the single
+biggest quality win available here.
 
-1. **Guided conversation.** The counterpart's line plays; you see an English cue
-   (the target Catalan is behind a toggle, off by default) and record. A turn
-   passes only when it matches. After three failures the answer is shown, and
-   one clean repeat is still required.
-2. **Monologue.** You deliver a longer script in one take, judged per sentence.
+An ElevenLabs voice is a timbre, not a language, so there is no such thing as a
+"Catalan voice" to hunt for — what matters is that the **model** speaks Catalan.
+That is why `config.elevenlabs.ttsModel` is `eleven_v3`: it covers 70+ languages
+including Catalan, while `eleven_multilingual_v2` (29 languages) and the faster
+Flash/Turbo v2.5 models (32) do not. Swapping in a faster model would silently
+read Catalan with Spanish phonology.
+
+## The five phases
+
+Support falls away one step at a time: produce the sounds, say the line with it
+in front of you, retrieve it from meaning alone, sustain it, then use it
+unscripted.
+
+1. **Vocabulary.** Each new word is heard, then repeated. No English at all —
+   before you can map meaning to speech you have to make the sounds, and a gloss
+   at this stage invites translating instead of imitating. Judged by the same
+   strict engine; after three misses the word is revealed and one clean repeat
+   is required.
+2. **Follow along.** The dialogue runs with the Catalan in front of you, so the
+   work is producing it accurately rather than recalling it.
+3. **From the cue.** The same dialogues with only the English instruction. This
+   is the pass that proves you know it rather than can read it. A turn passes
+   only when it matches; after three failures the answer is shown, and one clean
+   repeat is still required.
+4. **Monologue.** You deliver a longer script in one take, judged per sentence.
    Failed sentences are replayed and redone individually, then the full take
    again. Three passes of fading support: full text, every other sentence
    hidden, then English cues only.
-3. **Free form.** Open conversation with the LLM counterpart, in Catalan, on
+5. **Free form.** Open conversation with the LLM counterpart, in Catalan, on
    theme. Nothing is corrected during the conversation. At the end you get one
    report, grouped by grammar, vocabulary, Castilianisms and pronunciation, with
    playback of the correct version and a slice of your own audio.
+
+The interface ships light and dark, following your system on first load and
+remembering the choice after that (`◐` in the header).
 
 ## The correction engine
 
 `src/judge/` combines four independent signals, so no single model gets to decide
 what you meant:
 
-| Signal | Source | Catches |
-| --- | --- | --- |
-| Word diff | Scribe transcript vs the turn's `accept` list | Wrong, missing, extra words |
-| Alignment loss | `POST /v1/forced-alignment` vs the expected text | Mispronounced *correct* words |
-| Word logprob | Scribe, per word | Words it was unsure it heard |
-| Language drift | Sampled second Scribe pass with auto-detect | Castilian accent, code-switching |
+| Signal | Source | Catches | Live for Catalan |
+| --- | --- | --- | --- |
+| Word diff | Scribe transcript vs the turn's `accept` list | Wrong, missing, extra words | yes |
+| Word logprob | Scribe, per word | Words it was unsure it heard | yes |
+| Language drift | Sampled second Scribe pass with auto-detect | Castilian accent, code-switching | yes |
+| Alignment loss | `POST /v1/forced-alignment` vs the expected text | Mispronounced *correct* words | **no — see Known limits** |
 
-Scribe answers *what did you say*; forced alignment answers *how well did your
-audio match what you should have said*. Both calls run in parallel per attempt.
+Scribe answers *what did you say*. The signal that would answer *how well did
+you say it* is unavailable for Catalan, so judging currently runs on the first
+three rows. `WordSignal.alignmentLoss` and the threshold logic behind it are
+kept intact, so a provider that does support Catalan drops straight in.
 
 **The hard floor lives in code.** `applyHardFloor` in `src/judge/index.ts` fails
 any wrong, missing or extra word whatever the judge said, and refuses a
@@ -112,9 +143,13 @@ ELEVENLABS_API_KEY=... npm run spike -- ./recordings
 Record ten sentences including deliberate mistakes and Castilian-sounding
 vowels. `deliberateErrors` is what makes the result readable: the script
 compares alignment loss on those words against the rest and tells you whether
-the two separate. If they do not, pronunciation feedback should degrade to
-confidence flags only — and the UI should say so rather than implying a
-precision it does not have.
+the two separate.
+
+For Catalan the alignment half will not return anything — the endpoint does not
+support it, and the script reports the failure rather than pretending. What the
+spike still answers, and what it is worth running for, is whether Scribe hears
+your Catalan faithfully including your errors, and whether per-word logprobs
+come back at all. Those two are the whole judging signal now.
 
 ## Units and generation
 
@@ -162,11 +197,27 @@ the unit schema rejects malformed content.
 
 ## Known limits
 
+- **No pronunciation scoring at all, for Catalan.** ElevenLabs forced alignment
+  covers the same 29 languages as multilingual v2, and Catalan is not among
+  them, so the call is not made. Judging runs on word diff, logprob and drift:
+  wrong words still always fail, but *right word said badly* will pass. The app
+  does not announce this — it is a deliberate choice for a personal demo, not an
+  oversight. If this ever becomes more than that, put the disclaimer back.
+- **Accents are judged by the 2016 orthography.** An accent-only difference is
+  forgiven, because the transcriber picks the spelling and its training data
+  spans both sides of the reform — except on the 15 words where Catalan uses the
+  accent to distinguish words (`és`, `sí`, `són`, `bé`, `més`, `té`, `què`…),
+  where it stays strict. A wrong *letter* always fails.
 - **STT auto-correction.** Scribe may output the correct word for one you
-  mispronounced. Run the spike to find out how much this happens to you; the
-  word diff cannot catch what Scribe silently fixes.
-- **No true pronunciation scoring.** Alignment loss is a word-level proxy, not
-  phoneme grading. It will not reliably separate subtle vowel errors. The UI
-  labels these words *unclear*, not *wrong*, for that reason.
+  mispronounced. Without alignment there is now no second signal to catch it,
+  which makes this limitation bite harder than the brief assumed.
+- **If you want the pronunciation signal back**, Azure Speech pronunciation
+  assessment supports `ca-ES` and returns phoneme-level accuracy — better than
+  the alignment-loss proxy this was designed around. Two caveats worth knowing
+  before committing: **prosody** assessment (intonation, stress, rhythm) is
+  `en-US` only, and so are **spoken phonemes in IPA** and syllable groups. So
+  for Catalan you would learn that a word's phonemes scored badly, but not get
+  them named in IPA. Wire it into `WordSignal.alignmentLoss` and the existing
+  threshold logic takes it from there.
 - Desktop Chrome only. No mobile layout, no accounts, no spaced repetition, and
   no progress history beyond the calibration data.

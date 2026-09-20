@@ -14,6 +14,11 @@ export type DiffStatus = 'match' | 'substitution' | 'missing' | 'extra';
 export interface WordSignal {
   /** The word the learner should have said. Absent for an extra word. */
   expected?: string;
+  /**
+   * Index of this word among the target line's whitespace-separated tokens, so
+   * its model audio can be cut from the line rather than synthesised alone.
+   */
+  expectedIndex?: number;
   /** The word Scribe heard. Absent for a missing word. */
   heard?: string;
   status: DiffStatus;

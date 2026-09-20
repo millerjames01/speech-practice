@@ -2,8 +2,8 @@
   "language": "ca",
   "variety": "Central Catalan, Girona-leaning",
   "voices": {
-    "narrator": "REPLACE_WITH_VOICE_ID",
-    "counterpart": "REPLACE_WITH_VOICE_ID"
+    "narrator": "JBFqnCBsd6RMkjVDRZzb",
+    "counterpart": "onwK4e9ZLuTAKqWW03F9"
   },
   "pronunciationTargets": [
     "neutral vowel [ə] in unstressed a/e",
@@ -23,10 +23,10 @@
           "title": "Greetings and introductions",
           "type": "scenario",
           "situation": "Meeting someone for the first time: greeting, name, where you are from.",
-          "grammar": ["ser vs estar in introductions", "sóc de + place", "em dic"],
-          "newVocab": ["bon dia", "bona tarda", "com et dius", "em dic", "sóc de", "encantat", "adéu"],
-          "focus": ["dic", "encantat", "adéu"],
-          "unlocks": "Names, origin, sóc de…"
+          "grammar": ["ser vs estar in introductions", "soc de + place", "em dic"],
+          "newVocab": ["bon dia", "bona tarda", "com et dius", "em dic", "soc de", "encantat", "adeu"],
+          "focus": ["dic", "encantat", "adeu"],
+          "unlocks": "Names, origin, soc de…"
         },
         {
           "id": "a1-02",
