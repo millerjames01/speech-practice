@@ -116,3 +116,28 @@ describe('the units shipped in /units', () => {
     expect(validateUnit(unit)).toEqual({ valid: true, errors: [] });
   });
 });
+
+describe('shipped content uses post-2016 orthography', () => {
+  // The bug this suite missed first time round: a unit written with a
+  // diacritic the 2016 IEC reform removed fails a learner who said it
+  // correctly, because the transcriber writes the modern spelling.
+  const REMOVED = [
+    'sóc', 'adéu', 'dóna', 'dónes', 'néta', 'nét', 'ós', 'óssa', 'vénen',
+    'véns', 'féu', 'sóls', 'mòlt', 'bòta', 'mòra', 'fóra', 'séc', 'vés',
+  ];
+
+  const sources = [
+    ...readdirSync('units')
+      .filter((f) => f.endsWith('.json'))
+      .map((f) => [`units/${f}`, readFileSync(`units/${f}`, 'utf8')] as const),
+    ['curriculum.json', readFileSync('curriculum.json', 'utf8')] as const,
+  ];
+
+  it.each(sources)('%s carries no removed diacritic', (_name, content) => {
+    const lower = content.toLowerCase();
+    const found = REMOVED.filter((word) =>
+      new RegExp(`(^|[^\\p{L}])${word}($|[^\\p{L}])`, 'u').test(lower),
+    );
+    expect(found).toEqual([]);
+  });
+});

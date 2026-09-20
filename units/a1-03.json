@@ -85,12 +85,12 @@
           "accept": ["El compte, si us plau", "Voldria el compte"],
           "focus": ["compte"]
         },
-        { "speaker": "cambrera", "text": "Gràcies a vostè. Adéu!" },
+        { "speaker": "cambrera", "text": "Gràcies a vostè. Adeu!" },
         {
           "speaker": "learner",
           "cue": "Say goodbye",
-          "accept": ["Adéu!", "Adéu, gràcies"],
-          "focus": ["adéu"]
+          "accept": ["Adeu!", "Adeu, gràcies"],
+          "focus": ["adeu"]
         }
       ]
     }

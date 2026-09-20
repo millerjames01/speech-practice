@@ -61,3 +61,28 @@ describe('chooseVariant', () => {
     expect(() => chooseVariant([], 'qualsevol cosa')).toThrow();
   });
 });
+
+describe('orthography drift across the 2016 reform', () => {
+  it('passes a turn the transcriber spelled the other way round', () => {
+    // The failure that prompted this: unit said "Sóc de Girona", Scribe heard
+    // "Soc de Girona." and the learner was told they said the wrong word.
+    const entries = diff('Soc de Girona', 'Sóc de Girona');
+    expect(entries.every((e) => e.status === 'match')).toBe(true);
+  });
+
+  it('chooses the variant cleanly despite the accent difference', () => {
+    const choice = chooseVariant(['Soc de Girona', 'Jo soc de Girona'], 'Sóc de Girona.');
+    expect(choice.errors).toBe(0);
+    expect(choice.target).toBe('Soc de Girona');
+  });
+
+  it('still fails a word that differs by a letter rather than an accent', () => {
+    const entries = diff('setanta', 'setenta');
+    expect(entries[0]!.status).toBe('substitution');
+  });
+
+  it('still fails one of the 15 words that keep a meaning-bearing accent', () => {
+    const entries = diff('Sí', 'Si');
+    expect(entries[0]!.status).toBe('substitution');
+  });
+});
