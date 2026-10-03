@@ -52,7 +52,7 @@ including Catalan, while `eleven_multilingual_v2` (29 languages) and the faster
 Flash/Turbo v2.5 models (32) do not. Swapping in a faster model would silently
 read Catalan with Spanish phonology.
 
-## The five phases
+## The phases
 
 Support falls away one step at a time: produce the sounds, say the line with it
 in front of you, retrieve it from meaning alone, sustain it, then use it
@@ -73,13 +73,50 @@ unscripted.
    Failed sentences are replayed and redone individually, then the full take
    again. Three passes of fading support: full text, every other sentence
    hidden, then English cues only.
-5. **Free form.** Open conversation with the LLM counterpart, in Catalan, on
+5. **Conversation.** Open tasks — propose a day and a time, say how home
+   differs from here — with an LLM counterpart that adapts to what you say and
+   coaching straight after each turn. This is the phase aimed at **vocabulary
+   range and Castilianisms** rather than sounds, and the only one that is
+   LLM-judged: there is no finite set of right answers to match against, so a
+   turn is judged on whether it achieved what was asked. **It never blocks.**
+6. **Free form.** Open conversation with the LLM counterpart, in Catalan, on
    theme. Nothing is corrected during the conversation. At the end you get one
    report, grouped by grammar, vocabulary, Castilianisms and pronunciation, with
    playback of the correct version and a slice of your own audio.
 
+A unit only runs the phases it has content for: the A1 units are scripted and
+run all of them, the A2 units are built around open conversation and skip the
+scripted dialogues and the monologue entirely.
+
 The interface ships light and dark, following your system on first load and
 remembering the choice after that (`◐` in the header).
+
+## Castilianisms
+
+The conversation phase catches Castilian-made Catalan in two halves, mirroring
+the correction engine's own split between certainty in code and judgement in a
+model.
+
+`src/castilianisms.ts` holds a researched, cited table — `tenir que` → `haver
+de`, `hi han` → `hi ha`, `lo que` → `el que`, `vale` → `d'acord`. These are
+literal strings, so they are matched deterministically: instant, free, and not
+a matter of opinion. The same table seeds the coach's prompt, so the model has
+the common cases in front of it and spends its judgement on what a list cannot
+hold — calqued word order, a Spanish idiom translated whole. If the table
+matched and the model stayed quiet, the table wins.
+
+The syntactic entries are the ones that matter. A borrowed word announces
+itself; `tenir que` is three ordinary Catalan words in an order Catalan does not
+use, which is exactly what a speaker coming from Spanish cannot hear themselves
+doing.
+
+The phase also offers **upgrades** — what a native would more likely have said —
+*whether or not you were correct*. That is the vocabulary-expansion half, and it
+is shown differently from a Castilianism on purpose: a calque is wrong, an
+upgrade is a nudge.
+
+The table is researched and cited but, like the units, not reviewed by a Catalan
+speaker.
 
 ## The correction engine
 

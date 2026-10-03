@@ -1,0 +1,58 @@
+{
+  "id": "a2-02",
+  "title": "Where I am from",
+  "level": "A2",
+  "type": "scenario",
+  "reviewed": false,
+  "newVocab": [
+    "el poble",
+    "la ciutat",
+    "el barri",
+    "la costa",
+    "el clima",
+    "s'assembla a",
+    "a diferència de",
+    "en canvi",
+    "més gran que",
+    "més tranquil que",
+    "trobar a faltar"
+  ],
+  "voices": {
+    "narrator": "JBFqnCBsd6RMkjVDRZzb",
+    "veïna": "onwK4e9ZLuTAKqWW03F9"
+  },
+  "conversation": {
+    "scenario": "You are a Catalan neighbour who has never been to the United States and is genuinely curious about it. The learner is American and lives here now. Ask about where they are from and how it compares with here. Be interested and ask follow-up questions rather than accepting short answers.",
+    "tasks": [
+      {
+        "goal": "Say where in the United States you are from, and what kind of place it is.",
+        "requires": ["the place", "whether it is a city, a town or somewhere rural"],
+        "targetVocab": ["el poble", "la ciutat", "la costa"]
+      },
+      {
+        "goal": "Compare the size and the pace of where you are from with here.",
+        "requires": ["a comparison of size", "a comparison of how busy or quiet it is"],
+        "targetVocab": ["més gran que", "més tranquil que", "en canvi"]
+      },
+      {
+        "goal": "Describe one thing that is genuinely different about daily life there.",
+        "requires": ["a concrete difference", "why it strikes you as different"],
+        "targetVocab": ["a diferència de", "en canvi"]
+      },
+      {
+        "goal": "Say what the weather is like where you are from, compared with here.",
+        "requires": ["the climate there", "how it differs from here"],
+        "targetVocab": ["el clima", "s'assembla a"]
+      },
+      {
+        "goal": "Say one thing you miss and one thing you do not miss at all.",
+        "requires": ["something you miss", "something you do not miss"],
+        "targetVocab": ["trobar a faltar", "el barri"]
+      }
+    ]
+  },
+  "freeform": {
+    "scenario": "You are a curious Catalan neighbour talking to an American who lives here. Ask about their home country, their town, their family, and what surprised them about living here. Stay on origins and comparisons.",
+    "maxTurns": 12
+  }
+}

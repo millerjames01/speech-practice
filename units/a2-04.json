@@ -1,0 +1,59 @@
+{
+  "id": "a2-04",
+  "title": "Planning a day in the mountains",
+  "level": "A2",
+  "type": "scenario",
+  "reviewed": false,
+  "newVocab": [
+    "l'excursió",
+    "la motxilla",
+    "les botes de muntanya",
+    "la cantimplora",
+    "l'entrepà",
+    "la gorra",
+    "la protecció solar",
+    "el senderisme",
+    "el refugi",
+    "el camí",
+    "l'horari",
+    "la parada"
+  ],
+  "voices": {
+    "narrator": "JBFqnCBsd6RMkjVDRZzb",
+    "excursionista": "onwK4e9ZLuTAKqWW03F9"
+  },
+  "conversation": {
+    "scenario": "You are a Catalan friend who walks in the mountains most weekends and is organising a day out with the learner. You know the trains, the trails and what people forget to bring. Ask practical questions and correct their planning where it is thin — but as a friend, not a guide.",
+    "tasks": [
+      {
+        "goal": "Suggest a day out walking and say roughly where you would like to go.",
+        "requires": ["that it is a walking day out", "a general destination"],
+        "targetVocab": ["l'excursió", "el senderisme", "el camí"]
+      },
+      {
+        "goal": "Say how you will get there and what time you need to set off.",
+        "requires": ["the means of transport", "a departure time"],
+        "targetVocab": ["l'horari", "la parada"]
+      },
+      {
+        "goal": "List what you are putting in your bag.",
+        "requires": ["at least three things", "something to drink"],
+        "targetVocab": ["la motxilla", "la cantimplora", "l'entrepà"]
+      },
+      {
+        "goal": "Say what you will wear, and why that rather than something else.",
+        "requires": ["what you will wear on your feet", "a reason for your choices"],
+        "targetVocab": ["les botes de muntanya", "la gorra", "la protecció solar"]
+      },
+      {
+        "goal": "Agree the plan for the day: when you walk, where you stop, when you head back.",
+        "requires": ["a time to start walking", "a stopping point", "a time to return"],
+        "targetVocab": ["el refugi", "l'horari"]
+      }
+    ]
+  },
+  "freeform": {
+    "scenario": "You are a Catalan friend organising a day's walking with the learner. Talk about trains, trails, weather, what to bring and where to eat. Stay on the day out.",
+    "maxTurns": 12
+  }
+}

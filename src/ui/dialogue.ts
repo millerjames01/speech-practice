@@ -26,10 +26,11 @@ export function renderDialogues(
   support: GuidedSupport,
   onComplete: () => void,
 ): void {
+  const dialogues = unit.dialogues ?? [];
   let dialogueIndex = 0;
 
   const next = () => {
-    const dialogue = unit.dialogues[dialogueIndex];
+    const dialogue = dialogues[dialogueIndex];
     if (!dialogue) {
       onComplete();
       return;
@@ -222,7 +223,7 @@ function renderDialogue(
           ? 'the Catalan is in front of you'
           : 'English prompt only — recall it',
       ),
-      el('span', { class: 'phase-count' }, `${index + 1} of ${unit.dialogues.length}`),
+      el('span', { class: 'phase-count' }, `${index + 1} of ${unit.dialogues?.length ?? 0}`),
     ),
     stage,
     transcript,

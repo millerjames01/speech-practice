@@ -1,0 +1,59 @@
+{
+  "id": "a2-01",
+  "title": "Making plans in town",
+  "level": "A2",
+  "type": "scenario",
+  "reviewed": false,
+  "newVocab": [
+    "quedar",
+    "dijous",
+    "divendres",
+    "dissabte",
+    "un quart de",
+    "dos quarts de",
+    "tres quarts de",
+    "la tarda",
+    "el vespre",
+    "fer un cafè",
+    "fer un tomb",
+    "una estona"
+  ],
+  "voices": {
+    "narrator": "JBFqnCBsd6RMkjVDRZzb",
+    "amic": "onwK4e9ZLuTAKqWW03F9"
+  },
+  "conversation": {
+    "scenario": "You are a Catalan friend of the learner, living in Girona. You are arranging to meet up this week. You have opinions about when you are free and what you feel like doing, and you push back a little rather than agreeing to everything. Keep it to plans, days, times and places.",
+    "tasks": [
+      {
+        "goal": "Suggest meeting up this week. Name a day and say what you would like to do.",
+        "requires": ["a day of the week", "something to do together"],
+        "targetVocab": ["quedar", "dissabte", "fer un tomb"]
+      },
+      {
+        "goal": "Propose a time, using the Catalan quarter system — 'dos quarts de cinc' for 4.30, not 'les quatre i mitja'.",
+        "requires": ["a time built with un, dos or tres quarts de", "which part of the day"],
+        "targetVocab": ["dos quarts de", "tres quarts de", "la tarda", "el vespre"]
+      },
+      {
+        "goal": "Your friend cannot do that day. Offer two other days and say which one suits you better.",
+        "requires": ["two alternative days", "which you prefer, and why"],
+        "targetVocab": ["dijous", "divendres", "quedar"]
+      },
+      {
+        "goal": "Agree where in town to meet, and roughly how long you have.",
+        "requires": ["a meeting place", "how long you can stay"],
+        "targetVocab": ["una estona", "fer un cafè"]
+      },
+      {
+        "goal": "Say what time you will have to leave, and why.",
+        "requires": ["a time", "a reason for leaving then"],
+        "targetVocab": ["un quart de", "el vespre"]
+      }
+    ]
+  },
+  "freeform": {
+    "scenario": "You are a Catalan friend in Girona. Keep arranging the plan — change your mind about the day, suggest somewhere else, ask what the learner feels like doing. Stay on plans and schedules.",
+    "maxTurns": 12
+  }
+}

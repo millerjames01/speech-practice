@@ -8,7 +8,7 @@
 import { hasElevenLabsKey, loadRemembered } from './keys';
 import type { LearnerTurnLog } from './freeform';
 import { loadUnits } from './units';
-import { PHASE_ORDER, type Phase, type Unit } from './types';
+import { phasesFor, type Phase, type Unit } from './types';
 import { renderDialogues } from './ui/dialogue';
 import { button, clear, el, errorBox } from './ui/dom';
 import { renderFreeform } from './ui/freeform';
@@ -17,6 +17,7 @@ import { renderReport } from './ui/report';
 import { openSettings } from './ui/settings';
 import { initTheme, toggleTheme } from './ui/theme';
 import { renderVocab } from './ui/vocab';
+import { renderConversation } from './ui/conversation';
 import { resolveVoices } from './voices';
 
 const root = document.getElementById('app');
@@ -29,6 +30,7 @@ const PHASE_LABELS: Record<Phase, string> = {
   guidedFollow: 'Follow along',
   guidedCue: 'From the cue',
   monologue: 'Monologue',
+  conversation: 'Conversation',
   freeform: 'Free form',
   report: 'Report',
 };
@@ -107,18 +109,20 @@ function startUnit(unit: Unit): void {
   // Units ship without account-specific voice ids, so fill them in once here
   // and hand the phases a unit whose voices are real. Resolution failure is not
   // fatal: the phases render and the TTS error surfaces where it can be read.
+  const first = phasesFor(unit)[0] ?? 'freeform';
   void resolveVoices(unit)
-    .then((voices) => runPhase({ ...unit, voices }, 'vocab'))
-    .catch(() => runPhase(unit, 'vocab'));
+    .then((voices) => runPhase({ ...unit, voices }, first))
+    .catch(() => runPhase(unit, first));
 }
 
-/** Dots for the phases done, current and still to come. */
-function phaseProgress(current: Phase): HTMLElement {
-  const index = PHASE_ORDER.indexOf(current);
+/** Dots for the phases done, current and still to come, for this unit. */
+function phaseProgress(unit: Unit, current: Phase): HTMLElement {
+  const phases = phasesFor(unit);
+  const index = phases.indexOf(current);
   return el(
     'div',
     { class: 'phase-dots' },
-    ...PHASE_ORDER.map((phase, i) =>
+    ...phases.map((phase, i) =>
       el('span', {
         class: `dot ${i < index ? 'done' : ''} ${i === index ? 'current' : ''}`,
         title: PHASE_LABELS[phase],
@@ -131,7 +135,7 @@ function unitBar(unit: Unit, phase: Phase): HTMLElement {
   return el(
     'div',
     { class: 'phases' },
-    phaseProgress(phase),
+    phaseProgress(unit, phase),
     el('span', { class: 'phase-name' }, unit.title),
     // Quiet, one line, and only where it belongs - a full banner on every
     // phase reads as chrome and stops being seen.
@@ -140,9 +144,9 @@ function unitBar(unit: Unit, phase: Phase): HTMLElement {
   );
 }
 
-const nextPhase = (phase: Phase): Phase => {
-  const next = PHASE_ORDER[PHASE_ORDER.indexOf(phase) + 1];
-  return next ?? 'report';
+const nextPhase = (unit: Unit, phase: Phase): Phase => {
+  const phases = phasesFor(unit);
+  return phases[phases.indexOf(phase) + 1] ?? 'report';
 };
 
 function runPhase(unit: Unit, phase: Phase, turns: LearnerTurnLog[] = []): void {
@@ -153,7 +157,7 @@ function runPhase(unit: Unit, phase: Phase, turns: LearnerTurnLog[] = []): void 
 
   const stage = el('main', {});
   root!.append(stage);
-  const advance = () => runPhase(unit, nextPhase(phase));
+  const advance = () => runPhase(unit, nextPhase(unit, phase));
 
   switch (phase) {
     case 'vocab':
@@ -167,6 +171,9 @@ function runPhase(unit: Unit, phase: Phase, turns: LearnerTurnLog[] = []): void 
       break;
     case 'monologue':
       renderMonologue(stage, unit, advance);
+      break;
+    case 'conversation':
+      renderConversation(stage, unit, advance);
       break;
     case 'freeform':
       renderFreeform(stage, unit, (logs) => runPhase(unit, 'report', logs));

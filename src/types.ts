@@ -45,6 +45,29 @@ export interface Freeform {
   maxTurns: number;
 }
 
+/**
+ * A communicative goal, not a script.
+ *
+ * The scripted phases enumerate correct answers in `accept` and match them. For
+ * open subjects - plan a day out, say how home differs from here - no finite
+ * set of right answers exists, so a task states what the turn must achieve and
+ * the coach judges whether it did.
+ */
+export interface ConversationTask {
+  /** English instruction: "Propose a day and a time, and suggest two things." */
+  goal: string;
+  /** Checkable requirements: ["a day of the week", "a time of day"]. */
+  requires: string[];
+  /** Words the unit wants you to reach for. Scores range; never matched. */
+  targetVocab: string[];
+}
+
+export interface Conversation {
+  /** Brief for the LLM counterpart, second person, as `freeform.scenario` is. */
+  scenario: string;
+  tasks: ConversationTask[];
+}
+
 export interface Unit {
   id: string;
   title: string;
@@ -59,7 +82,9 @@ export interface Unit {
   newVocab: string[];
   voices: Record<string, string>;
   monologue?: Monologue;
-  dialogues: Dialogue[];
+  /** Scripted dialogues. Absent on units built around open conversation. */
+  dialogues?: Dialogue[];
+  conversation?: Conversation;
   freeform: Freeform;
 }
 
@@ -73,13 +98,25 @@ export type Phase =
   | 'guidedFollow'
   | 'guidedCue'
   | 'monologue'
+  | 'conversation'
   | 'freeform'
   | 'report';
 
-export const PHASE_ORDER: Phase[] = [
-  'vocab',
-  'guidedFollow',
-  'guidedCue',
-  'monologue',
-  'freeform',
-];
+/**
+ * The phases a unit actually runs, in order. A unit only gets a phase it has
+ * the content for: a conversation unit has no scripted dialogues to follow and
+ * no monologue to deliver, so it does not sit through empty versions of them.
+ */
+export function phasesFor(unit: Unit): Phase[] {
+  const phases: Phase[] = [];
+  if (unit.newVocab.length > 0) phases.push('vocab');
+  if (unit.dialogues && unit.dialogues.length > 0) {
+    phases.push('guidedFollow', 'guidedCue');
+  }
+  if (unit.monologue) phases.push('monologue');
+  if (unit.conversation && unit.conversation.tasks.length > 0) {
+    phases.push('conversation');
+  }
+  phases.push('freeform');
+  return phases;
+}
