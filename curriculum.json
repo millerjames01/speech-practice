@@ -2,8 +2,8 @@
   "language": "ca",
   "variety": "Central Catalan, Girona-leaning",
   "voices": {
-    "narrator": "REPLACE_WITH_VOICE_ID",
-    "counterpart": "REPLACE_WITH_VOICE_ID"
+    "narrator": "JBFqnCBsd6RMkjVDRZzb",
+    "counterpart": "onwK4e9ZLuTAKqWW03F9"
   },
   "pronunciationTargets": [
     "neutral vowel [ə] in unstressed a/e",
@@ -23,19 +23,58 @@
           "title": "Greetings and introductions",
           "type": "scenario",
           "situation": "Meeting someone for the first time: greeting, name, where you are from.",
-          "grammar": ["ser vs estar in introductions", "sóc de + place", "em dic"],
-          "newVocab": ["bon dia", "bona tarda", "com et dius", "em dic", "sóc de", "encantat", "adéu"],
-          "focus": ["dic", "encantat", "adéu"],
-          "unlocks": "Names, origin, sóc de…"
+          "grammar": [
+            "ser vs estar in introductions",
+            "soc de + place",
+            "em dic"
+          ],
+          "newVocab": [
+            "bon dia",
+            "bona tarda",
+            "com et dius",
+            "em dic",
+            "soc de",
+            "encantat",
+            "adeu"
+          ],
+          "focus": [
+            "dic",
+            "encantat",
+            "adeu"
+          ],
+          "unlocks": "Names, origin, soc de…"
         },
         {
           "id": "a1-02",
           "title": "Numbers 0-100 and prices",
           "type": "vocabulary",
           "situation": "Saying and hearing numbers and prices.",
-          "grammar": ["cardinal numbers", "euros amb cèntims"],
-          "newVocab": ["zero", "deu", "vint", "trenta", "quaranta", "cinquanta", "seixanta", "setanta", "vuitanta", "noranta", "cent", "euros", "cèntims", "quant costa"],
-          "focus": ["setanta", "seixanta", "quaranta", "cèntims"],
+          "grammar": [
+            "cardinal numbers",
+            "euros amb cèntims"
+          ],
+          "newVocab": [
+            "zero",
+            "deu",
+            "vint",
+            "trenta",
+            "quaranta",
+            "cinquanta",
+            "seixanta",
+            "setanta",
+            "vuitanta",
+            "noranta",
+            "cent",
+            "euros",
+            "cèntims",
+            "quant costa"
+          ],
+          "focus": [
+            "setanta",
+            "seixanta",
+            "quaranta",
+            "cèntims"
+          ],
           "unlocks": "Every quant costa? unit"
         },
         {
@@ -43,9 +82,26 @@
           "title": "Ordering at a café",
           "type": "scenario",
           "situation": "Ordering a drink and something to eat at a café counter, then paying.",
-          "grammar": ["voldria + noun", "polite requests with si us plau", "definite articles"],
-          "newVocab": ["voldria", "un cafè amb llet", "un tallat", "una aigua", "un croissant", "si us plau", "gràcies", "el compte"],
-          "focus": ["voldria", "tallat", "compte"],
+          "grammar": [
+            "voldria + noun",
+            "polite requests with si us plau",
+            "definite articles"
+          ],
+          "newVocab": [
+            "voldria",
+            "un cafè amb llet",
+            "un tallat",
+            "una aigua",
+            "un croissant",
+            "si us plau",
+            "gràcies",
+            "el compte"
+          ],
+          "focus": [
+            "voldria",
+            "tallat",
+            "compte"
+          ],
           "unlocks": "Polite requests, voldria…"
         },
         {
@@ -53,9 +109,27 @@
           "title": "Food and quantities",
           "type": "vocabulary",
           "situation": "Naming foods and the quantities you buy them in.",
-          "grammar": ["un quilo de + noun", "partitive de"],
-          "newVocab": ["pa", "llet", "ous", "pomes", "tomàquets", "enciam", "formatge", "un quilo", "mig quilo", "una dotzena"],
-          "focus": ["tomàquets", "ous", "enciam"],
+          "grammar": [
+            "un quilo de + noun",
+            "partitive de"
+          ],
+          "newVocab": [
+            "pa",
+            "llet",
+            "ous",
+            "pomes",
+            "tomàquets",
+            "enciam",
+            "formatge",
+            "un quilo",
+            "mig quilo",
+            "una dotzena"
+          ],
+          "focus": [
+            "tomàquets",
+            "ous",
+            "enciam"
+          ],
           "unlocks": "Grocery and restaurant units"
         },
         {
@@ -63,9 +137,22 @@
           "title": "At the grocery store and market",
           "type": "scenario",
           "situation": "Buying fruit and vegetables at a market stall by weight, and paying.",
-          "grammar": ["quant costa / quant és", "demonstratives aquest/aquell"],
-          "newVocab": ["quant costa", "un quilo de", "això és tot", "res més", "madur"],
-          "focus": ["quilo", "tomàquets", "costa"],
+          "grammar": [
+            "quant costa / quant és",
+            "demonstratives aquest/aquell"
+          ],
+          "newVocab": [
+            "quant costa",
+            "un quilo de",
+            "això és tot",
+            "res més",
+            "madur"
+          ],
+          "focus": [
+            "quilo",
+            "tomàquets",
+            "costa"
+          ],
           "unlocks": "Weights, quant costa?"
         },
         {
@@ -73,9 +160,25 @@
           "title": "Ordering at a restaurant",
           "type": "scenario",
           "situation": "A sit-down lunch: the menu del dia, choosing courses, asking for the bill.",
-          "grammar": ["de primer / de segon", "per beure", "m'agrada / no m'agrada"],
-          "newVocab": ["la carta", "el menú del dia", "de primer", "de segon", "les postres", "per beure", "el compte"],
-          "focus": ["postres", "segon", "carta"],
+          "grammar": [
+            "de primer / de segon",
+            "per beure",
+            "m'agrada / no m'agrada"
+          ],
+          "newVocab": [
+            "la carta",
+            "el menú del dia",
+            "de primer",
+            "de segon",
+            "les postres",
+            "per beure",
+            "el compte"
+          ],
+          "focus": [
+            "postres",
+            "segon",
+            "carta"
+          ],
           "unlocks": "Menu, the bill, preferences"
         },
         {
@@ -83,9 +186,27 @@
           "title": "Places and directions vocabulary",
           "type": "vocabulary",
           "situation": "Naming places in town and the words for giving directions.",
-          "grammar": ["a l'esquerra / a la dreta", "tot recte", "al costat de"],
-          "newVocab": ["l'esquerra", "la dreta", "tot recte", "la cantonada", "la plaça", "el carrer", "l'estació", "la farmàcia", "al costat de"],
-          "focus": ["esquerra", "plaça", "cantonada"],
+          "grammar": [
+            "a l'esquerra / a la dreta",
+            "tot recte",
+            "al costat de"
+          ],
+          "newVocab": [
+            "l'esquerra",
+            "la dreta",
+            "tot recte",
+            "la cantonada",
+            "la plaça",
+            "el carrer",
+            "l'estació",
+            "la farmàcia",
+            "al costat de"
+          ],
+          "focus": [
+            "esquerra",
+            "plaça",
+            "cantonada"
+          ],
           "unlocks": "Left/right, landmarks"
         },
         {
@@ -93,9 +214,25 @@
           "title": "Asking for directions",
           "type": "scenario",
           "situation": "Stopping someone in the street to find a place, and following what they tell you.",
-          "grammar": ["on és…?", "imperatives: gira, segueix, travessa", "està lluny?"],
-          "newVocab": ["on és", "perdoni", "gira", "segueix", "travessa", "lluny", "a prop"],
-          "focus": ["on és", "gira", "travessa"],
+          "grammar": [
+            "on és…?",
+            "imperatives: gira, segueix, travessa",
+            "està lluny?"
+          ],
+          "newVocab": [
+            "on és",
+            "perdoni",
+            "gira",
+            "segueix",
+            "travessa",
+            "lluny",
+            "a prop"
+          ],
+          "focus": [
+            "on és",
+            "gira",
+            "travessa"
+          ],
           "unlocks": "Imperatives, on és…?"
         },
         {
@@ -103,9 +240,28 @@
           "title": "Colours, sizes and clothes",
           "type": "vocabulary",
           "situation": "Naming clothes, colours and sizes.",
-          "grammar": ["adjective agreement in gender and number"],
-          "newVocab": ["vermell", "blau", "verd", "negre", "blanc", "groc", "la camisa", "els pantalons", "la jaqueta", "la talla", "gran", "petit"],
-          "focus": ["vermell", "groc", "jaqueta"],
+          "grammar": [
+            "adjective agreement in gender and number"
+          ],
+          "newVocab": [
+            "vermell",
+            "blau",
+            "verd",
+            "negre",
+            "blanc",
+            "groc",
+            "la camisa",
+            "els pantalons",
+            "la jaqueta",
+            "la talla",
+            "gran",
+            "petit"
+          ],
+          "focus": [
+            "vermell",
+            "groc",
+            "jaqueta"
+          ],
           "unlocks": "Shopping units"
         },
         {
@@ -113,10 +269,152 @@
           "title": "Shopping for clothes",
           "type": "scenario",
           "situation": "In a clothes shop: asking for a size, trying something on, and returning it.",
-          "grammar": ["em va bé / em va petit", "puc emprovar-m'ho?", "voldria canviar"],
-          "newVocab": ["la talla", "emprovar", "el emprovador", "em va bé", "canviar", "el tiquet"],
-          "focus": ["emprovar", "talla", "tiquet"],
+          "grammar": [
+            "em va bé / em va petit",
+            "puc emprovar-m'ho?",
+            "voldria canviar"
+          ],
+          "newVocab": [
+            "la talla",
+            "emprovar",
+            "el emprovador",
+            "em va bé",
+            "canviar",
+            "el tiquet"
+          ],
+          "focus": [
+            "emprovar",
+            "talla",
+            "tiquet"
+          ],
           "unlocks": "Sizes, trying on, returns"
+        }
+      ]
+    },
+    {
+      "level": "A2",
+      "units": [
+        {
+          "id": "a2-01",
+          "title": "Making plans in town",
+          "type": "scenario",
+          "situation": "Arranging to meet a friend in town: a day, a time, a place and what to do.",
+          "grammar": [
+            "quedar for arranging to meet",
+            "the Catalan quarter system: un/dos/tres quarts de",
+            "parts of the day: matí, tarda, vespre"
+          ],
+          "newVocab": [
+            "quedar",
+            "dijous",
+            "divendres",
+            "dissabte",
+            "un quart de",
+            "dos quarts de",
+            "tres quarts de",
+            "la tarda",
+            "el vespre",
+            "fer un cafè",
+            "fer un tomb",
+            "una estona"
+          ],
+          "focus": [
+            "quedar",
+            "dos quarts de",
+            "dissabte"
+          ],
+          "unlocks": "Days, clock times the Catalan way, making arrangements"
+        },
+        {
+          "id": "a2-02",
+          "title": "Where I am from",
+          "type": "scenario",
+          "situation": "Describing where you are from in the United States and comparing it with life here.",
+          "grammar": [
+            "comparatives: més/menys ... que, tan ... com",
+            "contrast: en canvi, a diferència de",
+            "trobar a faltar for missing something"
+          ],
+          "newVocab": [
+            "el poble",
+            "la ciutat",
+            "el barri",
+            "la costa",
+            "el clima",
+            "s'assembla a",
+            "a diferència de",
+            "en canvi",
+            "més gran que",
+            "més tranquil que",
+            "trobar a faltar"
+          ],
+          "focus": [
+            "s'assembla a",
+            "el barri",
+            "trobar a faltar"
+          ],
+          "unlocks": "Comparison and contrast, describing places"
+        },
+        {
+          "id": "a2-03",
+          "title": "Opinions and what is going on",
+          "type": "scenario",
+          "situation": "Giving opinions about local life and disagreeing politely.",
+          "grammar": [
+            "opinion verbs: crec/trobo/em sembla que",
+            "agreement and disagreement: hi estic d'acord",
+            "structuring an argument: d'una banda, de l'altra"
+          ],
+          "newVocab": [
+            "crec que",
+            "em sembla que",
+            "trobo que",
+            "al meu entendre",
+            "estic d'acord",
+            "no hi estic d'acord",
+            "em fa l'efecte que",
+            "val la pena",
+            "en canvi",
+            "d'una banda",
+            "de l'altra"
+          ],
+          "focus": [
+            "em sembla que",
+            "al meu entendre",
+            "val la pena"
+          ],
+          "unlocks": "Opinion, hedging, polite disagreement"
+        },
+        {
+          "id": "a2-04",
+          "title": "Planning a day in the mountains",
+          "type": "scenario",
+          "situation": "Organising a day trip for hiking: getting there, what to bring, what to wear, the schedule.",
+          "grammar": [
+            "haver de for obligation, never tenir que",
+            "future plans without the Castilian anar a + infinitive",
+            "time and transport expressions"
+          ],
+          "newVocab": [
+            "l'excursió",
+            "la motxilla",
+            "les botes de muntanya",
+            "la cantimplora",
+            "l'entrepà",
+            "la gorra",
+            "la protecció solar",
+            "el senderisme",
+            "el refugi",
+            "el camí",
+            "l'horari",
+            "la parada"
+          ],
+          "focus": [
+            "l'excursió",
+            "la cantimplora",
+            "el senderisme"
+          ],
+          "unlocks": "Outdoor kit, transport, planning a day"
         }
       ]
     }

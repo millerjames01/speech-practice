@@ -1,0 +1,58 @@
+{
+  "id": "a2-03",
+  "title": "Opinions and what is going on",
+  "level": "A2",
+  "type": "scenario",
+  "reviewed": false,
+  "newVocab": [
+    "crec que",
+    "em sembla que",
+    "trobo que",
+    "al meu entendre",
+    "estic d'acord",
+    "no hi estic d'acord",
+    "em fa l'efecte que",
+    "val la pena",
+    "en canvi",
+    "d'una banda",
+    "de l'altra"
+  ],
+  "voices": {
+    "narrator": "JBFqnCBsd6RMkjVDRZzb",
+    "company": "onwK4e9ZLuTAKqWW03F9"
+  },
+  "conversation": {
+    "scenario": "You are a Catalan acquaintance having a coffee with the learner and talking about what is going on locally — the new bike lanes, tourism, a street that has been dug up for months, rents. Have opinions of your own and disagree politely when you do. Draw the learner out rather than lecturing.",
+    "tasks": [
+      {
+        "goal": "Say what you think about something that has changed in your neighbourhood recently.",
+        "requires": ["what has changed", "your opinion of it"],
+        "targetVocab": ["crec que", "trobo que", "el barri"]
+      },
+      {
+        "goal": "Your companion disagrees. Acknowledge their point, then hold your ground.",
+        "requires": ["acknowledging their view", "restating yours"],
+        "targetVocab": ["no hi estic d'acord", "en canvi", "em sembla que"]
+      },
+      {
+        "goal": "Give two sides of an issue — one thing that works and one that does not.",
+        "requires": ["something that works", "something that does not"],
+        "targetVocab": ["d'una banda", "de l'altra"]
+      },
+      {
+        "goal": "Say whether something here is worth doing, and recommend it or not.",
+        "requires": ["the thing", "a clear recommendation"],
+        "targetVocab": ["val la pena", "al meu entendre"]
+      },
+      {
+        "goal": "Say something that still seems wrong to you about how things are done here, carefully.",
+        "requires": ["the thing", "why it seems wrong", "hedging rather than flat assertion"],
+        "targetVocab": ["em fa l'efecte que", "em sembla que"]
+      }
+    ]
+  },
+  "freeform": {
+    "scenario": "You are a Catalan acquaintance over coffee, talking about local goings-on: rents, tourism, roadworks, the council. Offer opinions and disagree where you genuinely would. Stay on local life and opinions.",
+    "maxTurns": 12
+  }
+}

@@ -72,9 +72,15 @@ export function validateUnit(input: unknown): ValidationResult {
     }
   }
 
-  if (!Array.isArray(u.dialogues) || u.dialogues.length === 0) {
-    push('dialogues must be a non-empty array');
-  } else {
+  // Dialogues are optional: a unit built around open conversation has none.
+  // A unit with neither dialogues nor a conversation teaches nothing, though.
+  if (u.dialogues === undefined && u.conversation === undefined) {
+    push('a unit needs either dialogues or a conversation');
+  }
+
+  if (u.dialogues !== undefined && (!Array.isArray(u.dialogues) || u.dialogues.length === 0)) {
+    push('dialogues must be a non-empty array when present');
+  } else if (Array.isArray(u.dialogues)) {
     u.dialogues.forEach((d, di) => {
       const dia = d as Record<string, unknown>;
       const at = `dialogues[${di}]`;
@@ -115,6 +121,34 @@ export function validateUnit(input: unknown): ValidationResult {
       });
       if (learnerTurns === 0) push(`${at} has no learner turns`);
     });
+  }
+
+  if (u.conversation !== undefined) {
+    const c = u.conversation as Record<string, unknown>;
+    if (typeof c !== 'object' || c === null || Array.isArray(c)) {
+      push('conversation must be an object');
+    } else {
+      if (typeof c.scenario !== 'string' || !c.scenario) {
+        push('conversation.scenario must be a non-empty string');
+      }
+      if (!Array.isArray(c.tasks) || c.tasks.length === 0) {
+        push('conversation.tasks must be a non-empty array');
+      } else {
+        c.tasks.forEach((t, i) => {
+          const task = t as Record<string, unknown>;
+          const at = `conversation.tasks[${i}]`;
+          if (typeof task?.goal !== 'string' || !task.goal) {
+            push(`${at}.goal must be a non-empty string`);
+          }
+          if (!isStringArray(task?.requires) || task.requires.length === 0) {
+            push(`${at}.requires must be a non-empty array of strings`);
+          }
+          if (!isStringArray(task?.targetVocab)) {
+            push(`${at}.targetVocab must be an array of strings`);
+          }
+        });
+      }
+    }
   }
 
   const f = u.freeform as Record<string, unknown>;

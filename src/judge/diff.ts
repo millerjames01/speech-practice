@@ -3,7 +3,7 @@
  * of which `accept` variant to judge against.
  */
 
-import { tokenize } from './normalize';
+import { tokenize, wordsEqual } from './normalize';
 import type { DiffStatus } from './types';
 
 export interface DiffEntry {
@@ -38,7 +38,9 @@ export function diffWords(expected: string[], heard: string[]): DiffEntry[] {
 
   for (let i = 1; i <= n; i += 1) {
     for (let j = 1; j <= m; j += 1) {
-      const same = expected[i - 1] === heard[j - 1];
+      // wordsEqual, not ===, so an accent-only spelling difference from the
+      // transcriber does not register as a substitution.
+      const same = wordsEqual(expected[i - 1]!, heard[j - 1]!);
       const subCost = cost[i - 1]![j - 1]! + (same ? 0 : 1);
       const delCost = cost[i - 1]![j]! + 1;
       const insCost = cost[i]![j - 1]! + 1;

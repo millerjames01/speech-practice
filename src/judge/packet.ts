@@ -32,6 +32,7 @@ export function assembleSignals(
   return diff.map((entry) => {
     const aligned =
       entry.expected !== undefined ? alignment?.words[expectedIndex] : undefined;
+    const thisExpectedIndex = entry.expected !== undefined ? expectedIndex : undefined;
     if (entry.expected !== undefined) expectedIndex += 1;
 
     const heardWord =
@@ -43,6 +44,7 @@ export function assembleSignals(
       level: ctx.level,
     };
     if (entry.expected !== undefined) signal.expected = entry.expected;
+    if (thisExpectedIndex !== undefined) signal.expectedIndex = thisExpectedIndex;
     if (entry.heard !== undefined) signal.heard = entry.heard;
     if (aligned?.loss !== undefined) signal.alignmentLoss = aligned.loss;
     if (heardWord?.logprob !== undefined) signal.logprob = heardWord.logprob;

@@ -85,7 +85,15 @@ export function renderReport(
 
   clear(root);
   const body = el('div', {}, el('p', { class: 'hint' }, 'Building the correction report…'));
-  root.append(el('h2', {}, 'Correction report'), body);
+  root.append(
+    el(
+      'div',
+      { class: 'phases' },
+      el('span', { class: 'phase-name' }, 'Correction report'),
+      el('span', {}, unit.title),
+    ),
+    body,
+  );
 
   const show = (report: CorrectionReport) => {
     clear(body);
@@ -93,7 +101,7 @@ export function renderReport(
     if (turns.length === 0) {
       body.append(el('p', {}, 'No turns were recorded, so there is nothing to correct.'));
     } else if (report.errors.length === 0) {
-      body.append(el('p', { class: 'pass' }, 'No errors found in this session.'));
+      body.append(el('p', { class: 'verdict pass' }, 'No errors found in this session.'));
     }
 
     if (report.summary) body.append(el('p', { class: 'summary' }, report.summary));
