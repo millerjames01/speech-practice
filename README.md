@@ -37,6 +37,101 @@ not a real backend.
 Before practising, replace the `REPLACE_WITH_VOICE_ID` placeholders in
 `curriculum.json` and in each file under `units/` with ElevenLabs voice ids.
 
+## Speedrun mode — Castellano → Català
+
+**Use it:** https://millerjames01.github.io/speech-practice/#speedrun
+
+- **Install it.** On iPhone: open the link in Safari → Share → *Add to Home
+  Screen*. On Android: Chrome menu → *Install app*. It opens full-screen.
+- **Offline.** After the first visit everything works without a connection:
+  lessons, checking, Today, progress, export. ElevenLabs needs a connection,
+  except for lines already played, which are cached.
+- **A Catalan voice.** Audio uses the device's own speech voices, which also
+  work offline once downloaded. iPhone/iPad/Mac: Settings → Accessibility →
+  Spoken Content → Voices → Català (Montse or Jordi). Android: Settings →
+  Text-to-speech → Google → install Català. Windows: Settings → Time & language
+  → Speech → add Catalan.
+- **Your progress lives on one device**, in the browser. Use *Export progress*
+  (bottom of the map) now and then, and *Import progress* to move it to a new
+  phone or restore it.
+- **Deploys automatically** from `main` (`.github/workflows/deploy.yml`: test,
+  build with the Pages base path, publish).
+
+
+A second, written mode for Castellano speakers: a speedrun to C1 built on the
+80/20 rule. It skips topic word lists (no fruit, animals, weather or jobs) and
+drills the small set of words and patterns that make up most of real speech:
+the core verbs in every tense, weak pronouns, function words, connectors and
+the most frequent nouns and adverbs. Open it with **Speedrun** in the
+header, or go to `/#speedrun`. It needs no keys.
+
+**103 bite-sized lessons**, about five minutes each:
+
+| Level | Lessons | Focus |
+| --- | --- | --- |
+| A2 | 34 | conversation glue, core nouns, cognate rules, gender flips, ser/estar/tenir, the -ar/-re/-ir families, fer/anar/poder/voler/saber/venir/dir/veure, both pasts, imperfect, future, haver de / cal, imperative |
+| B1 | 30 | weak pronouns (el, li, en, hi, ho and their pairs), anar-se'n, conditional, present subjunctive, por/para, core verb forms, tot/mateix/algun, frequent prepositions, Castilianisms, verbs that diverge |
+| B2 | 21 | imperfect subjunctive, si-clauses, compound moods, deure, periphrases, Castellano *lo*, en + infinitive, prepositions that drop or change, idiomatic verbs |
+| C1 | 18 | passat simple, formal register, el qual, pronoun clusters and dislocation, high-frequency adverbs, common idioms, subtle Castilianisms, academic writing |
+
+Each lesson is a short concept note with clickable conjugation tables, then
+10–14 Castellano sentences to type in Catalan. A miss goes back into the queue
+three items later, so every lesson ends on the right answer; the score counts
+first tries only. Lessons record a best time and first-try accuracy.
+
+**Daily practice: the Today button.** Every item you meet enters a simple
+spaced-repetition ladder (`src/speedrun/srs.ts`): a first-try hit moves it to
+the next interval (1, 3, 7, 14, 30, 60 days), a miss sends it back to
+tomorrow. Today builds one session: everything due (most overdue first,
+capped at 30), plus six not-yet-due items from the lowest steps, all shuffled
+so consecutive items come from different lessons. Then it hands you the next
+new lesson. Re-running a lesson for a better time never pushes a schedule out
+early. The map shows lessons done, items due today, and how many items have
+reached the two-week step ("long-term").
+
+Suggested routine, about 25 minutes a day: press Today, do the new lesson it
+offers, and stop. Skip the new lesson on days when more than 30 items are
+due. Don't move on from a level until its boss lesson clears at 90% first try.
+Pair it with real Catalan input (TV3/3Cat, podcasts) — this course builds
+accurate production of the core; listening hours build the ear.
+
+**Dictation.** A toggle on the map switches every drill to *hear the Catalan,
+write it*: the Castellano stays hidden (one click reveals it), Play and 0.75×
+replay sit above the box, and Alt+L / Alt+S replay while typing. The meaning
+shows after you answer. It needs a decent voice, so set up ElevenLabs or a
+ca-ES system voice first.
+
+Progress lives in `localStorage`.
+
+**Checking.** Words are never forgiven: a wrong, missing or extra word fails.
+Spelling is lenient: accents, ç, l·l and hyphens that are off still pass, but
+as a *spelling slip* that marks the word. A leading subject pronoun is
+accepted, as are pre-2017 diacritics (*sóc, dóna, vénen*) and the long
+perifràstic forms (*vàrem, varen*).
+
+**Listening.** Every answer, table cell and core word plays on click, with a
+slow option and auto-play after each check (toggle on the map). Audio uses
+ElevenLabs with the `narrator` voice from `curriculum.json` when a key is set,
+cached like the rest of the app; otherwise it falls back to the browser's
+Catalan voice (quality depends on the OS).
+
+**80/20 audit.** `npm run coverage -- path/to/ca_50k.txt` measures the course
+against a word-frequency list (one `word count` per line, such as
+[FrequencyWords](https://github.com/hermitdave/FrequencyWords)' `ca_50k.txt`,
+built from subtitles; not committed). It reports what share of running speech
+the course's words cover, which top-ranked words it never uses, and which of
+its words are rare. Use it before adding content: a new word should earn its
+place by frequency.
+
+**Content.** Lessons live in `speedrun/*.json`, one file per level half,
+validated on load by `src/speedrun/schema.ts`. Answers are patterns, so one
+line lists every correct phrasing: `(x)` is optional and `[a|b]` picks an
+alternative, for example `(Ella) [vaig menjar|he menjat] pa.` The canonical
+answer (shown and spoken) drops optional words and takes the first
+alternative. Like the units, every file is marked `reviewed: false`: it follows
+the IEC norm for Central Catalan but has not been checked by a Catalan speaker
+yet, and the app says so.
+
 ## The three phases
 
 1. **Guided conversation.** The counterpart's line plays; you see an English cue
@@ -168,5 +263,6 @@ the unit schema rejects malformed content.
 - **No true pronunciation scoring.** Alignment loss is a word-level proxy, not
   phoneme grading. It will not reliably separate subtle vowel errors. The UI
   labels these words *unclear*, not *wrong*, for that reason.
-- Desktop Chrome only. No mobile layout, no accounts, no spaced repetition, and
-  no progress history beyond the calibration data.
+- The conversation trainer is desktop Chrome only, with no accounts, no spaced
+  repetition and no progress history beyond the calibration data. The speedrun
+  works on mobile and keeps its own progress in `localStorage`.

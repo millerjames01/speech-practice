@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import { serviceWorker } from './scripts/sw-plugin';
 
 /**
  * The brief flags CORS as a week-one unknown: if any ElevenLabs or LLM call is
@@ -14,6 +15,9 @@ const proxyTarget = (target: string, prefix: string) => ({
 });
 
 export default defineConfig({
+  // GitHub Pages serves the site from /<repo>/; the deploy workflow sets this.
+  base: process.env.BASE_PATH ?? '/',
+  plugins: [serviceWorker()],
   server: {
     port: 5173,
     proxy: {

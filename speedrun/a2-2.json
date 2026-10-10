@@ -1,0 +1,1960 @@
+{
+  "level": "A2",
+  "reviewed": false,
+  "lessons": [
+    {
+      "id": "a2-18",
+      "title": "Daily routine and reflexives",
+      "goal": "Describe your day with em llevo, em dutxo, dino, sopo.",
+      "note": "Reflexive pronouns before the verb: **em, et, es, ens, us, es** (m', t', s' before a vowel). After an infinitive they attach with a hyphen: **dutxar-me**, **llevar-se**.\n\nFalse friend: *levantarse* → **llevar-se**. Meals are verbs: **esmorzar** (desayunar), **dinar** (comer al mediodía), **sopar** (cenar).\n\n*Temprano* → **d'hora**.",
+      "tables": [
+        {
+          "title": "llevar-se — present",
+          "rows": [
+            [
+              "jo",
+              "em llevo"
+            ],
+            [
+              "tu",
+              "et lleves"
+            ],
+            [
+              "ell, ella",
+              "es lleva"
+            ],
+            [
+              "nosaltres",
+              "ens llevem"
+            ],
+            [
+              "vosaltres",
+              "us lleveu"
+            ],
+            [
+              "ells, elles",
+              "es lleven"
+            ]
+          ]
+        }
+      ],
+      "vocab": [
+        [
+          "llevar-se",
+          "levantarse"
+        ],
+        [
+          "dutxar-se",
+          "ducharse"
+        ],
+        [
+          "vestir-se",
+          "vestirse"
+        ],
+        [
+          "rentar-se",
+          "lavarse"
+        ],
+        [
+          "esmorzar",
+          "desayunar"
+        ],
+        [
+          "dinar",
+          "comer"
+        ],
+        [
+          "sopar",
+          "cenar"
+        ],
+        [
+          "d'hora",
+          "temprano"
+        ]
+      ],
+      "items": [
+        [
+          "Me levanto a las siete.",
+          "Em llevo a les set.",
+          "levantarse → llevar-se"
+        ],
+        [
+          "¿A qué hora te duchas?",
+          "A quina hora et dutxes?"
+        ],
+        [
+          "Desayunamos en casa.",
+          "Esmorzem a casa."
+        ],
+        [
+          "Él se viste rápido.",
+          "(Ell) es vesteix [ràpid|de pressa]."
+        ],
+        [
+          "Comemos con los compañeros.",
+          "Dinem amb els companys.",
+          "comer (mediodía) → dinar"
+        ],
+        [
+          "Cenan tarde.",
+          "Sopen tard."
+        ],
+        [
+          "Nos acostamos a las once.",
+          "[Anem a dormir|Ens n'anem a dormir|Ens fiquem al llit] a les onze."
+        ],
+        [
+          "Me lavo las manos.",
+          "Em rento les mans."
+        ],
+        [
+          "¿Os levantáis temprano?",
+          "Us lleveu [d'hora|aviat]?"
+        ],
+        [
+          "Quiero ducharme.",
+          "[Vull dutxar-me|Em vull dutxar]."
+        ],
+        [
+          "Se llama Pau.",
+          "Es diu Pau."
+        ],
+        [
+          "Mi habitación es pequeña.",
+          "La meva habitació és petita."
+        ]
+      ]
+    },
+    {
+      "id": "a2-19",
+      "title": "Hours, quarters and days",
+      "goal": "Tell the time the Catalan way and name the days.",
+      "note": "**És la una. Són les dues.**\n\nThe traditional system counts quarters *toward* the next hour: **un quart de nou** = 8:15, **dos quarts de nou** = 8:30, **tres quarts de nou** = 8:45. You'll also hear *les vuit i quart*; both are accepted here, but learn the quarts — it's what you'll hear in Catalonia.\n\n**dilluns** = el lunes (this one), **els dilluns** = los lunes (every).",
+      "tables": [
+        {
+          "title": "the days",
+          "rows": [
+            [
+              "lunes",
+              "dilluns"
+            ],
+            [
+              "martes",
+              "dimarts"
+            ],
+            [
+              "miércoles",
+              "dimecres"
+            ],
+            [
+              "jueves",
+              "dijous"
+            ],
+            [
+              "viernes",
+              "divendres"
+            ],
+            [
+              "sábado",
+              "dissabte"
+            ],
+            [
+              "domingo",
+              "diumenge"
+            ]
+          ]
+        },
+        {
+          "title": "quarters",
+          "rows": [
+            [
+              "8:15",
+              "un quart de nou"
+            ],
+            [
+              "8:30",
+              "dos quarts de nou"
+            ],
+            [
+              "8:45",
+              "tres quarts de nou"
+            ]
+          ]
+        }
+      ],
+      "vocab": [
+        [
+          "un quart",
+          "un cuarto"
+        ],
+        [
+          "el matí",
+          "la mañana"
+        ],
+        [
+          "la tarda",
+          "la tarde"
+        ],
+        [
+          "el vespre",
+          "la tarde-noche"
+        ],
+        [
+          "la nit",
+          "la noche"
+        ],
+        [
+          "quedar",
+          "quedar (citarse)"
+        ]
+      ],
+      "items": [
+        [
+          "Es la una.",
+          "És la una."
+        ],
+        [
+          "Son las tres.",
+          "Són les tres."
+        ],
+        [
+          "Son las ocho y cuarto.",
+          "[És un quart de nou|Són les vuit i quart]."
+        ],
+        [
+          "Son las cinco y media.",
+          "[Són dos quarts de sis|Són les cinc i mitja]."
+        ],
+        [
+          "Son las diez menos cuarto.",
+          "[Són tres quarts de deu|Són les deu menys quart]."
+        ],
+        [
+          "Quedamos el lunes.",
+          "Quedem (el) dilluns."
+        ],
+        [
+          "Los sábados no trabajo.",
+          "Els dissabtes no treballo."
+        ],
+        [
+          "¿A qué hora empieza?",
+          "A quina hora comença?"
+        ],
+        [
+          "A las nueve de la mañana.",
+          "A les nou del matí."
+        ],
+        [
+          "El miércoles voy al médico.",
+          "(El) dimecres vaig al metge."
+        ],
+        [
+          "Abren de lunes a viernes.",
+          "Obren de dilluns a divendres."
+        ],
+        [
+          "El domingo comemos con la familia.",
+          "(El) diumenge dinem amb la família."
+        ]
+      ]
+    },
+    {
+      "id": "a2-20",
+      "title": "Agradar and fer mal",
+      "goal": "Say what you like, love, and what hurts.",
+      "note": "**Agradar** works like gustar: **m'agrada** + singular, **m'agraden** + plural.\n\nPronouns: **em, et, li, ens, us, els** (m', t' before a vowel). *A mis padres les gusta* → **Als meus pares els agrada**.\n\n*Doler* → **fer mal**: **Em fa mal el cap.** Gender trap: **la xocolata** is feminine.",
+      "tables": [
+        {
+          "title": "agradar",
+          "rows": [
+            [
+              "me gusta(n)",
+              "m'agrada, m'agraden"
+            ],
+            [
+              "te gusta(n)",
+              "t'agrada, t'agraden"
+            ],
+            [
+              "le gusta(n)",
+              "li agrada, li agraden"
+            ],
+            [
+              "nos gusta(n)",
+              "ens agrada, ens agraden"
+            ],
+            [
+              "os gusta(n)",
+              "us agrada, us agraden"
+            ],
+            [
+              "les gusta(n)",
+              "els agrada, els agraden"
+            ]
+          ]
+        }
+      ],
+      "vocab": [
+        [
+          "la xocolata",
+          "el chocolate"
+        ],
+        [
+          "el gos",
+          "el perro"
+        ],
+        [
+          "ballar",
+          "bailar"
+        ],
+        [
+          "viatjar",
+          "viajar"
+        ],
+        [
+          "el cap",
+          "la cabeza"
+        ],
+        [
+          "el peu",
+          "el pie"
+        ],
+        [
+          "la pel·lícula",
+          "la película"
+        ]
+      ],
+      "items": [
+        [
+          "Me gusta el chocolate.",
+          "M'agrada la xocolata.",
+          "xocolata is feminine"
+        ],
+        [
+          "¿Te gustan los perros?",
+          "T'agraden els gossos?"
+        ],
+        [
+          "No nos gusta el frío.",
+          "No ens agrada el fred."
+        ],
+        [
+          "A ella le encanta bailar.",
+          "(A ella) li encanta ballar."
+        ],
+        [
+          "¿Os gusta la ciudad?",
+          "Us agrada la ciutat?"
+        ],
+        [
+          "A mis padres les gusta viajar.",
+          "Als meus pares els agrada viatjar."
+        ],
+        [
+          "Me duele la cabeza.",
+          "Em fa mal el cap.",
+          "doler → fer mal"
+        ],
+        [
+          "¿Qué te gusta hacer?",
+          "Què t'agrada fer?"
+        ],
+        [
+          "A mí no me gustan las películas de miedo.",
+          "(A mi) no m'agraden les pel·lícules de por."
+        ],
+        [
+          "Le duelen los pies.",
+          "Li fan mal els peus."
+        ],
+        [
+          "Me gusta mucho.",
+          "M'agrada molt."
+        ],
+        [
+          "Me duelen los ojos.",
+          "Em fan mal els ulls."
+        ]
+      ]
+    },
+    {
+      "id": "a2-21",
+      "title": "Past I: vaig + infinitive",
+      "goal": "Tell what happened with the passat perifràstic.",
+      "note": "Catalan's everyday past (= *comí, hablaste, fuimos*) is **anar-like helper + infinitive**: **vaig menjar** = comí.\n\nThe helper: **vaig, vas, va, vam, vau, van**. The main verb never changes, so every verb is regular here.\n\nLonger forms **vàrem, vàreu, varen** also exist and are accepted.",
+      "tables": [
+        {
+          "title": "passat perifràstic — parlar",
+          "rows": [
+            [
+              "jo",
+              "vaig parlar"
+            ],
+            [
+              "tu",
+              "vas parlar"
+            ],
+            [
+              "ell, ella",
+              "va parlar"
+            ],
+            [
+              "nosaltres",
+              "vam parlar"
+            ],
+            [
+              "vosaltres",
+              "vau parlar"
+            ],
+            [
+              "ells, elles",
+              "van parlar"
+            ]
+          ]
+        }
+      ],
+      "vocab": [
+        [
+          "ahir",
+          "ayer"
+        ],
+        [
+          "anit",
+          "anoche"
+        ],
+        [
+          "la setmana passada",
+          "la semana pasada"
+        ],
+        [
+          "l'any passat",
+          "el año pasado"
+        ],
+        [
+          "tard",
+          "tarde"
+        ],
+        [
+          "el pis",
+          "el piso"
+        ]
+      ],
+      "items": [
+        [
+          "Ayer comí paella.",
+          "Ahir vaig menjar paella."
+        ],
+        [
+          "¿Hablaste con él?",
+          "[Vas parlar|Has parlat] amb ell?"
+        ],
+        [
+          "El año pasado compramos un piso.",
+          "[L'any passat vam comprar un pis|Vam comprar un pis l'any passat]."
+        ],
+        [
+          "Ayer trabajaron mucho.",
+          "Ahir van treballar molt."
+        ],
+        [
+          "¿Qué comisteis?",
+          "Què vau menjar?"
+        ],
+        [
+          "Llegué tarde.",
+          "Vaig arribar tard."
+        ],
+        [
+          "Ella escribió un libro.",
+          "(Ella) va escriure un llibre."
+        ],
+        [
+          "Anoche dormimos poco.",
+          "[Anit|Ahir a la nit] vam dormir poc."
+        ],
+        [
+          "La semana pasada vendieron la casa.",
+          "La setmana passada van vendre la casa."
+        ],
+        [
+          "¿Cuándo empezaste?",
+          "Quan vas començar?"
+        ],
+        [
+          "No entendí nada.",
+          "No vaig entendre res."
+        ],
+        [
+          "Compraron pan y leche.",
+          "Van comprar pa i llet."
+        ]
+      ]
+    },
+    {
+      "id": "a2-22",
+      "title": "Past II: fui, hice, tuve, vi",
+      "goal": "Use the past of the irregular giants — which aren't irregular here.",
+      "note": "The good news: Castellano's nightmare preterites (*fui, hice, tuve, dije, vine, pude*) are all just **vaig + infinitive** in Catalan:\n\n- **va ser** (fue), **vaig anar** (fui), **vaig fer** (hice), **vaig tenir** (tuve), **vaig veure** (vi), **vaig dir** (dije), **vaig venir** (vine), **vaig poder** (pude).\n\n*Hace dos años* → **fa dos anys**.",
+      "vocab": [
+        [
+          "llarg",
+          "largo"
+        ],
+        [
+          "la festa",
+          "la fiesta"
+        ],
+        [
+          "fa dos anys",
+          "hace dos años"
+        ],
+        [
+          "el cotxe",
+          "el coche"
+        ],
+        [
+          "sopar",
+          "cenar"
+        ],
+        [
+          "la veritat",
+          "la verdad"
+        ]
+      ],
+      "items": [
+        [
+          "Fue un día muy largo.",
+          "Va ser un dia molt llarg."
+        ],
+        [
+          "Fuimos a la playa.",
+          "Vam anar a la platja."
+        ],
+        [
+          "¿Qué hiciste el sábado?",
+          "Què vas fer (el) dissabte?"
+        ],
+        [
+          "Tuve un problema con el coche.",
+          "Vaig tenir un problema amb el cotxe."
+        ],
+        [
+          "Vimos una película.",
+          "Vam veure una pel·lícula."
+        ],
+        [
+          "¿Qué dijo?",
+          "Què va dir?"
+        ],
+        [
+          "Vinieron a cenar.",
+          "Van venir a sopar."
+        ],
+        [
+          "No pude dormir.",
+          "No vaig poder dormir."
+        ],
+        [
+          "Hace dos años fui a Roma.",
+          "Fa dos anys vaig anar a Roma."
+        ],
+        [
+          "Hicieron una fiesta.",
+          "Van fer una festa."
+        ],
+        [
+          "Ayer supe la verdad.",
+          "[Ahir vaig saber la veritat|Vaig saber la veritat ahir]."
+        ],
+        [
+          "¿Fuisteis en coche?",
+          "Vau anar [amb|en] cotxe?"
+        ]
+      ]
+    },
+    {
+      "id": "a2-23",
+      "title": "Perfet: he menjat",
+      "goal": "Say what you have done today, already, or never.",
+      "note": "Same use as Castellano *he comido*: today, this week, ya, todavía no, nunca.\n\n**haver** + participle: **he, has, ha, hem, heu, han**.\n\nRegular participles: **-ar → -at** (parlat), **-re/-er → -ut** (perdut, venut), **-ir → -it** (dormit, llegit).\n\n*Todavía* → **encara**. *Elegir* → **triar** or **escollir**.",
+      "tables": [
+        {
+          "title": "perfet",
+          "cols": [
+            "",
+            "parlar",
+            "perdre",
+            "dormir"
+          ],
+          "rows": [
+            [
+              "jo",
+              "he parlat",
+              "he perdut",
+              "he dormit"
+            ],
+            [
+              "tu",
+              "has parlat",
+              "has perdut",
+              "has dormit"
+            ],
+            [
+              "ell, ella",
+              "ha parlat",
+              "ha perdut",
+              "ha dormit"
+            ],
+            [
+              "nosaltres",
+              "hem parlat",
+              "hem perdut",
+              "hem dormit"
+            ],
+            [
+              "vosaltres",
+              "heu parlat",
+              "heu perdut",
+              "heu dormit"
+            ],
+            [
+              "ells, elles",
+              "han parlat",
+              "han perdut",
+              "han dormit"
+            ]
+          ]
+        }
+      ],
+      "vocab": [
+        [
+          "ja",
+          "ya"
+        ],
+        [
+          "encara no",
+          "todavía no"
+        ],
+        [
+          "mai",
+          "nunca"
+        ],
+        [
+          "acabar",
+          "terminar"
+        ],
+        [
+          "triar",
+          "elegir"
+        ],
+        [
+          "guanyar",
+          "ganar"
+        ]
+      ],
+      "items": [
+        [
+          "Hoy he trabajado mucho.",
+          "Avui he treballat molt."
+        ],
+        [
+          "¿Has comido?",
+          "Has [menjat|dinat]?"
+        ],
+        [
+          "Esta mañana hemos perdido el tren.",
+          "Aquest matí hem perdut el tren."
+        ],
+        [
+          "Ya he leído el libro.",
+          "Ja he llegit el llibre."
+        ],
+        [
+          "¿Habéis dormido bien?",
+          "Heu dormit bé?"
+        ],
+        [
+          "Todavía no han llegado.",
+          "Encara no han arribat."
+        ],
+        [
+          "Nunca he estado en Londres.",
+          "[No he estat mai|Mai (no) he estat] a Londres."
+        ],
+        [
+          "Ella ha vendido su coche.",
+          "(Ella) ha venut el seu cotxe."
+        ],
+        [
+          "Esta semana he estudiado mucho.",
+          "Aquesta setmana he estudiat molt."
+        ],
+        [
+          "¿Has terminado?",
+          "Has acabat?"
+        ],
+        [
+          "Hemos elegido un piso.",
+          "Hem [triat|escollit] un pis."
+        ],
+        [
+          "¿Quién ha ganado?",
+          "Qui ha guanyat?"
+        ]
+      ]
+    },
+    {
+      "id": "a2-24",
+      "title": "Irregular participles",
+      "goal": "Know fet, dit, vist, escrit, après, entès, tingut, vingut, plogut...",
+      "note": "The participles you'll use every day. Two families:\n\n- Like Castellano: **fet** (hecho), **dit** (dicho), **vist** (visto), **escrit**, **obert**, **mort**.\n- The -ut family from -c verbs: **tingut**, **vingut**, **pogut**, **volgut**, **begut**, **viscut**, **conegut**, **plogut**.\n- Plus: **après** (aprendre), **entès** (entendre), **pres** (prendre).",
+      "tables": [
+        {
+          "title": "participles",
+          "rows": [
+            [
+              "fer",
+              "fet"
+            ],
+            [
+              "dir",
+              "dit"
+            ],
+            [
+              "veure",
+              "vist"
+            ],
+            [
+              "escriure",
+              "escrit"
+            ],
+            [
+              "obrir",
+              "obert"
+            ],
+            [
+              "aprendre",
+              "après"
+            ],
+            [
+              "entendre",
+              "entès"
+            ],
+            [
+              "tenir",
+              "tingut"
+            ],
+            [
+              "venir",
+              "vingut"
+            ],
+            [
+              "poder",
+              "pogut"
+            ],
+            [
+              "beure",
+              "begut"
+            ],
+            [
+              "ploure",
+              "plogut"
+            ]
+          ]
+        }
+      ],
+      "vocab": [
+        [
+          "la pàgina",
+          "la página"
+        ],
+        [
+          "nou",
+          "nuevo"
+        ],
+        [
+          "la sort",
+          "la suerte"
+        ],
+        [
+          "tota la nit",
+          "toda la noche"
+        ],
+        [
+          "l'aigua",
+          "el agua"
+        ],
+        [
+          "res",
+          "nada"
+        ]
+      ],
+      "items": [
+        [
+          "¿Qué has hecho hoy?",
+          "Què has fet avui?"
+        ],
+        [
+          "No me ha dicho nada.",
+          "No m'ha dit res."
+        ],
+        [
+          "¿Has visto a Marta?",
+          "Has vist la Marta?"
+        ],
+        [
+          "He escrito tres páginas.",
+          "He escrit tres pàgines."
+        ],
+        [
+          "Han abierto un restaurante nuevo.",
+          "Han obert un restaurant nou."
+        ],
+        [
+          "Hemos aprendido mucho.",
+          "Hem après molt."
+        ],
+        [
+          "¿Lo has entendido?",
+          "Ho has entès?"
+        ],
+        [
+          "Ha llovido toda la noche.",
+          "Ha plogut tota la nit."
+        ],
+        [
+          "Hoy he tenido suerte.",
+          "Avui he tingut sort."
+        ],
+        [
+          "No he podido venir.",
+          "No he pogut venir."
+        ],
+        [
+          "¿Has bebido agua?",
+          "Has begut aigua?"
+        ],
+        [
+          "Ha venido mi hermano.",
+          "Ha vingut el meu germà."
+        ]
+      ]
+    },
+    {
+      "id": "a2-25",
+      "title": "Perfet or perifràstic?",
+      "goal": "Pick the right past tense every time.",
+      "note": "Map it straight from Castellano:\n\n- *he comido* → **he menjat** (today, this week, ya, nunca)\n- *comí* → **vaig menjar** (ayer, el año pasado, en 2010)\n\nOne twist: *¿alguna vez?* in a question is usually **mai**: **Has estat mai a Andorra?**\n\n*Nací* → **vaig néixer**.",
+      "vocab": [
+        [
+          "l'estiu",
+          "el verano"
+        ],
+        [
+          "néixer",
+          "nacer"
+        ],
+        [
+          "el curs",
+          "el curso"
+        ],
+        [
+          "mai (in a question)",
+          "alguna vez"
+        ],
+        [
+          "encara",
+          "todavía"
+        ],
+        [
+          "sortir",
+          "salir"
+        ]
+      ],
+      "items": [
+        [
+          "Este verano hemos ido a Menorca.",
+          "Aquest estiu hem anat a Menorca."
+        ],
+        [
+          "El verano pasado fuimos a Mallorca.",
+          "L'estiu passat vam anar a Mallorca."
+        ],
+        [
+          "¿Ya has cenado?",
+          "Ja has sopat?"
+        ],
+        [
+          "Anoche cené tarde.",
+          "[Anit|Ahir a la nit] vaig sopar tard."
+        ],
+        [
+          "Esta semana no he salido.",
+          "Aquesta setmana no he sortit."
+        ],
+        [
+          "Nací en Lleida.",
+          "Vaig néixer a Lleida."
+        ],
+        [
+          "¿Has estado alguna vez en Andorra?",
+          "[Has estat mai|Alguna vegada has estat|Has estat alguna vegada] a Andorra?"
+        ],
+        [
+          "Ayer no hice nada.",
+          "Ahir no vaig fer res."
+        ],
+        [
+          "Hoy no he hecho nada.",
+          "Avui no he fet res."
+        ],
+        [
+          "El lunes empecé un curso.",
+          "(El) dilluns vaig començar un curs."
+        ],
+        [
+          "Todavía no he empezado.",
+          "Encara no he començat."
+        ],
+        [
+          "Hoy he visto a Pere, pero ayer no lo vi.",
+          "Avui he vist [en|el] Pere, però ahir no el vaig veure."
+        ]
+      ]
+    },
+    {
+      "id": "a2-26",
+      "title": "Imperfet: parlava, dormia",
+      "goal": "Describe how things used to be.",
+      "note": "Same use as Castellano *hablaba, dormía*.\n\n- **-ar**: parlava, parlaves, parlava, **parlàvem, parlàveu**, parlaven\n- **-re / -ir**: perdia, dormia — **-ia, -ies, -ia, -íem, -íeu, -ien**\n\nNote the accent on nosaltres/vosaltres. *En la calle* → **al carrer**.",
+      "tables": [
+        {
+          "title": "imperfet",
+          "cols": [
+            "",
+            "parlar",
+            "dormir"
+          ],
+          "rows": [
+            [
+              "jo",
+              "parlava",
+              "dormia"
+            ],
+            [
+              "tu",
+              "parlaves",
+              "dormies"
+            ],
+            [
+              "ell, ella",
+              "parlava",
+              "dormia"
+            ],
+            [
+              "nosaltres",
+              "parlàvem",
+              "dormíem"
+            ],
+            [
+              "vosaltres",
+              "parlàveu",
+              "dormíeu"
+            ],
+            [
+              "ells, elles",
+              "parlaven",
+              "dormien"
+            ]
+          ]
+        }
+      ],
+      "vocab": [
+        [
+          "de petit",
+          "de pequeño"
+        ],
+        [
+          "jugar",
+          "jugar"
+        ],
+        [
+          "el carrer",
+          "la calle"
+        ],
+        [
+          "abans",
+          "antes"
+        ],
+        [
+          "mentre",
+          "mientras"
+        ],
+        [
+          "junts",
+          "juntos"
+        ]
+      ],
+      "items": [
+        [
+          "De pequeño jugaba en la calle.",
+          "De petit jugava al carrer.",
+          "en la calle → al carrer"
+        ],
+        [
+          "Antes vivíamos en Reus.",
+          "Abans vivíem a Reus."
+        ],
+        [
+          "Siempre llegabas tarde.",
+          "Sempre arribaves tard."
+        ],
+        [
+          "Mi abuela cantaba muy bien.",
+          "La meva àvia cantava molt bé."
+        ],
+        [
+          "Dormíamos poco.",
+          "Dormíem poc."
+        ],
+        [
+          "¿Qué estudiabas?",
+          "Què estudiaves?"
+        ],
+        [
+          "Los domingos comíamos en casa de los abuelos.",
+          "Els diumenges dinàvem a casa dels avis."
+        ],
+        [
+          "Ellos trabajaban juntos.",
+          "(Ells) treballaven junts."
+        ],
+        [
+          "Yo leía mucho.",
+          "Llegia molt."
+        ],
+        [
+          "No entendíais nada.",
+          "No enteníeu res."
+        ],
+        [
+          "Mientras comíamos, llovía.",
+          "Mentre menjàvem(,) plovia."
+        ],
+        [
+          "Antes no me gustaba el café.",
+          "Abans no m'agradava el cafè."
+        ]
+      ]
+    },
+    {
+      "id": "a2-27",
+      "title": "Imperfet: era, feia, deia",
+      "goal": "Handle the irregular imperfects of ser, fer, dir, veure.",
+      "note": "**ser**: era, eres, era, **érem, éreu**, eren.\n\nVerbs whose stem ends in a vowel take **-ia** straight on: **feia** (fer), **deia** (dir), **veia** (veure), **creia** (creure), **reia** (riure). Beure, viure, escriure use **v**: **bevia, vivia, escrivia**.\n\n*Hacía mucho frío* → **Feia molt (de) fred**.",
+      "tables": [
+        {
+          "title": "imperfet",
+          "cols": [
+            "",
+            "ser",
+            "fer",
+            "dir"
+          ],
+          "rows": [
+            [
+              "jo",
+              "era",
+              "feia",
+              "deia"
+            ],
+            [
+              "tu",
+              "eres",
+              "feies",
+              "deies"
+            ],
+            [
+              "ell, ella",
+              "era",
+              "feia",
+              "deia"
+            ],
+            [
+              "nosaltres",
+              "érem",
+              "fèiem",
+              "dèiem"
+            ],
+            [
+              "vosaltres",
+              "éreu",
+              "fèieu",
+              "dèieu"
+            ],
+            [
+              "ells, elles",
+              "eren",
+              "feien",
+              "deien"
+            ]
+          ]
+        }
+      ],
+      "vocab": [
+        [
+          "el camp",
+          "el campo"
+        ],
+        [
+          "creure",
+          "creer"
+        ],
+        [
+          "massa",
+          "demasiado"
+        ],
+        [
+          "la carta",
+          "la carta"
+        ],
+        [
+          "petit, petita",
+          "pequeño, pequeña"
+        ],
+        [
+          "cada nit",
+          "cada noche"
+        ]
+      ],
+      "items": [
+        [
+          "Cuando era pequeña, vivía en el campo.",
+          "Quan era petita(,) vivia al camp."
+        ],
+        [
+          "Hacía mucho frío.",
+          "Feia molt (de) fred."
+        ],
+        [
+          "¿Qué decías?",
+          "Què deies?"
+        ],
+        [
+          "Éramos muy amigos.",
+          "Érem molt amics."
+        ],
+        [
+          "Veíamos la tele cada noche.",
+          "[Miràvem|Vèiem] la [tele|televisió] cada nit."
+        ],
+        [
+          "Mi padre siempre decía la verdad.",
+          "El meu pare sempre deia la veritat."
+        ],
+        [
+          "¿Dónde estabais?",
+          "On [éreu|estàveu]?"
+        ],
+        [
+          "Ellos hacían pan.",
+          "(Ells) feien pa."
+        ],
+        [
+          "Bebía demasiado café.",
+          "Bevia massa cafè."
+        ],
+        [
+          "Antes escribía cartas.",
+          "Abans escrivia cartes."
+        ],
+        [
+          "Eran las diez.",
+          "Eren les deu."
+        ],
+        [
+          "Creíamos que no venías.",
+          "Crèiem que no venies."
+        ]
+      ]
+    },
+    {
+      "id": "a2-28",
+      "title": "Future: parlaré",
+      "goal": "Talk about plans — and stop saying 'vaig a'.",
+      "note": "Infinitive + **-é, -às, -à, -em, -eu, -an**: **parlaré**. Verbs in -re drop the e: perdre → **perdré**, viure → **viuré**.\n\nKey rule: *voy a + infinitivo* is NOT \"vaig a\" (vaig + infinitive means the past!). (In the past, *iba a* → **anava a** is fine — B2.) Use the **future**: *voy a comer* → **menjaré**, *va a llover* → **plourà**.\n\n*Llamar por teléfono* → **trucar**.\n\nTo say what you *plan* to do, use **pensar + infinitive**: **Penso anar a Roma** (pienso ir a Roma).",
+      "tables": [
+        {
+          "title": "futur",
+          "cols": [
+            "",
+            "parlar",
+            "perdre",
+            "dormir"
+          ],
+          "rows": [
+            [
+              "jo",
+              "parlaré",
+              "perdré",
+              "dormiré"
+            ],
+            [
+              "tu",
+              "parlaràs",
+              "perdràs",
+              "dormiràs"
+            ],
+            [
+              "ell, ella",
+              "parlarà",
+              "perdrà",
+              "dormirà"
+            ],
+            [
+              "nosaltres",
+              "parlarem",
+              "perdrem",
+              "dormirem"
+            ],
+            [
+              "vosaltres",
+              "parlareu",
+              "perdreu",
+              "dormireu"
+            ],
+            [
+              "ells, elles",
+              "parlaran",
+              "perdran",
+              "dormiran"
+            ]
+          ]
+        }
+      ],
+      "vocab": [
+        [
+          "demà",
+          "mañana"
+        ],
+        [
+          "l'any que ve",
+          "el año que viene"
+        ],
+        [
+          "trucar",
+          "llamar (teléfono)"
+        ],
+        [
+          "ploure",
+          "llover"
+        ],
+        [
+          "guanyar",
+          "ganar"
+        ],
+        [
+          "després",
+          "después"
+        ]
+      ],
+      "items": [
+        [
+          "Mañana hablaré con ella.",
+          "Demà parlaré amb ella."
+        ],
+        [
+          "Voy a comer a las dos.",
+          "[Dinaré|Menjaré] a les dues.",
+          "ir a + inf → future"
+        ],
+        [
+          "¿Me llamarás?",
+          "Em trucaràs?",
+          "llamar → trucar"
+        ],
+        [
+          "Viviremos en Tarragona.",
+          "Viurem a Tarragona."
+        ],
+        [
+          "El año que viene estudiaré catalán.",
+          "L'any que ve estudiaré català."
+        ],
+        [
+          "¿Dónde dormiréis?",
+          "On dormireu?"
+        ],
+        [
+          "Llegarán tarde.",
+          "Arribaran tard."
+        ],
+        [
+          "Vamos a ganar.",
+          "Guanyarem."
+        ],
+        [
+          "Te escribiré.",
+          "T'escriuré."
+        ],
+        [
+          "Lo entenderás.",
+          "Ho entendràs."
+        ],
+        [
+          "Va a llover.",
+          "Plourà."
+        ],
+        [
+          "¿Qué vas a comprar?",
+          "Què compraràs?"
+        ],
+        [
+          "Pienso ir a Roma este verano.",
+          "Penso anar a Roma aquest estiu."
+        ]
+      ]
+    },
+    {
+      "id": "a2-29",
+      "title": "Future: faré, tindré, aniré",
+      "goal": "Use the irregular futures of the core verbs.",
+      "note": "Only a handful, and they mirror the stems you know:\n\n**faré** (fer), **diré** (dir), **tindré** (tenir), **vindré** (venir), **voldré** (voler), **podré**, **sabré**, **hauré** (haver), **seré** (ser), **aniré** (anar).\n\n*Habrá* → **hi haurà**. *Boda* → **casament**.",
+      "tables": [
+        {
+          "title": "futur — jo / nosaltres",
+          "rows": [
+            [
+              "fer",
+              "faré",
+              "farem"
+            ],
+            [
+              "dir",
+              "diré",
+              "direm"
+            ],
+            [
+              "tenir",
+              "tindré",
+              "tindrem"
+            ],
+            [
+              "venir",
+              "vindré",
+              "vindrem"
+            ],
+            [
+              "voler",
+              "voldré",
+              "voldrem"
+            ],
+            [
+              "saber",
+              "sabré",
+              "sabrem"
+            ],
+            [
+              "ser",
+              "seré",
+              "serem"
+            ],
+            [
+              "anar",
+              "aniré",
+              "anirem"
+            ],
+            [
+              "haver",
+              "hauré",
+              "haurem"
+            ]
+          ]
+        }
+      ],
+      "vocab": [
+        [
+          "el casament",
+          "la boda"
+        ],
+        [
+          "aviat",
+          "pronto"
+        ],
+        [
+          "el temps",
+          "el tiempo"
+        ],
+        [
+          "ajudar",
+          "ayudar"
+        ],
+        [
+          "més tard",
+          "más tarde"
+        ],
+        [
+          "sortir",
+          "salir"
+        ]
+      ],
+      "items": [
+        [
+          "¿Qué harás mañana?",
+          "Què faràs demà?"
+        ],
+        [
+          "Te lo diré luego.",
+          "T'ho diré [després|més tard]."
+        ],
+        [
+          "Tendremos tiempo.",
+          "Tindrem temps."
+        ],
+        [
+          "¿Vendréis a la boda?",
+          "Vindreu al casament?"
+        ],
+        [
+          "No podré venir.",
+          "No podré venir."
+        ],
+        [
+          "Mañana iremos a Sitges.",
+          "Demà anirem a Sitges."
+        ],
+        [
+          "Lo sabrás pronto.",
+          "Ho sabràs aviat."
+        ],
+        [
+          "Seremos cinco.",
+          "Serem cinc."
+        ],
+        [
+          "Querrán ayudar.",
+          "Voldran ajudar."
+        ],
+        [
+          "Saldré a las ocho.",
+          "Sortiré a les vuit."
+        ],
+        [
+          "Habrá mucha gente.",
+          "Hi haurà molta gent."
+        ],
+        [
+          "Veréis el mar.",
+          "Veureu el mar."
+        ]
+      ]
+    },
+    {
+      "id": "a2-30",
+      "title": "Haver de and caldre",
+      "goal": "Express obligation without the 'tenir que' Castilianism.",
+      "note": "*Tener que* → **haver de**: **He de treballar** (also **haig de**). \"Tinc que\" is a classic Castilianism — avoid it.\n\n*Hay que* → **cal** + infinitive: **Cal pagar.**\n*No hace falta* → **No cal.**\n\nHaver de works in every tense: **vaig haver de**, **havia de**, **hauré de**.",
+      "tables": [
+        {
+          "title": "haver de — present",
+          "rows": [
+            [
+              "jo",
+              "he de / haig de"
+            ],
+            [
+              "tu",
+              "has de"
+            ],
+            [
+              "ell, ella",
+              "ha de"
+            ],
+            [
+              "nosaltres",
+              "hem de"
+            ],
+            [
+              "vosaltres",
+              "heu de"
+            ],
+            [
+              "ells, elles",
+              "han de"
+            ]
+          ]
+        }
+      ],
+      "vocab": [
+        [
+          "cal",
+          "hay que"
+        ],
+        [
+          "no cal",
+          "no hace falta"
+        ],
+        [
+          "esperar",
+          "esperar"
+        ],
+        [
+          "en efectiu",
+          "en efectivo"
+        ],
+        [
+          "la paciència",
+          "la paciencia"
+        ],
+        [
+          "d'hora",
+          "temprano"
+        ]
+      ],
+      "items": [
+        [
+          "Tengo que trabajar.",
+          "[He|Haig] de treballar.",
+          "tener que → haver de"
+        ],
+        [
+          "¿Tienes que estudiar?",
+          "Has d'estudiar?"
+        ],
+        [
+          "Hay que pagar en efectivo.",
+          "Cal pagar en efectiu."
+        ],
+        [
+          "No hace falta.",
+          "No cal."
+        ],
+        [
+          "Tenemos que hablar.",
+          "Hem de parlar."
+        ],
+        [
+          "Ella tiene que salir temprano.",
+          "(Ella) ha de sortir [d'hora|aviat]."
+        ],
+        [
+          "Tuve que esperar una hora.",
+          "Vaig haver d'esperar una hora."
+        ],
+        [
+          "Tendréis que venir.",
+          "Haureu de venir."
+        ],
+        [
+          "Hay que tener paciencia.",
+          "Cal tenir paciència."
+        ],
+        [
+          "No hace falta venir.",
+          "No cal venir."
+        ],
+        [
+          "Teníamos que levantarnos a las seis.",
+          "[Ens havíem de llevar|Havíem de llevar-nos] a les sis."
+        ],
+        [
+          "¿Qué tengo que hacer?",
+          "Què [he|haig] de fer?"
+        ]
+      ]
+    },
+    {
+      "id": "a2-31",
+      "title": "Molt, poc, massa, gaire",
+      "goal": "Talk about quantities like a native.",
+      "note": "**molt** (mucho), **poc** (poco), **massa** (demasiado, never changes), **prou** (bastante, suficiente), **una mica** (un poco).\n\n**gaire** = *mucho* in negatives and questions: **No tinc gaire temps.** **Hi ha gaire gent?** It's the mark of natural Catalan.\n\n*Dinero* → **diners**, always plural. *Ya basta* → **Ja n'hi ha prou** (learn it as a chunk).",
+      "vocab": [
+        [
+          "gaire",
+          "mucho (neg./preg.)"
+        ],
+        [
+          "massa",
+          "demasiado"
+        ],
+        [
+          "prou",
+          "suficiente"
+        ],
+        [
+          "una mica",
+          "un poco"
+        ],
+        [
+          "els diners",
+          "el dinero"
+        ],
+        [
+          "el trànsit",
+          "el tráfico"
+        ]
+      ],
+      "items": [
+        [
+          "No tengo mucho tiempo.",
+          "No tinc [gaire|molt de|molt] temps.",
+          "neg. → gaire"
+        ],
+        [
+          "Hay demasiados coches.",
+          "Hi ha massa cotxes."
+        ],
+        [
+          "Quiero un poco de agua.",
+          "Vull una mica d'aigua."
+        ],
+        [
+          "Tenemos bastante dinero.",
+          "Tenim [prou|bastants] diners.",
+          "diners is plural"
+        ],
+        [
+          "Hay poca gente.",
+          "Hi ha poca gent."
+        ],
+        [
+          "Trabajas demasiado.",
+          "Treballes massa."
+        ],
+        [
+          "¿Hay mucho tráfico?",
+          "Hi ha [gaire|molt de|molt] trànsit?"
+        ],
+        [
+          "Tengo muchas ganas.",
+          "Tinc moltes ganes."
+        ],
+        [
+          "Ya basta.",
+          "Ja n'hi ha prou.",
+          "fixed phrase"
+        ],
+        [
+          "Estoy un poco cansada.",
+          "Estic una mica cansada."
+        ],
+        [
+          "No me gusta mucho.",
+          "No m'agrada [gaire|molt]."
+        ],
+        [
+          "Comes poco.",
+          "Menges poc."
+        ]
+      ]
+    },
+    {
+      "id": "a2-32",
+      "title": "Prepositions: a, en, amb, per",
+      "goal": "Put people and things in the right place.",
+      "note": "- Place with a name or article → **a**: **a Barcelona**, **a la feina**, **a casa**.\n- Before un/una, aquest, algun → **en**: **en un poble**, **en aquest moment**.\n- **amb** = con (and transport: **amb tren**).\n- **per a** = para (destination/recipient): **per a tu**. **per** = por.\n- **des de... fins a** = desde... hasta. **cap a** = hacia. **sense** = sin.",
+      "vocab": [
+        [
+          "la feina",
+          "el trabajo"
+        ],
+        [
+          "el poble",
+          "el pueblo"
+        ],
+        [
+          "cap a",
+          "hacia"
+        ],
+        [
+          "sense",
+          "sin"
+        ],
+        [
+          "davant de",
+          "delante de"
+        ],
+        [
+          "a prop de",
+          "cerca de"
+        ],
+        [
+          "sota",
+          "debajo de"
+        ]
+      ],
+      "items": [
+        [
+          "Trabajo en Barcelona.",
+          "Treballo a Barcelona."
+        ],
+        [
+          "Estoy en el trabajo.",
+          "[Soc|Estic] a la feina."
+        ],
+        [
+          "Vivimos en un pueblo pequeño.",
+          "Vivim [en|a] un poble petit."
+        ],
+        [
+          "Este regalo es para ti.",
+          "Aquest regal és [per a|per] tu."
+        ],
+        [
+          "Vengo con mi novia.",
+          "Vinc amb la meva [xicota|nòvia|parella]."
+        ],
+        [
+          "Desde las ocho hasta las tres.",
+          "Des de les vuit fins a les tres."
+        ],
+        [
+          "Voy hacia la estación.",
+          "Vaig cap a l'estació."
+        ],
+        [
+          "Café sin azúcar.",
+          "Cafè sense sucre."
+        ],
+        [
+          "El banco está delante de la iglesia.",
+          "El banc [és|està] davant de l'església."
+        ],
+        [
+          "Gracias por todo.",
+          "Gràcies per tot."
+        ],
+        [
+          "Vivo cerca del centro.",
+          "Visc a prop del centre."
+        ],
+        [
+          "El gato está debajo de la mesa.",
+          "El gat [és|està] sota (de) la taula."
+        ]
+      ]
+    },
+    {
+      "id": "a2-33",
+      "title": "Comparisons",
+      "goal": "Compare anything: més, menys, tan, millor, pitjor.",
+      "note": "**més... que**, **menys... que**, **tan... com** (adjective), **tant com** (amount).\n\n**millor** (mejor), **pitjor** (peor). *Mi hermano mayor* → **el meu germà gran**.\n\n*Cuanto más, mejor* → **Com més, millor.** Superlative: **el més...**, or **-íssim**: **boníssim**.",
+      "vocab": [
+        [
+          "millor",
+          "mejor"
+        ],
+        [
+          "pitjor",
+          "peor"
+        ],
+        [
+          "tan... com",
+          "tan... como"
+        ],
+        [
+          "gran",
+          "grande, mayor"
+        ],
+        [
+          "bonic",
+          "bonito"
+        ],
+        [
+          "el món",
+          "el mundo"
+        ]
+      ],
+      "items": [
+        [
+          "Barcelona es más grande que Girona.",
+          "Barcelona és més gran que Girona."
+        ],
+        [
+          "Soy menos alto que tú.",
+          "Soc menys alt que tu."
+        ],
+        [
+          "Es tan inteligente como su madre.",
+          "És tan intel·ligent com la seva mare."
+        ],
+        [
+          "Este es mejor.",
+          "Aquest és millor."
+        ],
+        [
+          "Hoy hace peor tiempo que ayer.",
+          "Avui fa pitjor temps que ahir."
+        ],
+        [
+          "Mi hermano mayor.",
+          "El meu germà gran.",
+          "mayor (sibling) → gran"
+        ],
+        [
+          "Es la ciudad más bonita del mundo.",
+          "És la ciutat més bonica del món."
+        ],
+        [
+          "Trabajo tanto como tú.",
+          "Treballo tant com tu."
+        ],
+        [
+          "¡Está buenísimo!",
+          "[Està|És] boníssim!"
+        ],
+        [
+          "Tengo más de veinte libros.",
+          "Tinc més de vint llibres."
+        ],
+        [
+          "Cuanto más, mejor.",
+          "Com més, millor."
+        ],
+        [
+          "Es el peor día de mi vida.",
+          "És el pitjor dia de la meva vida."
+        ]
+      ]
+    },
+    {
+      "id": "a2-34",
+      "title": "Imperative",
+      "goal": "Give orders, ask favours, and tell people what not to do.",
+      "note": "Positive **tu**: usually the 3rd-person present: **parla**, **menja**, **llegeix**. Irregulars: **fes** (haz), **digues** (di), **vine** (ven), **ves** (ve), **sigues** (sé), **tingues** (ten).\n\n**vostè**: **parli**, **passi**. **vosaltres**: **parleu**, **tingueu**.\n\nNegative uses the subjunctive, as in Castellano: **no parlis**, **no facis**, **no vinguis**.\n\nPronouns attach with a hyphen: **digues-me**.",
+      "tables": [
+        {
+          "title": "imperative",
+          "cols": [
+            "",
+            "tu",
+            "no + tu",
+            "vosaltres"
+          ],
+          "rows": [
+            [
+              "parlar",
+              "parla",
+              "no parlis",
+              "parleu"
+            ],
+            [
+              "fer",
+              "fes",
+              "no facis",
+              "feu"
+            ],
+            [
+              "dir",
+              "digues",
+              "no diguis",
+              "digueu"
+            ],
+            [
+              "venir",
+              "vine",
+              "no vinguis",
+              "veniu"
+            ],
+            [
+              "anar",
+              "ves",
+              "no vagis",
+              "aneu"
+            ],
+            [
+              "ser",
+              "sigues",
+              "no siguis",
+              "sigueu"
+            ],
+            [
+              "tenir",
+              "tingues",
+              "no tinguis",
+              "tingueu"
+            ]
+          ]
+        }
+      ],
+      "vocab": [
+        [
+          "fort",
+          "fuerte, alto (voz)"
+        ],
+        [
+          "puntual",
+          "puntual"
+        ],
+        [
+          "fora",
+          "fuera"
+        ],
+        [
+          "passar",
+          "pasar"
+        ],
+        [
+          "si us plau",
+          "por favor"
+        ],
+        [
+          "de pressa",
+          "deprisa"
+        ]
+      ],
+      "items": [
+        [
+          "¡Habla más alto!",
+          "Parla més [fort|alt]!"
+        ],
+        [
+          "¡Ven aquí!",
+          "Vine aquí!"
+        ],
+        [
+          "Haz los deberes.",
+          "Fes els deures."
+        ],
+        [
+          "¡Vete a casa!",
+          "Ves a casa!"
+        ],
+        [
+          "Dime la verdad.",
+          "Digues-me la veritat."
+        ],
+        [
+          "No hables tan rápido.",
+          "No parlis tan [ràpid|de pressa]."
+        ],
+        [
+          "No hagas eso.",
+          "No facis això."
+        ],
+        [
+          "Sé puntual.",
+          "Sigues puntual."
+        ],
+        [
+          "Tened paciencia.",
+          "Tingueu paciència."
+        ],
+        [
+          "Pase, por favor.",
+          "Passi, si us plau.",
+          "usted"
+        ],
+        [
+          "Comamos fuera.",
+          "[Dinem|Mengem] fora."
+        ],
+        [
+          "No vengas tarde.",
+          "No vinguis tard."
+        ]
+      ]
+    }
+  ]
+}

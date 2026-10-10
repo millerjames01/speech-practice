@@ -1,0 +1,1023 @@
+{
+  "level": "B2",
+  "reviewed": false,
+  "lessons": [
+    {
+      "id": "b2-01",
+      "title": "Imperfect subjunctive: parlés, fos",
+      "goal": "Say what someone wanted, asked or feared in the past.",
+      "note": "Endings in **-és / -ís**:\n\n- **-ar, -re**: parlés, parlessis, parlés, **parléssim, parléssiu**, parlessin\n- **-ir**: dormís, dormissis, dormís, dormíssim, dormíssiu, dormissin\n\nIrregulars mostly mirror the present subjunctive (tingui → tingués, digui → digués). The ones to know: **fos** (ser), **tingués**, **fes**, **anés**, **digués**, **vingués**, **pogués**, **volgués**, **sabés**, **estigués**, **hagués**.\n\nSame triggers as Castellano: *quería que vinieras* → **volia que vinguessis**.",
+      "tables": [
+        {
+          "title": "imperfet de subjuntiu",
+          "cols": [
+            "",
+            "parlar",
+            "ser",
+            "tenir"
+          ],
+          "rows": [
+            [
+              "jo",
+              "parlés",
+              "fos",
+              "tingués"
+            ],
+            [
+              "tu",
+              "parlessis",
+              "fossis",
+              "tinguessis"
+            ],
+            [
+              "ell, ella",
+              "parlés",
+              "fos",
+              "tingués"
+            ],
+            [
+              "nosaltres",
+              "parléssim",
+              "fóssim",
+              "tinguéssim"
+            ],
+            [
+              "vosaltres",
+              "parléssiu",
+              "fóssiu",
+              "tinguéssiu"
+            ],
+            [
+              "ells, elles",
+              "parlessin",
+              "fossin",
+              "tinguessin"
+            ]
+          ]
+        }
+      ],
+      "vocab": [
+        [
+          "sorprendre",
+          "sorprender"
+        ],
+        [
+          "la llàstima",
+          "la pena (lástima)"
+        ],
+        [
+          "com si",
+          "como si"
+        ],
+        [
+          "preferir",
+          "preferir"
+        ],
+        [
+          "caldre",
+          "hacer falta"
+        ]
+      ],
+      "items": [
+        [
+          "Quería que vinieras.",
+          "Volia que vinguessis."
+        ],
+        [
+          "Me pidió que lo hiciera.",
+          "Em va demanar que ho fes."
+        ],
+        [
+          "Ojalá fuera verdad.",
+          "Tant de bo fos veritat."
+        ],
+        [
+          "Era necesario que estudiáramos.",
+          "[Calia|Era necessari] que estudiéssim."
+        ],
+        [
+          "No pensaba que pudieras venir.",
+          "No pensava que poguessis venir."
+        ],
+        [
+          "Le dije que se fuera.",
+          "Li vaig dir que se n'anés."
+        ],
+        [
+          "Habla como si lo supiera todo.",
+          "Parla com si ho sabés tot."
+        ],
+        [
+          "Querían que habláramos catalán.",
+          "Volien que parléssim català."
+        ],
+        [
+          "Me sorprendió que no dijeras nada.",
+          "Em va sorprendre que no diguessis res."
+        ],
+        [
+          "Esperaba que tuvieras razón.",
+          "Esperava que tinguessis raó."
+        ],
+        [
+          "Preferiría que no fumaras.",
+          "Preferiria que no fumessis."
+        ],
+        [
+          "Fue una pena que no estuvierais.",
+          "Va ser una [llàstima|pena] que no hi [fóssiu|estiguéssiu]."
+        ]
+      ]
+    },
+    {
+      "id": "b2-02",
+      "title": "Si-clauses",
+      "goal": "Imagine: si tingués temps, viatjaria més.",
+      "note": "Two patterns, as in Castellano:\n\n- Real: **si + present, present/future** — **Si plou, ens quedem.**\n- Unreal: **si + imperfet de subjuntiu, condicional** — **Si tingués temps, viatjaria més.**\n\nNever the conditional after si.\n\n*Ganar la lotería* → **tocar la loteria**: **si et toqués la loteria**.",
+      "vocab": [
+        [
+          "tocar la loteria",
+          "ganar la lotería"
+        ],
+        [
+          "viatjar",
+          "viajar"
+        ],
+        [
+          "genial",
+          "genial"
+        ],
+        [
+          "a poc a poc",
+          "despacio"
+        ],
+        [
+          "si",
+          "si"
+        ]
+      ],
+      "items": [
+        [
+          "Si tuviera tiempo, viajaría más.",
+          "Si tingués temps(,) viatjaria més."
+        ],
+        [
+          "Si fuera tú, no lo haría.",
+          "[Si fos tu|Jo que tu](,) no ho faria."
+        ],
+        [
+          "¿Qué harías si ganaras la lotería?",
+          "Què faries si [et toqués|guanyessis] la loteria?"
+        ],
+        [
+          "Si pudiera, te ayudaría.",
+          "Si pogués(,) t'ajudaria."
+        ],
+        [
+          "Si lloviera, nos quedaríamos en casa.",
+          "Si plogués(,) ens [quedaríem|estaríem] a casa."
+        ],
+        [
+          "Si llueve, nos quedamos.",
+          "Si plou(,) ens quedem."
+        ],
+        [
+          "Si supieras la verdad, no dirías eso.",
+          "Si sabessis la veritat(,) no diries això."
+        ],
+        [
+          "Si vinieran, sería genial.",
+          "Si vinguessin(,) seria [genial|fantàstic]."
+        ],
+        [
+          "Si tuviéramos coche, iríamos.",
+          "Si tinguéssim cotxe(,) hi aniríem."
+        ],
+        [
+          "Si quisieras, podrías.",
+          "Si volguessis(,) podries."
+        ],
+        [
+          "Si estuviera aquí, lo sabría.",
+          "Si [fos|estigués] aquí(,) ho sabria."
+        ],
+        [
+          "Si hablaras más despacio, te entendería.",
+          "Si parlessis més a poc a poc(,) t'entendria."
+        ]
+      ]
+    },
+    {
+      "id": "b2-03",
+      "title": "Si ho hagués sabut...",
+      "goal": "Talk about what would have happened.",
+      "note": "**Plusquamperfet de subjuntiu**: hagués, haguessis, hagués, haguéssim, haguéssiu, haguessin + participle.\n\n**Condicional perfet**: hauria, hauries, hauria, hauríem, hauríeu, haurien + participle.\n\n*Si lo hubiera sabido, habría venido* → **Si ho hagués sabut, hauria vingut.** As in Castellano, *hagués* is also accepted in the second half.",
+      "tables": [
+        {
+          "title": "compound forms — jo",
+          "rows": [
+            [
+              "hubiera hecho",
+              "hagués fet"
+            ],
+            [
+              "habría hecho",
+              "hauria fet"
+            ],
+            [
+              "hubiéramos ido",
+              "haguéssim anat"
+            ],
+            [
+              "habríamos ido",
+              "hauríem anat"
+            ]
+          ]
+        }
+      ],
+      "vocab": [
+        [
+          "aprovar",
+          "aprobar"
+        ],
+        [
+          "callar",
+          "callar"
+        ],
+        [
+          "imaginar",
+          "imaginar"
+        ],
+        [
+          "passar",
+          "pasar"
+        ],
+        [
+          "abans",
+          "antes"
+        ]
+      ],
+      "items": [
+        [
+          "Si lo hubiera sabido, habría venido.",
+          "Si ho hagués sabut(,) [hauria|hagués] vingut."
+        ],
+        [
+          "Me habría gustado verte.",
+          "[M'hauria|M'hagués] agradat veure't."
+        ],
+        [
+          "Si hubieras estudiado, habrías aprobado.",
+          "Si haguessis estudiat(,) [hauries|haguessis] aprovat."
+        ],
+        [
+          "Yo no lo habría hecho.",
+          "No ho [hauria|hagués] fet."
+        ],
+        [
+          "Ojalá hubiera ido.",
+          "Tant de bo hi hagués anat."
+        ],
+        [
+          "Habríamos llegado antes.",
+          "[Hauríem|Haguéssim] arribat abans."
+        ],
+        [
+          "Si no hubiera llovido, habríamos salido.",
+          "Si no hagués plogut(,) [hauríem|haguéssim] sortit."
+        ],
+        [
+          "¿Qué habrías hecho tú?",
+          "Què [hauries|haguessis] fet (tu)?"
+        ],
+        [
+          "Como si no hubiera pasado nada.",
+          "Com si no hagués passat res."
+        ],
+        [
+          "Habría sido mejor callar.",
+          "[Hauria estat|Hagués estat|Hauria sigut] millor callar."
+        ],
+        [
+          "Si me lo hubieras dicho, te habría ayudado.",
+          "Si m'ho haguessis dit(,) [t'hauria|t'hagués] ajudat."
+        ],
+        [
+          "Nunca lo habría imaginado.",
+          "[No ho hauria imaginat mai|Mai (no) ho hauria imaginat]."
+        ]
+      ]
+    },
+    {
+      "id": "b2-04",
+      "title": "Perfet de subjuntiu: hagi fet",
+      "goal": "Hope, doubt or feel about something that has happened.",
+      "note": "**hagi, hagis, hagi, hàgim, hàgiu, hagin** + participle = *haya hecho*.\n\nTriggers: **espero que, no crec que, és possible que, m'alegro que, dubto que, quan** (future): **Quan hagis acabat, avisa'm.**\n\nReminder: **potser** prefers the indicative: **Potser ja han sortit.**",
+      "tables": [
+        {
+          "title": "perfet de subjuntiu — arribar",
+          "rows": [
+            [
+              "jo",
+              "hagi arribat"
+            ],
+            [
+              "tu",
+              "hagis arribat"
+            ],
+            [
+              "ell, ella",
+              "hagi arribat"
+            ],
+            [
+              "nosaltres",
+              "hàgim arribat"
+            ],
+            [
+              "vosaltres",
+              "hàgiu arribat"
+            ],
+            [
+              "ells, elles",
+              "hagin arribat"
+            ]
+          ]
+        }
+      ],
+      "vocab": [
+        [
+          "dubtar",
+          "dudar"
+        ],
+        [
+          "avisar",
+          "avisar"
+        ],
+        [
+          "perdre's",
+          "perderse"
+        ],
+        [
+          "em sap greu",
+          "lo siento"
+        ],
+        [
+          "sorprendre",
+          "sorprender"
+        ]
+      ],
+      "items": [
+        [
+          "Espero que hayas llegado bien.",
+          "Espero que hagis arribat bé."
+        ],
+        [
+          "No creo que lo haya hecho él.",
+          "No crec que ho hagi fet ell."
+        ],
+        [
+          "Me alegro de que hayáis venido.",
+          "M'alegro (de) que hàgiu vingut."
+        ],
+        [
+          "Es posible que se haya perdido.",
+          "És possible que s'hagi perdut."
+        ],
+        [
+          "Cuando hayas terminado, avísame.",
+          "Quan hagis acabat(,) avisa'm."
+        ],
+        [
+          "Es raro que no hayan llamado.",
+          "És estrany que no hagin trucat."
+        ],
+        [
+          "Ojalá haya aprobado.",
+          "Tant de bo hagi aprovat."
+        ],
+        [
+          "No conozco a nadie que haya estado allí.",
+          "No conec ningú que hi hagi estat."
+        ],
+        [
+          "Dudo que lo hayan entendido.",
+          "Dubto que ho hagin entès."
+        ],
+        [
+          "Siento que hayas tenido que esperar.",
+          "[Em sap greu|Sento] que hagis hagut d'esperar."
+        ],
+        [
+          "Quizás ya hayan salido.",
+          "Potser ja [han|hagin] sortit."
+        ],
+        [
+          "Me sorprende que no hayas dicho nada.",
+          "Em sorprèn que no hagis dit res."
+        ]
+      ]
+    },
+    {
+      "id": "b2-05",
+      "title": "Passive, impersonal es, agreement",
+      "goal": "Write signs, rules and reports: es lloga, va ser construïda.",
+      "note": "- **es** + verb, agreeing with the noun: **Es lloga pis. Es venen cotxes.**\n- **ser + participle** for the true passive: **va ser construïda**.\n- With a 3rd-person direct-object pronoun, the participle can agree: **L'has vista?** **Les he comprades.** (Non-agreement is also accepted.)",
+      "vocab": [
+        [
+          "llogar",
+          "alquilar"
+        ],
+        [
+          "construir",
+          "construir"
+        ],
+        [
+          "el lladre",
+          "el ladrón"
+        ],
+        [
+          "detenir",
+          "detener"
+        ],
+        [
+          "el voluntari",
+          "el voluntario"
+        ],
+        [
+          "fumar",
+          "fumar"
+        ]
+      ],
+      "items": [
+        [
+          "Se alquila piso.",
+          "Es lloga pis."
+        ],
+        [
+          "Aquí se habla catalán.",
+          "Aquí es parla català."
+        ],
+        [
+          "Se venden coches.",
+          "Es venen cotxes."
+        ],
+        [
+          "Se dice que es verdad.",
+          "Es diu que és veritat."
+        ],
+        [
+          "La iglesia fue construida en el siglo doce.",
+          "L'església va ser construïda al segle dotze."
+        ],
+        [
+          "Se busca camarero.",
+          "Es busca cambrer."
+        ],
+        [
+          "Las he comprado esta mañana. (las peras)",
+          "Les he [comprades|comprat] aquest matí."
+        ],
+        [
+          "¿La has visto? (a Laura)",
+          "L'has [vista|vist]?"
+        ],
+        [
+          "Aquí se come muy bien.",
+          "[Aquí es menja molt bé|Es menja molt bé aquí]."
+        ],
+        [
+          "No se puede fumar.",
+          "No es pot fumar."
+        ],
+        [
+          "El ladrón fue detenido.",
+          "El lladre va ser detingut."
+        ],
+        [
+          "Se necesitan voluntarios.",
+          "Es necessiten voluntaris."
+        ]
+      ]
+    },
+    {
+      "id": "b2-06",
+      "title": "Reported speech",
+      "goal": "Report what people said, asked and told you to do.",
+      "note": "Tenses shift as in Castellano:\n\n- *vendré* → **va dir que vindria**\n- *tengo hambre* → **em va preguntar si tenia gana**\n- *hazlo* → **em va dir que ho fes**\n\n*Contar (una historia)* → **explicar**. And the perspective rule still holds: *que fuera* (to the speaker) → **que hi anés** or **que vingués**.",
+      "vocab": [
+        [
+          "explicar",
+          "contar"
+        ],
+        [
+          "assegurar",
+          "asegurar"
+        ],
+        [
+          "preguntar si",
+          "preguntar si"
+        ],
+        [
+          "l'endemà",
+          "al día siguiente"
+        ],
+        [
+          "casar-se",
+          "casarse"
+        ]
+      ],
+      "items": [
+        [
+          "Dijo que vendría.",
+          "Va dir que vindria."
+        ],
+        [
+          "Me preguntó si tenía hambre.",
+          "Em va preguntar si tenia gana."
+        ],
+        [
+          "Me dijo que no lo hiciera.",
+          "Em va dir que no ho fes."
+        ],
+        [
+          "Dice que está cansada.",
+          "Diu que està cansada."
+        ],
+        [
+          "Le pregunté dónde vivía.",
+          "Li vaig preguntar on vivia."
+        ],
+        [
+          "Nos dijeron que habían perdido el tren.",
+          "Ens van dir que havien perdut el tren."
+        ],
+        [
+          "Me pidió que esperara.",
+          "Em va demanar que esperés."
+        ],
+        [
+          "Me contó que se iba a casar.",
+          "Em va explicar que [es casaria|s'havia de casar].",
+          "contar → explicar"
+        ],
+        [
+          "Dijo que ya lo sabía.",
+          "Va dir que ja ho sabia."
+        ],
+        [
+          "Preguntaron cuándo volveríamos.",
+          "Van preguntar quan tornaríem."
+        ],
+        [
+          "Me aseguró que llegaría a tiempo.",
+          "Em va assegurar que arribaria a temps."
+        ],
+        [
+          "Me dijo que fuera al día siguiente.",
+          "Em va dir que [hi anés|vingués] l'endemà."
+        ]
+      ]
+    },
+    {
+      "id": "b2-07",
+      "title": "Periphrases: acabar de, tornar a, soler",
+      "goal": "Express just, again, stop, start and usually.",
+      "note": "- **acabar de** + inf. = acabar de: **Acabo d'arribar.**\n- **tornar a** + inf. = volver a: **Torna a ploure.**\n- **deixar de** = dejar de; **posar-se a** = ponerse a; **començar a** = empezar a\n- **soler** = soler: **solc, sols, sol, solem, soleu, solen**; imperfect **solia**. Also **acostumar a**.\n\nPronouns can climb: **No ho tornis a fer = No tornis a fer-ho.**\n\nThe one place **anar a + infinitive** is fine: the past, for *was about to*: **Anava a sortir quan vas trucar.** In the present it's still a Castilianism.",
+      "vocab": [
+        [
+          "acabar de",
+          "acabar de"
+        ],
+        [
+          "tornar a",
+          "volver a"
+        ],
+        [
+          "deixar de",
+          "dejar de"
+        ],
+        [
+          "soler",
+          "soler"
+        ],
+        [
+          "plorar",
+          "llorar"
+        ],
+        [
+          "cridar",
+          "gritar"
+        ]
+      ],
+      "items": [
+        [
+          "Acabo de llegar.",
+          "Acabo d'arribar."
+        ],
+        [
+          "He dejado de fumar.",
+          "He deixat de fumar."
+        ],
+        [
+          "Se puso a llorar.",
+          "Es va posar a plorar."
+        ],
+        [
+          "Vuelve a llover.",
+          "Torna a ploure."
+        ],
+        [
+          "Suelo levantarme temprano.",
+          "[Solc llevar-me|Em solc llevar|Acostumo a llevar-me] [d'hora|aviat]."
+        ],
+        [
+          "Solíamos ir a la playa.",
+          "Solíem anar a la platja."
+        ],
+        [
+          "Está a punto de llover.",
+          "Està a punt de ploure."
+        ],
+        [
+          "Acaba de salir.",
+          "Acaba de sortir."
+        ],
+        [
+          "No vuelvas a hacerlo.",
+          "[No ho tornis a fer|No tornis a fer-ho]."
+        ],
+        [
+          "Empezó a nevar.",
+          "Va començar a nevar."
+        ],
+        [
+          "Dejad de gritar.",
+          "Deixeu de cridar.",
+          "gritar → cridar"
+        ],
+        [
+          "Acabábamos de cenar cuando llamaron.",
+          "Acabàvem de sopar quan van trucar."
+        ],
+        [
+          "Iba a salir cuando llamaste.",
+          "[Anava a sortir|Estava a punt de sortir] quan vas trucar."
+        ]
+      ]
+    },
+    {
+      "id": "b2-08",
+      "title": "Deure: probability and debt",
+      "goal": "Guess with deu ser, and owe with et dec.",
+      "note": "**deure + infinitive** = *deber de* (probability): **Deu ser tard.** **Devia ser mitjanit.** **Deu haver sortit.**\n\nFor obligation, use **haver de**: *debes estudiar* → **has d'estudiar**.\n\n**deure** also = owe: **Et dec deu euros. Quant et dec?**",
+      "tables": [
+        {
+          "title": "deure",
+          "cols": [
+            "",
+            "present",
+            "imperfet"
+          ],
+          "rows": [
+            [
+              "jo",
+              "dec",
+              "devia"
+            ],
+            [
+              "tu",
+              "deus",
+              "devies"
+            ],
+            [
+              "ell, ella",
+              "deu",
+              "devia"
+            ],
+            [
+              "nosaltres",
+              "devem",
+              "devíem"
+            ],
+            [
+              "vosaltres",
+              "deveu",
+              "devíeu"
+            ],
+            [
+              "ells, elles",
+              "deuen",
+              "devien"
+            ]
+          ]
+        }
+      ],
+      "vocab": [
+        [
+          "la mitjanit",
+          "la medianoche"
+        ],
+        [
+          "deure",
+          "deber"
+        ],
+        [
+          "preocupar-se",
+          "preocuparse"
+        ],
+        [
+          "haver de",
+          "tener que, deber"
+        ]
+      ],
+      "items": [
+        [
+          "Debe de ser tarde.",
+          "Deu ser tard."
+        ],
+        [
+          "Deben de tener hambre.",
+          "Deuen tenir gana."
+        ],
+        [
+          "Debía de ser medianoche.",
+          "Devia ser mitjanit."
+        ],
+        [
+          "Debe de haber salido.",
+          "Deu haver sortit."
+        ],
+        [
+          "Te debo diez euros.",
+          "Et dec deu euros."
+        ],
+        [
+          "¿Cuánto te debo?",
+          "Quant et dec?"
+        ],
+        [
+          "Debes estudiar más.",
+          "Has d'estudiar més.",
+          "obligation → haver de"
+        ],
+        [
+          "Debías de estar cansado.",
+          "Devies estar cansat."
+        ],
+        [
+          "Deben de estar en casa.",
+          "Deuen [ser|estar] a casa."
+        ],
+        [
+          "Ya deben de haber llegado.",
+          "Ja deuen haver arribat."
+        ],
+        [
+          "No debéis preocuparos.",
+          "[No us heu de preocupar|No heu de preocupar-vos|No cal que us preocupeu]."
+        ],
+        [
+          "¿Quién debe de ser?",
+          "Qui deu ser?"
+        ]
+      ]
+    },
+    {
+      "id": "b2-09",
+      "title": "Hi and en with verbs",
+      "goal": "Answer naturally: hi compto, en parlarem, n'estic fart.",
+      "note": "Complements with **a / en / amb** → **hi**: **hi penso**, **hi compto**, **hi estic d'acord**, **hi jugo**.\n\nComplements with **de** → **en**: **en parlarem**, **n'estic fart**, **n'estic segur**, **en tinc ganes**, **me'n recordo**, **me'n fio**.\n\nThis is what makes Catalan sound Catalan. Castellano just repeats *de eso / con eso*.",
+      "vocab": [
+        [
+          "comptar amb",
+          "contar con"
+        ],
+        [
+          "fart",
+          "harto"
+        ],
+        [
+          "fiar-se de",
+          "fiarse de"
+        ],
+        [
+          "assabentar-se de",
+          "enterarse de"
+        ],
+        [
+          "jugar a",
+          "jugar a"
+        ]
+      ],
+      "items": [
+        [
+          "¿Cuento con tu ayuda? Sí, cuenta con ello.",
+          "Sí, compta-hi."
+        ],
+        [
+          "Hablaremos de ello mañana.",
+          "En parlarem demà."
+        ],
+        [
+          "Estoy harto de esto.",
+          "N'estic fart."
+        ],
+        [
+          "Estoy de acuerdo con eso.",
+          "Hi estic d'acord."
+        ],
+        [
+          "Estoy seguro de ello.",
+          "N'estic segur."
+        ],
+        [
+          "Tengo ganas de ello.",
+          "En tinc ganes."
+        ],
+        [
+          "No pienses más en eso.",
+          "No hi pensis més."
+        ],
+        [
+          "¿Juegas al tenis? Sí, juego cada semana.",
+          "Sí, hi jugo cada setmana."
+        ],
+        [
+          "Ya tengo bastante.",
+          "Ja en tinc prou."
+        ],
+        [
+          "¿Te acuerdas de la fiesta? Sí, me acuerdo.",
+          "Sí, me'n recordo."
+        ],
+        [
+          "No me fío de él.",
+          "No me'n fio."
+        ],
+        [
+          "Me he enterado de lo que pasó.",
+          "M'he assabentat del que va passar.",
+          "enterarse → assabentar-se"
+        ]
+      ]
+    },
+    {
+      "id": "b2-10",
+      "title": "Imperative + pronoun clusters",
+      "goal": "Say llévatelo, dímelo, dame un poco, ponte a ello.",
+      "note": "Imperatives carry pronoun pairs on their back:\n\n- **digues-m'ho** (dímelo), **porta-me'l** (tráemelo), **explica'ns-ho**\n- **dona-me'n** (dame de eso), **dona-l'hi** (dáselo, el libro)\n- **emporta-te'l** (llévatelo), **treu-te-la** (quítatela), **posa-t'hi** (ponte a ello)\n- **menja-t'ho tot**, **pensa-t'ho bé**, **fes-m'ho saber**",
+      "vocab": [
+        [
+          "emportar-se",
+          "llevarse"
+        ],
+        [
+          "treure's",
+          "quitarse"
+        ],
+        [
+          "posar-s'hi",
+          "ponerse a ello"
+        ],
+        [
+          "fer saber",
+          "hacer saber"
+        ]
+      ],
+      "items": [
+        [
+          "Llévatelo. (el libro)",
+          "[Emporta-te'l|Endú-te'l]."
+        ],
+        [
+          "Dímelo. (eso)",
+          "Digues-m'ho."
+        ],
+        [
+          "Dame un poco. (de pan)",
+          "Dona-me'n una mica."
+        ],
+        [
+          "Ponte a ello.",
+          "Posa-t'hi."
+        ],
+        [
+          "Quítatela. (la chaqueta)",
+          "Treu-te-la."
+        ],
+        [
+          "Házmelo saber.",
+          "Fes-m'ho saber."
+        ],
+        [
+          "Explícanoslo. (eso)",
+          "Explica'ns-ho."
+        ],
+        [
+          "Tráemelo. (el libro)",
+          "Porta-me'l."
+        ],
+        [
+          "Cómetelo todo.",
+          "Menja-t'ho tot."
+        ],
+        [
+          "Piénsatelo bien.",
+          "Pensa-t'ho bé."
+        ],
+        [
+          "Dáselo. (el libro, a él)",
+          "Dona-l'hi."
+        ],
+        [
+          "Váyanse. (ustedes)",
+          "Vagin-se'n."
+        ]
+      ]
+    },
+    {
+      "id": "b2-11",
+      "title": "Castilianisms II: structures",
+      "goal": "Unlearn the calques that survive into B2.",
+      "note": "- *tener que* → **haver de**; *hay que* → **cal**\n- *en cuanto a* → **quant a**, **pel que fa a**; *a nivel de* → **en l'àmbit de** (or rephrase)\n- *de repente* → **de sobte**, **de cop**\n- *sin embargo* → **tanmateix**, **no obstant això**\n- *mientras tanto* → **mentrestant**\n- no personal *a*: **Vaig veure la Maria**\n- *los datos* → **les dades** (feminine); *apoyar* → **donar suport**; *pendiente* → **pendent**",
+      "vocab": [
+        [
+          "pel que fa a",
+          "en cuanto a"
+        ],
+        [
+          "de sobte",
+          "de repente"
+        ],
+        [
+          "tanmateix",
+          "sin embargo"
+        ],
+        [
+          "mentrestant",
+          "mientras tanto"
+        ],
+        [
+          "les dades",
+          "los datos"
+        ],
+        [
+          "donar suport",
+          "apoyar"
+        ]
+      ],
+      "items": [
+        [
+          "Tengo que irme.",
+          "[Me n'he d'anar|Me n'haig d'anar|He d'anar-me'n]."
+        ],
+        [
+          "Hay que decírselo. (eso, a él)",
+          "Cal dir-li-ho."
+        ],
+        [
+          "En cuanto al precio, es caro.",
+          "[Quant al|Pel que fa al] preu(,) és car."
+        ],
+        [
+          "A nivel personal, estoy bien.",
+          "[Personalment|En l'àmbit personal](,) estic bé."
+        ],
+        [
+          "De repente, se fue la luz.",
+          "[De sobte|De cop](,) [va marxar la llum|se'n va anar la llum]."
+        ],
+        [
+          "Sin embargo, no lo hizo.",
+          "[Tanmateix|No obstant això](,) no ho va fer."
+        ],
+        [
+          "Vi a María en el mercado.",
+          "Vaig veure la Maria al mercat.",
+          "no personal a"
+        ],
+        [
+          "Necesito los datos.",
+          "Necessito les dades.",
+          "dada is feminine"
+        ],
+        [
+          "Te apoyo.",
+          "Et dono suport."
+        ],
+        [
+          "Está pendiente.",
+          "Està pendent."
+        ],
+        [
+          "Desde luego que sí.",
+          "[És clar|I tant|Naturalment] que sí."
+        ],
+        [
+          "Mientras tanto, esperamos.",
+          "Mentrestant(,) esperem."
+        ]
+      ]
+    }
+  ]
+}
