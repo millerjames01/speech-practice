@@ -1,0 +1,320 @@
+{
+  "level": "B1",
+  "reviewed": false,
+  "lessons": [
+    {
+      "id": "b1-16",
+      "title": "When, so that, before, although",
+      "goal": "Use the subjunctive after quan, perquè, abans que, encara que.",
+      "note": "As in Castellano:\n\n- **quan** + subjunctive for the future: **Quan arribis, truca'm.**\n- **perquè** + subjunctive = *para que*: **perquè ho entenguis**.\n- **abans que, sense que, fins que** + subjunctive.\n- **encara que** + subjunctive (hypothetical).\n\nDifferences: **potser** (quizás) usually takes the indicative: **Potser vindrà.** And *me alegro de que* drops the de: **M'alegro que...**",
+      "vocab": [["tan aviat com", "en cuanto"], ["així que", "en cuanto, así que"], ["potser", "quizás"], ["alegrar-se", "alegrarse"], ["sense que", "sin que"]],
+      "items": [
+        ["Cuando llegues, llámame.", "Quan arribis(,) truca'm."],
+        ["Te lo explico para que lo entiendas.", "T'ho explico perquè ho entenguis."],
+        ["Antes de que te vayas, dime algo.", "Abans que te'n vagis(,) digues-me [una cosa|alguna cosa]."],
+        ["Sale sin que lo vean.", "Surt sense que el vegin."],
+        ["Espera hasta que vuelva.", "Espera fins que (no) torni."],
+        ["Aunque llueva, iremos.", "Encara que plogui(,) hi anirem."],
+        ["No creo que sea verdad.", "No crec que sigui veritat."],
+        ["Quizás venga mañana.", "Potser [vindrà|vingui|ve] demà."],
+        ["En cuanto lo sepa, te lo diré.", "[Tan aviat com|Així que] ho sàpiga(,) t'ho diré."],
+        ["Cuando tengas tiempo, ven.", "Quan tinguis temps(,) vine."],
+        ["Me alegro de que estés aquí.", "M'alegro (de) que [siguis|estiguis] aquí."],
+        ["No es que no quiera.", "No és que no vulgui."]
+      ]
+    },
+    {
+      "id": "b1-17",
+      "title": "Ser and estar, deeper",
+      "goal": "Handle events, estar-se, estar d'acord, a punt de.",
+      "note": "- Events *take place*, so they use **ser**: **La festa és a casa meva.**\n- **estar-se** = stay, live for a while: **Avui m'estic a casa.**\n- **estar d'acord** (estar de acuerdo), **estar a punt de** (estar a punto de).\n\nWith casa + possessive, no article: **a casa meva**, **casa teva**.",
+      "vocab": [["a casa meva", "en mi casa"], ["estar-se", "quedarse"], ["malalt", "enfermo"], ["les vacances", "las vacaciones"], ["ennuvolat", "nublado"], ["la reunió", "la reunión"]],
+      "items": [
+        ["La fiesta es en mi casa.", "La festa és a casa meva.", "casa meva: no article"],
+        ["Hoy me quedo en casa.", "Avui [m'estic|em quedo] a casa."],
+        ["Estamos de acuerdo.", "Estem d'acord."],
+        ["Estoy a punto de salir.", "Estic a punt de sortir."],
+        ["Está enfermo.", "Està malalt."],
+        ["Están de vacaciones.", "[Estan|Són] de vacances."],
+        ["Esto está muy bien.", "Això està molt bé."],
+        ["La reunión es a las cinco.", "La reunió és a les cinc."],
+        ["Mi hermana vive en Londres este año.", "La meva germana [s'està|viu] a Londres aquest any."],
+        ["El cielo está nublado.", "El cel està ennuvolat."],
+        ["Está mal hecho.", "Està mal fet."],
+        ["¿Dónde está tu casa?", "On [és|està] [casa teva|la teva casa]?"]
+      ]
+    },
+    {
+      "id": "b1-18",
+      "title": "Relatives: que, on, qui, el que",
+      "goal": "Build sentences with que, on, amb qui, de què, el que.",
+      "note": "- **que**: subject or object, people or things — **la noia que viu aquí**.\n- **on**: where — **la ciutat on vaig néixer**.\n- After a preposition: **qui** for people (**amb qui**), **què** for things (**de què**, **amb què**).\n- *lo que* → **el que** (or **allò que**). *lo cual* → **la qual cosa** or **cosa que**.",
+      "vocab": [["el que", "lo que"], ["la qual cosa", "lo cual"], ["amb qui", "con quien"], ["de què", "de qué"], ["molestar", "molestar"], ["el bolígraf", "el bolígrafo"]],
+      "items": [
+        ["El libro que lees es mío.", "El llibre que llegeixes és meu."],
+        ["La chica que vive aquí.", "La noia que viu aquí."],
+        ["La ciudad donde nací.", "La ciutat on vaig néixer."],
+        ["El amigo con quien viajo.", "L'amic amb [qui|el qual] viatjo."],
+        ["No sé de qué hablas.", "No sé de què parles."],
+        ["Lo que dices es verdad.", "[El que|Allò que] dius és veritat."],
+        ["Llegó tarde, lo cual me molestó.", "Va arribar tard(,) [la qual cosa|cosa que] em va molestar."],
+        ["La persona a quien llamé.", "La persona a qui vaig trucar."],
+        ["Es lo que quiero.", "És el que vull."],
+        ["El bolígrafo con el que escribo.", "El bolígraf amb què escric."],
+        ["La casa en la que vivimos.", "La casa [on|en què] vivim."],
+        ["Todo lo que tengo.", "Tot el que tinc."]
+      ]
+    },
+    {
+      "id": "b1-19",
+      "title": "Per, per a, perquè, per què",
+      "goal": "Stop mixing por and para — and porque and por qué.",
+      "note": "- **per a** + noun/person = *para*: **per a tu**, **per a demà**.\n- **per** + infinitive (purpose) = *para*: **Estudio per aprendre**. (Per a + inf. is also accepted.)\n- **per** = *por*: cause, through, agent — **gràcies per tot**, **per la platja**.\n- **perquè** = *porque* and *para que* (+ subj.). **per què** = *¿por qué?*\n\nTrap: *por la mañana* → **al matí**.",
+      "vocab": [["passejar", "pasear"], ["al matí", "por la mañana"], ["a la tarda", "por la tarde"], ["per setmana", "por semana"], ["perquè", "porque, para que"]],
+      "items": [
+        ["¿Por qué no vienes? Porque estoy cansado.", "Per què no vens? Perquè estic cansat."],
+        ["Esto es para mañana.", "Això és [per a|per] demà."],
+        ["Estudio para aprender.", "Estudio [per|per a] aprendre."],
+        ["Gracias por venir.", "Gràcies per venir."],
+        ["Paseamos por la playa.", "Passegem per la platja."],
+        ["Te llamo para que me ayudes.", "Et truco perquè m'ajudis."],
+        ["Lo hago por ti.", "Ho faig per tu."],
+        ["Un regalo para mi madre.", "Un regal [per a|per] la meva mare."],
+        ["Fue escrito por un niño.", "Va ser escrit per un [nen|infant]."],
+        ["No sé por qué.", "No sé per què."],
+        ["Salgo por la mañana.", "Surto al matí.", "por la mañana → al matí"],
+        ["Una vez por semana.", "[Una vegada|Un cop] [per|a la] setmana."]
+      ]
+    },
+    {
+      "id": "b1-20",
+      "title": "Castilianisms I: bueno, vale, pues",
+      "goal": "Swap the filler words that give away a Castellano speaker.",
+      "note": "These slip in constantly. The Catalan versions:\n\n- *vale* → **d'acord**\n- *bueno* → **bé**, **bo**, **doncs bé**\n- *pues* → **doncs**\n- *entonces* → **llavors**, **aleshores**\n- *todavía* → **encara**\n- *enseguida* → **de seguida**\n- *a lo mejor* → **potser**\n- *hasta luego* → **fins després**, **fins ara**\n- *incluso* → **fins i tot**\n- *¡venga!* → **som-hi!**, **au!**",
+      "vocab": [["d'acord", "vale"], ["doncs", "pues"], ["llavors", "entonces"], ["de seguida", "enseguida"], ["fins i tot", "incluso"], ["som-hi", "¡vamos!"]],
+      "items": [
+        ["Vale, nos vemos mañana.", "D'acord, ens veiem demà.", "vale → d'acord"],
+        ["Pues no lo sé.", "Doncs no ho sé."],
+        ["Bueno, me voy.", "[Bé|Bo|Doncs bé|Au], me'n vaig."],
+        ["Entonces, ¿qué hacemos?", "[Llavors|Aleshores], què fem?"],
+        ["Todavía no lo sé.", "Encara no ho sé."],
+        ["Vuelvo enseguida.", "Torno de seguida."],
+        ["A lo mejor llueve.", "Potser [plourà|plou]."],
+        ["Claro que sí.", "[És clar que sí|I tant]."],
+        ["Hasta luego.", "[Fins després|Fins aviat|Fins ara]."],
+        ["Incluso mi abuela lo sabe.", "Fins i tot la meva àvia ho sap."],
+        ["O sea, que no vienes.", "[És a dir|O sigui](,) que no vens."],
+        ["¡Venga, vamos!", "[Som-hi|Au, anem|Vinga, anem]!"]
+      ]
+    },
+    {
+      "id": "b1-21",
+      "title": "Verbs that diverge",
+      "goal": "Use the everyday verbs that don't look like Castellano.",
+      "note": "High-frequency verbs where guessing from Castellano fails:\n\n- *quitar, sacar* → **treure**\n- *echar de menos* → **trobar a faltar**, **enyorar**\n- *romper* → **trencar**\n- *tirar (a la basura)* → **llençar**\n- *encender* → **encendre** (encén)\n- *ahorrar* → **estalviar**\n- *meter* → **ficar**, **posar**\n- *caer* → **caure**\n- *aprovechar* → **aprofitar**\n- *dejar (prestar)* → **deixar**",
+      "vocab": [["treure", "quitar, sacar"], ["trencar", "romper"], ["llençar", "tirar (basura)"], ["estalviar", "ahorrar"], ["ficar", "meter"], ["el got", "el vaso"], ["les escombraries", "la basura"]],
+      "items": [
+        ["¿Puedo pedirte un favor?", "[Et puc demanar|Puc demanar-te] un favor?"],
+        ["Quita eso de la mesa.", "Treu això de la taula."],
+        ["Te echo de menos.", "[Et trobo a faltar|T'enyoro]."],
+        ["He roto el vaso.", "He trencat el got."],
+        ["Tira la basura.", "Llença les [escombraries|deixalles]."],
+        ["Enciende la luz.", "Encén [el|la] llum."],
+        ["Hay que ahorrar.", "Cal estalviar."],
+        ["Saca el móvil.", "Treu el mòbil."],
+        ["Mete la ropa en la maleta.", "[Fica|Posa] la roba [a|dins de] la maleta."],
+        ["Se me cae todo.", "Em cau tot."],
+        ["Aprovecha el día.", "Aprofita el dia."],
+        ["¿Me dejas tu boli?", "Em deixes el teu [boli|bolígraf]?"]
+      ]
+    },
+    {
+      "id": "b1-22",
+      "title": "Portar, venir, tornar",
+      "goal": "Bring, take, come and go from the right point of view.",
+      "note": "- **portar** covers both *traer* and *llevar*: **Em portes aigua?** **Et porto a casa.** Also *llevar puesto*: **Porta ulleres.**\n- **emportar-se** = *llevarse*: **Emporta't l'abric.**\n- **venir** when moving toward the listener: *¿Puedo ir contigo?* → **Puc venir amb tu?** *Voy a tu casa* → **Vinc a casa teva.**\n- **tornar** = volver; **tornar a** + inf. = volver a hacer.",
+      "vocab": [["portar", "traer, llevar"], ["emportar-se", "llevarse"], ["tornar", "volver"], ["el paraigua", "el paraguas"], ["l'abric", "el abrigo"], ["les ulleres", "las gafas"]],
+      "items": [
+        ["Esta tarde voy a tu casa.", "[Aquesta tarda vinc a casa teva|Vinc a casa teva aquesta tarda].", "toward the listener → venir"],
+        ["¿Me traes agua?", "Em [portes|duus] aigua?"],
+        ["Coge el paraguas.", "[Agafa|Porta] el paraigua."],
+        ["¿Puedo ir contigo?", "Puc venir amb tu?"],
+        ["Ya voy, ya voy.", "Ja vinc, ja vinc."],
+        ["Traed algo de beber.", "Porteu alguna cosa [per|de] beure."],
+        ["He vuelto a perder las llaves.", "He tornat a perdre les claus."],
+        ["¿Cuándo vuelves?", "Quan tornes?"],
+        ["Llévate el abrigo.", "Emporta't l'abric."],
+        ["Te llevo a casa.", "Et porto a casa."],
+        ["Vengo de trabajar.", "Vinc de treballar."],
+        ["Lleva gafas.", "Porta ulleres."]
+      ]
+    },
+    {
+      "id": "b1-23",
+      "title": "Time expressions",
+      "goal": "Say how long ago, for how long, and how often.",
+      "note": "- *hace dos días* → **fa dos dies**; *desde hace* → **des de fa**\n- *dentro de una semana* → **d'aquí a una setmana**\n- *a menudo* → **sovint**; *de vez en cuando* → **de tant en tant**\n- *anteayer* → **abans-d'ahir**; *pasado mañana* → **demà passat**\n- *al día siguiente* → **l'endemà**; *hace rato* → **fa estona**\n- *ahora mismo* → **ara mateix**",
+      "vocab": [["sovint", "a menudo"], ["de tant en tant", "de vez en cuando"], ["l'endemà", "al día siguiente"], ["fa estona", "hace rato"], ["ara mateix", "ahora mismo"], ["fumar", "fumar"]],
+      "items": [
+        ["Hace dos días que no lo veo.", "Fa dos dies que no el veig."],
+        ["Dentro de una semana.", "D'aquí a una setmana."],
+        ["Te espero desde hace una hora.", "[Fa una hora que t'espero|T'espero des de fa una hora]."],
+        ["Ya no fumo.", "Ja no fumo."],
+        ["A menudo voy a pie.", "Sovint vaig a peu."],
+        ["De vez en cuando.", "De tant en tant."],
+        ["Anteayer llovió.", "Abans-d'ahir va ploure."],
+        ["Pasado mañana es fiesta.", "Demà passat és festa."],
+        ["Al día siguiente se fue.", "L'endemà se'n va anar."],
+        ["Hace rato que ha llegado.", "Fa estona que ha arribat."],
+        ["A veces me olvido.", "[A|De] vegades me n'oblido."],
+        ["Ahora mismo.", "Ara mateix."]
+      ]
+    },
+    {
+      "id": "b1-24",
+      "title": "Numbers, dates, ordinals",
+      "goal": "Write big numbers, dates and 'the fifth street on the right'.",
+      "note": "- Tens and units join with hyphens: **trenta-dos**, and 20s with **-i-**: **vint-i-un**, **vint-i-una**.\n- Hundreds agree: **dos-cents euros**, **cinc-centes persones**.\n- Months: gener, febrer, març, abril, maig, juny, juliol, agost, setembre, octubre, novembre, desembre. *En agosto* → **a l'agost**.\n- Ordinals: **primer, segon, tercer, quart, cinquè, sisè, setè, vuitè, novè, desè** (fem. primera, segona, tercera, quarta, cinquena...).\n\nGender trap: **el carrer** (la calle) is masculine.",
+      "vocab": [["l'aniversari", "el cumpleaños"], ["el segle", "el siglo"], ["el carrer", "la calle"], ["a la dreta", "a la derecha"], ["a l'esquerra", "a la izquierda"]],
+      "items": [
+        ["Vivo en el tercer piso.", "Visc al tercer pis."],
+        ["Es la primera vez.", "És la primera vegada."],
+        ["Mi cumpleaños es el cinco de mayo.", "El meu aniversari és el cinc de maig."],
+        ["Nací en agosto.", "Vaig néixer (a) l'agost."],
+        ["Cuesta doscientos euros.", "Costa dos-cents euros."],
+        ["Veintiuna personas.", "Vint-i-una persones."],
+        ["Llegamos el uno de enero.", "Vam arribar [l'u|el primer|el dia u] de gener."],
+        ["Es la quinta calle a la derecha.", "És el cinquè carrer a la dreta.", "carrer is masculine"],
+        ["En octubre empiezo.", "[A l'octubre començo|Començo a l'octubre]."],
+        ["Mil quinientas personas.", "Mil cinc-centes persones."],
+        ["El siglo veinte.", "El segle vint."],
+        ["Treinta y dos años.", "Trenta-dos anys."]
+      ]
+    },
+    {
+      "id": "b1-25",
+      "title": "Tothom, algú, qualsevol, altre",
+      "goal": "Use the indefinites: everyone, someone, anyone, other.",
+      "note": "- **tothom** = todo el mundo (singular verb: **tothom ho sap**)\n- **algú** / **ningú** = alguien / nadie\n- **alguna cosa**, **una cosa** = algo; **res** = nada\n- **cadascú** = cada uno; **qualsevol** = cualquier(a)\n- **un altre, una altra** = otro, otra; *el otro día* → **l'altre dia**\n- **uns quants** = unos cuantos\n\n*Lo quiero todo* → **Ho vull tot.**",
+      "vocab": [["tothom", "todo el mundo"], ["cadascú", "cada uno"], ["qualsevol", "cualquiera"], ["un altre", "otro"], ["uns quants", "unos cuantos"]],
+      "items": [
+        ["Todo el mundo lo sabe.", "Tothom ho sap."],
+        ["¿Alguien quiere café?", "Algú vol cafè?"],
+        ["Quiero otro.", "[En vull un altre|Vull un altre]."],
+        ["Cualquier día.", "Qualsevol dia."],
+        ["Cada uno paga lo suyo.", "Cadascú paga el seu."],
+        ["Tengo algo para ti.", "Tinc [una cosa|alguna cosa] [per a|per] tu."],
+        ["Unos cuantos amigos.", "Uns quants amics."],
+        ["Otra vez.", "[Una altra vegada|Un altre cop]."],
+        ["No conozco a nadie.", "No conec ningú."],
+        ["Lo quiero todo.", "Ho vull tot."],
+        ["El otro día lo vi.", "L'altre dia el vaig veure."],
+        ["Cualquiera puede hacerlo.", "Qualsevol [ho pot fer|pot fer-ho]."]
+      ]
+    },
+    {
+      "id": "b1-26",
+      "title": "Connectors",
+      "goal": "Link ideas: sinó, com que, ja que, així que, tot i que, malgrat.",
+      "note": "- **sinó** = sino; **no només... sinó que també**\n- **com que** = como (causal, at the start): **Com que plovia...**\n- **ja que** = ya que; **així que** = así que; **per tant** = por lo tanto\n- **tot i que**, **encara que** = aunque; **malgrat** = a pesar de\n- **a més** = además; **en canvi** = en cambio\n- *luego (por tanto)* → **doncs**: **Penso, doncs existeixo.**",
+      "vocab": [["sinó", "sino"], ["com que", "como (causa)"], ["tot i que", "aunque"], ["malgrat", "a pesar de"], ["en canvi", "en cambio"], ["vermell", "rojo"]],
+      "items": [
+        ["No es rojo, sino azul.", "No és vermell, sinó blau."],
+        ["Como llovía, no salimos.", "Com que plovia(,) no vam sortir."],
+        ["Ya que estás aquí, ayúdame.", "Ja que [ets|estàs] aquí(,) ajuda'm."],
+        ["Estoy cansado, así que me voy.", "Estic cansat(,) així que me'n vaig."],
+        ["Aunque es tarde, seguimos.", "[Tot i que|Encara que] és tard(,) [continuem|seguim]."],
+        ["A pesar del frío, salimos.", "Malgrat el fred(,) [vam sortir|sortim]."],
+        ["Además, es barato.", "A més(,) és barat."],
+        ["Yo trabajo; él, en cambio, descansa.", "Jo treballo; ell(,) en canvi(,) descansa."],
+        ["Pienso, luego existo.", "Penso(,) doncs existeixo."],
+        ["Por lo tanto, no iremos.", "Per tant(,) no hi anirem."],
+        ["No solo canta, sino que también baila.", "No només canta(,) sinó que també balla."],
+        ["Llegó tarde porque perdió el tren.", "Va arribar tard perquè va perdre el tren."]
+      ]
+    },
+    {
+      "id": "b1-27",
+      "title": "Health and the body",
+      "goal": "Explain what hurts and get help.",
+      "note": "- *Me duele* → **em fa mal**: **Em fa mal la gola.**\n- *Me encuentro mal* → **Em trobo malament.** (*mal* is an adverb only before a participle: mal fet)\n- *Resfriado* → **refredat**. *Espalda* → **l'esquena**. *Garganta* → **la gola**.\n- *Toser* → **tossir**: tusso, tusses, **tus**.",
+      "vocab": [["la gola", "la garganta"], ["l'esquena", "la espalda"], ["el braç", "el brazo"], ["la febre", "la fiebre"], ["refredat", "resfriado"], ["malament", "mal"], ["la pastilla", "la pastilla"]],
+      "items": [
+        ["Me duele la garganta.", "Em fa mal la gola."],
+        ["Tengo fiebre.", "Tinc febre."],
+        ["Estoy resfriado.", "Estic refredat."],
+        ["Tengo que ir al médico.", "[He|Haig] d'anar al metge."],
+        ["Me he roto el brazo.", "M'he trencat el braç."],
+        ["¿Dónde está la farmacia?", "On [és|està] la farmàcia?"],
+        ["Tómate esta pastilla.", "Pren(-te) aquesta pastilla."],
+        ["Me encuentro mal.", "Em trobo malament.", "mal → malament"],
+        ["Le duele la espalda.", "Li fa mal l'esquena."],
+        ["Tose mucho.", "Tus molt."],
+        ["Ya estoy mejor.", "Ja estic millor."],
+        ["Necesito cita con el médico.", "Necessito [hora|una cita] amb el metge."]
+      ]
+    },
+    {
+      "id": "b1-28",
+      "title": "Work",
+      "goal": "Talk about your job, your boss and your hours.",
+      "note": "- *trabajo* (empleo) → **la feina**: **Busco feina.**\n- *trabajar de* → **treballar de**: **Treballo de cambrer.**\n- *jefe* → **el cap**. *En paro* → **a l'atur**.\n- *¿A qué te dedicas?* → **A què et dediques?** or **De què treballes?**",
+      "vocab": [["la feina", "el trabajo"], ["el cap", "el jefe"], ["el cambrer", "el camarero"], ["l'atur", "el paro"], ["cobrar", "cobrar"], ["l'augment", "el aumento"], ["contractar", "contratar"]],
+      "items": [
+        ["Trabajo de camarero.", "Treballo de cambrer."],
+        ["¿A qué te dedicas?", "[A què et dediques|De què treballes]?"],
+        ["Busco trabajo.", "Busco feina.", "trabajo → feina"],
+        ["Cobro poco.", "Cobro poc."],
+        ["Tengo una reunión a las diez.", "Tinc una reunió a les deu."],
+        ["Mi jefe es muy exigente.", "El meu cap és molt exigent.", "jefe → cap"],
+        ["Estoy en paro.", "[Estic|Soc] a l'atur."],
+        ["He pedido un aumento.", "He demanat un augment."],
+        ["Trabajamos desde casa.", "Treballem des de casa."],
+        ["Me han contratado.", "M'han contractat."],
+        ["Hacemos horas extra.", "Fem hores [extres|extra]."],
+        ["Tengo vacaciones en agosto.", "[Faig|Tinc] vacances a l'agost."]
+      ]
+    },
+    {
+      "id": "b1-29",
+      "title": "Weather",
+      "goal": "Talk about the weather in every tense.",
+      "note": "**Quin temps fa?** Weather uses **fer**: **fa sol, fa vent, fa fred, fa bo** (hace buen tiempo).\n\n**plou** (llueve), **neva** (nieva), **hi ha boira** (hay niebla), **està ennuvolat** (nublado), **està serè** (despejado).\n\nIdiom: *llueve a cántaros* → **plou a bots i barrals**.",
+      "vocab": [["fa bo", "hace buen tiempo"], ["la boira", "la niebla"], ["la tempesta", "la tormenta"], ["serè", "despejado"], ["acostar-se", "acercarse"], ["nevar", "nevar"]],
+      "items": [
+        ["¿Qué tiempo hace?", "Quin temps fa?"],
+        ["Hace sol.", "Fa sol."],
+        ["Hace buen tiempo.", "[Fa bo|Fa bon temps]."],
+        ["Llueve mucho.", "Plou molt."],
+        ["Mañana nevará.", "Demà nevarà."],
+        ["Hay niebla.", "Hi ha boira."],
+        ["Hace mucho viento.", "Fa molt (de) vent."],
+        ["Está lloviendo a cántaros.", "[Plou a bots i barrals|Està plovent a bots i barrals]."],
+        ["Ayer hizo mucho calor.", "Ahir va fer [molta|molt de] calor."],
+        ["Hace un frío que pela.", "Fa un fred que pela."],
+        ["Se acerca una tormenta.", "S'acosta una tempesta."],
+        ["Está despejado.", "[Està|El cel està] serè."]
+      ]
+    },
+    {
+      "id": "b1-30",
+      "title": "B1 boss: mixed tenses",
+      "goal": "Switch tenses and pronouns at speed.",
+      "note": "No new material. Every item mixes what you've drilled: both pasts, imperfect, future, conditional, subjunctive, and pronouns.\n\nRun it until you can do it under three minutes.",
+      "items": [
+        ["Ayer fui al cine y hoy voy al teatro.", "Ahir vaig anar al [cine|cinema] i avui vaig al teatre."],
+        ["Si tengo tiempo, lo haré.", "Si tinc temps(,) ho faré."],
+        ["Cuando era niño, hacía mucho deporte.", "Quan era [petit|nen](,) feia molt (d')esport."],
+        ["Le he dicho que venga.", "Li he dit que vingui."],
+        ["¿Lo has visto? No, todavía no lo he visto.", "No, encara no l'he vist."],
+        ["Tendrías que decírselo. (eso, a él)", "[Hauries de dir-li-ho|Li ho hauries de dir]."],
+        ["Me voy cuando termine.", "Me'n vaig quan acabi."],
+        ["Quiero que me lo expliques. (eso)", "Vull que m'ho expliquis."],
+        ["No había nadie.", "No hi havia ningú."],
+        ["Iremos si nos invitan.", "Hi anirem si ens conviden."],
+        ["¿Qué harías sin mí?", "Què faries sense mi?"],
+        ["Hace años que vivo aquí.", "Fa anys que visc aquí."]
+      ]
+    }
+  ]
+}

@@ -15,6 +15,7 @@ import { renderFreeform } from './ui/freeform';
 import { renderMonologue } from './ui/monologue';
 import { renderReport } from './ui/report';
 import { openSettings } from './ui/settings';
+import { renderSpeedrun } from './speedrun/ui';
 
 const root = document.getElementById('app');
 if (!root) throw new Error('Missing #app');
@@ -34,8 +35,21 @@ function header(subtitle?: string): HTMLElement {
     { class: 'app-header' },
     el('h1', {}, 'Conversation Trainer — Catalan'),
     subtitle ? el('p', { class: 'subtitle' }, subtitle) : null,
+    button('⚡ Speedrun', openSpeedrun),
     button('Settings', () => openSettings(renderUnitList)),
   );
+}
+
+/** The written Castellano → Catalan speedrun. Lives at #speedrun so a reload stays there. */
+function openSpeedrun(): void {
+  if (location.hash !== '#speedrun') history.replaceState(null, '', '#speedrun');
+  renderSpeedrun(root!, {
+    onExit: () => {
+      history.replaceState(null, '', location.pathname);
+      renderUnitList();
+    },
+    onSettings: (back) => openSettings(back),
+  });
 }
 
 function renderUnitList(): void {
@@ -51,6 +65,25 @@ function renderUnitList(): void {
       ),
     );
   }
+
+  root!.append(
+    el(
+      'div',
+      { class: 'unit sr-promo' },
+      el(
+        'div',
+        {},
+        el('h3', {}, '⚡ Speedrun to C1 — Castellano → Català'),
+        el(
+          'p',
+          { class: 'hint' },
+          'Bite-sized written translation lessons, A2 to C1, with click-to-listen. ' +
+            'Works without keys using the browser voice.',
+        ),
+      ),
+      button('Open', openSpeedrun, 'btn primary'),
+    ),
+  );
 
   for (const message of errors) {
     root!.append(errorBox(`Skipped an invalid unit — ${message}`));
@@ -143,5 +176,10 @@ function runPhase(unit: Unit, phase: Phase, turns: LearnerTurnLog[] = []): void 
 }
 
 loadRemembered();
-renderUnitList();
-if (!hasElevenLabsKey()) openSettings(renderUnitList);
+if (location.hash === '#speedrun') {
+  // The speedrun works without keys (browser voice), so no settings prompt.
+  openSpeedrun();
+} else {
+  renderUnitList();
+  if (!hasElevenLabsKey()) openSettings(renderUnitList);
+}

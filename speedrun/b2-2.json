@@ -1,0 +1,236 @@
+{
+  "level": "B2",
+  "reviewed": false,
+  "lessons": [
+    {
+      "id": "b2-12",
+      "title": "Translating Castellano 'lo'",
+      "goal": "Handle lo mejor, lo que, lo de ayer, lo cansado que estoy.",
+      "note": "Catalan has no neuter article *lo*. Instead:\n\n- *lo mejor* → **el millor**; *lo importante* → **el més important**\n- *lo que* → **el que**, **allò que**\n- *lo de ayer* → **allò d'ahir**\n- *por lo menos* → **almenys**, **si més no**\n- *lo cansado que estoy* → **que cansat que estic** or **com estic de cansat**\n- *¡lo bien que lo pasamos!* → **Que bé que ens ho vam passar!**\n\nAnd when *lo* = eso → **ho**.",
+      "vocab": [["almenys", "por lo menos"], ["si més no", "por lo menos"], ["allò", "aquello, lo"], ["passar-s'ho bé", "pasarlo bien"], ["increïble", "increíble"]],
+      "items": [
+        ["Lo mejor es esperar.", "El millor és esperar."],
+        ["Lo importante es participar.", "[El més important|L'important] és participar."],
+        ["Lo que pasa es que no tengo tiempo.", "El que passa és que no tinc temps."],
+        ["Por lo menos ha venido.", "[Almenys|Si més no|Com a mínim] ha vingut."],
+        ["Lo de ayer fue increíble.", "[Allò|El] d'ahir va ser increïble."],
+        ["No sabes lo cansado que estoy.", "No saps [que cansat que estic|com estic de cansat]."],
+        ["Lo siento mucho.", "[Ho sento molt|Em sap molt de greu]."],
+        ["Hice lo que pude.", "Vaig fer el que vaig poder."],
+        ["Lo peor ya ha pasado.", "El pitjor ja ha passat."],
+        ["Lo bueno de vivir aquí es el clima.", "[El bo|L'avantatge|El millor] de viure aquí és el clima."],
+        ["¡Lo bien que lo pasamos!", "Que bé que ens ho vam passar!"],
+        ["Es lo de siempre.", "És [el de sempre|allò de sempre|el mateix de sempre]."]
+      ]
+    },
+    {
+      "id": "b2-13",
+      "title": "Concession and cause",
+      "goal": "Argue with per molt que, tot i + infinitive, atès que.",
+      "note": "- **per molt que / per més que** + subj. = por mucho que\n- **tot i** + infinitive = aun + gerundio: **Tot i ser tard...**\n- **malgrat que**, **tot i que** = aunque, a pesar de que\n- **atès que**, **ja que**, **donat que** = dado que, ya que\n- **gràcies a** / **per culpa de**\n\n*Lograr* → **aconseguir**.",
+      "vocab": [["aconseguir", "conseguir, lograr"], ["intentar", "intentar"], ["la pluja", "la lluvia"], ["contestar", "contestar"], ["insistir", "insistir"], ["atès que", "dado que"]],
+      "items": [
+        ["Por mucho que lo intente, no puedo.", "Per [molt|més] que ho intenti(,) no puc."],
+        ["Aun siendo tarde, salimos.", "Tot i ser tard(,) [vam sortir|sortim]."],
+        ["Aunque no lo creas, es verdad.", "Encara que no [t'ho|ho] creguis(,) és veritat."],
+        ["Dado que no hay tiempo, lo dejamos.", "[Atès que|Ja que|Donat que] no hi ha temps(,) ho deixem."],
+        ["Gracias a ti, lo conseguí.", "Gràcies a tu(,) ho vaig aconseguir."],
+        ["Por culpa de la lluvia, no fuimos.", "Per culpa de la pluja(,) no hi vam anar."],
+        ["A pesar de que estaba enfermo, vino.", "[Malgrat que|Tot i que] estava malalt(,) va venir."],
+        ["Como no contestabas, me fui.", "Com que no contestaves(,) me'n vaig anar."],
+        ["Por más que corras, no llegarás.", "Per més que corris(,) no [hi arribaràs|arribaràs]."],
+        ["Aun sabiéndolo, no dijo nada.", "Tot i saber-ho(,) no va dir res."],
+        ["Puesto que insistes, iré.", "[Ja que|Atès que|Com que] insisteixes(,) hi aniré."],
+        ["Aunque sea caro, lo compraré.", "Encara que sigui car(,) [el|ho] compraré."]
+      ]
+    },
+    {
+      "id": "b2-14",
+      "title": "Time clauses: en arribar",
+      "goal": "Say al llegar, antes de salir, desde que, en cuanto.",
+      "note": "- *al + infinitivo* → **en + infinitive**: *al llegar* → **en arribar**. (\"Al arribar\" is a Castilianism.)\n- **abans de / després de** + infinitive; **abans que** + subjunctive\n- **des que** = desde que; **cada vegada que** = cada vez que\n- **tan bon punt**, **així que** = en cuanto\n- **un cop** + participle = una vez + participio\n\n*Poner la mesa* → **parar la taula**. *Dormir la siesta* → **fer la migdiada**.",
+      "vocab": [["en arribar", "al llegar"], ["tan bon punt", "en cuanto"], ["la migdiada", "la siesta"], ["parar la taula", "poner la mesa"], ["reconèixer", "reconocer"], ["fer-se fosc", "oscurecer"]],
+      "items": [
+        ["Al llegar, me di cuenta.", "En arribar(,) me'n vaig adonar.", "al + inf → en + inf"],
+        ["Antes de salir, cierra la puerta.", "Abans de sortir(,) tanca la porta."],
+        ["Después de comer, dormimos la siesta.", "Després de dinar(,) [fem|dormim] la migdiada."],
+        ["Desde que vivo aquí, estoy mejor.", "Des que visc aquí(,) estic millor."],
+        ["Cada vez que lo veo, me río.", "[Cada vegada|Cada cop] que el veig(,) ric."],
+        ["En cuanto llegó, empezó a llover.", "[Tan bon punt|Així que|Tan aviat com] va arribar(,) va començar a ploure."],
+        ["Al salir del trabajo, fui al gimnasio.", "En sortir de la feina(,) vaig anar al gimnàs."],
+        ["No me iré hasta que me lo digas.", "No me n'aniré fins que (no) m'ho diguis."],
+        ["Mientras tú cocinas, yo pongo la mesa.", "Mentre tu cuines(,) jo paro (la) taula.", "poner la mesa → parar taula"],
+        ["Al verla, la reconocí.", "En veure-la(,) la vaig reconèixer."],
+        ["Una vez terminado, avísame.", "[Un cop|Una vegada] acabat(,) avisa'm."],
+        ["Antes de que oscurezca.", "Abans que es faci fosc."]
+      ]
+    },
+    {
+      "id": "b2-15",
+      "title": "Prepositions that drop or change",
+      "goal": "Say estic segur que, trigar a, pensar a, insistir a.",
+      "note": "- Before **que**, a preposition drops: *seguro de que* → **segur que**; *me di cuenta de que* → **em vaig adonar que**; *me alegro de que* → **m'alegro que**.\n- Before an infinitive it stays: **tinc ganes de veure't**.\n- Some change: *tardar en* → **trigar a**; *insistir en* → **insistir a**; *consistir en* → **consistir a**; *acordarse de hacer* → **pensar a** fer.",
+      "vocab": [["trigar", "tardar"], ["insistir a", "insistir en"], ["consistir a", "consistir en"], ["pensar a", "acordarse de (hacer)"], ["interessar-se per", "interesarse por"]],
+      "items": [
+        ["Estoy seguro de que vendrá.", "Estic segur que vindrà."],
+        ["Me di cuenta de que era tarde.", "Em vaig adonar que era tard."],
+        ["Tengo ganas de verte.", "Tinc ganes de veure't."],
+        ["Acuérdate de comprar pan.", "[Pensa a|Recorda't de] comprar pa.", "pensar a + inf"],
+        ["Has tardado mucho en venir.", "Has [trigat|tardat] molt a venir.", "tardar en → trigar a"],
+        ["Insiste en pagar.", "Insisteix a pagar."],
+        ["Consiste en leer mucho.", "Consisteix a llegir molt."],
+        ["Me alegro de que vengas.", "M'alegro que vinguis."],
+        ["Confío en ti.", "[Confio en|Em fio de] tu."],
+        ["Se casó con un médico.", "Es va casar amb un metge."],
+        ["Se interesa por la historia.", "S'interessa per la història."],
+        ["No me acordé de que era su cumpleaños.", "No [em vaig recordar|vaig recordar] que era el seu aniversari."]
+      ]
+    },
+    {
+      "id": "b2-16",
+      "title": "-ment, -et, -às, -íssim",
+      "goal": "Build adverbs, diminutives and augmentatives on the fly.",
+      "note": "- *-mente* → **-ment** on the feminine: **clarament**, **ràpidament**\n- diminutive *-ito* → **-et / -eta**: **gatet**, **caseta**, **llibret**, **una miqueta**\n- augmentative *-azo* → **-às**: **cotxàs**\n- *-ísimo* → **-íssim**: **facilíssim**\n- *des-* = des-: **desfer** (deshacer)\n\nWith ningú before the verb, **no** is optional: **ningú (no) es va fer mal**.",
+      "vocab": [["clarament", "claramente"], ["afortunadament", "afortunadamente"], ["desfer", "deshacer"], ["fer-se mal", "hacerse daño"], ["totalment", "totalmente"]],
+      "items": [
+        ["Habla claramente.", "Parla clarament."],
+        ["Un gatito.", "Un gatet."],
+        ["Una casita en el campo.", "Una caseta al camp."],
+        ["Un poquito.", "Una [miqueta|mica]."],
+        ["Rápidamente.", "Ràpidament."],
+        ["Deshacer la maleta.", "Desfer la maleta."],
+        ["Un cochazo.", "Un cotxàs."],
+        ["Afortunadamente, nadie se hizo daño.", "Afortunadament(,) ningú (no) es va fer mal."],
+        ["Un momentito, por favor.", "Un moment(et), si us plau."],
+        ["Facilísimo.", "Facilíssim."],
+        ["Totalmente de acuerdo.", "Totalment d'acord."],
+        ["Un librito.", "Un llibret."]
+      ]
+    },
+    {
+      "id": "b2-17",
+      "title": "Em ve de gust, em fa mandra",
+      "goal": "Express cravings, laziness, shame, fear and disgust.",
+      "note": "Feelings built like *gustar*, mostly with **fer**:\n\n- *me apetece* → **em ve de gust**\n- *me da pereza* → **em fa mandra**\n- *me da vergüenza* → **em fa vergonya**\n- *me da miedo* → **em fa por**\n- *me da pena / asco / rabia* → **em fa pena / fàstic / ràbia**\n- *me hace gracia* → **em fa gràcia**\n\nAnd change of state: **fer-se gran**, **posar-se nerviós**, **quedar-se sense**.",
+      "vocab": [["venir de gust", "apetecer"], ["la mandra", "la pereza"], ["la vergonya", "la vergüenza"], ["el fàstic", "el asco"], ["el gelat", "el helado"], ["la benzina", "la gasolina"]],
+      "items": [
+        ["Me apetece un helado.", "Em ve de gust un gelat.", "apetecer → venir de gust"],
+        ["Me da pereza salir.", "Em fa mandra sortir."],
+        ["Me da vergüenza.", "Em fa vergonya."],
+        ["Los perros le dan miedo.", "Els gossos li fan por."],
+        ["Me hace gracia.", "Em fa gràcia."],
+        ["Me da pena verlo así.", "Em fa pena veure'l així."],
+        ["Me da asco.", "Em fa fàstic."],
+        ["Nos estamos haciendo mayores.", "Ens estem fent grans."],
+        ["Se pone nervioso.", "Es posa nerviós."],
+        ["Nos quedamos sin gasolina.", "Ens [vam quedar|hem quedat|quedem] sense benzina."],
+        ["¿Te apetece venir?", "Et ve de gust venir?"],
+        ["Me da mucha rabia.", "Em fa molta ràbia."]
+      ]
+    },
+    {
+      "id": "b2-18",
+      "title": "Expressions with fer and donar",
+      "goal": "Use fer cas, fer servir, fer tard, fer goig, donar la raó.",
+      "note": "- *hacer caso* → **fer cas**; *usar* → **fer servir**\n- *llegar tarde* → **fer tard**\n- *echar un vistazo* → **fer una ullada**; *echar una mano* → **fer un cop de mà**\n- *portarse bien* → **fer bondat**; *hacerse cargo* → **fer-se'n càrrec**\n- *estar guapo, lucir* → **fer goig**\n- *dar la razón* → **donar la raó**\n- *¡date prisa!* → **afanya't!**",
+      "vocab": [["fer cas", "hacer caso"], ["fer servir", "usar"], ["fer tard", "llegar tarde"], ["una ullada", "un vistazo"], ["fer goig", "lucir, estar guapo"], ["afanyar-se", "darse prisa"]],
+      "items": [
+        ["No me haces caso.", "No em fas cas."],
+        ["¿Cómo se usa esto?", "Com es fa servir això?"],
+        ["Vamos a llegar tarde.", "Farem tard."],
+        ["Échale un vistazo.", "Fes-hi una ullada."],
+        ["¿Me echas una mano?", "Em [fas|dones] un cop de mà?"],
+        ["Pórtate bien.", "[Fes bondat|Porta't bé]."],
+        ["Me hago cargo.", "Me'n faig càrrec."],
+        ["Le doy la razón.", "Li dono la raó."],
+        ["¡Date prisa!", "[Afanya't|Corre|Dona't pressa]!"],
+        ["Estás muy guapa con ese vestido.", "[Fas molt de goig|Estàs molt guapa] amb aquest vestit."],
+        ["Le di las gracias.", "Li vaig donar les gràcies."],
+        ["Hace falta paciencia.", "[Cal|Fa falta] paciència."]
+      ]
+    },
+    {
+      "id": "b2-19",
+      "title": "Expressions with tenir, anar, deixar, treure",
+      "goal": "Say te viene bien, tener lugar, déjalo estar, sacar provecho.",
+      "note": "- *¿te viene bien?* → **et va bé?** (anar, not venir!)\n- *tener lugar* → **tenir lloc**; *tener en cuenta* → **tenir en compte**; *cuidar* → **tenir cura de**\n- *ir agobiado* → **anar de bòlit**\n- *déjalo* → **deixa-ho estar**\n- *mejorarse* → **posar-se bé**; *poner en marcha* → **posar en marxa**\n- *sacar provecho* → **treure profit**; *quitarse de encima* → **treure's de sobre**",
+      "vocab": [["anar bé", "venir bien"], ["tenir lloc", "tener lugar"], ["tenir cura de", "cuidar"], ["anar de bòlit", "ir agobiado"], ["treure profit", "sacar provecho"]],
+      "items": [
+        ["¿Te viene bien el martes?", "Et va bé (el) dimarts?", "venir bien → anar bé"],
+        ["La reunión tendrá lugar en Girona.", "La reunió tindrà lloc a Girona."],
+        ["Ten en cuenta que es nuevo.", "Tingues en compte que és nou."],
+        ["Cuida de tu hermano.", "[Tingues cura del|Té cura del|Cuida el] teu germà."],
+        ["Voy agobiadísimo esta semana.", "[Aquesta setmana vaig de bòlit|Vaig de bòlit aquesta setmana]."],
+        ["Déjalo estar.", "Deixa-ho estar."],
+        ["Que te mejores.", "Que et [posis bé|milloris]."],
+        ["Hemos puesto en marcha el proyecto.", "Hem posat en marxa el projecte."],
+        ["Sacó provecho de la situación.", "Va treure profit de la situació."],
+        ["Me lo quité de encima.", "Me'l vaig treure de sobre."],
+        ["Tienes toda la razón.", "Tens tota la raó."],
+        ["No me viene bien.", "No em va bé."]
+      ]
+    },
+    {
+      "id": "b2-20",
+      "title": "Opinion and debate",
+      "goal": "Give and defend an opinion.",
+      "note": "- **crec que**, **em sembla que**, **al meu parer**, **des del meu punt de vista**\n- **no crec que** + subjunctive; **dubto que** + subjunctive\n- **d'una banda... de l'altra** = por un lado... por otro\n- **segons** = según; **en resum** = en resumen\n- **(no) hi estic d'acord**; **estic d'acord amb tu**\n- *puede que* → **pot ser que** + subj. (≠ **potser**)",
+      "vocab": [["al meu parer", "en mi opinión"], ["em sembla", "me parece"], ["d'una banda", "por un lado"], ["segons", "según"], ["pujar", "subir"], ["just", "justo"]],
+      "items": [
+        ["Creo que tienes razón.", "Crec que tens raó."],
+        ["Me parece que no.", "Em sembla que no."],
+        ["En mi opinión, es un error.", "[Al meu parer|Des del meu punt de vista|Segons la meva opinió](,) és un error."],
+        ["No creo que sea buena idea.", "No crec que sigui (una) bona idea."],
+        ["Por un lado es barato, por otro está lejos.", "D'una banda és barat(,) (i) de l'altra és lluny."],
+        ["Según los expertos, subirá.", "Segons els experts(,) pujarà."],
+        ["No estoy de acuerdo.", "No hi estic d'acord."],
+        ["Estoy de acuerdo contigo.", "Estic d'acord amb tu."],
+        ["En resumen, hay que cambiar.", "En resum(,) cal canviar."],
+        ["Desde mi punto de vista, no es justo.", "Des del meu punt de vista(,) no és just."],
+        ["Puede que sí.", "[Pot ser que sí|Potser sí]."],
+        ["Dudo que funcione.", "Dubto que funcioni."]
+      ]
+    },
+    {
+      "id": "b2-21",
+      "title": "Hi ha vs és",
+      "goal": "Tell existence from location, in every tense.",
+      "note": "- Something indefinite exists → **hi ha**: **Hi ha un llibre a la taula.**\n- Something definite is somewhere → **ser** (or estar): **El llibre és a la taula.**\n- *¿Está María?* → **Hi és la Maria?** — *No está* → **No hi és.**\n\nTenses: **hi havia, hi haurà, hi ha hagut, hi hauria**. With en: **n'hi ha**.",
+      "vocab": [["l'accident", "el accidente"], ["el retard", "el retraso"], ["la plaça", "la plaza"], ["el banc", "el banco"], ["hi és", "está (ahí)"]],
+      "items": [
+        ["Hay un libro en la mesa.", "Hi ha un llibre [a|sobre] la taula."],
+        ["El libro está en la mesa.", "El llibre [és|està] [a|sobre] la taula."],
+        ["¿Está María? No, no está.", "No, no hi és."],
+        ["Había mucha gente.", "Hi havia molta gent."],
+        ["Ha habido un accidente.", "Hi ha hagut un accident."],
+        ["Habrá problemas.", "Hi haurà problemes."],
+        ["¿Hay leche? Sí, hay.", "Sí, n'hi ha."],
+        ["El banco está en la plaza.", "El banc [és|està] a la plaça."],
+        ["Hay un banco en la plaza.", "Hi ha un banc a la plaça."],
+        ["No había nadie en casa.", "No hi havia ningú a casa."],
+        ["Puede haber retrasos.", "[Hi pot haver|Pot haver-hi] retards."],
+        ["¿Ya hemos llegado?", "Ja hi som?"]
+      ]
+    },
+    {
+      "id": "b2-22",
+      "title": "B2 boss: moods and pronouns",
+      "goal": "Combine compound tenses, subjunctives and pronoun clusters.",
+      "note": "No new material — every item stacks two or three B2 skills. Aim for 100% first-try before moving to C1.",
+      "items": [
+        ["Si me lo hubieras dicho antes, habría venido.", "Si m'ho haguessis dit abans(,) [hauria|hagués] vingut."],
+        ["Me pidió que se lo diera. (el libro, a ella)", "Em va demanar que l'hi donés."],
+        ["No creo que lo hayan terminado. (el trabajo)", "No crec que [l'hagin|ho hagin] acabat."],
+        ["Debe de haberse ido.", "[Se'n deu haver anat|Deu haver-se'n anat]."],
+        ["Al enterarme, la llamé.", "En assabentar-me'n(,) li vaig trucar."],
+        ["Por mucho que insistas, no iré.", "Per molt que insisteixis(,) no hi aniré."],
+        ["Acabo de darme cuenta.", "[Me n'acabo d'adonar|Acabo d'adonar-me'n]."],
+        ["Se lo habría dicho si lo hubiera visto. (eso, a él)", "Li ho [hauria|hagués] dit si l'hagués vist."],
+        ["Me apetece que vengas.", "Em ve de gust que vinguis."],
+        ["Llevaba años sin verla.", "Feia anys que no la veia."],
+        ["Ojalá no lo hubiera hecho.", "Tant de bo no ho hagués fet."],
+        ["Quería que lo hiciéramos juntos.", "Volia que ho féssim junts."]
+      ]
+    }
+  ]
+}

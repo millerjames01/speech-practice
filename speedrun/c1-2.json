@@ -1,0 +1,194 @@
+{
+  "level": "C1",
+  "reviewed": false,
+  "lessons": [
+    {
+      "id": "c1-10",
+      "title": "Verb pairs that split",
+      "goal": "Choose between demanar/preguntar, tornar, quedar, deixar, veure/mirar.",
+      "note": "One Castellano verb, two Catalan ones — or the reverse:\n\n- *pedir* → **demanar**; *preguntar* → **preguntar**\n- *devolver* → **tornar**: **Torna'm el llibre.**\n- *quedar con alguien* → **quedar amb algú**; *quedar bien (ropa)* → **quedar bé**\n- *prestar* → **deixar**: **Em deixes deu euros?**\n- *conseguir* → **aconseguir**; *ahorrar* → **estalviar**\n- *ver* (percibir) → **veure**; *mirar* → **mirar**; *oír* → **sentir**",
+      "vocab": [["tornar", "volver, devolver"], ["quedar amb", "quedar con"], ["deixar", "dejar, prestar"], ["aconseguir", "conseguir"], ["el tro", "el trueno"], ["estalviar", "ahorrar"]],
+      "items": [
+        ["Te pregunto una cosa.", "Et pregunto una cosa."],
+        ["Te pido un favor.", "Et demano un favor."],
+        ["Devuélveme el libro.", "Torna'm el llibre.", "devolver → tornar"],
+        ["Quedé con Ana a las seis.", "Vaig quedar amb l'Anna a les sis."],
+        ["Te esperé una hora.", "Et vaig esperar una hora."],
+        ["¿Me prestas diez euros?", "Em deixes deu euros?"],
+        ["He conseguido el trabajo.", "He aconseguit la feina."],
+        ["¿Ves aquello?", "Veus allò?"],
+        ["Sé que estás ahí.", "Sé que hi ets."],
+        ["¿Has oído el trueno?", "Has sentit el tro?"],
+        ["Ese color te queda bien.", "Aquest color et queda bé."],
+        ["Hemos ahorrado mucho.", "Hem estalviat molt."]
+      ]
+    },
+    {
+      "id": "c1-11",
+      "title": "Formal verbs",
+      "goal": "Use esdevenir, romandre, assolir, palesar, endegar, escaure's.",
+      "note": "The vocabulary of reports, news and official texts:\n\n- **esdevenir** = convertirse en\n- **romandre** = permanecer\n- **assolir** = alcanzar, lograr\n- **palesar**, **posar de manifest** = poner de manifiesto\n- **endegar** = poner en marcha\n- **si s'escau** = si procede\n- **mancar** = faltar; **la manca de** = la falta de\n- **comportar** = implicar; **esmentar** = mencionar\n- **cloure** = cerrar (un acto)",
+      "vocab": [["esdevenir", "convertirse en"], ["romandre", "permanecer"], ["assolir", "alcanzar"], ["palesar", "poner de manifiesto"], ["endegar", "poner en marcha"], ["la finestreta", "la ventanilla"]],
+      "items": [
+        ["Se convirtió en un símbolo.", "[Va esdevenir|Esdevingué|Es va convertir en] un símbol."],
+        ["Permaneció en silencio.", "[Va romandre|Romangué|Es va quedar] en silenci."],
+        ["Han alcanzado los objetivos.", "Han [assolit|aconseguit] els objectius."],
+        ["Esto pone de manifiesto la falta de recursos.", "Això [palesa|posa de manifest] la manca de recursos."],
+        ["Han puesto en marcha un nuevo plan.", "Han [endegat|posat en marxa] un nou pla."],
+        ["Si procede, se lo comunicaremos.", "Si s'escau(,) li ho comunicarem."],
+        ["Faltan datos.", "[Manquen|Falten] dades."],
+        ["Esto implica riesgos.", "Això [comporta|implica] riscos."],
+        ["Como ya he mencionado.", "Com ja he [esmentat|mencionat]."],
+        ["Diríjase a la ventanilla.", "Adreci's a la finestreta."],
+        ["La sesión se cerró a las ocho.", "La sessió [es va cloure|es va tancar|va acabar] a les vuit."],
+        ["Cabe destacar que el proyecto es viable.", "[Cal destacar|Convé destacar|Cal remarcar] que el projecte és viable."]
+      ]
+    },
+    {
+      "id": "c1-12",
+      "title": "Subjunctive: passi el que passi",
+      "goal": "Use the subjunctive in relatives, concessives and 'whatever' clauses.",
+      "note": "- Unknown antecedent: **Busco algú que parli japonès.**\n- Reduplication = *whatever / wherever / whoever*: **passi el que passi**, **sigui com sigui**, **vagi on vagi**, **sigui qui sigui**, **digui el que digui**.\n- *llueva o no* → **tant si plou com si no**\n- **per bé que** + subj. = por bien que\n- **com si** + imperfect subj. = como si",
+      "vocab": [["passi el que passi", "pase lo que pase"], ["sigui com sigui", "sea como sea"], ["per bé que", "por bien que"], ["tant si... com si", "tanto si... como si"], ["trobar", "encontrar"]],
+      "items": [
+        ["Busco a alguien que hable japonés.", "Busco algú que parli japonès."],
+        ["Pase lo que pase, estaré aquí.", "Passi el que passi(,) [seré|estaré] aquí."],
+        ["Sea como sea, hay que hacerlo.", "Sigui com sigui(,) cal fer-ho."],
+        ["Llueva o no, iremos.", "[Tant si plou com si no|Plogui o no](,) hi anirem."],
+        ["Me miró como si no me conociera.", "Em va mirar com si no em conegués."],
+        ["Diga lo que diga, no le creo.", "Digui el que digui(,) no [el crec|me'l crec]."],
+        ["Por bien que lo haga, nunca está contento.", "Per bé que ho faci(,) [mai (no) està content|no està mai content]."],
+        ["No hay nadie que lo sepa.", "No hi ha ningú que ho sàpiga."],
+        ["Vaya donde vaya, la encuentro.", "Vagi on vagi(,) la trobo."],
+        ["Quienquiera que sea, que entre.", "Sigui qui sigui(,) que entri."],
+        ["Es el mejor libro que haya leído.", "És el millor llibre que [hagi|he] llegit."],
+        ["Hazlo como quieras.", "Fes-ho com vulguis."]
+      ]
+    },
+    {
+      "id": "c1-13",
+      "title": "Sequence of tenses",
+      "goal": "Match the subjunctive tense to the main verb, every time.",
+      "note": "Past or conditional main verb → **imperfect subjunctive**:\n\n- **Li vaig demanar que vingués.**\n- **Seria millor que li ho diguessis.**\n- **M'alegraria que vinguéssiu.**\n\nAnterior past → **hagués** + participle: **Era impossible que l'hagués vist.**\n\n*Firmar* → **signar**; *dimitir* → **dimitir**.",
+      "vocab": [["ordenar", "ordenar"], ["aconsellar", "aconsejar"], ["dimitir", "dimitir"], ["impossible", "imposible"], ["preocupar-se", "preocuparse"]],
+      "items": [
+        ["Le pedí que viniera.", "Li vaig demanar que vingués."],
+        ["Quería que lo supieras.", "Volia que ho sabessis."],
+        ["Sería mejor que se lo dijeras. (eso, a él)", "Seria millor que li ho diguessis."],
+        ["Me ordenó que me callara.", "Em va ordenar que callés."],
+        ["Me alegraría que vinierais.", "M'alegraria que vinguéssiu."],
+        ["Era imposible que lo hubiera visto.", "Era impossible que l'hagués vist."],
+        ["Te lo dije para que no te preocuparas.", "T'ho vaig dir perquè no et preocupessis."],
+        ["No creía que fuera tan difícil.", "No creia que fos tan difícil."],
+        ["Antes de que llegaran, ya habíamos salido.", "Abans que arribessin(,) ja havíem sortit."],
+        ["Me sorprendería que no lo supiera.", "Em sorprendria que no ho sabés."],
+        ["Le aconsejé que no firmara.", "Li vaig aconsellar que no signés."],
+        ["Esperaban que dimitiera.", "Esperaven que dimitís."]
+      ]
+    },
+    {
+      "id": "c1-14",
+      "title": "Dislocation: el llibre, ja l'he llegit",
+      "goal": "Front or back a topic and resume it with a pronoun.",
+      "note": "Catalan loves moving the topic to the front (or the end) — and then it **must** be picked up with a weak pronoun:\n\n- **El llibre, ja l'he llegit.** / **Ja l'he llegit, el llibre.**\n- **De pa, no en queda.** / **No en queda, de pa.**\n- **A la Maria, li encanta.**\n- **A Girona, hi vaig sovint.**\n- **Això, no ho sabia.**\n\nCastellano does it too (*el libro ya lo he leído*), but Catalan also does it with **en** and **hi**, which is where learners drop the pronoun.",
+      "vocab": [["sovint", "a menudo"], ["el nou cap", "el nuevo jefe"], ["les ganes", "las ganas"], ["posar", "poner"], ["encara", "todavía"]],
+      "items": [
+        ["El libro ya lo he leído.", "[El llibre(,) ja l'he llegit|Ja l'he llegit(,) el llibre]."],
+        ["Pan no queda.", "[De pa(,) no en queda|No en queda(,) de pa]."],
+        ["A María le encanta.", "A la Maria(,) li encanta."],
+        ["A Girona voy a menudo.", "A Girona(,) hi vaig sovint."],
+        ["Eso no lo sabía.", "Això(,) no ho sabia."],
+        ["Dinero no tengo.", "[Diners(,) no en tinc|No en tinc(,) de diners|De diners(,) no en tinc]."],
+        ["A tus padres ya se lo he dicho. (eso)", "Als teus pares(,) ja els ho he dit."],
+        ["Las llaves, ¿dónde las has puesto?", "Les claus(,) on les has [posades|posat]?"],
+        ["Con Joan no he hablado todavía.", "Amb [en|el] Joan(,) encara no hi he parlat."],
+        ["Cansada sí que lo estoy.", "Cansada(,) sí que ho estic."],
+        ["Este coche, me lo compro.", "Aquest cotxe(,) me'l compro."],
+        ["¿Lo has visto, al nuevo jefe?", "L'has vist(,) el nou cap?"]
+      ]
+    },
+    {
+      "id": "c1-15",
+      "title": "Negation: pas, gens, ni, expletive no",
+      "goal": "Handle the fine print of Catalan negation.",
+      "note": "- **pas** reinforces and contradicts an expectation: **No és pas tan difícil.**\n- **gens** = nada (degree): **No m'agrada gens.**\n- Before the verb, **ningú, res, mai, ni, tampoc** allow an optional **no**: **Ningú (no) ho sap.**\n- Expletive **no** (meaning nothing) after **abans que**, **fins que**, and in comparisons: **abans que no arribi**, **més val riure que no plorar**.\n- *en absoluto* → **gens ni mica**, **de cap manera**",
+      "vocab": [["gens", "nada"], ["gens ni mica", "en absoluto"], ["netejar", "limpiar"], ["necessitar", "necesitar"], ["de cap manera", "de ningún modo"]],
+      "items": [
+        ["No es tan difícil, ¿eh?", "No és (pas) tan difícil, eh?"],
+        ["No me gusta nada.", "No m'agrada gens."],
+        ["Ni él ni yo lo sabíamos.", "Ni ell ni jo (no) ho sabíem."],
+        ["Antes de que llegue, lo limpiaré.", "Abans que (no) arribi(,) ho netejaré."],
+        ["Más vale reír que llorar.", "Més val riure que (no) plorar."],
+        ["Yo tampoco iré.", "Jo tampoc (no) hi aniré."],
+        ["No queda ni uno.", "No en queda [ni un|cap]."],
+        ["No he dormido nada.", "No he dormit gens."],
+        ["Nadie lo sabe.", "Ningú (no) ho sap."],
+        ["No es que sea caro, es que no lo necesito.", "No és que sigui car(,) és que no [el|ho] necessito."],
+        ["Apenas habló.", "[Gairebé no|Amb prou feines] va parlar."],
+        ["En absoluto.", "[Gens ni mica|De cap manera|En absolut]."]
+      ]
+    },
+    {
+      "id": "c1-16",
+      "title": "Spoken discourse markers",
+      "goal": "Sound natural in conversation: escolta, oi?, doncs res, i ara!",
+      "note": "- *oye* → **escolta**; *mira* → **mira**; *a ver* → **a veure**\n- *¿verdad?* → **oi?**\n- *pues nada* → **doncs res**\n- *¡qué va!* → **i ara!**\n- *me da igual* → **m'és igual**, **tant me fa**, **tant se val**\n- *¿qué le vamos a hacer?* → **què hi farem?**\n- *no pasa nada* → **no passa res**\n- *¡qué pasada! / ¡qué fuerte!* → **quina passada!** / **que fort!**\n- *mira por dónde* → **ves per on**",
+      "vocab": [["escolta", "oye"], ["oi?", "¿verdad?"], ["i ara!", "¡qué va!"], ["tant se val", "da igual"], ["quina passada", "qué pasada"], ["ves per on", "mira por dónde"]],
+      "items": [
+        ["Oye, ¿tienes un momento?", "Escolta, tens un moment?"],
+        ["Es bonito, ¿verdad?", "És bonic, [oi|eh|no]?"],
+        ["Pues nada, me voy.", "Doncs res(,) me'n vaig."],
+        ["¡Qué va!", "I ara!"],
+        ["Me da igual.", "[M'és igual|Tant me fa|Tant se val]."],
+        ["¿Qué le vamos a hacer?", "Què hi farem?"],
+        ["No pasa nada.", "No passa res."],
+        ["¡Qué pasada!", "Quina passada!"],
+        ["A ver, explícamelo.", "A veure(,) explica-m'ho."],
+        ["Mira por dónde, aquí está.", "[Ves per on|Mira per on](,) [és aquí|aquí és]."],
+        ["¡Qué fuerte!", "Que fort!"],
+        ["¡Hombre, cuánto tiempo!", "Home(,) quant de temps!"]
+      ]
+    },
+    {
+      "id": "c1-17",
+      "title": "Academic and professional writing",
+      "goal": "Write reports and summaries in clean formal Catalan.",
+      "note": "- *cabe señalar* → **cal assenyalar**, **convé remarcar**\n- *se trata de* → **es tracta de**\n- *de acuerdo con* → **d'acord amb**, **segons**\n- *poner de relieve* → **posar de relleu**\n- *en lo que respecta a* → **pel que fa a**\n- *a continuación* → **tot seguit**\n- *en suma* → **en suma**, **en definitiva**\n- *deberse a* → **deure's a**: **es deu a**",
+      "vocab": [["l'informe", "el informe"], ["assenyalar", "señalar"], ["posar de relleu", "poner de relieve"], ["el finançament", "la financiación"], ["el fenomen", "el fenómeno"], ["la proposta", "la propuesta"]],
+      "items": [
+        ["Este informe analiza los resultados.", "Aquest informe analitza els resultats."],
+        ["Cabe señalar que los datos son provisionales.", "[Cal assenyalar|Cal remarcar|Convé assenyalar] que les dades són provisionals."],
+        ["Se trata de un problema complejo.", "Es tracta d'un problema complex."],
+        ["De acuerdo con el estudio, el paro ha bajado.", "[D'acord amb|Segons] l'estudi(,) l'atur ha baixat."],
+        ["Los resultados ponen de relieve la necesidad de invertir.", "Els resultats posen de relleu la necessitat d'invertir."],
+        ["En lo que respecta a la financiación, hace falta más inversión.", "Pel que fa al finançament(,) [cal|fa falta] més inversió."],
+        ["Conviene tener en cuenta el contexto.", "Convé tenir en compte el context."],
+        ["Este fenómeno se debe a varios factores.", "Aquest fenomen es deu a [diversos|diferents|uns quants] factors."],
+        ["A continuación se presentan las conclusiones.", "[Tot seguit|A continuació] es presenten les conclusions."],
+        ["Cabe preguntarse si es viable.", "[Cal preguntar-se|Cal plantejar-se] si és viable."],
+        ["En suma, la propuesta es sólida.", "[En suma|En resum|En definitiva](,) la proposta és sòlida."],
+        ["Agradecemos su colaboración.", "Agraïm la [seva|vostra] col·laboració."]
+      ]
+    },
+    {
+      "id": "c1-18",
+      "title": "Final boss",
+      "goal": "Everything at once. Clear this and the run is complete.",
+      "note": "Moods, compound tenses, pronoun clusters, dislocation, idioms and the prepositions that change. If you clear it at 100% first-try, you've finished the speedrun.",
+      "items": [
+        ["Si lo hubiera sabido, no se lo habría dicho. (eso, a ella)", "Si ho hagués sabut(,) no li ho [hauria|hagués] dit."],
+        ["El libro del que te hablé, ¿lo has leído?", "El llibre [del qual|de què] et vaig parlar(,) l'has llegit?"],
+        ["Pase lo que pase, cuenta conmigo.", "Passi el que passi(,) compta amb mi."],
+        ["Me di cuenta de que se lo había llevado. (el coche)", "Em vaig adonar que se l'havia [endut|emportat]."],
+        ["Debe de estar harto de ello.", "[En deu estar fart|Deu estar-ne fart]."],
+        ["Por mucho que me lo pidas, no te lo daré. (eso)", "Per molt que m'ho demanis(,) no t'ho donaré."],
+        ["Al llegar, vimos que no quedaba nadie.", "En arribar(,) vam veure que no (hi) quedava ningú."],
+        ["Dinero no tengo, pero ganas sí.", "[Diners|De diners](,) no en tinc(,) però ganes(,) sí."],
+        ["Ni siquiera se dio cuenta.", "Ni tan sols se'n va adonar."],
+        ["Le aconsejé que no fuera.", "Li vaig aconsellar que no hi anés."],
+        ["Me apetecía tanto que no me lo pensé.", "Em venia tant de gust que no m'ho vaig pensar."],
+        ["Quien quiera venir, que me lo diga.", "Qui vulgui venir(,) que m'ho digui."]
+      ]
+    }
+  ]
+}
