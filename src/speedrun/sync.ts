@@ -128,3 +128,56 @@ export function mergeLessons(a: LessonRecord | undefined, b: LessonRecord): Less
   if (!a) return b;
   return { bestMs: Math.min(a.bestMs, b.bestMs), bestScore: Math.max(a.bestScore, b.bestScore), runs: Math.max(a.runs, b.runs) };
 }
+
+/* ---------- short codes via dpaste.com ----------
+ * dpaste is a free, anonymous paste service that allows cross-origin requests,
+ * so a browser can store the sync payload there and fetch it back with a short
+ * id. Pastes expire after a day; the link flow above stays as the offline and
+ * no-third-party fallback.
+ */
+
+const PASTE_API = 'https://dpaste.com/api/v2/';
+const PASTE_RAW = (id: string) => `https://dpaste.com/${id}.txt`;
+const MAX_PASTE = 200_000;
+
+/** Upper-cases and strips separators, so "au4-dfn hwn" reads as "AU4DFNHWN". */
+export function normalizeShortCode(input: string): string | null {
+  const id = input.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  return /^[A-Z0-9]{6,12}$/.test(id) ? id : null;
+}
+
+/** Groups a code in threes for reading aloud or typing: AU4-DFN-HWN. */
+export const formatShortCode = (id: string): string => id.match(/.{1,3}/g)?.join('-') ?? id;
+
+export async function uploadSync(code: string, fetchFn: typeof fetch = fetch): Promise<string> {
+  let res: Response;
+  try {
+    res = await fetchFn(PASTE_API, {
+      method: 'POST',
+      body: new URLSearchParams({ content: code, syntax: 'text', expiry_days: '1', title: 'catalan-speedrun' }),
+    });
+  } catch {
+    throw new Error('Couldn’t reach the sync service. Check your connection, or use a link instead.');
+  }
+  if (!res.ok) throw new Error(`The sync service refused the upload (${res.status}). Try again in a minute, or use a link.`);
+  const id = (await res.text()).match(/dpaste\.com\/([A-Za-z0-9]+)/)?.[1];
+  const normalized = id ? normalizeShortCode(id) : null;
+  if (!normalized) throw new Error('The sync service sent an unexpected reply. Use a link instead.');
+  return normalized;
+}
+
+export async function downloadSync(input: string, fetchFn: typeof fetch = fetch): Promise<string> {
+  const id = normalizeShortCode(input);
+  if (!id) throw new Error('That doesn’t look like a sync code. It has 9 letters and numbers, like AU4-DFN-HWN.');
+  let res: Response;
+  try {
+    res = await fetchFn(PASTE_RAW(id));
+  } catch {
+    throw new Error('Couldn’t reach the sync service. Check your connection, or use a link instead.');
+  }
+  if (res.status === 404) throw new Error('No progress found for that code. Codes expire after a day — get a fresh one.');
+  if (!res.ok) throw new Error(`The sync service answered ${res.status}. Try again, or use a link.`);
+  const text = await res.text();
+  if (text.length > MAX_PASTE || !extractCode(text)) throw new Error('That code doesn’t hold Speedrun progress.');
+  return text;
+}

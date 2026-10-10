@@ -29,7 +29,7 @@ import {
   setPrefs,
 } from './progress';
 import { planToday, shuffle } from './srs';
-import { decodeSync, encodeSync } from './sync';
+import { decodeSync, downloadSync, encodeSync, formatShortCode, uploadSync } from './sync';
 import {
   hasBrowserCatalanVoice,
   lastSpeechError,
@@ -441,10 +441,57 @@ async function syncLink(): Promise<string> {
 }
 
 function openSyncPanel(root: HTMLElement, nav: SpeedrunNav): void {
+  let close = () => {};
+
+  /* Quick: short code through the paste service. */
+  const codeOut = el('div', { class: 'sr-shortcode' });
+  codeOut.setAttribute('aria-live', 'polite');
+  const codeStatus = el('p', { class: 'sr-muted', role: 'status' });
+  const getCode = iconButton('Get sync code', ICONS.arrow, async () => {
+    getCode.disabled = true;
+    codeStatus.textContent = 'Uploading…';
+    try {
+      const id = await uploadSync(await encodeSync(allLessonRecords(), allCards()));
+      codeOut.textContent = formatShortCode(id);
+      codeStatus.textContent = 'On your other device: Sync devices → Enter code. Valid for 24 hours.';
+    } catch (err) {
+      codeStatus.textContent = err instanceof Error ? err.message : String(err);
+    } finally {
+      getCode.disabled = false;
+    }
+  }, 'sr-btn primary');
+
+  const codeIn = el('input', {
+    class: 'sr-input sr-code-input',
+    type: 'text',
+    placeholder: 'AU4-DFN-HWN',
+    autocomplete: 'off',
+    spellcheck: false,
+  });
+  codeIn.setAttribute('autocapitalize', 'characters');
+  codeIn.setAttribute('aria-label', 'Sync code from your other device');
+  const fetchStatus = el('p', { class: 'sr-muted', role: 'status' });
+  const fetchCode = button('Get progress', async () => {
+    fetchCode.disabled = true;
+    fetchStatus.textContent = 'Fetching…';
+    try {
+      const text = await downloadSync(codeIn.value);
+      close();
+      await receiveSync(root, nav, text);
+    } catch (err) {
+      fetchStatus.textContent = err instanceof Error ? err.message : String(err);
+    } finally {
+      fetchCode.disabled = false;
+    }
+  }, 'sr-btn primary');
+  codeIn.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Enter') fetchCode.click();
+  });
+
+  /* Fallback: the progress travels inside a link. */
   const status = el('p', { class: 'sr-muted', role: 'status' });
   const manual = el('textarea', { class: 'sr-code', readOnly: true, rows: 3 });
   manual.hidden = true;
-
   const copy = async () => {
     const url = await syncLink();
     try {
@@ -467,41 +514,58 @@ function openSyncPanel(root: HTMLElement, nav: SpeedrunNav): void {
       await copy();
     }
   };
-
-  const paste = el('textarea', { class: 'sr-code', rows: 3, placeholder: 'Paste a sync link or code here' });
-  let close = () => {};
-  const merge = button('Merge into this device', () => {
+  const paste = el('textarea', { class: 'sr-code', rows: 2, placeholder: 'Paste a sync link here' });
+  const merge = button('Merge link', () => {
     close();
     void receiveSync(root, nav, paste.value);
-  }, 'sr-btn primary');
+  }, 'sr-btn');
+
+  const linkSection = el(
+    'details',
+    { class: 'sr-details' },
+    el('summary', {}, 'No internet service? Sync with a link instead'),
+    el(
+      'p',
+      { class: 'sr-muted' },
+      'The progress travels inside the link itself. Send it any way you like — AirDrop, Messages or email to ' +
+        'yourself, Notes — and open it on the other device. If it opens in a browser instead of the installed ' +
+        'app (common on iPhone), paste it below.',
+    ),
+    el(
+      'div',
+      { class: 'sr-actions' },
+      'share' in navigator ? iconButton('Share link', ICONS.arrow, () => void share(), 'sr-btn') : null,
+      button('Copy link', () => void copy(), 'sr-btn'),
+    ),
+    status,
+    manual,
+    paste,
+    el('div', { class: 'sr-actions' }, merge),
+  );
 
   ({ close } = modal(
     el('h2', { class: 'sr-modal-title' }, 'Sync devices'),
     el(
       'p',
       { class: 'sr-muted' },
-      'Your progress travels inside a link — no account, no server. Send it from this device any way you like: ' +
-        'AirDrop, Messages or email to yourself, Notes, or copy and paste. Opening it on the other device merges ' +
-        'the two, keeping the newest state of every item. To end up identical, sync once in each direction.',
+      'Get a code on one device, enter it on the other. Progress merges: for each item the newest answer wins. ' +
+        'To make both identical, sync once in each direction.',
     ),
     el('h3', { class: 'sr-section-label' }, 'Send from this device'),
-    el(
-      'div',
-      { class: 'sr-actions' },
-      'share' in navigator ? iconButton('Share link', ICONS.arrow, () => void share(), 'sr-btn primary') : null,
-      button('Copy link', () => void copy(), 'share' in navigator ? 'sr-btn' : 'sr-btn primary'),
-    ),
-    status,
-    manual,
+    el('div', { class: 'sr-actions' }, getCode),
+    codeOut,
+    codeStatus,
     el('h3', { class: 'sr-section-label' }, 'Receive on this device'),
+    el('div', { class: 'sr-code-row' }, codeIn, fetchCode),
+    fetchStatus,
+    linkSection,
     el(
       'p',
-      { class: 'sr-muted' },
-      'Opening a sync link does this automatically. If the link opened in a browser instead of the installed app ' +
-        '(common on iPhone), copy it and paste it here.',
+      { class: 'sr-fineprint' },
+      'Codes are stored for 24 hours on dpaste.com, a free public paste service. They contain only lesson numbers, ' +
+        'scores and review dates.',
     ),
-    paste,
-    el('div', { class: 'sr-actions' }, merge, button('Close', () => close(), 'sr-btn ghost')),
+    el('div', { class: 'sr-actions' }, button('Close', () => close(), 'sr-btn ghost')),
   ));
 }
 

@@ -1,6 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { DAY, enroll, review, startOfDay, type SrsCard } from '../src/speedrun/srs';
-import { decodeSync, encodeSync, extractCode, mergeLessons, newerCard } from '../src/speedrun/sync';
+import {
+  decodeSync,
+  downloadSync,
+  encodeSync,
+  extractCode,
+  formatShortCode,
+  mergeLessons,
+  newerCard,
+  normalizeShortCode,
+  uploadSync,
+} from '../src/speedrun/sync';
 
 const NOW = new Date(2026, 9, 10, 21, 30).getTime();
 
@@ -103,5 +113,45 @@ describe('merging', () => {
     expect(bMerged.lessons['a2-01']).toEqual({ bestMs: 80_000, bestScore: 1, runs: 1 });
     expect(bMerged.cards.find((c) => c.lessonId === 'a2-01' && c.index === 1)).toMatchObject({ step: 0, lapses: 1 });
     expect(b.cards).toHaveLength(2);
+  });
+});
+
+describe('short codes', () => {
+  const fake = (handler: (url: string, init?: RequestInit) => Response) =>
+    (async (url: RequestInfo | URL, init?: RequestInit) => handler(String(url), init)) as typeof fetch;
+
+  it('normalizes and formats codes for humans', () => {
+    expect(normalizeShortCode(' au4-dfn hwn ')).toBe('AU4DFNHWN');
+    expect(normalizeShortCode('no')).toBeNull();
+    expect(formatShortCode('AU4DFNHWN')).toBe('AU4-DFN-HWN');
+  });
+
+  it('uploads the payload with a one-day expiry and returns the short id', async () => {
+    let sent: URLSearchParams | undefined;
+    const id = await uploadSync(
+      'ca1.abc',
+      fake((url, init) => {
+        expect(url).toBe('https://dpaste.com/api/v2/');
+        sent = init?.body as URLSearchParams;
+        return new Response('https://dpaste.com/AU4DFNHWN\n', { status: 201 });
+      }),
+    );
+    expect(id).toBe('AU4DFNHWN');
+    expect(sent?.get('content')).toBe('ca1.abc');
+    expect(sent?.get('expiry_days')).toBe('1');
+  });
+
+  it('downloads by code, and explains expired, foreign and offline cases', async () => {
+    const code = await encodeSync({}, [enroll('a2-01', 0, true, NOW)], NOW);
+    const text = await downloadSync('au4-dfn-hwn', fake((url) => {
+      expect(url).toBe('https://dpaste.com/AU4DFNHWN.txt');
+      return new Response(code);
+    }));
+    expect((await decodeSync(text)).cards).toHaveLength(1);
+
+    await expect(downloadSync('AU4DFNHWN', fake(() => new Response('', { status: 404 })))).rejects.toThrow(/expire/);
+    await expect(downloadSync('AU4DFNHWN', fake(() => new Response('<html>spam</html>')))).rejects.toThrow(/doesn’t hold/);
+    await expect(downloadSync('AU4DFNHWN', (async () => { throw new TypeError('offline'); }) as typeof fetch)).rejects.toThrow(/connection/);
+    await expect(downloadSync('??', fake(() => new Response('')))).rejects.toThrow(/9 letters/);
   });
 });

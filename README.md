@@ -52,12 +52,17 @@ Before practising, replace the `REPLACE_WITH_VOICE_ID` placeholders in
   Text-to-speech → Google → install Català. Windows: Settings → Time & language
   → Speech → add Catalan.
 - **Sync between phone and PC, no account.** *Sync devices* (bottom of the
-  map) packs your progress into a link. Send it however you like — AirDrop,
-  Messages or email to yourself, Notes, copy-paste — and open it on the other
-  device: it merges, keeping the newest state of every item. Sync once in each
-  direction to make both identical. On iPhone a link may open in Safari rather
-  than the home-screen app (they keep separate storage); paste it into the
-  *Receive* box instead.
+  map) → *Get sync code* on one device shows a code like `AU4-DFN-HWN`; type it
+  under *Receive* on the other. Progress merges — for each item the newest
+  answer wins — so sync once in each direction to make both identical. Codes
+  live for 24 hours on [dpaste.com](https://dpaste.com), a free public paste
+  service that allows browser requests; they hold only lesson ids, scores and
+  review dates.
+  - *Offline or without a third party:* the same panel can put the progress
+    inside a link instead. Send it however you like (AirDrop, Messages, Notes)
+    and open it, or paste it, on the other device. On iPhone a link may open
+    in Safari rather than the home-screen app, which keeps separate storage;
+    paste it into the app there.
 - **Backups.** *Export progress* saves a file; *Import progress* replaces
   this device's progress with one.
 - **Deploys automatically** from `main` (`.github/workflows/deploy.yml`: test,
