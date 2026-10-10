@@ -10,24 +10,122 @@
       "tables": [
         {
           "title": "passat simple — 3rd person",
-          "cols": ["", "ell, ella", "ells, elles"],
-          "rows": [["ser", "fou", "foren"], ["fer", "féu", "feren"], ["dir", "digué", "digueren"], ["tenir", "tingué", "tingueren"], ["venir", "vingué", "vingueren"], ["anar", "anà", "anaren"], ["parlar", "parlà", "parlaren"]]
+          "cols": [
+            "",
+            "ell, ella",
+            "ells, elles"
+          ],
+          "rows": [
+            [
+              "ser",
+              "fou",
+              "foren"
+            ],
+            [
+              "fer",
+              "féu",
+              "feren"
+            ],
+            [
+              "dir",
+              "digué",
+              "digueren"
+            ],
+            [
+              "tenir",
+              "tingué",
+              "tingueren"
+            ],
+            [
+              "venir",
+              "vingué",
+              "vingueren"
+            ],
+            [
+              "anar",
+              "anà",
+              "anaren"
+            ],
+            [
+              "parlar",
+              "parlà",
+              "parlaren"
+            ]
+          ]
         }
       ],
-      "vocab": [["el rei", "el rey"], ["l'hereu", "el heredero"], ["l'alba", "el amanecer"], ["lluny", "lejos"], ["aleshores", "entonces"]],
+      "vocab": [
+        [
+          "el rei",
+          "el rey"
+        ],
+        [
+          "l'hereu",
+          "el heredero"
+        ],
+        [
+          "l'alba",
+          "el amanecer"
+        ],
+        [
+          "lluny",
+          "lejos"
+        ],
+        [
+          "aleshores",
+          "entonces"
+        ]
+      ],
       "items": [
-        ["El rey murió sin herederos.", "El rei [morí|va morir] sense hereus.", "literary past"],
-        ["Fue un gran poeta.", "[Fou|Va ser] un gran poeta."],
-        ["Dijo que no.", "[Digué|Va dir] que no."],
-        ["Llegaron al amanecer.", "[Arribaren|Van arribar] a l'alba."],
-        ["Hizo lo que pudo.", "[Féu|Va fer] el que [pogué|va poder]."],
-        ["Tuvo tres hijos.", "[Tingué|Va tenir] tres fills."],
-        ["Vinieron de lejos.", "[Vingueren|Van venir] de lluny."],
-        ["Escribió muchas cartas.", "[Escriví|Va escriure] moltes cartes."],
-        ["Fueron años difíciles.", "[Foren|Van ser] anys difícils."],
-        ["Se fue sin decir nada.", "[Se n'anà|Se'n va anar] sense dir res."],
-        ["Vivió en París.", "[Visqué|Va viure] a París."],
-        ["Entonces habló el rey.", "Aleshores [parlà|va parlar] el rei."]
+        [
+          "El rey murió sin herederos.",
+          "El rei [morí|va morir] sense hereus.",
+          "literary past"
+        ],
+        [
+          "Fue un gran poeta.",
+          "[Fou|Va ser] un gran poeta."
+        ],
+        [
+          "Dijo que no.",
+          "[Digué|Va dir] que no."
+        ],
+        [
+          "Llegaron al amanecer.",
+          "[Arribaren|Van arribar] a l'alba."
+        ],
+        [
+          "Hizo lo que pudo.",
+          "[Féu|Va fer] el que [pogué|va poder]."
+        ],
+        [
+          "Tuvo tres hijos.",
+          "[Tingué|Va tenir] tres fills."
+        ],
+        [
+          "Vinieron de lejos.",
+          "[Vingueren|Van venir] de lluny."
+        ],
+        [
+          "Escribió muchas cartas.",
+          "[Escriví|Va escriure] moltes cartes."
+        ],
+        [
+          "Fueron años difíciles.",
+          "[Foren|Van ser] anys difícils."
+        ],
+        [
+          "Se fue sin decir nada.",
+          "[Se n'anà|Se'n va anar] sense dir res."
+        ],
+        [
+          "Vivió en París.",
+          "[Visqué|Va viure] a París."
+        ],
+        [
+          "Entonces habló el rey.",
+          "Aleshores [parlà|va parlar] el rei."
+        ]
       ]
     },
     {
@@ -35,20 +133,82 @@
       "title": "Formal letters and vostè",
       "goal": "Write a formal email or letter from greeting to sign-off.",
       "note": "- *Estimado/a* → **Benvolgut / Benvolguda**\n- *Le escribo para...* → **Li escric per...** (vostè) or **Us escric per...** (formal vós, common in letters)\n- *Me dirijo a* → **M'adreço a**\n- *Le agradecería que* → **Li agrairia que** + imperfect subj.\n- *Atentamente* → **Atentament**; *un cordial saludo* → **Cordialment**\n\nPolite questions can open with **Que**: **Que podria signar aquí?** *Firmar* → **signar**.",
-      "vocab": [["benvolgut", "estimado"], ["atentament", "atentamente"], ["adreçar-se", "dirigirse"], ["sol·licitar", "solicitar"], ["signar", "firmar"], ["la queixa", "la queja"]],
+      "vocab": [
+        [
+          "benvolgut",
+          "estimado"
+        ],
+        [
+          "atentament",
+          "atentamente"
+        ],
+        [
+          "adreçar-se",
+          "dirigirse"
+        ],
+        [
+          "sol·licitar",
+          "solicitar"
+        ],
+        [
+          "signar",
+          "firmar"
+        ],
+        [
+          "la queixa",
+          "la queja"
+        ]
+      ],
       "items": [
-        ["Estimado señor:", "Benvolgut senyor,"],
-        ["Estimada señora García:", "Benvolguda senyora García,"],
-        ["Le escribo para solicitar información.", "[Li|Us] escric per [sol·licitar|demanar] informació."],
-        ["Atentamente,", "Atentament,"],
-        ["Le agradecería que me respondiera.", "Li agrairia que em respongués."],
-        ["Quedo a la espera de su respuesta.", "[Resto|Quedo] a l'espera de la seva resposta."],
-        ["Le adjunto el documento.", "[Li|Us] adjunto el document."],
-        ["Me dirijo a ustedes para presentar una queja.", "[M'adreço|Em dirigeixo] a vostès per presentar una queixa."],
-        ["¿Podría usted firmar aquí?", "(Que) podria signar aquí?", "firmar → signar"],
-        ["Le ruego que me disculpe.", "Li prego que em [disculpi|perdoni]."],
-        ["Un cordial saludo.", "[Cordialment|Salutacions cordials]."],
-        ["En respuesta a su carta del lunes.", "En resposta a la seva carta de dilluns."]
+        [
+          "Estimado señor:",
+          "Benvolgut senyor,"
+        ],
+        [
+          "Estimada señora García:",
+          "Benvolguda senyora García,"
+        ],
+        [
+          "Le escribo para solicitar información.",
+          "[Li|Us] escric per [sol·licitar|demanar] informació."
+        ],
+        [
+          "Atentamente,",
+          "Atentament,"
+        ],
+        [
+          "Le agradecería que me respondiera.",
+          "Li agrairia que em respongués."
+        ],
+        [
+          "Quedo a la espera de su respuesta.",
+          "[Resto|Quedo] a l'espera de la seva resposta."
+        ],
+        [
+          "Le adjunto el documento.",
+          "[Li|Us] adjunto el document."
+        ],
+        [
+          "Me dirijo a ustedes para presentar una queja.",
+          "[M'adreço|Em dirigeixo] a vostès per presentar una queixa."
+        ],
+        [
+          "¿Podría usted firmar aquí?",
+          "(Que) podria signar aquí?",
+          "firmar → signar"
+        ],
+        [
+          "Le ruego que me disculpe.",
+          "Li prego que em [disculpi|perdoni]."
+        ],
+        [
+          "Un cordial saludo.",
+          "[Cordialment|Salutacions cordials]."
+        ],
+        [
+          "En respuesta a su carta del lunes.",
+          "En resposta a la seva carta de dilluns."
+        ]
       ]
     },
     {
@@ -56,20 +216,81 @@
       "title": "Formal connectors",
       "goal": "Structure an argument in writing.",
       "note": "- *sin embargo / no obstante* → **tanmateix**, **no obstant això**\n- *por consiguiente* → **per consegüent**, **en conseqüència**\n- *así pues* → **així doncs**\n- *por otra parte* → **d'altra banda**\n- *dicho de otro modo* → **dit d'una altra manera**\n- *en definitiva* → **en definitiva**; *por último* → **finalment**, **per acabar**\n- *por cierto* → **per cert**; *de hecho* → **de fet**",
-      "vocab": [["tanmateix", "sin embargo"], ["per consegüent", "por consiguiente"], ["d'altra banda", "por otra parte"], ["el pressupost", "el presupuesto"], ["fracassar", "fracasar"], ["l'èxit", "el éxito"]],
+      "vocab": [
+        [
+          "tanmateix",
+          "sin embargo"
+        ],
+        [
+          "per consegüent",
+          "por consiguiente"
+        ],
+        [
+          "d'altra banda",
+          "por otra parte"
+        ],
+        [
+          "el pressupost",
+          "el presupuesto"
+        ],
+        [
+          "fracassar",
+          "fracasar"
+        ],
+        [
+          "l'èxit",
+          "el éxito"
+        ]
+      ],
       "items": [
-        ["Sin embargo, el proyecto fracasó.", "[Tanmateix|No obstant això|Malgrat això](,) el projecte va fracassar."],
-        ["Por consiguiente, se cancela la reunión.", "[Per consegüent|En conseqüència|Per tant](,) [es cancel·la|s'anul·la] la reunió."],
-        ["Es decir, no hay presupuesto.", "És a dir(,) no hi ha pressupost."],
-        ["Así pues, empecemos.", "Així doncs(,) comencem."],
-        ["En primer lugar, quiero agradecer su presencia.", "En primer lloc(,) vull agrair la [seva|vostra] presència."],
-        ["Por otra parte, los costes han aumentado.", "D'altra banda(,) els costos han augmentat."],
-        ["En definitiva, ha sido un éxito.", "En definitiva(,) ha estat un èxit."],
-        ["Por último, hablaremos del futuro.", "[Finalment|Per acabar|Per últim](,) parlarem del futur."],
-        ["Dicho de otro modo, hay que esperar.", "Dit d'una altra manera(,) cal esperar."],
-        ["De hecho, ya lo sabíamos.", "De fet(,) ja ho sabíem."],
-        ["No obstante, hay excepciones.", "[No obstant això|Tanmateix|Ara bé](,) hi ha excepcions."],
-        ["Por cierto, ¿has visto a Jordi?", "Per cert(,) has vist [en|el] Jordi?"]
+        [
+          "Sin embargo, el proyecto fracasó.",
+          "[Tanmateix|No obstant això|Malgrat això](,) el projecte va fracassar."
+        ],
+        [
+          "Por consiguiente, se cancela la reunión.",
+          "[Per consegüent|En conseqüència|Per tant](,) [es cancel·la|s'anul·la] la reunió."
+        ],
+        [
+          "Es decir, no hay presupuesto.",
+          "És a dir(,) no hi ha pressupost."
+        ],
+        [
+          "Así pues, empecemos.",
+          "Així doncs(,) comencem."
+        ],
+        [
+          "En primer lugar, quiero agradecer su presencia.",
+          "En primer lloc(,) vull agrair la [seva|vostra] presència."
+        ],
+        [
+          "Por otra parte, los costes han aumentado.",
+          "D'altra banda(,) els costos han augmentat."
+        ],
+        [
+          "En definitiva, ha sido un éxito.",
+          "En definitiva(,) ha estat un èxit."
+        ],
+        [
+          "Por último, hablaremos del futuro.",
+          "[Finalment|Per acabar|Per últim](,) parlarem del futur."
+        ],
+        [
+          "Dicho de otro modo, hay que esperar.",
+          "Dit d'una altra manera(,) cal esperar."
+        ],
+        [
+          "De hecho, ya lo sabíamos.",
+          "De fet(,) ja ho sabíem."
+        ],
+        [
+          "No obstante, hay excepciones.",
+          "[No obstant això|Tanmateix|Ara bé](,) hi ha excepcions."
+        ],
+        [
+          "Por cierto, ¿has visto a Jordi?",
+          "Per cert(,) has vist [en|el] Jordi?"
+        ]
       ]
     },
     {
@@ -77,20 +298,78 @@
       "title": "El qual, cosa que, qui",
       "goal": "Write formal relative clauses, including 'cuyo'.",
       "note": "- After a preposition: **el qual, la qual, els quals, les quals** — **l'empresa per a la qual treballo**, **el llibre del qual et vaig parlar**.\n- *lo cual* → **la qual cosa**, **cosa que**.\n- **qui** without antecedent = *quien*: **Qui ho sàpiga, que ho digui.**\n- *cuyo* has no single word: **la casa les finestres de la qual...** or rephrase: **la casa que té les finestres trencades**.\n- Trap: *ayudar a alguien* → **ajudar algú** (direct object): **les persones que ajudem**.",
-      "vocab": [["el qual", "el cual"], ["cosa que", "lo cual"], ["impedir", "impedir"], ["créixer", "crecer"], ["admirable", "admirable"]],
+      "vocab": [
+        [
+          "el qual",
+          "el cual"
+        ],
+        [
+          "cosa que",
+          "lo cual"
+        ],
+        [
+          "impedir",
+          "impedir"
+        ],
+        [
+          "créixer",
+          "crecer"
+        ],
+        [
+          "admirable",
+          "admirable"
+        ]
+      ],
       "items": [
-        ["La empresa para la cual trabajo.", "L'empresa [per a la qual|per la qual|on] treballo."],
-        ["Los amigos con los cuales viajé.", "Els amics amb [els quals|qui] vaig viatjar."],
-        ["La razón por la cual me fui.", "La raó per [la qual|què] me'n vaig anar."],
-        ["El libro del cual te hablé.", "El llibre [del qual|de què] et vaig parlar."],
-        ["Quien lo sepa, que lo diga.", "Qui ho sàpiga(,) que ho digui."],
-        ["Llovió todo el día, lo cual nos impidió salir.", "Va ploure tot el dia(,) [cosa que|la qual cosa] ens va impedir sortir."],
-        ["Las personas a las que ayudamos.", "Les persones que ajudem.", "ajudar takes a direct object"],
-        ["El pueblo en el que crecí.", "El poble [on|en què|en el qual] vaig créixer."],
-        ["Todo aquel que quiera venir.", "[Tothom qui|Tot aquell que|Qualsevol que] vulgui venir."],
-        ["La casa cuyas ventanas están rotas.", "[La casa que té les finestres trencades|La casa les finestres de la qual estan trencades]."],
-        ["Es la mujer de quien te hablé.", "És la dona de [qui|la qual] et vaig parlar."],
-        ["Hizo todo lo que pudo, lo cual es admirable.", "Va fer tot el que va poder(,) [la qual cosa|cosa que] és admirable."]
+        [
+          "La empresa para la cual trabajo.",
+          "L'empresa [per a la qual|per la qual|on] treballo."
+        ],
+        [
+          "Los amigos con los cuales viajé.",
+          "Els amics amb [els quals|qui] vaig viatjar."
+        ],
+        [
+          "La razón por la cual me fui.",
+          "La raó per [la qual|què] me'n vaig anar."
+        ],
+        [
+          "El libro del cual te hablé.",
+          "El llibre [del qual|de què] et vaig parlar."
+        ],
+        [
+          "Quien lo sepa, que lo diga.",
+          "Qui ho sàpiga(,) que ho digui."
+        ],
+        [
+          "Llovió todo el día, lo cual nos impidió salir.",
+          "Va ploure tot el dia(,) [cosa que|la qual cosa] ens va impedir sortir."
+        ],
+        [
+          "Las personas a las que ayudamos.",
+          "Les persones que ajudem.",
+          "ajudar takes a direct object"
+        ],
+        [
+          "El pueblo en el que crecí.",
+          "El poble [on|en què|en el qual] vaig créixer."
+        ],
+        [
+          "Todo aquel que quiera venir.",
+          "[Tothom qui|Tot aquell que|Qualsevol que] vulgui venir."
+        ],
+        [
+          "La casa cuyas ventanas están rotas.",
+          "[La casa que té les finestres trencades|La casa les finestres de la qual estan trencades]."
+        ],
+        [
+          "Es la mujer de quien te hablé.",
+          "És la dona de [qui|la qual] et vaig parlar."
+        ],
+        [
+          "Hizo todo lo que pudo, lo cual es admirable.",
+          "Va fer tot el que va poder(,) [la qual cosa|cosa que] és admirable."
+        ]
       ]
     },
     {
@@ -98,20 +377,77 @@
       "title": "Pronoun mastery I: se'm, se'ns, -los-ho",
       "goal": "Say se me olvidó, me lo llevo, ponme uno, díselo a ellos.",
       "note": "- Accidental *se me*: **se'm va oblidar**, **se m'ha caigut**, **se'ns ha acabat**.\n- *llevarse*: **me l'emporto**, **se l'ha endut**.\n- With en: **posa-me'n un**, **porta'ls-en uns quants**, **no me'n queda**.\n- *se lo (a ellos)*: **els ho** → after the verb **digues-los-ho**.\n- el + hi → **l'hi**, after the verb **fica-l'hi**.",
-      "vocab": [["endur-se", "llevarse"], ["caure", "caer"], ["acabar-se", "acabarse"], ["el pastís", "el pastel"], ["passar", "pasar"]],
+      "vocab": [
+        [
+          "endur-se",
+          "llevarse"
+        ],
+        [
+          "caure",
+          "caer"
+        ],
+        [
+          "acabar-se",
+          "acabarse"
+        ],
+        [
+          "el pastís",
+          "el pastel"
+        ],
+        [
+          "passar",
+          "pasar"
+        ]
+      ],
       "items": [
-        ["Se me olvidó.", "Se'm va oblidar."],
-        ["Se me ha caído el móvil.", "Se m'ha caigut el mòbil."],
-        ["Me lo llevo. (el abrigo)", "Me l'emporto."],
-        ["Se lo ha llevado. (el coche)", "Se l'ha [endut|emportat]."],
-        ["Ponme uno. (de eso)", "Posa-me'n un."],
-        ["Llévales algunos. (pasteles, a ellos)", "Porta'ls-en [uns quants|alguns]."],
-        ["Os los envío. (los papeles)", "Us els envio."],
-        ["No me queda. (de eso)", "No me'n queda."],
-        ["Díselo a ellos. (eso)", "Digues-los-ho."],
-        ["Mételo ahí. (el dinero)", "Fica-l'hi."],
-        ["Ya se me pasará.", "Ja se'm passarà."],
-        ["Se nos ha acabado el pan.", "Se'ns ha acabat el pa."]
+        [
+          "Se me olvidó.",
+          "Se'm va oblidar."
+        ],
+        [
+          "Se me ha caído el móvil.",
+          "Se m'ha caigut el mòbil."
+        ],
+        [
+          "Me lo llevo. (el abrigo)",
+          "Me l'emporto."
+        ],
+        [
+          "Se lo ha llevado. (el coche)",
+          "Se l'ha [endut|emportat]."
+        ],
+        [
+          "Ponme uno. (de eso)",
+          "Posa-me'n un."
+        ],
+        [
+          "Llévales algunos. (pasteles, a ellos)",
+          "Porta'ls-en [uns quants|alguns]."
+        ],
+        [
+          "Os los envío. (los papeles)",
+          "Us els envio."
+        ],
+        [
+          "No me queda. (de eso)",
+          "No me'n queda."
+        ],
+        [
+          "Díselo a ellos. (eso)",
+          "Digues-los-ho."
+        ],
+        [
+          "Mételo ahí. (el dinero)",
+          "Fica-l'hi."
+        ],
+        [
+          "Ya se me pasará.",
+          "Ja se'm passarà."
+        ],
+        [
+          "Se nos ha acabado el pan.",
+          "Se'ns ha acabat el pa."
+        ]
       ]
     },
     {
@@ -119,20 +455,77 @@
       "title": "Pronoun mastery II: answering",
       "goal": "Answer questions replacing every complement: ho és, hi he parlat, en vinc.",
       "note": "Natives answer by replacing complements, not repeating them:\n\n- Attribute (*lo es, lo estoy*) → **ho**: **Sí, ho és. Sí, ho estic.**\n- *con él, en eso, a eso* → **hi**: **Sí, hi he parlat.**\n- *de allí, de eso* → **en**: **Sí, en vinc. Me n'he recordat.**\n- Two at once: **l'hi he donat**, **els n'he comprat**, **n'hi posaré**, **els en parlaré**.",
-      "vocab": [["el director", "el director"], ["el bitllet", "el billete"], ["l'error", "el error"], ["la flor", "la flor"], ["el projecte", "el proyecto"]],
+      "vocab": [
+        [
+          "el director",
+          "el director"
+        ],
+        [
+          "el bitllet",
+          "el billete"
+        ],
+        [
+          "l'error",
+          "el error"
+        ],
+        [
+          "la flor",
+          "la flor"
+        ],
+        [
+          "el projecte",
+          "el proyecto"
+        ]
+      ],
       "items": [
-        ["¿Estás cansada? Sí, lo estoy.", "Sí, ho estic."],
-        ["¿Es médico? Sí, lo es.", "Sí, ho és."],
-        ["Parece fácil, pero no lo es.", "Sembla fàcil(,) però no ho és."],
-        ["¿Has hablado con el director? Sí, he hablado con él.", "Sí, hi he parlat."],
-        ["¿Vienes de la playa? Sí, vengo de allí.", "Sí, en vinc."],
-        ["¿Has pensado en el viaje? Sí, he pensado en ello.", "Sí, hi he pensat."],
-        ["¿Te has acordado de los billetes? Sí, me he acordado.", "Sí, me n'he recordat."],
-        ["¿Le has dado el libro a Marta? Sí, se lo he dado.", "Sí, l'hi he donat."],
-        ["¿Has comprado pan para los niños? Sí, les he comprado.", "Sí, els n'he comprat."],
-        ["¿Os habéis dado cuenta del error? Sí, nos hemos dado cuenta.", "Sí, ens n'hem adonat."],
-        ["¿Pondrás flores en la mesa? Sí, pondré algunas.", "Sí, n'hi posaré algunes."],
-        ["¿Les hablarás del proyecto? Sí, les hablaré de él.", "Sí, els en parlaré."]
+        [
+          "¿Estás cansada? Sí, lo estoy.",
+          "Sí, ho estic."
+        ],
+        [
+          "¿Es médico? Sí, lo es.",
+          "Sí, ho és."
+        ],
+        [
+          "Parece fácil, pero no lo es.",
+          "Sembla fàcil(,) però no ho és."
+        ],
+        [
+          "¿Has hablado con el director? Sí, he hablado con él.",
+          "Sí, hi he parlat."
+        ],
+        [
+          "¿Vienes de la playa? Sí, vengo de allí.",
+          "Sí, en vinc."
+        ],
+        [
+          "¿Has pensado en el viaje? Sí, he pensado en ello.",
+          "Sí, hi he pensat."
+        ],
+        [
+          "¿Te has acordado de los billetes? Sí, me he acordado.",
+          "Sí, me n'he recordat."
+        ],
+        [
+          "¿Le has dado el libro a Marta? Sí, se lo he dado.",
+          "Sí, l'hi he donat."
+        ],
+        [
+          "¿Has comprado pan para los niños? Sí, les he comprado.",
+          "Sí, els n'he comprat."
+        ],
+        [
+          "¿Os habéis dado cuenta del error? Sí, nos hemos dado cuenta.",
+          "Sí, ens n'hem adonat."
+        ],
+        [
+          "¿Pondrás flores en la mesa? Sí, pondré algunas.",
+          "Sí, n'hi posaré algunes."
+        ],
+        [
+          "¿Les hablarás del proyecto? Sí, les hablaré de él.",
+          "Sí, els en parlaré."
+        ]
       ]
     },
     {
@@ -140,41 +533,159 @@
       "title": "Frases fetes I",
       "goal": "Use the idioms you'll hear every week.",
       "note": "Don't translate idioms word for word — swap them:\n\n- *estar como una cabra* → **estar com un llum**\n- *manos a la obra* → **posar fil a l'agulla**\n- *largarse* → **tocar el dos**\n- *resumir* → **fer-ne cinc cèntims**\n- *estar hasta las narices* → **estar fins al capdamunt**\n- *no tener ni un duro* → **no tenir ni cinc**\n- *ser un pedazo de pan* → **ser un tros de pa**\n- *hacerse el remolón* → **fer el ronso**\n- *tomar el pelo* → **prendre el pèl**",
-      "vocab": [["el llum", "la lámpara"], ["l'agulla", "la aguja"], ["el capdamunt", "lo más alto"], ["el ruc", "el burro"], ["el pèl", "el pelo"], ["el núvol", "la nube"]],
+      "vocab": [
+        [
+          "el llum",
+          "la lámpara"
+        ],
+        [
+          "l'agulla",
+          "la aguja"
+        ],
+        [
+          "el capdamunt",
+          "lo más alto"
+        ],
+        [
+          "el ruc",
+          "el burro"
+        ],
+        [
+          "el pèl",
+          "el pelo"
+        ],
+        [
+          "el núvol",
+          "la nube"
+        ]
+      ],
       "items": [
-        ["Está como una cabra.", "Està com un llum."],
-        ["Pongámonos manos a la obra.", "Posem fil a l'agulla."],
-        ["Me largo.", "Toco el dos."],
-        ["Te lo resumo.", "Te'n [faig|faré] cinc cèntims."],
-        ["Estoy hasta las narices.", "Estic fins al [capdamunt|monyo]."],
-        ["No tengo ni un duro.", "No tinc ni cinc."],
-        ["Es un pedazo de pan.", "És un tros de pa."],
-        ["No hagas el tonto.", "No facis el ruc."],
-        ["No te hagas el remolón.", "No facis el ronso."],
-        ["Ve con pies de plomo.", "Ves amb peus de plom."],
-        ["¿Me estás tomando el pelo?", "M'estàs prenent el pèl?"],
-        ["Siempre estás en las nubes.", "Sempre estàs [a la lluna|als núvols]."]
+        [
+          "Está como una cabra.",
+          "Està com un llum."
+        ],
+        [
+          "Pongámonos manos a la obra.",
+          "Posem fil a l'agulla."
+        ],
+        [
+          "Me largo.",
+          "Toco el dos."
+        ],
+        [
+          "Te lo resumo.",
+          "Te'n [faig|faré] cinc cèntims."
+        ],
+        [
+          "Estoy hasta las narices.",
+          "Estic fins al [capdamunt|monyo]."
+        ],
+        [
+          "No tengo ni un duro.",
+          "No tinc ni cinc."
+        ],
+        [
+          "Es un pedazo de pan.",
+          "És un tros de pa."
+        ],
+        [
+          "No hagas el tonto.",
+          "No facis el ruc."
+        ],
+        [
+          "No te hagas el remolón.",
+          "No facis el ronso."
+        ],
+        [
+          "Ve con pies de plomo.",
+          "Ves amb peus de plom."
+        ],
+        [
+          "¿Me estás tomando el pelo?",
+          "M'estàs prenent el pèl?"
+        ],
+        [
+          "Siempre estás en las nubes.",
+          "Sempre estàs [a la lluna|als núvols]."
+        ]
       ]
     },
     {
       "id": "c1-08",
-      "title": "Frases fetes II: refranys",
-      "goal": "Swap Castellano proverbs for their Catalan equivalents.",
-      "note": "Proverbs rarely map word for word. Learn the Catalan ones as units:\n\n- *poco a poco se va lejos* → **de mica en mica s'omple la pica**\n- *a quien madruga...* → **qui matina fa farina**\n- *no vendas la piel del oso...* → **no diguis blat fins que no sigui al sac i ben lligat**\n- *hacer todo lo posible* → **fer mans i mànigues**\n\nSome are nearly identical: **qui no plora no mama**.",
-      "vocab": [["la pica", "el fregadero"], ["matinar", "madrugar"], ["el blat", "el trigo"], ["el ferrer", "el herrero"], ["el ganivet", "el cuchillo"], ["la banya", "el cuerno"]],
+      "title": "High-frequency adverbs",
+      "goal": "Hedge, stress and qualify like a native speaker.",
+      "note": "Adverbs carry attitude, and the frequent ones are few:\n\n- **probablement**, **segurament** (seguramente, probablemente)\n- **simplement**, **completament**, **perfectament**, **immediatament**\n- **en realitat** (en realidad) — **de fet** (de hecho)\n- **per descomptat** (por supuesto)\n- **bastant** (bastante) — **ni més ni menys**\n- *en serio* → **seriosament**, **de debò**\n\nNote: **segurament** usually means *probably*, not *surely*.",
+      "vocab": [
+        [
+          "segurament",
+          "probablemente"
+        ],
+        [
+          "per descomptat",
+          "por supuesto"
+        ],
+        [
+          "en realitat",
+          "en realidad"
+        ],
+        [
+          "simplement",
+          "simplemente"
+        ],
+        [
+          "bastant",
+          "bastante"
+        ]
+      ],
       "items": [
-        ["Poco a poco se va lejos.", "De mica en mica s'omple la pica."],
-        ["Más vale pájaro en mano que ciento volando.", "Més val un ocell a la mà que cent volant."],
-        ["Quien no llora no mama.", "Qui no plora no mama."],
-        ["No vendas la piel del oso antes de cazarlo.", "No diguis blat fins que no sigui al sac i ben lligat."],
-        ["A quien madruga, Dios le ayuda.", "Qui matina fa farina."],
-        ["Dime con quién andas y te diré quién eres.", "Digues-me amb qui vas i et diré qui ets."],
-        ["En casa del herrero, cuchillo de palo.", "A casa del ferrer(,) ganivet de fusta."],
-        ["Hacer de tripas corazón.", "Fer de tripes cor."],
-        ["No hay mal que por bien no venga.", "No hi ha mal que per bé no vingui."],
-        ["Hablando del rey de Roma, por la puerta asoma.", "Parlant del rei de Roma(,) per la porta treu la banya."],
-        ["Hizo todo lo posible.", "Va fer mans i mànigues."],
-        ["Ojos que no ven, corazón que no siente.", "Ulls que no veuen(,) cor que no sent."]
+        [
+          "Probablemente lloverá.",
+          "Probablement plourà."
+        ],
+        [
+          "Seguramente ya lo sabe.",
+          "Segurament ja ho sap."
+        ],
+        [
+          "Simplemente no quiero.",
+          "Simplement no vull."
+        ],
+        [
+          "Estoy completamente seguro.",
+          "(N')estic completament segur."
+        ],
+        [
+          "Por supuesto.",
+          "[Per descomptat|És clar|Naturalment]."
+        ],
+        [
+          "En realidad, no es así.",
+          "En realitat(,) no és així."
+        ],
+        [
+          "Ahora mismo voy.",
+          "Ara mateix [hi vaig|vinc]."
+        ],
+        [
+          "Es bastante difícil.",
+          "És bastant difícil."
+        ],
+        [
+          "Lo hizo perfectamente.",
+          "Ho va fer perfectament."
+        ],
+        [
+          "Ven inmediatamente.",
+          "Vine immediatament."
+        ],
+        [
+          "Ni más ni menos.",
+          "Ni més ni menys."
+        ],
+        [
+          "En serio, escúchame.",
+          "[Seriosament|De debò](,) escolta'm."
+        ]
       ]
     },
     {
@@ -182,20 +693,81 @@
       "title": "Castilianisms III: the subtle ones",
       "goal": "Remove the last calques an educated speaker would notice.",
       "note": "- *apenas* → **amb prou feines**, **gairebé no**\n- *a propósito (adrede)* → **expressament**, **a posta**\n- *llevar a cabo* → **dur a terme**\n- *ni siquiera* → **ni tan sols**\n- *en vez de* → **en lloc de**, **en comptes de**\n- *casi* → **gairebé**, **quasi**\n- *a lo largo de* → **al llarg de**; *a la vez* → **alhora**\n- *acto seguido* → **tot seguit**; *por suerte* → **per sort**\n- *enterarse* → **assabentar-se**",
-      "vocab": [["amb prou feines", "apenas"], ["a posta", "adrede"], ["dur a terme", "llevar a cabo"], ["ni tan sols", "ni siquiera"], ["alhora", "a la vez"], ["gairebé", "casi"]],
+      "vocab": [
+        [
+          "amb prou feines",
+          "apenas"
+        ],
+        [
+          "a posta",
+          "adrede"
+        ],
+        [
+          "dur a terme",
+          "llevar a cabo"
+        ],
+        [
+          "ni tan sols",
+          "ni siquiera"
+        ],
+        [
+          "alhora",
+          "a la vez"
+        ],
+        [
+          "gairebé",
+          "casi"
+        ]
+      ],
       "items": [
-        ["Apenas tengo tiempo.", "[Amb prou feines|Gairebé no] tinc temps."],
-        ["Lo has hecho a propósito.", "Ho has fet [expressament|a posta]."],
-        ["Llevar a cabo un proyecto.", "[Dur|Portar] a terme un projecte."],
-        ["Ni siquiera me saludó.", "Ni tan sols em va saludar."],
-        ["En vez de quejarte, haz algo.", "En [lloc|comptes] de queixar-te(,) fes alguna cosa."],
-        ["Cada vez más gente.", "[Cada vegada|Cada cop] més gent."],
-        ["Casi me caigo.", "[Gairebé|Quasi|Per poc] caic."],
-        ["A lo largo del día.", "Al llarg del dia."],
-        ["Todos a la vez.", "Tots [alhora|a la vegada]."],
-        ["Acto seguido, se fue.", "Tot seguit(,) se'n va anar."],
-        ["Por suerte, no pasó nada.", "Per sort(,) no va passar res."],
-        ["Me he enterado hoy.", "[M'he assabentat|Ho he sabut] avui."]
+        [
+          "Apenas tengo tiempo.",
+          "[Amb prou feines|Gairebé no] tinc temps."
+        ],
+        [
+          "Lo has hecho a propósito.",
+          "Ho has fet [expressament|a posta]."
+        ],
+        [
+          "Llevar a cabo un proyecto.",
+          "[Dur|Portar] a terme un projecte."
+        ],
+        [
+          "Ni siquiera me saludó.",
+          "Ni tan sols em va saludar."
+        ],
+        [
+          "En vez de quejarte, haz algo.",
+          "En [lloc|comptes] de queixar-te(,) fes alguna cosa."
+        ],
+        [
+          "Cada vez más gente.",
+          "[Cada vegada|Cada cop] més gent."
+        ],
+        [
+          "Casi me caigo.",
+          "[Gairebé|Quasi|Per poc] caic."
+        ],
+        [
+          "A lo largo del día.",
+          "Al llarg del dia."
+        ],
+        [
+          "Todos a la vez.",
+          "Tots [alhora|a la vegada]."
+        ],
+        [
+          "Acto seguido, se fue.",
+          "Tot seguit(,) se'n va anar."
+        ],
+        [
+          "Por suerte, no pasó nada.",
+          "Per sort(,) no va passar res."
+        ],
+        [
+          "Me he enterado hoy.",
+          "[M'he assabentat|Ho he sabut] avui."
+        ]
       ]
     }
   ]

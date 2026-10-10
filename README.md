@@ -39,19 +39,21 @@ Before practising, replace the `REPLACE_WITH_VOICE_ID` placeholders in
 
 ## Speedrun mode — Castellano → Català
 
-A second, written mode for Castellano speakers: a speedrun to C1 that goes deep
-on core vocabulary and the conjugation patterns of the most common verbs rather
-than wide on word lists. Open it with **⚡ Speedrun** in the header, or go to
-`/#speedrun`. It needs no keys.
+A second, written mode for Castellano speakers: a speedrun to C1 built on the
+80/20 rule. It skips topic word lists (no fruit, animals, weather or jobs) and
+drills the small set of words and patterns that make up most of real speech:
+the core verbs in every tense, weak pronouns, function words, connectors and
+the most frequent nouns and adverbs. Open it with **⚡ Speedrun** in the
+header, or go to `/#speedrun`. It needs no keys.
 
-**100 bite-sized lessons**, about five minutes each:
+**101 bite-sized lessons**, about five minutes each:
 
 | Level | Lessons | Focus |
 | --- | --- | --- |
-| A2 | 30 | ser/estar/tenir, the -ar/-re/-ir families, fer/anar/poder/voler/saber/venir/dir/veure, both pasts, imperfect, future, haver de / cal, imperative |
-| B1 | 30 | weak pronouns (el, li, en, hi, ho and their pairs), anar-se'n, conditional, present subjunctive, por/para, Castilianisms, verbs that diverge |
-| B2 | 22 | imperfect subjunctive, si-clauses, compound moods, deure, periphrases, Castellano *lo*, en + infinitive, prepositions that drop or change, idiomatic verbs |
-| C1 | 18 | passat simple, formal register, el qual, pronoun clusters and dislocation, frases fetes and refranys, subtle Castilianisms, academic writing |
+| A2 | 32 | conversation glue, core nouns, ser/estar/tenir, the -ar/-re/-ir families, fer/anar/poder/voler/saber/venir/dir/veure, both pasts, imperfect, future, haver de / cal, imperative |
+| B1 | 30 | weak pronouns (el, li, en, hi, ho and their pairs), anar-se'n, conditional, present subjunctive, por/para, core verb forms, tot/mateix/algun, frequent prepositions, Castilianisms, verbs that diverge |
+| B2 | 21 | imperfect subjunctive, si-clauses, compound moods, deure, periphrases, Castellano *lo*, en + infinitive, prepositions that drop or change, idiomatic verbs |
+| C1 | 18 | passat simple, formal register, el qual, pronoun clusters and dislocation, high-frequency adverbs, common idioms, subtle Castilianisms, academic writing |
 
 Each lesson is a short concept note with clickable conjugation tables, then
 10–12 Castellano sentences to type in Catalan. A miss goes back into the queue
@@ -70,6 +72,14 @@ slow option and auto-play after each check (toggle on the map). Audio uses
 ElevenLabs with the `narrator` voice from `curriculum.json` when a key is set,
 cached like the rest of the app; otherwise it falls back to the browser's
 Catalan voice (quality depends on the OS).
+
+**80/20 audit.** `npm run coverage -- path/to/ca_50k.txt` measures the course
+against a word-frequency list (one `word count` per line, such as
+[FrequencyWords](https://github.com/hermitdave/FrequencyWords)' `ca_50k.txt`,
+built from subtitles; not committed). It reports what share of running speech
+the course's words cover, which top-ranked words it never uses, and which of
+its words are rare. Use it before adding content: a new word should earn its
+place by frequency.
 
 **Content.** Lessons live in `speedrun/*.json`, one file per level half,
 validated on load by `src/speedrun/schema.ts`. Answers are patterns, so one

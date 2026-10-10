@@ -10,24 +10,128 @@
       "tables": [
         {
           "title": "direct object",
-          "cols": ["", "before verb", "before vowel"],
-          "rows": [["me", "em", "m'"], ["te", "et", "t'"], ["lo", "el", "l'"], ["la", "la", "l'"], ["nos", "ens", "ens"], ["os", "us", "us"], ["los", "els", "els"], ["las", "les", "les"]]
+          "cols": [
+            "",
+            "before verb",
+            "before vowel"
+          ],
+          "rows": [
+            [
+              "me",
+              "em",
+              "m'"
+            ],
+            [
+              "te",
+              "et",
+              "t'"
+            ],
+            [
+              "lo",
+              "el",
+              "l'"
+            ],
+            [
+              "la",
+              "la",
+              "l'"
+            ],
+            [
+              "nos",
+              "ens",
+              "ens"
+            ],
+            [
+              "os",
+              "us",
+              "us"
+            ],
+            [
+              "los",
+              "els",
+              "els"
+            ],
+            [
+              "las",
+              "les",
+              "les"
+            ]
+          ]
         }
       ],
-      "vocab": [["trobar", "encontrar"], ["estimar", "querer (amor)"], ["convidar", "invitar"], ["ajudar", "ayudar"], ["esperar", "esperar"]],
+      "vocab": [
+        [
+          "trobar",
+          "encontrar"
+        ],
+        [
+          "estimar",
+          "querer (amor)"
+        ],
+        [
+          "convidar",
+          "invitar"
+        ],
+        [
+          "ajudar",
+          "ayudar"
+        ],
+        [
+          "esperar",
+          "esperar"
+        ]
+      ],
       "items": [
-        ["Lo veo.", "El veig."],
-        ["La conozco.", "La conec."],
-        ["Los compro mañana.", "Els compro demà."],
-        ["Las invito.", "Les convido."],
-        ["¿Lo has visto?", "L'has vist?"],
-        ["La he comprado.", "L'he [comprada|comprat]."],
-        ["Quiero verlo.", "[Vull veure'l|El vull veure]."],
-        ["Cómpralo.", "Compra'l."],
-        ["No los encuentro.", "No els trobo.", "encontrar → trobar"],
-        ["Te quiero.", "T'estimo.", "love → estimar"],
-        ["¿Me ayudas?", "M'ajudes?"],
-        ["Os esperamos.", "Us esperem."]
+        [
+          "Lo veo.",
+          "El veig."
+        ],
+        [
+          "La conozco.",
+          "La conec."
+        ],
+        [
+          "Los compro mañana.",
+          "Els compro demà."
+        ],
+        [
+          "Las invito.",
+          "Les convido."
+        ],
+        [
+          "¿Lo has visto?",
+          "L'has vist?"
+        ],
+        [
+          "La he comprado.",
+          "L'he [comprada|comprat]."
+        ],
+        [
+          "Quiero verlo.",
+          "[Vull veure'l|El vull veure]."
+        ],
+        [
+          "Cómpralo.",
+          "Compra'l."
+        ],
+        [
+          "No los encuentro.",
+          "No els trobo.",
+          "encontrar → trobar"
+        ],
+        [
+          "Te quiero.",
+          "T'estimo.",
+          "love → estimar"
+        ],
+        [
+          "¿Me ayudas?",
+          "M'ajudes?"
+        ],
+        [
+          "Os esperamos.",
+          "Us esperem."
+        ]
       ]
     },
     {
@@ -38,24 +142,121 @@
       "tables": [
         {
           "title": "indirect object",
-          "cols": ["", "before verb", "after verb"],
-          "rows": [["le", "li", "-li"], ["les", "els", "-los / 'ls"], ["me", "em", "-me / 'm"], ["te", "et", "-te / 't"], ["nos", "ens", "-nos / 'ns"], ["os", "us", "-vos"]]
+          "cols": [
+            "",
+            "before verb",
+            "after verb"
+          ],
+          "rows": [
+            [
+              "le",
+              "li",
+              "-li"
+            ],
+            [
+              "les",
+              "els",
+              "-los / 'ls"
+            ],
+            [
+              "me",
+              "em",
+              "-me / 'm"
+            ],
+            [
+              "te",
+              "et",
+              "-te / 't"
+            ],
+            [
+              "nos",
+              "ens",
+              "-nos / 'ns"
+            ],
+            [
+              "os",
+              "us",
+              "-vos"
+            ]
+          ]
         }
       ],
-      "vocab": [["demanar", "pedir"], ["preguntar", "preguntar"], ["enviar", "enviar"], ["el missatge", "el mensaje"], ["l'ajuda", "la ayuda"], ["una cosa", "algo"]],
+      "vocab": [
+        [
+          "demanar",
+          "pedir"
+        ],
+        [
+          "preguntar",
+          "preguntar"
+        ],
+        [
+          "enviar",
+          "enviar"
+        ],
+        [
+          "el missatge",
+          "el mensaje"
+        ],
+        [
+          "l'ajuda",
+          "la ayuda"
+        ],
+        [
+          "una cosa",
+          "algo"
+        ]
+      ],
       "items": [
-        ["Le doy un libro.", "Li dono un llibre."],
-        ["Les escribo una carta.", "Els escric una carta."],
-        ["¿Qué le has dicho?", "Què li has dit?"],
-        ["Le pido ayuda.", "Li demano ajuda.", "pedir → demanar"],
-        ["Les compramos un regalo.", "Els comprem un regal."],
-        ["No le digas nada.", "No li diguis res."],
-        ["Quiero decirle algo.", "[Vull dir-li|Li vull dir] [una cosa|alguna cosa]."],
-        ["Dale las llaves.", "Dona-li les claus."],
-        ["Les hemos enviado un mensaje.", "Els hem enviat un missatge."],
-        ["¿Le gusta?", "Li agrada?"],
-        ["Pregúntale.", "Pregunta-li."],
-        ["Le escribí ayer.", "[Li vaig escriure ahir|Ahir li vaig escriure]."]
+        [
+          "Le doy un libro.",
+          "Li dono un llibre."
+        ],
+        [
+          "Les escribo una carta.",
+          "Els escric una carta."
+        ],
+        [
+          "¿Qué le has dicho?",
+          "Què li has dit?"
+        ],
+        [
+          "Le pido ayuda.",
+          "Li demano ajuda.",
+          "pedir → demanar"
+        ],
+        [
+          "Les compramos un regalo.",
+          "Els comprem un regal."
+        ],
+        [
+          "No le digas nada.",
+          "No li diguis res."
+        ],
+        [
+          "Quiero decirle algo.",
+          "[Vull dir-li|Li vull dir] [una cosa|alguna cosa]."
+        ],
+        [
+          "Dale las llaves.",
+          "Dona-li les claus."
+        ],
+        [
+          "Les hemos enviado un mensaje.",
+          "Els hem enviat un missatge."
+        ],
+        [
+          "¿Le gusta?",
+          "Li agrada?"
+        ],
+        [
+          "Pregúntale.",
+          "Pregunta-li."
+        ],
+        [
+          "Le escribí ayer.",
+          "[Li vaig escriure ahir|Ahir li vaig escriure]."
+        ]
       ]
     },
     {
@@ -66,24 +267,131 @@
       "tables": [
         {
           "title": "after the verb",
-          "cols": ["", "after vowel", "after consonant / u"],
-          "rows": [["em", "'m", "-me"], ["et", "'t", "-te"], ["es", "'s", "-se"], ["el", "'l", "-lo"], ["la", "-la", "-la"], ["ens", "'ns", "-nos"], ["us", "-us", "-vos"], ["els", "'ls", "-los"], ["les", "-les", "-les"]]
+          "cols": [
+            "",
+            "after vowel",
+            "after consonant / u"
+          ],
+          "rows": [
+            [
+              "em",
+              "'m",
+              "-me"
+            ],
+            [
+              "et",
+              "'t",
+              "-te"
+            ],
+            [
+              "es",
+              "'s",
+              "-se"
+            ],
+            [
+              "el",
+              "'l",
+              "-lo"
+            ],
+            [
+              "la",
+              "-la",
+              "-la"
+            ],
+            [
+              "ens",
+              "'ns",
+              "-nos"
+            ],
+            [
+              "us",
+              "-us",
+              "-vos"
+            ],
+            [
+              "els",
+              "'ls",
+              "-los"
+            ],
+            [
+              "les",
+              "-les",
+              "-les"
+            ]
+          ]
         }
       ],
-      "vocab": [["llevar-se", "levantarse"], ["despertar", "despertar"], ["seure", "sentarse"], ["dir", "decir, llamar (nombre)"], ["buscar", "buscar"]],
+      "vocab": [
+        [
+          "llevar-se",
+          "levantarse"
+        ],
+        [
+          "despertar",
+          "despertar"
+        ],
+        [
+          "seure",
+          "sentarse"
+        ],
+        [
+          "dir",
+          "decir, llamar (nombre)"
+        ],
+        [
+          "buscar",
+          "buscar"
+        ]
+      ],
       "items": [
-        ["Mírame.", "Mira'm."],
-        ["Tengo que verte.", "[He de veure't|Haig de veure't|T'he de veure]."],
-        ["Levántate.", "Lleva't."],
-        ["Escúchanos.", "Escolta'ns."],
-        ["Quiero conocerlos.", "[Vull conèixer-los|Els vull conèixer]."],
-        ["Ayúdame.", "Ajuda'm."],
-        ["Para comprarlo.", "Per comprar-lo."],
-        ["Sentaos.", "[Seieu|Asseieu-vos]."],
-        ["Dime.", "Digues-me."],
-        ["Estoy buscándote.", "[T'estic buscant|Estic buscant-te]."],
-        ["Puedes llamarme Pep.", "[Em pots dir|Pots dir-me] Pep."],
-        ["Despiértanos a las siete.", "Desperta'ns a les set."]
+        [
+          "Mírame.",
+          "Mira'm."
+        ],
+        [
+          "Tengo que verte.",
+          "[He de veure't|Haig de veure't|T'he de veure]."
+        ],
+        [
+          "Levántate.",
+          "Lleva't."
+        ],
+        [
+          "Escúchanos.",
+          "Escolta'ns."
+        ],
+        [
+          "Quiero conocerlos.",
+          "[Vull conèixer-los|Els vull conèixer]."
+        ],
+        [
+          "Ayúdame.",
+          "Ajuda'm."
+        ],
+        [
+          "Para comprarlo.",
+          "Per comprar-lo."
+        ],
+        [
+          "Sentaos.",
+          "[Seieu|Asseieu-vos]."
+        ],
+        [
+          "Dime.",
+          "Digues-me."
+        ],
+        [
+          "Estoy buscándote.",
+          "[T'estic buscant|Estic buscant-te]."
+        ],
+        [
+          "Puedes llamarme Pep.",
+          "[Em pots dir|Pots dir-me] Pep."
+        ],
+        [
+          "Despiértanos a las siete.",
+          "Desperta'ns a les set."
+        ]
       ]
     },
     {
@@ -91,20 +399,77 @@
       "title": "The pronoun en",
       "goal": "Say 'I have two', 'I don't have any', 'there are lots'.",
       "note": "Castellano has no equivalent. **En** replaces an indefinite noun or a quantity:\n\n- *¿Tienes hijos? — Tengo dos.* → **En tinc dos.**\n- *No tengo.* → **No en tinc.**\n- *Hay muchos.* → **N'hi ha molts.**\n\nIt also replaces *de + something*: *Sé mucho de eso* → **En sé molt.**\n\nShapes: **en**, **n'** (before a vowel), **-ne / 'n** after the verb (**compra'n**).",
-      "vocab": [["n'hi ha", "hay (de eso)"], ["cap", "ninguno"], ["necessitar", "necesitar"], ["la pera", "la pera"], ["més", "más"]],
+      "vocab": [
+        [
+          "n'hi ha",
+          "hay (de eso)"
+        ],
+        [
+          "cap",
+          "ninguno"
+        ],
+        [
+          "necessitar",
+          "necesitar"
+        ],
+        [
+          "la pera",
+          "la pera"
+        ],
+        [
+          "més",
+          "más"
+        ]
+      ],
       "items": [
-        ["¿Tienes hijos? Sí, tengo dos.", "Sí, en tinc dos."],
-        ["¿Dinero? No tengo.", "No en tinc."],
-        ["Manzanas: quiero tres.", "En vull tres."],
-        ["¿Cuántos quieres?", "Quants en vols?"],
-        ["Hay muchos.", "N'hi ha molts."],
-        ["No hay.", "No n'hi ha."],
-        ["¿Peras? Compra algunas.", "Compra'n algunes."],
-        ["¿Café? Hoy he bebido tres.", "[Avui n'he begut tres|N'he begut tres avui]."],
-        ["¿Coche? Tengo uno.", "En tinc un."],
-        ["Necesito más.", "En necessito més."],
-        ["Sé mucho de eso.", "En sé molt."],
-        ["No quiero ninguno.", "No en vull cap."]
+        [
+          "¿Tienes hijos? Sí, tengo dos.",
+          "Sí, en tinc dos."
+        ],
+        [
+          "¿Dinero? No tengo.",
+          "No en tinc."
+        ],
+        [
+          "Manzanas: quiero tres.",
+          "En vull tres."
+        ],
+        [
+          "¿Cuántos quieres?",
+          "Quants en vols?"
+        ],
+        [
+          "Hay muchos.",
+          "N'hi ha molts."
+        ],
+        [
+          "No hay.",
+          "No n'hi ha."
+        ],
+        [
+          "¿Peras? Compra algunas.",
+          "Compra'n algunes."
+        ],
+        [
+          "¿Café? Hoy he bebido tres.",
+          "[Avui n'he begut tres|N'he begut tres avui]."
+        ],
+        [
+          "¿Coche? Tengo uno.",
+          "En tinc un."
+        ],
+        [
+          "Necesito más.",
+          "En necessito més."
+        ],
+        [
+          "Sé mucho de eso.",
+          "En sé molt."
+        ],
+        [
+          "No quiero ninguno.",
+          "No en vull cap."
+        ]
       ]
     },
     {
@@ -112,20 +477,77 @@
       "title": "The pronoun hi",
       "goal": "Replace places and a/en complements: hi vaig, no hi és, hi penso.",
       "note": "**Hi** replaces a place (*allí*): *¿Vas a Girona? — Sí, voy mañana.* → **Sí, hi vaig demà.**\n\nIt also replaces complements with **a / en**: *Pienso en ello* → **Hi penso.** *No creo en eso* → **No hi crec.**\n\nSome verbs carry hi by default: **no hi veig** (no veo), **no hi sento** (no oigo), **hi ha**.\n\nWith *ir* and no destination, Catalan wants hi: **Anem-hi!** (¡Vamos!)",
-      "vocab": [["la vegada", "la vez"], ["les ulleres", "las gafas"], ["tornar", "volver"], ["creure", "creer"], ["algú", "alguien"]],
+      "vocab": [
+        [
+          "la vegada",
+          "la vez"
+        ],
+        [
+          "les ulleres",
+          "las gafas"
+        ],
+        [
+          "tornar",
+          "volver"
+        ],
+        [
+          "creure",
+          "creer"
+        ],
+        [
+          "algú",
+          "alguien"
+        ]
+      ],
       "items": [
-        ["¿Vas a Girona? Sí, voy mañana.", "Sí, hi vaig demà."],
-        ["¿Está en casa? No, no está.", "No, no hi és."],
-        ["¿Has estado en París? Sí, he estado dos veces.", "Sí, hi he estat dues vegades."],
-        ["Pienso en ello.", "Hi penso."],
-        ["Vivo allí desde hace años.", "Hi visc des de fa anys."],
-        ["No veo bien sin gafas.", "No hi veig bé sense ulleres."],
-        ["¡Vamos!", "Anem-hi!"],
-        ["No puedo ir.", "[No hi puc anar|No puc anar-hi]."],
-        ["¿Hay alguien?", "Hi ha algú?"],
-        ["Mañana volveré allí.", "Demà hi tornaré."],
-        ["No creo en eso.", "No hi crec."],
-        ["¿Vienes a la fiesta? Sí, iré.", "Sí, hi aniré."]
+        [
+          "¿Vas a Girona? Sí, voy mañana.",
+          "Sí, hi vaig demà."
+        ],
+        [
+          "¿Está en casa? No, no está.",
+          "No, no hi és."
+        ],
+        [
+          "¿Has estado en París? Sí, he estado dos veces.",
+          "Sí, hi he estat dues vegades."
+        ],
+        [
+          "Pienso en ello.",
+          "Hi penso."
+        ],
+        [
+          "Vivo allí desde hace años.",
+          "Hi visc des de fa anys."
+        ],
+        [
+          "No veo bien sin gafas.",
+          "No hi veig bé sense ulleres."
+        ],
+        [
+          "¡Vamos!",
+          "Anem-hi!"
+        ],
+        [
+          "No puedo ir.",
+          "[No hi puc anar|No puc anar-hi]."
+        ],
+        [
+          "¿Hay alguien?",
+          "Hi ha algú?"
+        ],
+        [
+          "Mañana volveré allí.",
+          "Demà hi tornaré."
+        ],
+        [
+          "No creo en eso.",
+          "No hi crec."
+        ],
+        [
+          "¿Vienes a la fiesta? Sí, iré.",
+          "Sí, hi aniré."
+        ]
       ]
     },
     {
@@ -136,23 +558,113 @@
       "tables": [
         {
           "title": "common pairs",
-          "rows": [["me lo (eso)", "m'ho"], ["me lo (el libro)", "me'l"], ["te lo (eso)", "t'ho"], ["nos lo (eso)", "ens ho"], ["os lo (el paquete)", "us l'"], ["se lo (eso, a él)", "li ho"], ["se lo (el libro, a él)", "l'hi"], ["se las (a él)", "les hi"]]
+          "rows": [
+            [
+              "me lo (eso)",
+              "m'ho"
+            ],
+            [
+              "me lo (el libro)",
+              "me'l"
+            ],
+            [
+              "te lo (eso)",
+              "t'ho"
+            ],
+            [
+              "nos lo (eso)",
+              "ens ho"
+            ],
+            [
+              "os lo (el paquete)",
+              "us l'"
+            ],
+            [
+              "se lo (eso, a él)",
+              "li ho"
+            ],
+            [
+              "se lo (el libro, a él)",
+              "l'hi"
+            ],
+            [
+              "se las (a él)",
+              "les hi"
+            ]
+          ]
         }
       ],
-      "vocab": [["explicar", "explicar"], ["presentar", "presentar"], ["el paquet", "el paquete"], ["regalar", "regalar"], ["el rellotge", "el reloj"]],
+      "vocab": [
+        [
+          "explicar",
+          "explicar"
+        ],
+        [
+          "presentar",
+          "presentar"
+        ],
+        [
+          "el paquet",
+          "el paquete"
+        ],
+        [
+          "regalar",
+          "regalar"
+        ],
+        [
+          "el rellotge",
+          "el reloj"
+        ]
+      ],
       "items": [
-        ["Dámelo. (el libro)", "Dona-me'l."],
-        ["Te lo digo. (eso)", "T'ho dic."],
-        ["Se lo doy. (el libro, a ella)", "L'hi dono."],
-        ["Se lo he dicho. (eso, a él)", "Li ho he dit."],
-        ["Me lo compro. (el coche)", "Me'l compro."],
-        ["¿Nos lo explicas? (eso)", "Ens ho expliques?"],
-        ["Os lo envío mañana. (el paquete)", "Us l'envio demà."],
-        ["Díselo. (eso, a ella)", "Digues-li-ho."],
-        ["No me lo digas. (eso)", "No m'ho diguis."],
-        ["Te la presento. (a María)", "Te la presento."],
-        ["Se las doy. (las llaves, a él)", "Les hi dono."],
-        ["Me lo ha regalado mi madre. (el reloj)", "Me l'ha regalat la meva mare."]
+        [
+          "Dámelo. (el libro)",
+          "Dona-me'l."
+        ],
+        [
+          "Te lo digo. (eso)",
+          "T'ho dic."
+        ],
+        [
+          "Se lo doy. (el libro, a ella)",
+          "L'hi dono."
+        ],
+        [
+          "Se lo he dicho. (eso, a él)",
+          "Li ho he dit."
+        ],
+        [
+          "Me lo compro. (el coche)",
+          "Me'l compro."
+        ],
+        [
+          "¿Nos lo explicas? (eso)",
+          "Ens ho expliques?"
+        ],
+        [
+          "Os lo envío mañana. (el paquete)",
+          "Us l'envio demà."
+        ],
+        [
+          "Díselo. (eso, a ella)",
+          "Digues-li-ho."
+        ],
+        [
+          "No me lo digas. (eso)",
+          "No m'ho diguis."
+        ],
+        [
+          "Te la presento. (a María)",
+          "Te la presento."
+        ],
+        [
+          "Se las doy. (las llaves, a él)",
+          "Les hi dono."
+        ],
+        [
+          "Me lo ha regalado mi madre. (el reloj)",
+          "Me l'ha regalat la meva mare."
+        ]
       ]
     },
     {
@@ -163,23 +675,106 @@
       "tables": [
         {
           "title": "anar-se'n — present",
-          "rows": [["jo", "me'n vaig"], ["tu", "te'n vas"], ["ell, ella", "se'n va"], ["nosaltres", "ens n'anem"], ["vosaltres", "us n'aneu"], ["ells, elles", "se'n van"]]
+          "rows": [
+            [
+              "jo",
+              "me'n vaig"
+            ],
+            [
+              "tu",
+              "te'n vas"
+            ],
+            [
+              "ell, ella",
+              "se'n va"
+            ],
+            [
+              "nosaltres",
+              "ens n'anem"
+            ],
+            [
+              "vosaltres",
+              "us n'aneu"
+            ],
+            [
+              "ells, elles",
+              "se'n van"
+            ]
+          ]
         }
       ],
-      "vocab": [["anar-se'n", "irse"], ["recordar-se'n", "acordarse"], ["oblidar-se'n", "olvidarse"], ["la cadira", "la silla"], ["aviat", "pronto, temprano"]],
+      "vocab": [
+        [
+          "anar-se'n",
+          "irse"
+        ],
+        [
+          "recordar-se'n",
+          "acordarse"
+        ],
+        [
+          "oblidar-se'n",
+          "olvidarse"
+        ],
+        [
+          "la cadira",
+          "la silla"
+        ],
+        [
+          "aviat",
+          "pronto, temprano"
+        ]
+      ],
       "items": [
-        ["Me voy.", "Me'n vaig."],
-        ["Nos vamos a casa.", "Ens n'anem a casa."],
-        ["¿Ya te vas?", "Ja te'n vas?"],
-        ["Se ha ido.", "Se n'ha anat."],
-        ["Me tengo que ir.", "[Me n'he d'anar|Me n'haig d'anar|He d'anar-me'n]."],
-        ["¡Vete!", "Ves-te'n!"],
-        ["No me acuerdo.", "No [me'n recordo|ho recordo]."],
-        ["Se fueron temprano.", "Se'n van anar [d'hora|aviat]."],
-        ["Vámonos.", "Anem-nos-en."],
-        ["¿Sillas? Hay dos.", "N'hi ha dues.", "cadira is feminine"],
-        ["Me he olvidado.", "Me n'he oblidat."],
-        ["¿Os vais mañana?", "Us n'aneu demà?"]
+        [
+          "Me voy.",
+          "Me'n vaig."
+        ],
+        [
+          "Nos vamos a casa.",
+          "Ens n'anem a casa."
+        ],
+        [
+          "¿Ya te vas?",
+          "Ja te'n vas?"
+        ],
+        [
+          "Se ha ido.",
+          "Se n'ha anat."
+        ],
+        [
+          "Me tengo que ir.",
+          "[Me n'he d'anar|Me n'haig d'anar|He d'anar-me'n]."
+        ],
+        [
+          "¡Vete!",
+          "Ves-te'n!"
+        ],
+        [
+          "No me acuerdo.",
+          "No [me'n recordo|ho recordo]."
+        ],
+        [
+          "Se fueron temprano.",
+          "Se'n van anar [d'hora|aviat]."
+        ],
+        [
+          "Vámonos.",
+          "Anem-nos-en."
+        ],
+        [
+          "¿Sillas? Hay dos.",
+          "N'hi ha dues.",
+          "cadira is feminine"
+        ],
+        [
+          "Me he olvidado.",
+          "Me n'he oblidat."
+        ],
+        [
+          "¿Os vais mañana?",
+          "Us n'aneu demà?"
+        ]
       ]
     },
     {
@@ -187,20 +782,77 @@
       "title": "Ho: the neuter 'lo'",
       "goal": "Replace 'eso / lo' with ho everywhere.",
       "note": "When *lo* means *eso* (an idea, a fact, a whole sentence), Catalan uses **ho**: **No ho sé. Ho sento. Ja ho he fet.**\n\nAfter the verb: **fes-ho**, **digues-ho**, **saber-ho**.\n\n*Piénsalo* → **Pensa-t'ho** (or **pensa-hi**, think about it).",
-      "vocab": [["ho sento", "lo siento"], ["em sap greu", "lo siento"], ["una altra vegada", "otra vez"], ["un altre cop", "otra vez"], ["pensar", "pensar"]],
+      "vocab": [
+        [
+          "ho sento",
+          "lo siento"
+        ],
+        [
+          "em sap greu",
+          "lo siento"
+        ],
+        [
+          "una altra vegada",
+          "otra vez"
+        ],
+        [
+          "un altre cop",
+          "otra vez"
+        ],
+        [
+          "pensar",
+          "pensar"
+        ]
+      ],
       "items": [
-        ["Lo siento.", "[Ho sento|Em sap greu]."],
-        ["Ya lo he hecho.", "Ja ho he fet."],
-        ["Hazlo ahora.", "Fes-ho ara."],
-        ["¿Lo ves?", "Ho veus?"],
-        ["No lo creo.", "No ho crec."],
-        ["Dilo otra vez.", "Digues-ho [una altra vegada|un altre cop]."],
-        ["Quiero saberlo.", "[Vull saber-ho|Ho vull saber]."],
-        ["Lo sabía.", "Ho sabia."],
-        ["No lo entiendo.", "No ho entenc."],
-        ["Piénsalo.", "[Pensa-t'ho|Pensa-hi]."],
-        ["¿Quién lo ha dicho?", "Qui ho ha dit?"],
-        ["Lo haremos mañana.", "Ho farem demà."]
+        [
+          "Lo siento.",
+          "[Ho sento|Em sap greu]."
+        ],
+        [
+          "Ya lo he hecho.",
+          "Ja ho he fet."
+        ],
+        [
+          "Hazlo ahora.",
+          "Fes-ho ara."
+        ],
+        [
+          "¿Lo ves?",
+          "Ho veus?"
+        ],
+        [
+          "No lo creo.",
+          "No ho crec."
+        ],
+        [
+          "Dilo otra vez.",
+          "Digues-ho [una altra vegada|un altre cop]."
+        ],
+        [
+          "Quiero saberlo.",
+          "[Vull saber-ho|Ho vull saber]."
+        ],
+        [
+          "Lo sabía.",
+          "Ho sabia."
+        ],
+        [
+          "No lo entiendo.",
+          "No ho entenc."
+        ],
+        [
+          "Piénsalo.",
+          "[Pensa-t'ho|Pensa-hi]."
+        ],
+        [
+          "¿Quién lo ha dicho?",
+          "Qui ho ha dit?"
+        ],
+        [
+          "Lo haremos mañana.",
+          "Ho farem demà."
+        ]
       ]
     },
     {
@@ -208,20 +860,82 @@
       "title": "Pronominal verbs",
       "goal": "Use adonar-se'n, quedar-se, equivocar-se, queixar-se...",
       "note": "Everyday pronominal verbs. Most match Castellano, but watch:\n\n- *darse cuenta* → **adonar-se'n**: **Me n'he adonat.** (\"donar-se compte\" is a Castilianism)\n- *ponerse* (ropa) → **posar-se**: **Posa't la jaqueta.**\n- *volverse* → **tornar-se**: **Es va tornar boig.**\n- *atreverse* → **atrevir-se** (t'atreveixes).",
-      "vocab": [["adonar-se'n", "darse cuenta"], ["quedar-se", "quedarse"], ["equivocar-se", "equivocarse"], ["queixar-se", "quejarse"], ["preocupar-se", "preocuparse"], ["la jaqueta", "la chaqueta"]],
+      "vocab": [
+        [
+          "adonar-se'n",
+          "darse cuenta"
+        ],
+        [
+          "quedar-se",
+          "quedarse"
+        ],
+        [
+          "equivocar-se",
+          "equivocarse"
+        ],
+        [
+          "queixar-se",
+          "quejarse"
+        ],
+        [
+          "preocupar-se",
+          "preocuparse"
+        ],
+        [
+          "la jaqueta",
+          "la chaqueta"
+        ]
+      ],
       "items": [
-        ["Me he dado cuenta.", "Me n'he adonat.", "darse cuenta → adonar-se'n"],
-        ["Se quedó en casa.", "Es va quedar a casa."],
-        ["Nos casamos en junio.", "Ens [casem|casarem] al juny."],
-        ["No te enfades.", "No t'enfadis."],
-        ["Me he equivocado.", "M'he equivocat."],
-        ["Siempre se queja.", "Sempre es queixa."],
-        ["No te preocupes.", "No et preocupis."],
-        ["Ponte la chaqueta.", "Posa't la jaqueta."],
-        ["Me olvidé de las llaves.", "[Em vaig oblidar (de)|Vaig oblidar] les claus."],
-        ["¿Te acuerdas de mí?", "Et recordes de mi?"],
-        ["Se volvió loco.", "Es va tornar boig."],
-        ["¿Te atreves?", "T'atreveixes?"]
+        [
+          "Me he dado cuenta.",
+          "Me n'he adonat.",
+          "darse cuenta → adonar-se'n"
+        ],
+        [
+          "Se quedó en casa.",
+          "Es va quedar a casa."
+        ],
+        [
+          "Nos casamos en junio.",
+          "Ens [casem|casarem] al juny."
+        ],
+        [
+          "No te enfades.",
+          "No t'enfadis."
+        ],
+        [
+          "Me he equivocado.",
+          "M'he equivocat."
+        ],
+        [
+          "Siempre se queja.",
+          "Sempre es queixa."
+        ],
+        [
+          "No te preocupes.",
+          "No et preocupis."
+        ],
+        [
+          "Ponte la chaqueta.",
+          "Posa't la jaqueta."
+        ],
+        [
+          "Me olvidé de las llaves.",
+          "[Em vaig oblidar (de)|Vaig oblidar] les claus."
+        ],
+        [
+          "¿Te acuerdas de mí?",
+          "Et recordes de mi?"
+        ],
+        [
+          "Se volvió loco.",
+          "Es va tornar boig."
+        ],
+        [
+          "¿Te atreves?",
+          "T'atreveixes?"
+        ]
       ]
     },
     {
@@ -229,20 +943,77 @@
       "title": "Gerund: estic menjant",
       "goal": "Talk about actions in progress and how long they've lasted.",
       "note": "Gerund: **-ant, -ent, -int** (parlant, perdent, dormint). Irregulars follow the stem: **fent, dient, veient, tenint, vivint, escrivint, bevent**.\n\n**estar + gerundi** = estar + gerundio. **continuar / seguir + gerundi** = seguir.\n\n*Llevo dos años viviendo aquí* → **Fa dos anys que visc aquí** (most natural) or **Porto dos anys vivint aquí**.\n\n*Poco a poco* → **a poc a poc**.",
-      "vocab": [["cuinar", "cocinar"], ["a poc a poc", "poco a poco"], ["continuar", "seguir"], ["passar-se el dia", "pasarse el día"], ["fa... que", "hace... que"]],
+      "vocab": [
+        [
+          "cuinar",
+          "cocinar"
+        ],
+        [
+          "a poc a poc",
+          "poco a poco"
+        ],
+        [
+          "continuar",
+          "seguir"
+        ],
+        [
+          "passar-se el dia",
+          "pasarse el día"
+        ],
+        [
+          "fa... que",
+          "hace... que"
+        ]
+      ],
       "items": [
-        ["Estoy comiendo.", "Estic menjant."],
-        ["¿Qué estás haciendo?", "Què estàs fent?"],
-        ["Estábamos hablando de ti.", "Estàvem parlant de tu."],
-        ["Sigue lloviendo.", "[Continua|Segueix] plovent."],
-        ["Llevo dos años viviendo aquí.", "[Fa dos anys que visc aquí|Porto dos anys vivint aquí]."],
-        ["Están viendo la tele.", "Estan [mirant|veient] la [tele|televisió]."],
-        ["Mientras cocino, escucho la radio.", "Mentre cuino(,) escolto la ràdio."],
-        ["Poco a poco vamos aprendiendo.", "A poc a poc anem aprenent."],
-        ["Está escribiendo un correo.", "Està escrivint un correu."],
-        ["¿Me estás diciendo la verdad?", "[M'estàs dient|Estàs dient-me] la veritat?"],
-        ["Aprendí leyendo.", "Vaig aprendre llegint."],
-        ["Se pasa el día durmiendo.", "Es passa el dia dormint."]
+        [
+          "Estoy comiendo.",
+          "Estic menjant."
+        ],
+        [
+          "¿Qué estás haciendo?",
+          "Què estàs fent?"
+        ],
+        [
+          "Estábamos hablando de ti.",
+          "Estàvem parlant de tu."
+        ],
+        [
+          "Sigue lloviendo.",
+          "[Continua|Segueix] plovent."
+        ],
+        [
+          "Llevo dos años viviendo aquí.",
+          "[Fa dos anys que visc aquí|Porto dos anys vivint aquí]."
+        ],
+        [
+          "Están viendo la tele.",
+          "Estan [mirant|veient] la [tele|televisió]."
+        ],
+        [
+          "Mientras cocino, escucho la radio.",
+          "Mentre cuino(,) escolto la ràdio."
+        ],
+        [
+          "Poco a poco vamos aprendiendo.",
+          "A poc a poc anem aprenent."
+        ],
+        [
+          "Está escribiendo un correo.",
+          "Està escrivint un correu."
+        ],
+        [
+          "¿Me estás diciendo la verdad?",
+          "[M'estàs dient|Estàs dient-me] la veritat?"
+        ],
+        [
+          "Aprendí leyendo.",
+          "Vaig aprendre llegint."
+        ],
+        [
+          "Se pasa el día durmiendo.",
+          "Es passa el dia dormint."
+        ]
       ]
     },
     {
@@ -253,23 +1024,106 @@
       "tables": [
         {
           "title": "condicional — parlar",
-          "rows": [["jo", "parlaria"], ["tu", "parlaries"], ["ell, ella", "parlaria"], ["nosaltres", "parlaríem"], ["vosaltres", "parlaríeu"], ["ells, elles", "parlarien"]]
+          "rows": [
+            [
+              "jo",
+              "parlaria"
+            ],
+            [
+              "tu",
+              "parlaries"
+            ],
+            [
+              "ell, ella",
+              "parlaria"
+            ],
+            [
+              "nosaltres",
+              "parlaríem"
+            ],
+            [
+              "vosaltres",
+              "parlaríeu"
+            ],
+            [
+              "ells, elles",
+              "parlarien"
+            ]
+          ]
         }
       ],
-      "vocab": [["descansar", "descansar"], ["fantàstic", "fantástico"], ["importar", "importar"], ["fer res", "importar (¿te importa?)"], ["hauria de", "debería"]],
+      "vocab": [
+        [
+          "descansar",
+          "descansar"
+        ],
+        [
+          "fantàstic",
+          "fantástico"
+        ],
+        [
+          "importar",
+          "importar"
+        ],
+        [
+          "fer res",
+          "importar (¿te importa?)"
+        ],
+        [
+          "hauria de",
+          "debería"
+        ]
+      ],
       "items": [
-        ["Me gustaría ir.", "M'agradaria anar-hi.", "+ hi"],
-        ["¿Podrías ayudarme?", "[Em podries ajudar|Podries ajudar-me]?"],
-        ["Quería un café, por favor.", "Voldria un cafè, si us plau."],
-        ["Deberías descansar.", "Hauries de descansar."],
-        ["Yo no compraría eso.", "No compraria això."],
-        ["¿Qué comerías?", "Què menjaries?"],
-        ["Viviríamos en el campo.", "Viuríem al camp."],
-        ["Sería fantástico.", "Seria fantàstic."],
-        ["Deberíamos irnos.", "[Ens n'hauríem d'anar|Hauríem d'anar-nos-en]."],
-        ["Me encantaría.", "M'encantaria."],
-        ["¿Os importaría esperar?", "Us [importaria|faria res] esperar?"],
-        ["Dijo que llegaría tarde.", "Va dir que arribaria tard."]
+        [
+          "Me gustaría ir.",
+          "M'agradaria anar-hi.",
+          "+ hi"
+        ],
+        [
+          "¿Podrías ayudarme?",
+          "[Em podries ajudar|Podries ajudar-me]?"
+        ],
+        [
+          "Quería un café, por favor.",
+          "Voldria un cafè, si us plau."
+        ],
+        [
+          "Deberías descansar.",
+          "Hauries de descansar."
+        ],
+        [
+          "Yo no compraría eso.",
+          "No compraria això."
+        ],
+        [
+          "¿Qué comerías?",
+          "Què menjaries?"
+        ],
+        [
+          "Viviríamos en el campo.",
+          "Viuríem al camp."
+        ],
+        [
+          "Sería fantástico.",
+          "Seria fantàstic."
+        ],
+        [
+          "Deberíamos irnos.",
+          "[Ens n'hauríem d'anar|Hauríem d'anar-nos-en]."
+        ],
+        [
+          "Me encantaría.",
+          "M'encantaria."
+        ],
+        [
+          "¿Os importaría esperar?",
+          "Us [importaria|faria res] esperar?"
+        ],
+        [
+          "Dijo que llegaría tarde.",
+          "Va dir que arribaria tard."
+        ]
       ]
     },
     {
@@ -280,23 +1134,114 @@
       "tables": [
         {
           "title": "condicional — jo",
-          "rows": [["fer", "faria"], ["dir", "diria"], ["tenir", "tindria"], ["venir", "vindria"], ["saber", "sabria"], ["anar", "aniria"], ["caldre", "caldria"], ["valer", "valdria"]]
+          "rows": [
+            [
+              "fer",
+              "faria"
+            ],
+            [
+              "dir",
+              "diria"
+            ],
+            [
+              "tenir",
+              "tindria"
+            ],
+            [
+              "venir",
+              "vindria"
+            ],
+            [
+              "saber",
+              "sabria"
+            ],
+            [
+              "anar",
+              "aniria"
+            ],
+            [
+              "caldre",
+              "caldria"
+            ],
+            [
+              "valer",
+              "valdria"
+            ]
+          ]
         }
       ],
-      "vocab": [["jo que tu", "yo que tú"], ["valer la pena", "valer la pena"], ["caldre", "hacer falta"], ["quedar", "quedar"], ["amb mi", "conmigo"]],
+      "vocab": [
+        [
+          "jo que tu",
+          "yo que tú"
+        ],
+        [
+          "valer la pena",
+          "valer la pena"
+        ],
+        [
+          "caldre",
+          "hacer falta"
+        ],
+        [
+          "quedar",
+          "quedar"
+        ],
+        [
+          "amb mi",
+          "conmigo"
+        ]
+      ],
       "items": [
-        ["¿Qué harías tú?", "Què faries (tu)?"],
-        ["Yo no diría eso.", "No diria això."],
-        ["Tendríamos que salir ya.", "Hauríem de sortir ja.", "tener que → haver de"],
-        ["¿Vendrías conmigo?", "Vindries amb mi?"],
-        ["No sabría qué decir.", "No sabria què dir."],
-        ["Valdría la pena.", "Valdria la pena."],
-        ["Iríamos en tren.", "Aniríem [amb|en] tren."],
-        ["Haría falta más tiempo.", "[Caldria|Faria falta] més temps."],
-        ["Yo que tú no iría.", "[Jo que tu|Jo en el teu lloc|En el teu lloc](,) no hi aniria."],
-        ["Tendría unos treinta años.", "Tindria uns trenta anys."],
-        ["Podríamos quedar mañana.", "Podríem quedar demà."],
-        ["¿Querríais venir?", "Voldríeu venir?"]
+        [
+          "¿Qué harías tú?",
+          "Què faries (tu)?"
+        ],
+        [
+          "Yo no diría eso.",
+          "No diria això."
+        ],
+        [
+          "Tendríamos que salir ya.",
+          "Hauríem de sortir ja.",
+          "tener que → haver de"
+        ],
+        [
+          "¿Vendrías conmigo?",
+          "Vindries amb mi?"
+        ],
+        [
+          "No sabría qué decir.",
+          "No sabria què dir."
+        ],
+        [
+          "Valdría la pena.",
+          "Valdria la pena."
+        ],
+        [
+          "Iríamos en tren.",
+          "Aniríem [amb|en] tren."
+        ],
+        [
+          "Haría falta más tiempo.",
+          "[Caldria|Faria falta] més temps."
+        ],
+        [
+          "Yo que tú no iría.",
+          "[Jo que tu|Jo en el teu lloc|En el teu lloc](,) no hi aniria."
+        ],
+        [
+          "Tendría unos treinta años.",
+          "Tindria uns trenta anys."
+        ],
+        [
+          "Podríamos quedar mañana.",
+          "Podríem quedar demà."
+        ],
+        [
+          "¿Querríais venir?",
+          "Voldríeu venir?"
+        ]
       ]
     },
     {
@@ -307,22 +1252,101 @@
       "tables": [
         {
           "title": "plusquamperfet — fer",
-          "rows": [["jo", "havia fet"], ["tu", "havies fet"], ["ell, ella", "havia fet"], ["nosaltres", "havíem fet"], ["vosaltres", "havíeu fet"], ["ells, elles", "havien fet"]]
+          "rows": [
+            [
+              "jo",
+              "havia fet"
+            ],
+            [
+              "tu",
+              "havies fet"
+            ],
+            [
+              "ell, ella",
+              "havia fet"
+            ],
+            [
+              "nosaltres",
+              "havíem fet"
+            ],
+            [
+              "vosaltres",
+              "havíeu fet"
+            ],
+            [
+              "ells, elles",
+              "havien fet"
+            ]
+          ]
         }
       ],
-      "vocab": [["ja", "ya"], ["abans", "antes"], ["pensar que", "pensar que"], ["tanta sort", "tanta suerte"], ["acabar", "terminar"]],
+      "vocab": [
+        [
+          "ja",
+          "ya"
+        ],
+        [
+          "abans",
+          "antes"
+        ],
+        [
+          "pensar que",
+          "pensar que"
+        ],
+        [
+          "tanta sort",
+          "tanta suerte"
+        ],
+        [
+          "acabar",
+          "terminar"
+        ]
+      ],
       "items": [
-        ["Cuando llegué, ya se había ido.", "Quan vaig arribar(,) ja se n'havia anat."],
-        ["Nunca había visto el mar.", "[No havia vist mai|Mai (no) havia vist] el mar."],
-        ["Habíamos comido antes.", "Havíem [menjat|dinat] abans."],
-        ["¿Habías estado allí?", "Hi havies estat?"],
-        ["Ya lo habían hecho.", "Ja ho havien fet."],
-        ["Me dijo que había perdido el tren.", "Em va dir que havia perdut el tren."],
-        ["No había entendido nada.", "No havia entès res."],
-        ["¿Habíais terminado?", "Havíeu acabat?"],
-        ["Pensaba que habías venido.", "Pensava que havies vingut."],
-        ["Ella ya había cenado.", "(Ella) ja havia sopat."],
-        ["Nunca habíamos tenido tanta suerte.", "[No havíem tingut mai|Mai (no) havíem tingut] tanta sort."]
+        [
+          "Cuando llegué, ya se había ido.",
+          "Quan vaig arribar(,) ja se n'havia anat."
+        ],
+        [
+          "Nunca había visto el mar.",
+          "[No havia vist mai|Mai (no) havia vist] el mar."
+        ],
+        [
+          "Habíamos comido antes.",
+          "Havíem [menjat|dinat] abans."
+        ],
+        [
+          "¿Habías estado allí?",
+          "Hi havies estat?"
+        ],
+        [
+          "Ya lo habían hecho.",
+          "Ja ho havien fet."
+        ],
+        [
+          "Me dijo que había perdido el tren.",
+          "Em va dir que havia perdut el tren."
+        ],
+        [
+          "No había entendido nada.",
+          "No havia entès res."
+        ],
+        [
+          "¿Habíais terminado?",
+          "Havíeu acabat?"
+        ],
+        [
+          "Pensaba que habías venido.",
+          "Pensava que havies vingut."
+        ],
+        [
+          "Ella ya había cenado.",
+          "(Ella) ja havia sopat."
+        ],
+        [
+          "Nunca habíamos tenido tanta suerte.",
+          "[No havíem tingut mai|Mai (no) havíem tingut] tanta sort."
+        ]
       ]
     },
     {
@@ -333,24 +1357,124 @@
       "tables": [
         {
           "title": "present de subjuntiu",
-          "cols": ["", "parlar", "perdre", "llegir"],
-          "rows": [["jo", "parli", "perdi", "llegeixi"], ["tu", "parlis", "perdis", "llegeixis"], ["ell, ella", "parli", "perdi", "llegeixi"], ["nosaltres", "parlem", "perdem", "llegim"], ["vosaltres", "parleu", "perdeu", "llegiu"], ["ells, elles", "parlin", "perdin", "llegeixin"]]
+          "cols": [
+            "",
+            "parlar",
+            "perdre",
+            "llegir"
+          ],
+          "rows": [
+            [
+              "jo",
+              "parli",
+              "perdi",
+              "llegeixi"
+            ],
+            [
+              "tu",
+              "parlis",
+              "perdis",
+              "llegeixis"
+            ],
+            [
+              "ell, ella",
+              "parli",
+              "perdi",
+              "llegeixi"
+            ],
+            [
+              "nosaltres",
+              "parlem",
+              "perdem",
+              "llegim"
+            ],
+            [
+              "vosaltres",
+              "parleu",
+              "perdeu",
+              "llegiu"
+            ],
+            [
+              "ells, elles",
+              "parlin",
+              "perdin",
+              "llegeixin"
+            ]
+          ]
         }
       ],
-      "vocab": [["tant de bo", "ojalá"], ["a temps", "a tiempo"], ["és millor que", "es mejor que"], ["cal que", "hace falta que"], ["trucar", "llamar (tel.)"]],
+      "vocab": [
+        [
+          "tant de bo",
+          "ojalá"
+        ],
+        [
+          "a temps",
+          "a tiempo"
+        ],
+        [
+          "és millor que",
+          "es mejor que"
+        ],
+        [
+          "cal que",
+          "hace falta que"
+        ],
+        [
+          "trucar",
+          "llamar (tel.)"
+        ]
+      ],
       "items": [
-        ["Quiero que hables con él.", "Vull que parlis amb ell."],
-        ["Espero que te guste.", "Espero que t'agradi."],
-        ["Hace falta que estudiéis.", "Cal que estudieu."],
-        ["Es importante que duermas bien.", "És important que dormis bé."],
-        ["No quiero que pierdas el tren.", "No vull que perdis el tren."],
-        ["Ojalá llegue a tiempo.", "Tant de bo arribi a temps.", "ojalá → tant de bo"],
-        ["Prefiero que me llames tú.", "Prefereixo que em truquis tu."],
-        ["Espero que leáis el libro.", "Espero que llegiu el llibre."],
-        ["Pídele que espere.", "Demana-li que esperi."],
-        ["Es mejor que no compres nada.", "És millor que no compris res."],
-        ["Quieren que trabajemos más.", "Volen que treballem més."],
-        ["Dile que me escuche.", "Digues-li que m'escolti."]
+        [
+          "Quiero que hables con él.",
+          "Vull que parlis amb ell."
+        ],
+        [
+          "Espero que te guste.",
+          "Espero que t'agradi."
+        ],
+        [
+          "Hace falta que estudiéis.",
+          "Cal que estudieu."
+        ],
+        [
+          "Es importante que duermas bien.",
+          "És important que dormis bé."
+        ],
+        [
+          "No quiero que pierdas el tren.",
+          "No vull que perdis el tren."
+        ],
+        [
+          "Ojalá llegue a tiempo.",
+          "Tant de bo arribi a temps.",
+          "ojalá → tant de bo"
+        ],
+        [
+          "Prefiero que me llames tú.",
+          "Prefereixo que em truquis tu."
+        ],
+        [
+          "Espero que leáis el libro.",
+          "Espero que llegiu el llibre."
+        ],
+        [
+          "Pídele que espere.",
+          "Demana-li que esperi."
+        ],
+        [
+          "Es mejor que no compres nada.",
+          "És millor que no compris res."
+        ],
+        [
+          "Quieren que trabajemos más.",
+          "Volen que treballem més."
+        ],
+        [
+          "Dile que me escuche.",
+          "Digues-li que m'escolti."
+        ]
       ]
     },
     {
@@ -361,23 +1485,136 @@
       "tables": [
         {
           "title": "subjuntiu — jo / nosaltres",
-          "rows": [["ser", "sigui", "siguem"], ["fer", "faci", "fem"], ["anar", "vagi", "anem"], ["tenir", "tingui", "tinguem"], ["venir", "vingui", "vinguem"], ["poder", "pugui", "puguem"], ["voler", "vulgui", "vulguem"], ["dir", "digui", "diguem"], ["saber", "sàpiga", "sapiguem"], ["veure", "vegi", "vegem"], ["haver", "hagi", "hàgim"]]
+          "rows": [
+            [
+              "ser",
+              "sigui",
+              "siguem"
+            ],
+            [
+              "fer",
+              "faci",
+              "fem"
+            ],
+            [
+              "anar",
+              "vagi",
+              "anem"
+            ],
+            [
+              "tenir",
+              "tingui",
+              "tinguem"
+            ],
+            [
+              "venir",
+              "vingui",
+              "vinguem"
+            ],
+            [
+              "poder",
+              "pugui",
+              "puguem"
+            ],
+            [
+              "voler",
+              "vulgui",
+              "vulguem"
+            ],
+            [
+              "dir",
+              "digui",
+              "diguem"
+            ],
+            [
+              "saber",
+              "sàpiga",
+              "sapiguem"
+            ],
+            [
+              "veure",
+              "vegi",
+              "vegem"
+            ],
+            [
+              "haver",
+              "hagi",
+              "hàgim"
+            ]
+          ]
         }
       ],
-      "vocab": [["feliç", "feliz"], ["tenir raó", "tener razón"], ["estrany", "raro"], ["saludar", "saludar"], ["el que", "lo que"]],
+      "vocab": [
+        [
+          "feliç",
+          "feliz"
+        ],
+        [
+          "tenir raó",
+          "tener razón"
+        ],
+        [
+          "estrany",
+          "raro"
+        ],
+        [
+          "saludar",
+          "saludar"
+        ],
+        [
+          "el que",
+          "lo que"
+        ]
+      ],
       "items": [
-        ["Espero que seas feliz.", "Espero que siguis feliç."],
-        ["Quiero que vengas.", "Vull que vinguis."],
-        ["Es posible que tenga razón.", "És possible que tingui raó."],
-        ["No creo que pueda.", "No crec que pugui."],
-        ["Haz lo que quieras.", "Fes el que vulguis."],
-        ["Que te vaya bien.", "Que et vagi bé."],
-        ["Dile que lo haga.", "Digues-li que ho faci."],
-        ["Espero que lo sepas.", "Espero que ho sàpigues."],
-        ["Ojalá esté en casa.", "Tant de bo [sigui|estigui] a casa."],
-        ["No quiero que digas nada.", "No vull que diguis res."],
-        ["Es raro que no haya venido.", "És estrany que no hagi vingut."],
-        ["Cuando veas a Joan, salúdalo.", "Quan vegis [en|el] Joan(,) saluda'l."]
+        [
+          "Espero que seas feliz.",
+          "Espero que siguis feliç."
+        ],
+        [
+          "Quiero que vengas.",
+          "Vull que vinguis."
+        ],
+        [
+          "Es posible que tenga razón.",
+          "És possible que tingui raó."
+        ],
+        [
+          "No creo que pueda.",
+          "No crec que pugui."
+        ],
+        [
+          "Haz lo que quieras.",
+          "Fes el que vulguis."
+        ],
+        [
+          "Que te vaya bien.",
+          "Que et vagi bé."
+        ],
+        [
+          "Dile que lo haga.",
+          "Digues-li que ho faci."
+        ],
+        [
+          "Espero que lo sepas.",
+          "Espero que ho sàpigues."
+        ],
+        [
+          "Ojalá esté en casa.",
+          "Tant de bo [sigui|estigui] a casa."
+        ],
+        [
+          "No quiero que digas nada.",
+          "No vull que diguis res."
+        ],
+        [
+          "Es raro que no haya venido.",
+          "És estrany que no hagi vingut."
+        ],
+        [
+          "Cuando veas a Joan, salúdalo.",
+          "Quan vegis [en|el] Joan(,) saluda'l."
+        ]
       ]
     }
   ]

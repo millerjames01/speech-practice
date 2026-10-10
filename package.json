@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "spike": "tsx scripts/spike.ts",
-    "generate": "tsx scripts/generate.ts"
+    "generate": "tsx scripts/generate.ts",
+    "coverage": "tsx scripts/coverage.ts"
   },
   "devDependencies": {
     "@types/node": "^26.6.2",

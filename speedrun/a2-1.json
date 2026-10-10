@@ -10,405 +10,1883 @@
       "tables": [
         {
           "title": "ser — present",
-          "rows": [["jo", "soc"], ["tu", "ets"], ["ell, ella, vostè", "és"], ["nosaltres", "som"], ["vosaltres", "sou"], ["ells, elles, vostès", "són"]]
+          "rows": [
+            [
+              "jo",
+              "soc"
+            ],
+            [
+              "tu",
+              "ets"
+            ],
+            [
+              "ell, ella, vostè",
+              "és"
+            ],
+            [
+              "nosaltres",
+              "som"
+            ],
+            [
+              "vosaltres",
+              "sou"
+            ],
+            [
+              "ells, elles, vostès",
+              "són"
+            ]
+          ]
         }
       ],
-      "vocab": [["metge / metgessa", "médico/a"], ["professor / professora", "profesor/a"], ["d'on", "de dónde"], ["també", "también"], ["però", "pero"], ["aquí", "aquí"]],
+      "vocab": [
+        [
+          "metge / metgessa",
+          "médico/a"
+        ],
+        [
+          "professor / professora",
+          "profesor/a"
+        ],
+        [
+          "d'on",
+          "de dónde"
+        ],
+        [
+          "també",
+          "también"
+        ],
+        [
+          "però",
+          "pero"
+        ],
+        [
+          "aquí",
+          "aquí"
+        ]
+      ],
       "items": [
-        ["Soy de Barcelona.", "Soc de Barcelona."],
-        ["¿De dónde eres?", "D'on ets?"],
-        ["Ella es médica.", "(Ella) és metgessa."],
-        ["Somos estudiantes.", "Som estudiants."],
-        ["¿Sois de Valencia?", "Sou de València?"],
-        ["Ellos son mis amigos.", "(Ells) són els meus amics."],
-        ["Usted es el profesor, ¿verdad?", "Vostè és el professor, [oi|no|veritat]?"],
-        ["No soy de aquí, soy de Girona.", "No soc d'aquí, soc de Girona."],
-        ["¿Quién eres?", "Qui ets?"],
-        ["Mi hermana también es profesora.", "La meva germana també és professora."]
+        [
+          "Soy de Barcelona.",
+          "Soc de Barcelona."
+        ],
+        [
+          "¿De dónde eres?",
+          "D'on ets?"
+        ],
+        [
+          "Ella es médica.",
+          "(Ella) és metgessa."
+        ],
+        [
+          "Somos estudiantes.",
+          "Som estudiants."
+        ],
+        [
+          "¿Sois de Valencia?",
+          "Sou de València?"
+        ],
+        [
+          "Ellos son mis amigos.",
+          "(Ells) són els meus amics."
+        ],
+        [
+          "Usted es el profesor, ¿verdad?",
+          "Vostè és el professor, [oi|no|veritat]?"
+        ],
+        [
+          "No soy de aquí, soy de Girona.",
+          "No soc d'aquí, soc de Girona."
+        ],
+        [
+          "¿Quién eres?",
+          "Qui ets?"
+        ],
+        [
+          "Mi hermana también es profesora.",
+          "La meva germana també és professora."
+        ]
       ]
     },
     {
       "id": "a2-02",
+      "title": "Conversation glue",
+      "goal": "The little words that hold every conversation together.",
+      "note": "These sit in the top few hundred words of spoken Catalan. Learn them as chunks:\n\n- **Hola!** **Adéu!** **Bona nit.**\n- **De debò?** (¿De verdad?) — **Realment** (realmente)\n- **Suposo que sí.** (Supongo que sí.)\n- **Exactament.** **Perfecte.**\n- **Endavant!** (¡Adelante!) — **Tranquil.** (Tranquilo.)\n- **No importa.** **No passa res.**\n- **Què vol dir?** (¿Qué significa?)\n- **Perdona** (tú) / **Perdoni** (usted)",
+      "vocab": [
+        [
+          "hola",
+          "hola"
+        ],
+        [
+          "adéu",
+          "adiós"
+        ],
+        [
+          "de debò",
+          "de verdad"
+        ],
+        [
+          "suposo",
+          "supongo"
+        ],
+        [
+          "endavant",
+          "adelante"
+        ],
+        [
+          "tranquil",
+          "tranquilo"
+        ],
+        [
+          "voler dir",
+          "significar"
+        ]
+      ],
+      "items": [
+        [
+          "¡Hola! ¿Qué tal?",
+          "Hola! Què tal?"
+        ],
+        [
+          "¿De verdad?",
+          "De debò?"
+        ],
+        [
+          "Supongo que sí.",
+          "Suposo que sí."
+        ],
+        [
+          "Exactamente.",
+          "Exactament."
+        ],
+        [
+          "Adelante, pasa.",
+          "Endavant(,) passa."
+        ],
+        [
+          "Tranquilo, no pasa nada.",
+          "Tranquil(,) no passa res."
+        ],
+        [
+          "No importa.",
+          "No importa."
+        ],
+        [
+          "Perdona, ¿tienes hora?",
+          "Perdona(,) tens hora?"
+        ],
+        [
+          "Realmente no lo sé.",
+          "Realment no ho sé."
+        ],
+        [
+          "¡Perfecto, hasta mañana!",
+          "Perfecte(,) fins demà!"
+        ],
+        [
+          "Adiós, buenas noches.",
+          "Adéu(,) bona nit."
+        ],
+        [
+          "¿Qué significa esto?",
+          "[Què vol dir|Què significa] això?"
+        ],
+        [
+          "¡Dios mío!",
+          "Déu meu!"
+        ],
+        [
+          "Está bien hecho.",
+          "Està ben fet."
+        ]
+      ]
+    },
+    {
+      "id": "a2-03",
       "title": "Estar, and where things are",
       "goal": "Describe states and say where people and things are.",
       "note": "**Estar** is for temporary states, as in Castellano: **Estic cansat.**\n\nFor *where* something is, Catalan traditionally uses **ser**: **On és el lavabo?** **Soc a casa.** Estar is also heard and accepted, but ser is the more genuine choice.\n\nWatch the preposition: *en casa* → **a casa**, *en Madrid* → **a Madrid**.",
       "tables": [
         {
           "title": "estar — present",
-          "rows": [["jo", "estic"], ["tu", "estàs"], ["ell, ella, vostè", "està"], ["nosaltres", "estem"], ["vosaltres", "esteu"], ["ells, elles, vostès", "estan"]]
+          "rows": [
+            [
+              "jo",
+              "estic"
+            ],
+            [
+              "tu",
+              "estàs"
+            ],
+            [
+              "ell, ella, vostè",
+              "està"
+            ],
+            [
+              "nosaltres",
+              "estem"
+            ],
+            [
+              "vosaltres",
+              "esteu"
+            ],
+            [
+              "ells, elles, vostès",
+              "estan"
+            ]
+          ]
         }
       ],
-      "vocab": [["cansat", "cansado"], ["content", "contento"], ["tancat / obert", "cerrado / abierto"], ["enfadat", "enfadado"], ["el lavabo", "el baño"], ["la botiga", "la tienda"]],
+      "vocab": [
+        [
+          "cansat",
+          "cansado"
+        ],
+        [
+          "content",
+          "contento"
+        ],
+        [
+          "tancat / obert",
+          "cerrado / abierto"
+        ],
+        [
+          "enfadat",
+          "enfadado"
+        ],
+        [
+          "el lavabo",
+          "el baño"
+        ],
+        [
+          "la botiga",
+          "la tienda"
+        ]
+      ],
       "items": [
-        ["Estoy cansado.", "Estic cansat."],
-        ["¿Cómo estás?", "Com estàs?"],
-        ["Estamos muy contentos.", "Estem molt contents."],
-        ["¿Dónde está el baño?", "On [és|està] el [lavabo|bany]?"],
-        ["Estoy en casa.", "[Soc|Estic] a casa.", "en casa → a casa"],
-        ["La tienda está cerrada.", "La botiga està tancada."],
-        ["Hoy estáis muy guapos.", "[Avui esteu molt guapos|Esteu molt guapos avui]."],
-        ["Mis padres están en Madrid.", "Els meus pares [són|estan] a Madrid."],
-        ["Es simpática, pero hoy está enfadada.", "És simpàtica(,) però avui està enfadada."],
-        ["¿Estás bien?", "Estàs bé?"]
+        [
+          "Estoy cansado.",
+          "Estic cansat."
+        ],
+        [
+          "¿Cómo estás?",
+          "Com estàs?"
+        ],
+        [
+          "Estamos muy contentos.",
+          "Estem molt contents."
+        ],
+        [
+          "¿Dónde está el baño?",
+          "On [és|està] el [lavabo|bany]?"
+        ],
+        [
+          "Estoy en casa.",
+          "[Soc|Estic] a casa.",
+          "en casa → a casa"
+        ],
+        [
+          "La tienda está cerrada.",
+          "La botiga està tancada."
+        ],
+        [
+          "Hoy estáis muy guapos.",
+          "[Avui esteu molt guapos|Esteu molt guapos avui]."
+        ],
+        [
+          "Mis padres están en Madrid.",
+          "Els meus pares [són|estan] a Madrid."
+        ],
+        [
+          "Es simpática, pero hoy está enfadada.",
+          "És simpàtica(,) però avui està enfadada."
+        ],
+        [
+          "¿Estás bien?",
+          "Estàs bé?"
+        ]
       ]
     },
     {
-      "id": "a2-03",
+      "id": "a2-04",
       "title": "Tenir and hi ha",
       "goal": "Say what you have, how you feel, and what there is.",
       "note": "**Tenir** = tener, including the body-state expressions: **tinc gana** (hambre), **tinc set**, **tinc son**, **tinc fred**, **tinc por**, **tinc pressa**.\n\n**Hi ha** = hay. It never changes for plural: **hi ha dos llibres**.",
       "tables": [
         {
           "title": "tenir — present",
-          "rows": [["jo", "tinc"], ["tu", "tens"], ["ell, ella, vostè", "té"], ["nosaltres", "tenim"], ["vosaltres", "teniu"], ["ells, elles, vostès", "tenen"]]
+          "rows": [
+            [
+              "jo",
+              "tinc"
+            ],
+            [
+              "tu",
+              "tens"
+            ],
+            [
+              "ell, ella, vostè",
+              "té"
+            ],
+            [
+              "nosaltres",
+              "tenim"
+            ],
+            [
+              "vosaltres",
+              "teniu"
+            ],
+            [
+              "ells, elles, vostès",
+              "tenen"
+            ]
+          ]
         }
       ],
-      "vocab": [["gana", "hambre"], ["set", "sed"], ["son", "sueño"], ["pressa", "prisa"], ["por", "miedo"], ["la gent", "la gente"]],
+      "vocab": [
+        [
+          "gana",
+          "hambre"
+        ],
+        [
+          "set",
+          "sed"
+        ],
+        [
+          "son",
+          "sueño"
+        ],
+        [
+          "pressa",
+          "prisa"
+        ],
+        [
+          "por",
+          "miedo"
+        ],
+        [
+          "la gent",
+          "la gente"
+        ]
+      ],
       "items": [
-        ["Tengo hambre.", "Tinc gana."],
-        ["¿Tienes sed?", "Tens set?"],
-        ["Tiene veinte años.", "Té vint anys."],
-        ["No tenemos prisa.", "No tenim pressa."],
-        ["Hay un problema.", "Hi ha un problema."],
-        ["¿Hay pan?", "Hi ha pa?"],
-        ["¿Tenéis frío?", "Teniu fred?"],
-        ["Tienen dos hijos.", "Tenen dos fills."],
-        ["Tengo sueño.", "Tinc son."],
-        ["Aquí hay mucha gente.", "[Aquí hi ha molta gent|Hi ha molta gent aquí]."],
-        ["¿Cuántos años tienes?", "Quants anys tens?"],
-        ["Tengo miedo.", "Tinc por."]
+        [
+          "Tengo hambre.",
+          "Tinc gana."
+        ],
+        [
+          "¿Tienes sed?",
+          "Tens set?"
+        ],
+        [
+          "Tiene veinte años.",
+          "Té vint anys."
+        ],
+        [
+          "No tenemos prisa.",
+          "No tenim pressa."
+        ],
+        [
+          "Hay un problema.",
+          "Hi ha un problema."
+        ],
+        [
+          "¿Hay pan?",
+          "Hi ha pa?"
+        ],
+        [
+          "¿Tenéis frío?",
+          "Teniu fred?"
+        ],
+        [
+          "Tienen dos hijos.",
+          "Tenen dos fills."
+        ],
+        [
+          "Tengo sueño.",
+          "Tinc son."
+        ],
+        [
+          "Aquí hay mucha gente.",
+          "[Aquí hi ha molta gent|Hi ha molta gent aquí]."
+        ],
+        [
+          "¿Cuántos años tienes?",
+          "Quants anys tens?"
+        ],
+        [
+          "Tengo miedo.",
+          "Tinc por."
+        ]
       ]
     },
     {
-      "id": "a2-04",
+      "id": "a2-05",
       "title": "Articles and contractions",
       "goal": "Use el, la, l', the contractions al/del/pel, and the article before names.",
       "note": "**el / la / els / les**, and **l'** before a vowel or h: **l'home**, **l'amiga**. Exception: la stays before unstressed i/u: **la universitat**.\n\nContractions: **a + el = al**, **de + el = del**, **per + el = pel** (and **als, dels, pels**).\n\nCatalan puts an article before people's names: **en Joan**, **la Maria**, **l'Anna**.",
       "tables": [
         {
           "title": "contractions",
-          "cols": ["", "+ el", "+ els"],
-          "rows": [["a", "al", "als"], ["de", "del", "dels"], ["per", "pel", "pels"]]
+          "cols": [
+            "",
+            "+ el",
+            "+ els"
+          ],
+          "rows": [
+            [
+              "a",
+              "al",
+              "als"
+            ],
+            [
+              "de",
+              "del",
+              "dels"
+            ],
+            [
+              "per",
+              "pel",
+              "pels"
+            ]
+          ]
         }
       ],
-      "vocab": [["el mercat", "el mercado"], ["l'home", "el hombre"], ["la dona", "la mujer"], ["els avis", "los abuelos"], ["la taula", "la mesa"], ["les claus", "las llaves"]],
+      "vocab": [
+        [
+          "el mercat",
+          "el mercado"
+        ],
+        [
+          "l'home",
+          "el hombre"
+        ],
+        [
+          "la dona",
+          "la mujer"
+        ],
+        [
+          "els avis",
+          "los abuelos"
+        ],
+        [
+          "la taula",
+          "la mesa"
+        ],
+        [
+          "les claus",
+          "las llaves"
+        ]
+      ],
       "items": [
-        ["Voy al mercado.", "Vaig al mercat."],
-        ["El libro de Juan.", "El llibre [d'en|del] Joan."],
-        ["Hablo con María.", "Parlo amb la Maria."],
-        ["La casa de los abuelos.", "La casa dels avis."],
-        ["Paso por el parque.", "Passo pel parc."],
-        ["El hombre y la mujer.", "L'home i la dona."],
-        ["Doy el regalo a los niños.", "Dono el regal als [nens|infants]."],
-        ["La universidad está cerca.", "La universitat [és|està] a prop."],
-        ["Anna es la amiga de Jordi.", "L'Anna és l'amiga [d'en|del] Jordi."],
-        ["Las llaves están en la mesa.", "Les claus [són|estan] [a|sobre] la taula."]
+        [
+          "Voy al mercado.",
+          "Vaig al mercat."
+        ],
+        [
+          "El libro de Juan.",
+          "El llibre [d'en|del] Joan."
+        ],
+        [
+          "Hablo con María.",
+          "Parlo amb la Maria."
+        ],
+        [
+          "La casa de los abuelos.",
+          "La casa dels avis."
+        ],
+        [
+          "Paso por el parque.",
+          "Passo pel parc."
+        ],
+        [
+          "El hombre y la mujer.",
+          "L'home i la dona."
+        ],
+        [
+          "Doy el regalo a los niños.",
+          "Dono el regal als [nens|infants]."
+        ],
+        [
+          "La universidad está cerca.",
+          "La universitat [és|està] a prop."
+        ],
+        [
+          "Anna es la amiga de Jordi.",
+          "L'Anna és l'amiga [d'en|del] Jordi."
+        ],
+        [
+          "Las llaves están en la mesa.",
+          "Les claus [són|estan] [a|sobre] la taula."
+        ]
       ]
     },
     {
-      "id": "a2-05",
+      "id": "a2-06",
+      "title": "Core nouns: cosa, temps, vegada, lloc",
+      "goal": "The nouns that appear in almost every conversation.",
+      "note": "A handful of nouns do most of the work in speech. Gender traps first:\n\n- **la cosa, les coses** — **el temps** (tiempo, and weather) — **la vegada** (vez; also **el cop**)\n- **el lloc** (lugar) — **el nom** (nombre) — **la part** — **el món** (mundo)\n- **l'home, els homes** — **la dona** (mujer) — **la gent** (singular!) — **la vida**\n- **el tipus** (tipo) — **el costat** (lado): **al meu costat**\n\n*Tengo cosas que hacer* → **Tinc coses a fer** (or per fer).",
+      "vocab": [
+        [
+          "la cosa",
+          "la cosa"
+        ],
+        [
+          "el temps",
+          "el tiempo"
+        ],
+        [
+          "la vegada",
+          "la vez"
+        ],
+        [
+          "el lloc",
+          "el lugar"
+        ],
+        [
+          "el nom",
+          "el nombre"
+        ],
+        [
+          "el costat",
+          "el lado"
+        ],
+        [
+          "el tipus",
+          "el tipo"
+        ]
+      ],
+      "items": [
+        [
+          "Tengo muchas cosas que hacer.",
+          "Tinc moltes coses [a|per] fer."
+        ],
+        [
+          "¿Cómo se escribe tu nombre?",
+          "Com s'escriu el teu nom?"
+        ],
+        [
+          "Es una parte importante.",
+          "És una part important."
+        ],
+        [
+          "No tengo tiempo.",
+          "No tinc temps."
+        ],
+        [
+          "Muchas veces.",
+          "Moltes [vegades|cops]."
+        ],
+        [
+          "Es un buen lugar.",
+          "És un bon lloc."
+        ],
+        [
+          "El mejor del mundo.",
+          "El millor del món."
+        ],
+        [
+          "Los hombres y las mujeres.",
+          "Els homes i les dones."
+        ],
+        [
+          "Espera cinco minutos.",
+          "Espera cinc minuts."
+        ],
+        [
+          "¿Qué tipo de música te gusta?",
+          "Quin tipus de música t'agrada?"
+        ],
+        [
+          "Siéntate a mi lado.",
+          "Seu al meu costat."
+        ],
+        [
+          "La vida es bonita.",
+          "La vida és bonica."
+        ],
+        [
+          "Vivo solo.",
+          "Visc sol."
+        ],
+        [
+          "Cuatro meses.",
+          "Quatre mesos."
+        ]
+      ]
+    },
+    {
+      "id": "a2-07",
       "title": "-ar verbs: parlar",
       "goal": "Conjugate any regular -ar verb in the present.",
       "note": "The biggest family. First person ends in **-o**: **parlo**.\n\nSpelling keeps the sound before e: menjar → **menges**, buscar → **busques**, començar → **comences**, pagar → **pagues**.\n\nFalse friend: *coger* → **agafar**.",
       "tables": [
         {
           "title": "present",
-          "cols": ["", "parlar", "menjar"],
-          "rows": [["jo", "parlo", "menjo"], ["tu", "parles", "menges"], ["ell, ella", "parla", "menja"], ["nosaltres", "parlem", "mengem"], ["vosaltres", "parleu", "mengeu"], ["ells, elles", "parlen", "mengen"]]
+          "cols": [
+            "",
+            "parlar",
+            "menjar"
+          ],
+          "rows": [
+            [
+              "jo",
+              "parlo",
+              "menjo"
+            ],
+            [
+              "tu",
+              "parles",
+              "menges"
+            ],
+            [
+              "ell, ella",
+              "parla",
+              "menja"
+            ],
+            [
+              "nosaltres",
+              "parlem",
+              "mengem"
+            ],
+            [
+              "vosaltres",
+              "parleu",
+              "mengeu"
+            ],
+            [
+              "ells, elles",
+              "parlen",
+              "mengen"
+            ]
+          ]
         }
       ],
-      "vocab": [["treballar", "trabajar"], ["escoltar", "escuchar"], ["agafar", "coger"], ["començar", "empezar"], ["buscar", "buscar"], ["comprar", "comprar"]],
+      "vocab": [
+        [
+          "treballar",
+          "trabajar"
+        ],
+        [
+          "escoltar",
+          "escuchar"
+        ],
+        [
+          "agafar",
+          "coger"
+        ],
+        [
+          "començar",
+          "empezar"
+        ],
+        [
+          "buscar",
+          "buscar"
+        ],
+        [
+          "comprar",
+          "comprar"
+        ]
+      ],
       "items": [
-        ["Hablo catalán y castellano.", "Parlo català i castellà."],
-        ["¿Trabajas aquí?", "Treballes aquí?"],
-        ["Comemos mucha fruta.", "Mengem molta fruita."],
-        ["Estudian medicina.", "Estudien medicina."],
-        ["¿Qué buscas?", "Què busques?"],
-        ["Pago yo.", "[Pago jo|Jo pago]."],
-        ["¿Escucháis la radio?", "Escolteu la ràdio?"],
-        ["Empiezo mañana.", "Començo demà."],
-        ["Ella canta muy bien.", "(Ella) canta molt bé."],
-        ["Miramos la tele.", "Mirem la [tele|televisió]."],
-        ["¿Dónde compras el pan?", "On compres el pa?"],
-        ["¿Coges el tren cada día?", "Agafes el tren cada dia?", "coger → agafar"]
+        [
+          "Hablo catalán y castellano.",
+          "Parlo català i castellà."
+        ],
+        [
+          "¿Trabajas aquí?",
+          "Treballes aquí?"
+        ],
+        [
+          "Comemos mucha fruta.",
+          "Mengem molta fruita."
+        ],
+        [
+          "Estudian medicina.",
+          "Estudien medicina."
+        ],
+        [
+          "¿Qué buscas?",
+          "Què busques?"
+        ],
+        [
+          "Pago yo.",
+          "[Pago jo|Jo pago]."
+        ],
+        [
+          "¿Escucháis la radio?",
+          "Escolteu la ràdio?"
+        ],
+        [
+          "Empiezo mañana.",
+          "Començo demà."
+        ],
+        [
+          "Ella canta muy bien.",
+          "(Ella) canta molt bé."
+        ],
+        [
+          "Miramos la tele.",
+          "Mirem la [tele|televisió]."
+        ],
+        [
+          "¿Dónde compras el pan?",
+          "On compres el pa?"
+        ],
+        [
+          "¿Coges el tren cada día?",
+          "Agafes el tren cada dia?",
+          "coger → agafar"
+        ]
       ]
     },
     {
-      "id": "a2-06",
+      "id": "a2-08",
       "title": "-re verbs and the -c first person",
       "goal": "Handle perdre, and the irregular jo forms entenc, bec, visc, escric.",
-      "note": "Regular -re verbs: **perdo, perds, perd, perdem, perdeu, perden**.\n\nMany everyday verbs take a **-c** in the jo form: **entenc** (entendre), **aprenc** (aprendre), **venc** (vendre), **bec** (beure), **visc** (viure), **escric** (escriure). Beure, viure and escriure take a **v** in nosaltres/vosaltres: **bevem, vivim, escrivim**.",
+      "note": "Regular -re verbs: **perdo, perds, perd, perdem, perdeu, perden**.\n\nMany everyday verbs take a **-c** in the jo form: **entenc** (entendre), **aprenc** (aprendre), **venc** (vendre), **bec** (beure), **visc** (viure), **escric** (escriure), **prenc** (prendre: prenc, prens, pren). Beure, viure and escriure take a **v** in nosaltres/vosaltres: **bevem, vivim, escrivim**.",
       "tables": [
         {
           "title": "present",
-          "cols": ["", "entendre", "beure", "viure"],
-          "rows": [["jo", "entenc", "bec", "visc"], ["tu", "entens", "beus", "vius"], ["ell, ella", "entén", "beu", "viu"], ["nosaltres", "entenem", "bevem", "vivim"], ["vosaltres", "enteneu", "beveu", "viviu"], ["ells, elles", "entenen", "beuen", "viuen"]]
+          "cols": [
+            "",
+            "entendre",
+            "beure",
+            "viure"
+          ],
+          "rows": [
+            [
+              "jo",
+              "entenc",
+              "bec",
+              "visc"
+            ],
+            [
+              "tu",
+              "entens",
+              "beus",
+              "vius"
+            ],
+            [
+              "ell, ella",
+              "entén",
+              "beu",
+              "viu"
+            ],
+            [
+              "nosaltres",
+              "entenem",
+              "bevem",
+              "vivim"
+            ],
+            [
+              "vosaltres",
+              "enteneu",
+              "beveu",
+              "viviu"
+            ],
+            [
+              "ells, elles",
+              "entenen",
+              "beuen",
+              "viuen"
+            ]
+          ]
         }
       ],
-      "vocab": [["perdre", "perder"], ["aprendre", "aprender"], ["vendre", "vender"], ["escriure", "escribir"], ["córrer", "correr"], ["el correu", "el correo"]],
+      "vocab": [
+        [
+          "perdre",
+          "perder"
+        ],
+        [
+          "aprendre",
+          "aprender"
+        ],
+        [
+          "vendre",
+          "vender"
+        ],
+        [
+          "escriure",
+          "escribir"
+        ],
+        [
+          "córrer",
+          "correr"
+        ],
+        [
+          "el correu",
+          "el correo"
+        ]
+      ],
       "items": [
-        ["No lo entiendo.", "No (ho) entenc."],
-        ["Vivo en Girona.", "Visc a Girona.", "en + city → a"],
-        ["¿Qué bebes?", "Què beus?"],
-        ["Siempre pierdo las llaves.", "Sempre perdo les claus."],
-        ["Aprendemos catalán.", "Aprenem català."],
-        ["¿Dónde vivís?", "On viviu?"],
-        ["Escribo un correo.", "Escric un correu."],
-        ["Ellos beben agua.", "(Ells) beuen aigua."],
-        ["Él corre cada mañana.", "(Ell) corre cada matí."],
-        ["¿Me entiendes?", "M'entens?"],
-        ["Venden fruta en el mercado.", "Venen fruita al mercat."],
-        ["Aprende muy rápido.", "Aprèn molt [ràpid|de pressa]."]
+        [
+          "No lo entiendo.",
+          "No (ho) entenc."
+        ],
+        [
+          "Vivo en Girona.",
+          "Visc a Girona.",
+          "en + city → a"
+        ],
+        [
+          "¿Qué bebes?",
+          "Què beus?"
+        ],
+        [
+          "Siempre pierdo las llaves.",
+          "Sempre perdo les claus."
+        ],
+        [
+          "Aprendemos catalán.",
+          "Aprenem català."
+        ],
+        [
+          "¿Dónde vivís?",
+          "On viviu?"
+        ],
+        [
+          "Escribo un correo.",
+          "Escric un correu."
+        ],
+        [
+          "Ellos beben agua.",
+          "(Ells) beuen aigua."
+        ],
+        [
+          "Él corre cada mañana.",
+          "(Ell) corre cada matí."
+        ],
+        [
+          "¿Me entiendes?",
+          "M'entens?"
+        ],
+        [
+          "Venden fruta en el mercado.",
+          "Venen fruita al mercat."
+        ],
+        [
+          "Aprende muy rápido.",
+          "Aprèn molt [ràpid|de pressa]."
+        ],
+        [
+          "¿Qué tomas?",
+          "Què prens?"
+        ]
       ]
     },
     {
-      "id": "a2-07",
+      "id": "a2-09",
       "title": "-ir verbs: dormir and llegir",
       "goal": "Tell pure -ir verbs from the -eix- ones and conjugate both.",
       "note": "A few -ir verbs are 'pure': **dormo, dorms, dorm**. Same for sortir (**surto, surts, surt** — note the u), obrir, sentir.\n\nMost -ir verbs add **-eix-** in the singular and 3rd plural: **llegeixo, llegeixes, llegeix, llegim, llegiu, llegeixen**. Same with preferir, servir, decidir, patir, construir.\n\n*Oír* is usually **sentir**: **Sento un soroll.**",
       "tables": [
         {
           "title": "present",
-          "cols": ["", "dormir", "llegir"],
-          "rows": [["jo", "dormo", "llegeixo"], ["tu", "dorms", "llegeixes"], ["ell, ella", "dorm", "llegeix"], ["nosaltres", "dormim", "llegim"], ["vosaltres", "dormiu", "llegiu"], ["ells, elles", "dormen", "llegeixen"]]
+          "cols": [
+            "",
+            "dormir",
+            "llegir"
+          ],
+          "rows": [
+            [
+              "jo",
+              "dormo",
+              "llegeixo"
+            ],
+            [
+              "tu",
+              "dorms",
+              "llegeixes"
+            ],
+            [
+              "ell, ella",
+              "dorm",
+              "llegeix"
+            ],
+            [
+              "nosaltres",
+              "dormim",
+              "llegim"
+            ],
+            [
+              "vosaltres",
+              "dormiu",
+              "llegiu"
+            ],
+            [
+              "ells, elles",
+              "dormen",
+              "llegeixen"
+            ]
+          ]
         }
       ],
-      "vocab": [["sortir", "salir"], ["obrir", "abrir"], ["preferir", "preferir"], ["la finestra", "la ventana"], ["el diari", "el periódico"], ["el soroll", "el ruido"]],
+      "vocab": [
+        [
+          "sortir",
+          "salir"
+        ],
+        [
+          "obrir",
+          "abrir"
+        ],
+        [
+          "preferir",
+          "preferir"
+        ],
+        [
+          "la finestra",
+          "la ventana"
+        ],
+        [
+          "el diari",
+          "el periódico"
+        ],
+        [
+          "el soroll",
+          "el ruido"
+        ]
+      ],
       "items": [
-        ["Duermo ocho horas.", "Dormo vuit hores."],
-        ["¿A qué hora sales?", "A quina hora surts?"],
-        ["Leo un libro.", "Llegeixo un llibre."],
-        ["Preferimos el té.", "Preferim el te.", "té (tea) → te, no accent"],
-        ["¿Abres la ventana?", "Obres la finestra?"],
-        ["Los niños duermen.", "Els [nens|infants] dormen."],
-        ["Salimos esta noche.", "Sortim aquesta nit."],
-        ["Ella lee el periódico.", "(Ella) llegeix el diari."],
-        ["¿Qué prefieres?", "Què prefereixes?"],
-        ["Decido yo.", "[Decideixo jo|Jo decideixo]."],
-        ["La tienda abre a las nueve.", "La botiga obre a les nou."],
-        ["Oigo un ruido.", "Sento un soroll.", "oír → sentir"]
+        [
+          "Duermo ocho horas.",
+          "Dormo vuit hores."
+        ],
+        [
+          "¿A qué hora sales?",
+          "A quina hora surts?"
+        ],
+        [
+          "Leo un libro.",
+          "Llegeixo un llibre."
+        ],
+        [
+          "Preferimos el té.",
+          "Preferim el te.",
+          "té (tea) → te, no accent"
+        ],
+        [
+          "¿Abres la ventana?",
+          "Obres la finestra?"
+        ],
+        [
+          "Los niños duermen.",
+          "Els [nens|infants] dormen."
+        ],
+        [
+          "Salimos esta noche.",
+          "Sortim aquesta nit."
+        ],
+        [
+          "Ella lee el periódico.",
+          "(Ella) llegeix el diari."
+        ],
+        [
+          "¿Qué prefieres?",
+          "Què prefereixes?"
+        ],
+        [
+          "Decido yo.",
+          "[Decideixo jo|Jo decideixo]."
+        ],
+        [
+          "La tienda abre a las nueve.",
+          "La botiga obre a les nou."
+        ],
+        [
+          "Oigo un ruido.",
+          "Sento un soroll.",
+          "oír → sentir"
+        ]
       ]
     },
     {
-      "id": "a2-08",
+      "id": "a2-10",
       "title": "Fer and anar",
       "goal": "Use the two busiest verbs in the language.",
       "note": "**Fer** = hacer, and also weather: **fa calor**, **fa fred**.\n\n**Anar** = ir. Careful: **vaig** is also the past-tense helper (**vaig menjar** = comí). So *voy a comer* is NOT \"vaig a menjar\" — that's a Castilianism. You'll learn the right way in the future lesson; for now use anar with places: **Vaig a la platja.**\n\n*¿Adónde?* → **On?** or **A on?**",
       "tables": [
         {
           "title": "present",
-          "cols": ["", "fer", "anar"],
-          "rows": [["jo", "faig", "vaig"], ["tu", "fas", "vas"], ["ell, ella", "fa", "va"], ["nosaltres", "fem", "anem"], ["vosaltres", "feu", "aneu"], ["ells, elles", "fan", "van"]]
+          "cols": [
+            "",
+            "fer",
+            "anar"
+          ],
+          "rows": [
+            [
+              "jo",
+              "faig",
+              "vaig"
+            ],
+            [
+              "tu",
+              "fas",
+              "vas"
+            ],
+            [
+              "ell, ella",
+              "fa",
+              "va"
+            ],
+            [
+              "nosaltres",
+              "fem",
+              "anem"
+            ],
+            [
+              "vosaltres",
+              "feu",
+              "aneu"
+            ],
+            [
+              "ells, elles",
+              "fan",
+              "van"
+            ]
+          ]
         }
       ],
-      "vocab": [["la platja", "la playa"], ["el sopar", "la cena"], ["els deures", "los deberes"], ["l'esport", "el deporte"], ["a peu", "a pie"], ["el cine", "el cine"]],
+      "vocab": [
+        [
+          "la platja",
+          "la playa"
+        ],
+        [
+          "el sopar",
+          "la cena"
+        ],
+        [
+          "els deures",
+          "los deberes"
+        ],
+        [
+          "l'esport",
+          "el deporte"
+        ],
+        [
+          "a peu",
+          "a pie"
+        ],
+        [
+          "el cine",
+          "el cine"
+        ]
+      ],
       "items": [
-        ["¿Qué haces?", "Què fas?"],
-        ["Voy a la playa.", "Vaig a la platja."],
-        ["Hacemos la cena.", "Fem el sopar."],
-        ["¿Adónde vas?", "(A) on vas?"],
-        ["Vamos al cine.", "Anem al [cine|cinema]."],
-        ["Hace calor.", "Fa calor."],
-        ["¿Vais en tren?", "Aneu [amb|en] tren?"],
-        ["Ellos hacen deporte.", "(Ells) fan esport."],
-        ["Voy a casa.", "Vaig a casa."],
-        ["Hago los deberes.", "Faig els deures."],
-        ["¿Cómo va?", "Com va?"],
-        ["Van a pie.", "Van a peu."]
+        [
+          "¿Qué haces?",
+          "Què fas?"
+        ],
+        [
+          "Voy a la playa.",
+          "Vaig a la platja."
+        ],
+        [
+          "Hacemos la cena.",
+          "Fem el sopar."
+        ],
+        [
+          "¿Adónde vas?",
+          "(A) on vas?"
+        ],
+        [
+          "Vamos al cine.",
+          "Anem al [cine|cinema]."
+        ],
+        [
+          "Hace calor.",
+          "Fa calor."
+        ],
+        [
+          "¿Vais en tren?",
+          "Aneu [amb|en] tren?"
+        ],
+        [
+          "Ellos hacen deporte.",
+          "(Ells) fan esport."
+        ],
+        [
+          "Voy a casa.",
+          "Vaig a casa."
+        ],
+        [
+          "Hago los deberes.",
+          "Faig els deures."
+        ],
+        [
+          "¿Cómo va?",
+          "Com va?"
+        ],
+        [
+          "Van a pie.",
+          "Van a peu."
+        ]
       ]
     },
     {
-      "id": "a2-09",
+      "id": "a2-11",
       "title": "Poder, voler, saber, conèixer",
       "goal": "Say what you can, want, know and who you know.",
       "note": "Four irregular essentials. Two things trip up Castellano speakers:\n\n- *No sé* → **No ho sé**. Catalan needs the **ho** (it) with saber, dir, fer...\n- No personal *a*: *conozco a tu hermano* → **Conec el teu germà**. *Veo a María* → **Veig la Maria**.",
       "tables": [
         {
           "title": "present",
-          "cols": ["", "poder", "voler", "saber", "conèixer"],
-          "rows": [["jo", "puc", "vull", "sé", "conec"], ["tu", "pots", "vols", "saps", "coneixes"], ["ell, ella", "pot", "vol", "sap", "coneix"], ["nosaltres", "podem", "volem", "sabem", "coneixem"], ["vosaltres", "podeu", "voleu", "sabeu", "coneixeu"], ["ells, elles", "poden", "volen", "saben", "coneixen"]]
+          "cols": [
+            "",
+            "poder",
+            "voler",
+            "saber",
+            "conèixer"
+          ],
+          "rows": [
+            [
+              "jo",
+              "puc",
+              "vull",
+              "sé",
+              "conec"
+            ],
+            [
+              "tu",
+              "pots",
+              "vols",
+              "saps",
+              "coneixes"
+            ],
+            [
+              "ell, ella",
+              "pot",
+              "vol",
+              "sap",
+              "coneix"
+            ],
+            [
+              "nosaltres",
+              "podem",
+              "volem",
+              "sabem",
+              "coneixem"
+            ],
+            [
+              "vosaltres",
+              "podeu",
+              "voleu",
+              "sabeu",
+              "coneixeu"
+            ],
+            [
+              "ells, elles",
+              "poden",
+              "volen",
+              "saben",
+              "coneixen"
+            ]
+          ]
         }
       ],
-      "vocab": [["nedar", "nadar"], ["la resposta", "la respuesta"], ["entrar", "entrar"], ["repetir", "repetir"], ["veure", "ver"], ["el germà", "el hermano"]],
+      "vocab": [
+        [
+          "nedar",
+          "nadar"
+        ],
+        [
+          "la resposta",
+          "la respuesta"
+        ],
+        [
+          "entrar",
+          "entrar"
+        ],
+        [
+          "repetir",
+          "repetir"
+        ],
+        [
+          "veure",
+          "ver"
+        ],
+        [
+          "el germà",
+          "el hermano"
+        ]
+      ],
       "items": [
-        ["¿Puedo entrar?", "Puc entrar?"],
-        ["Quiero un café.", "Vull un cafè."],
-        ["No sé.", "No ho sé.", "saber needs ho"],
-        ["¿Sabes nadar?", "Saps nedar?"],
-        ["Conozco a tu hermano.", "Conec el teu germà.", "no personal a"],
-        ["¿Quieres venir?", "Vols venir?"],
-        ["No podemos.", "No podem."],
-        ["¿Conocéis Barcelona?", "Coneixeu Barcelona?"],
-        ["Ella sabe la respuesta.", "(Ella) sap la resposta."],
-        ["Ellos quieren comer.", "(Ells) volen menjar."],
-        ["¿Puedes repetirlo?", "[Pots repetir-ho|Ho pots repetir]?"],
-        ["Queremos ver a María.", "Volem veure la Maria."]
+        [
+          "¿Puedo entrar?",
+          "Puc entrar?"
+        ],
+        [
+          "Quiero un café.",
+          "Vull un cafè."
+        ],
+        [
+          "No sé.",
+          "No ho sé.",
+          "saber needs ho"
+        ],
+        [
+          "¿Sabes nadar?",
+          "Saps nedar?"
+        ],
+        [
+          "Conozco a tu hermano.",
+          "Conec el teu germà.",
+          "no personal a"
+        ],
+        [
+          "¿Quieres venir?",
+          "Vols venir?"
+        ],
+        [
+          "No podemos.",
+          "No podem."
+        ],
+        [
+          "¿Conocéis Barcelona?",
+          "Coneixeu Barcelona?"
+        ],
+        [
+          "Ella sabe la respuesta.",
+          "(Ella) sap la resposta."
+        ],
+        [
+          "Ellos quieren comer.",
+          "(Ells) volen menjar."
+        ],
+        [
+          "¿Puedes repetirlo?",
+          "[Pots repetir-ho|Ho pots repetir]?"
+        ],
+        [
+          "Queremos ver a María.",
+          "Volem veure la Maria."
+        ]
       ]
     },
     {
-      "id": "a2-10",
+      "id": "a2-12",
       "title": "Venir, dir, veure",
       "goal": "Come, say and see — and the 'Ja vinc!' perspective switch.",
       "note": "Three irregulars with a jo form you must memorise: **vinc**, **dic**, **veig**.\n\nPerspective: Catalan moves toward the listener with **venir**. Someone calls you — *¡Ya voy!* → **Ja vinc!** *¿Vienes a mi fiesta?* still → **Vens a la meva festa?**\n\n*Oír* → **sentir**; *escuchar* → **escoltar**.",
       "tables": [
         {
           "title": "present",
-          "cols": ["", "venir", "dir", "veure"],
-          "rows": [["jo", "vinc", "dic", "veig"], ["tu", "vens", "dius", "veus"], ["ell, ella", "ve", "diu", "veu"], ["nosaltres", "venim", "diem", "veiem"], ["vosaltres", "veniu", "dieu", "veieu"], ["ells, elles", "venen", "diuen", "veuen"]]
+          "cols": [
+            "",
+            "venir",
+            "dir",
+            "veure"
+          ],
+          "rows": [
+            [
+              "jo",
+              "vinc",
+              "dic",
+              "veig"
+            ],
+            [
+              "tu",
+              "vens",
+              "dius",
+              "veus"
+            ],
+            [
+              "ell, ella",
+              "ve",
+              "diu",
+              "veu"
+            ],
+            [
+              "nosaltres",
+              "venim",
+              "diem",
+              "veiem"
+            ],
+            [
+              "vosaltres",
+              "veniu",
+              "dieu",
+              "veieu"
+            ],
+            [
+              "ells, elles",
+              "venen",
+              "diuen",
+              "veuen"
+            ]
+          ]
         }
       ],
-      "vocab": [["l'oficina", "la oficina"], ["el mar", "el mar"], ["ploure", "llover"], ["la veritat", "la verdad"], ["escoltar", "escuchar"], ["sentir", "oír"]],
+      "vocab": [
+        [
+          "l'oficina",
+          "la oficina"
+        ],
+        [
+          "el mar",
+          "el mar"
+        ],
+        [
+          "ploure",
+          "llover"
+        ],
+        [
+          "la veritat",
+          "la verdad"
+        ],
+        [
+          "escoltar",
+          "escuchar"
+        ],
+        [
+          "sentir",
+          "oír"
+        ]
+      ],
       "items": [
-        ["Vengo de la oficina.", "Vinc de l'oficina."],
-        ["¿Qué dices?", "Què dius?"],
-        ["Veo el mar.", "Veig el mar."],
-        ["¿Vienes con nosotros?", "Vens amb nosaltres?"],
-        ["Dicen que llueve.", "Diuen que plou."],
-        ["No te veo.", "No et veig."],
-        ["Venimos mañana.", "Venim demà."],
-        ["¿Me oyes?", "Em sents?"],
-        ["Escucho música.", "Escolto música."],
-        ["Ella dice la verdad.", "(Ella) diu la veritat."],
-        ["¿Veis la diferencia?", "Veieu la diferència?"],
-        ["¡Ya voy!", "Ja vinc!", "toward the listener → venir"]
+        [
+          "Vengo de la oficina.",
+          "Vinc de l'oficina."
+        ],
+        [
+          "¿Qué dices?",
+          "Què dius?"
+        ],
+        [
+          "Veo el mar.",
+          "Veig el mar."
+        ],
+        [
+          "¿Vienes con nosotros?",
+          "Vens amb nosaltres?"
+        ],
+        [
+          "Dicen que llueve.",
+          "Diuen que plou."
+        ],
+        [
+          "No te veo.",
+          "No et veig."
+        ],
+        [
+          "Venimos mañana.",
+          "Venim demà."
+        ],
+        [
+          "¿Me oyes?",
+          "Em sents?"
+        ],
+        [
+          "Escucho música.",
+          "Escolto música."
+        ],
+        [
+          "Ella dice la verdad.",
+          "(Ella) diu la veritat."
+        ],
+        [
+          "¿Veis la diferencia?",
+          "Veieu la diferència?"
+        ],
+        [
+          "¡Ya voy!",
+          "Ja vinc!",
+          "toward the listener → venir"
+        ]
       ]
     },
     {
-      "id": "a2-11",
+      "id": "a2-13",
       "title": "Negatives and question words",
       "goal": "Ask anything and say no to everything.",
       "note": "**res** (nada), **ningú** (nadie), **mai** (nunca), **cap** (ningún), **gens** (nada de, en absoluto), **tampoc** (tampoco). After the verb they need **no**: **No vull res.** Before it, no is optional: **Mai (no) menjo carn.**\n\n**No... pas** adds emphasis: **No és pas car** (¡no es caro!).\n\n*¿Qué hora?* → **Quina hora?** — use **quin/quina** before a noun, **què** alone.",
       "tables": [
         {
           "title": "question words",
-          "rows": [["qué", "què"], ["quién", "qui"], ["dónde", "on"], ["cuándo", "quan"], ["cómo", "com"], ["cuánto", "quant"], ["por qué", "per què"], ["cuál, qué + noun", "quin, quina"]]
+          "rows": [
+            [
+              "qué",
+              "què"
+            ],
+            [
+              "quién",
+              "qui"
+            ],
+            [
+              "dónde",
+              "on"
+            ],
+            [
+              "cuándo",
+              "quan"
+            ],
+            [
+              "cómo",
+              "com"
+            ],
+            [
+              "cuánto",
+              "quant"
+            ],
+            [
+              "por qué",
+              "per què"
+            ],
+            [
+              "cuál, qué + noun",
+              "quin, quina"
+            ]
+          ]
         }
       ],
-      "vocab": [["res", "nada"], ["ningú", "nadie"], ["mai", "nunca"], ["cap", "ningún"], ["gens", "nada de"], ["arribar", "llegar"]],
+      "vocab": [
+        [
+          "res",
+          "nada"
+        ],
+        [
+          "ningú",
+          "nadie"
+        ],
+        [
+          "mai",
+          "nunca"
+        ],
+        [
+          "cap",
+          "ningún"
+        ],
+        [
+          "gens",
+          "nada de"
+        ],
+        [
+          "arribar",
+          "llegar"
+        ]
+      ],
       "items": [
-        ["No quiero nada.", "No vull res."],
-        ["Nunca como carne.", "[No menjo mai carn|Mai (no) menjo carn]."],
-        ["No hay nadie.", "No hi ha ningú."],
-        ["¿Por qué no vienes?", "Per què no vens?"],
-        ["¿Cuál prefieres?", "[Quin|Quina] prefereixes?"],
-        ["No tengo nada de hambre.", "No tinc gens de gana."],
-        ["Yo tampoco.", "Jo tampoc."],
-        ["¿Cuándo llegas?", "Quan arribes?", "llegar → arribar"],
-        ["¿Cuánto cuesta?", "Quant costa?"],
-        ["No tengo ningún problema.", "No tinc cap problema."],
-        ["¿Qué hora es?", "Quina hora és?"],
-        ["¡No es caro!", "No és (pas) car!"]
+        [
+          "No quiero nada.",
+          "No vull res."
+        ],
+        [
+          "Nunca como carne.",
+          "[No menjo mai carn|Mai (no) menjo carn]."
+        ],
+        [
+          "No hay nadie.",
+          "No hi ha ningú."
+        ],
+        [
+          "¿Por qué no vienes?",
+          "Per què no vens?"
+        ],
+        [
+          "¿Cuál prefieres?",
+          "[Quin|Quina] prefereixes?"
+        ],
+        [
+          "No tengo nada de hambre.",
+          "No tinc gens de gana."
+        ],
+        [
+          "Yo tampoco.",
+          "Jo tampoc."
+        ],
+        [
+          "¿Cuándo llegas?",
+          "Quan arribes?",
+          "llegar → arribar"
+        ],
+        [
+          "¿Cuánto cuesta?",
+          "Quant costa?"
+        ],
+        [
+          "No tengo ningún problema.",
+          "No tinc cap problema."
+        ],
+        [
+          "¿Qué hora es?",
+          "Quina hora és?"
+        ],
+        [
+          "¡No es caro!",
+          "No és (pas) car!"
+        ]
       ]
     },
     {
-      "id": "a2-12",
+      "id": "a2-14",
       "title": "Possessives and family",
       "goal": "Talk about your family with el meu, la teva, els seus...",
       "note": "Possessives take the article: *mi madre* → **la meva mare**, *tus hermanos* → **els teus germans**.\n\nWithout a noun, drop the article: **Aquest llibre és meu.**\n\n**El seu / la seva** covers su (de él, de ella, de usted, de ellos).",
       "tables": [
         {
           "title": "possessives",
-          "cols": ["", "m. sg", "f. sg", "m. pl", "f. pl"],
-          "rows": [["mi", "el meu", "la meva", "els meus", "les meves"], ["tu", "el teu", "la teva", "els teus", "les teves"], ["su", "el seu", "la seva", "els seus", "les seves"], ["nuestro", "el nostre", "la nostra", "els nostres", "les nostres"], ["vuestro", "el vostre", "la vostra", "els vostres", "les vostres"]]
+          "cols": [
+            "",
+            "m. sg",
+            "f. sg",
+            "m. pl",
+            "f. pl"
+          ],
+          "rows": [
+            [
+              "mi",
+              "el meu",
+              "la meva",
+              "els meus",
+              "les meves"
+            ],
+            [
+              "tu",
+              "el teu",
+              "la teva",
+              "els teus",
+              "les teves"
+            ],
+            [
+              "su",
+              "el seu",
+              "la seva",
+              "els seus",
+              "les seves"
+            ],
+            [
+              "nuestro",
+              "el nostre",
+              "la nostra",
+              "els nostres",
+              "les nostres"
+            ],
+            [
+              "vuestro",
+              "el vostre",
+              "la vostra",
+              "els vostres",
+              "les vostres"
+            ]
+          ]
         }
       ],
-      "vocab": [["el pare / la mare", "el padre / la madre"], ["els pares", "los padres"], ["el germà / la germana", "hermano/a"], ["el fill / la filla", "hijo/a"], ["l'avi / l'àvia", "abuelo/a"], ["l'oncle / la tia", "tío/a"], ["el cosí / la cosina", "primo/a"]],
+      "vocab": [
+        [
+          "el pare / la mare",
+          "el padre / la madre"
+        ],
+        [
+          "els pares",
+          "los padres"
+        ],
+        [
+          "el germà / la germana",
+          "hermano/a"
+        ],
+        [
+          "el fill / la filla",
+          "hijo/a"
+        ],
+        [
+          "l'avi / l'àvia",
+          "abuelo/a"
+        ],
+        [
+          "l'oncle / la tia",
+          "tío/a"
+        ],
+        [
+          "el cosí / la cosina",
+          "primo/a"
+        ]
+      ],
       "items": [
-        ["Mi madre es de Lleida.", "La meva mare és de Lleida."],
-        ["Tus hermanos son muy simpáticos.", "Els teus germans són molt simpàtics."],
-        ["Nuestra casa es pequeña.", "La nostra casa és petita."],
-        ["¿Es tu coche?", "És el teu cotxe?"],
-        ["Su hija se llama Laia.", "La seva filla es diu Laia."],
-        ["¿Vuestros padres viven aquí?", "Els vostres pares viuen aquí?"],
-        ["Mis abuelos tienen ochenta años.", "Els meus avis tenen vuitanta anys."],
-        ["Mi tío y mi tía.", "El meu oncle i la meva tia."],
-        ["Este libro es mío.", "Aquest llibre és meu."],
-        ["Mi primo trabaja con mi padre.", "El meu cosí treballa amb el meu pare."],
-        ["Mis hermanas estudian en Barcelona.", "Les meves germanes estudien a Barcelona."]
+        [
+          "Mi madre es de Lleida.",
+          "La meva mare és de Lleida."
+        ],
+        [
+          "Tus hermanos son muy simpáticos.",
+          "Els teus germans són molt simpàtics."
+        ],
+        [
+          "Nuestra casa es pequeña.",
+          "La nostra casa és petita."
+        ],
+        [
+          "¿Es tu coche?",
+          "És el teu cotxe?"
+        ],
+        [
+          "Su hija se llama Laia.",
+          "La seva filla es diu Laia."
+        ],
+        [
+          "¿Vuestros padres viven aquí?",
+          "Els vostres pares viuen aquí?"
+        ],
+        [
+          "Mis abuelos tienen ochenta años.",
+          "Els meus avis tenen vuitanta anys."
+        ],
+        [
+          "Mi tío y mi tía.",
+          "El meu oncle i la meva tia."
+        ],
+        [
+          "Este libro es mío.",
+          "Aquest llibre és meu."
+        ],
+        [
+          "Mi primo trabaja con mi padre.",
+          "El meu cosí treballa amb el meu pare."
+        ],
+        [
+          "Mis hermanas estudian en Barcelona.",
+          "Les meves germanes estudien a Barcelona."
+        ],
+        [
+          "Mi marido es muy joven.",
+          "El meu marit és molt jove."
+        ],
+        [
+          "Es un hombre viejo.",
+          "És un home vell."
+        ]
       ]
     },
     {
-      "id": "a2-13",
+      "id": "a2-15",
       "title": "Aquest, aquell, això",
       "goal": "Point at things near and far.",
       "note": "Central Catalan has two degrees, not three: **aquest** covers both *este* and *ese*; **aquell** = *aquel*.\n\nNeuter: **això** (esto/eso), **allò** (aquello). Places: **aquí** (aquí), **allà** or **allí** (allí).\n\nGender trap: **la sabata** (el zapato) is feminine. *Este año* is also **enguany**.",
       "tables": [
         {
           "title": "demonstratives",
-          "cols": ["", "m. sg", "f. sg", "m. pl", "f. pl"],
-          "rows": [["este / ese", "aquest", "aquesta", "aquests", "aquestes"], ["aquel", "aquell", "aquella", "aquells", "aquelles"]]
+          "cols": [
+            "",
+            "m. sg",
+            "f. sg",
+            "m. pl",
+            "f. pl"
+          ],
+          "rows": [
+            [
+              "este / ese",
+              "aquest",
+              "aquesta",
+              "aquests",
+              "aquestes"
+            ],
+            [
+              "aquel",
+              "aquell",
+              "aquella",
+              "aquells",
+              "aquelles"
+            ]
+          ]
         }
       ],
-      "vocab": [["això", "esto, eso"], ["allò", "aquello"], ["el noi / la noia", "el chico / la chica"], ["la muntanya", "la montaña"], ["la sabata", "el zapato"], ["enguany", "este año"]],
+      "vocab": [
+        [
+          "això",
+          "esto, eso"
+        ],
+        [
+          "allò",
+          "aquello"
+        ],
+        [
+          "el noi / la noia",
+          "el chico / la chica"
+        ],
+        [
+          "la muntanya",
+          "la montaña"
+        ],
+        [
+          "la sabata",
+          "el zapato"
+        ],
+        [
+          "enguany",
+          "este año"
+        ]
+      ],
       "items": [
-        ["Esta casa es muy grande.", "Aquesta casa és molt gran."],
-        ["¿Qué es esto?", "Què és això?"],
-        ["Ese chico es mi hermano.", "[Aquest|Aquell] noi és el meu germà."],
-        ["Aquellas montañas son altas.", "Aquelles muntanyes són altes."],
-        ["Eso no es verdad.", "Això no és veritat."],
-        ["Ven aquí.", "Vine aquí."],
-        ["Esta mañana trabajo.", "Aquest matí treballo."],
-        ["Estos zapatos son caros.", "Aquestes sabates són cares.", "sabata is feminine"],
-        ["¿Qué es aquello?", "Què és allò?"],
-        ["El coche está allí.", "El cotxe [és|està] [allà|allí]."],
-        ["Este año voy a Italia.", "[Aquest any|Enguany] vaig a Itàlia."]
+        [
+          "Esta casa es muy grande.",
+          "Aquesta casa és molt gran."
+        ],
+        [
+          "¿Qué es esto?",
+          "Què és això?"
+        ],
+        [
+          "Ese chico es mi hermano.",
+          "[Aquest|Aquell] noi és el meu germà."
+        ],
+        [
+          "Aquellas montañas son altas.",
+          "Aquelles muntanyes són altes."
+        ],
+        [
+          "Eso no es verdad.",
+          "Això no és veritat."
+        ],
+        [
+          "Ven aquí.",
+          "Vine aquí."
+        ],
+        [
+          "Esta mañana trabajo.",
+          "Aquest matí treballo."
+        ],
+        [
+          "Estos zapatos son caros.",
+          "Aquestes sabates són cares.",
+          "sabata is feminine"
+        ],
+        [
+          "¿Qué es aquello?",
+          "Què és allò?"
+        ],
+        [
+          "El coche está allí.",
+          "El cotxe [és|està] [allà|allí]."
+        ],
+        [
+          "Este año voy a Italia.",
+          "[Aquest any|Enguany] vaig a Itàlia."
+        ]
       ]
     },
     {
-      "id": "a2-14",
+      "id": "a2-16",
       "title": "Daily routine and reflexives",
       "goal": "Describe your day with em llevo, em dutxo, dino, sopo.",
       "note": "Reflexive pronouns before the verb: **em, et, es, ens, us, es** (m', t', s' before a vowel). After an infinitive they attach with a hyphen: **dutxar-me**, **llevar-se**.\n\nFalse friend: *levantarse* → **llevar-se**. Meals are verbs: **esmorzar** (desayunar), **dinar** (comer al mediodía), **sopar** (cenar).\n\n*Temprano* → **d'hora**.",
       "tables": [
         {
           "title": "llevar-se — present",
-          "rows": [["jo", "em llevo"], ["tu", "et lleves"], ["ell, ella", "es lleva"], ["nosaltres", "ens llevem"], ["vosaltres", "us lleveu"], ["ells, elles", "es lleven"]]
+          "rows": [
+            [
+              "jo",
+              "em llevo"
+            ],
+            [
+              "tu",
+              "et lleves"
+            ],
+            [
+              "ell, ella",
+              "es lleva"
+            ],
+            [
+              "nosaltres",
+              "ens llevem"
+            ],
+            [
+              "vosaltres",
+              "us lleveu"
+            ],
+            [
+              "ells, elles",
+              "es lleven"
+            ]
+          ]
         }
       ],
-      "vocab": [["llevar-se", "levantarse"], ["dutxar-se", "ducharse"], ["vestir-se", "vestirse"], ["rentar-se", "lavarse"], ["esmorzar", "desayunar"], ["dinar", "comer"], ["sopar", "cenar"], ["d'hora", "temprano"]],
-      "items": [
-        ["Me levanto a las siete.", "Em llevo a les set.", "levantarse → llevar-se"],
-        ["¿A qué hora te duchas?", "A quina hora et dutxes?"],
-        ["Desayunamos en casa.", "Esmorzem a casa."],
-        ["Él se viste rápido.", "(Ell) es vesteix [ràpid|de pressa]."],
-        ["Comemos con los compañeros.", "Dinem amb els companys.", "comer (mediodía) → dinar"],
-        ["Cenan tarde.", "Sopen tard."],
-        ["Nos acostamos a las once.", "[Anem a dormir|Ens n'anem a dormir|Ens fiquem al llit] a les onze."],
-        ["Me lavo las manos.", "Em rento les mans."],
-        ["¿Os levantáis temprano?", "Us lleveu [d'hora|aviat]?"],
-        ["Quiero ducharme.", "[Vull dutxar-me|Em vull dutxar]."],
-        ["Se llama Pau.", "Es diu Pau."]
-      ]
-    },
-    {
-      "id": "a2-15",
-      "title": "Hours, quarters and days",
-      "goal": "Tell the time the Catalan way and name the days.",
-      "note": "**És la una. Són les dues.**\n\nThe traditional system counts quarters *toward* the next hour: **un quart de nou** = 8:15, **dos quarts de nou** = 8:30, **tres quarts de nou** = 8:45. You'll also hear *les vuit i quart*; both are accepted here, but learn the quarts — it's what you'll hear in Catalonia.\n\n**dilluns** = el lunes (this one), **els dilluns** = los lunes (every).",
-      "tables": [
-        {
-          "title": "the days",
-          "rows": [["lunes", "dilluns"], ["martes", "dimarts"], ["miércoles", "dimecres"], ["jueves", "dijous"], ["viernes", "divendres"], ["sábado", "dissabte"], ["domingo", "diumenge"]]
-        },
-        {
-          "title": "quarters",
-          "rows": [["8:15", "un quart de nou"], ["8:30", "dos quarts de nou"], ["8:45", "tres quarts de nou"]]
-        }
+      "vocab": [
+        [
+          "llevar-se",
+          "levantarse"
+        ],
+        [
+          "dutxar-se",
+          "ducharse"
+        ],
+        [
+          "vestir-se",
+          "vestirse"
+        ],
+        [
+          "rentar-se",
+          "lavarse"
+        ],
+        [
+          "esmorzar",
+          "desayunar"
+        ],
+        [
+          "dinar",
+          "comer"
+        ],
+        [
+          "sopar",
+          "cenar"
+        ],
+        [
+          "d'hora",
+          "temprano"
+        ]
       ],
-      "vocab": [["un quart", "un cuarto"], ["el matí", "la mañana"], ["la tarda", "la tarde"], ["el vespre", "la tarde-noche"], ["la nit", "la noche"], ["quedar", "quedar (citarse)"]],
       "items": [
-        ["Es la una.", "És la una."],
-        ["Son las tres.", "Són les tres."],
-        ["Son las ocho y cuarto.", "[És un quart de nou|Són les vuit i quart]."],
-        ["Son las cinco y media.", "[Són dos quarts de sis|Són les cinc i mitja]."],
-        ["Son las diez menos cuarto.", "[Són tres quarts de deu|Són les deu menys quart]."],
-        ["Quedamos el lunes.", "Quedem (el) dilluns."],
-        ["Los sábados no trabajo.", "Els dissabtes no treballo."],
-        ["¿A qué hora empieza?", "A quina hora comença?"],
-        ["A las nueve de la mañana.", "A les nou del matí."],
-        ["El miércoles voy al médico.", "(El) dimecres vaig al metge."],
-        ["Abren de lunes a viernes.", "Obren de dilluns a divendres."],
-        ["El domingo comemos con la familia.", "(El) diumenge dinem amb la família."]
+        [
+          "Me levanto a las siete.",
+          "Em llevo a les set.",
+          "levantarse → llevar-se"
+        ],
+        [
+          "¿A qué hora te duchas?",
+          "A quina hora et dutxes?"
+        ],
+        [
+          "Desayunamos en casa.",
+          "Esmorzem a casa."
+        ],
+        [
+          "Él se viste rápido.",
+          "(Ell) es vesteix [ràpid|de pressa]."
+        ],
+        [
+          "Comemos con los compañeros.",
+          "Dinem amb els companys.",
+          "comer (mediodía) → dinar"
+        ],
+        [
+          "Cenan tarde.",
+          "Sopen tard."
+        ],
+        [
+          "Nos acostamos a las once.",
+          "[Anem a dormir|Ens n'anem a dormir|Ens fiquem al llit] a les onze."
+        ],
+        [
+          "Me lavo las manos.",
+          "Em rento les mans."
+        ],
+        [
+          "¿Os levantáis temprano?",
+          "Us lleveu [d'hora|aviat]?"
+        ],
+        [
+          "Quiero ducharme.",
+          "[Vull dutxar-me|Em vull dutxar]."
+        ],
+        [
+          "Se llama Pau.",
+          "Es diu Pau."
+        ],
+        [
+          "Mi habitación es pequeña.",
+          "La meva habitació és petita."
+        ]
       ]
     }
   ]

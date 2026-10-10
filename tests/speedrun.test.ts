@@ -105,7 +105,7 @@ describe('speedrun content', () => {
   });
 
   it('has the planned lessons per level, numbered without gaps', () => {
-    const plan = { A2: 30, B1: 30, B2: 22, C1: 18 } as const;
+    const plan = { A2: 32, B1: 30, B2: 21, C1: 18 } as const;
     for (const [level, count] of Object.entries(plan)) {
       const ids = lessons.filter((l) => l.level === level).map((l) => l.id).sort();
       const expected = Array.from(
