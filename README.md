@@ -56,10 +56,33 @@ header, or go to `/#speedrun`. It needs no keys.
 | C1 | 18 | passat simple, formal register, el qual, pronoun clusters and dislocation, high-frequency adverbs, common idioms, subtle Castilianisms, academic writing |
 
 Each lesson is a short concept note with clickable conjugation tables, then
-10–12 Castellano sentences to type in Catalan. A miss goes back into the queue
+10–14 Castellano sentences to type in Catalan. A miss goes back into the queue
 three items later, so every lesson ends on the right answer; the score counts
-first tries only. Lessons record a best time and first-try accuracy, and missed
-items feed a **Review mistakes** deck. Progress lives in `localStorage`.
+first tries only. Lessons record a best time and first-try accuracy.
+
+**Daily practice: the Today button.** Every item you meet enters a simple
+spaced-repetition ladder (`src/speedrun/srs.ts`): a first-try hit moves it to
+the next interval (1, 3, 7, 14, 30, 60 days), a miss sends it back to
+tomorrow. Today builds one session: everything due (most overdue first,
+capped at 30), plus six not-yet-due items from the lowest steps, all shuffled
+so consecutive items come from different lessons. Then it hands you the next
+new lesson. Re-running a lesson for a better time never pushes a schedule out
+early. The map shows lessons done, items due today, and how many items have
+reached the two-week step ("long-term").
+
+Suggested routine, about 25 minutes a day: press Today, do the new lesson it
+offers, and stop. Skip the new lesson on days when more than 30 items are
+due. Don't move on from a level until its boss lesson clears at 90% first try.
+Pair it with real Catalan input (TV3/3Cat, podcasts) — this course builds
+accurate production of the core; listening hours build the ear.
+
+**Dictation.** A toggle on the map switches every drill to *hear the Catalan,
+write it*: the Castellano stays hidden (one click reveals it), Play and 0.75×
+replay sit above the box, and Alt+L / Alt+S replay while typing. The meaning
+shows after you answer. It needs a decent voice, so set up ElevenLabs or a
+ca-ES system voice first.
+
+Progress lives in `localStorage`.
 
 **Checking.** Words are never forgiven: a wrong, missing or extra word fails.
 Spelling is lenient: accents, ç, l·l and hyphens that are off still pass, but

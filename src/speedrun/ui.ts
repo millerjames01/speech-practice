@@ -16,16 +16,16 @@ import { loadSpeedrun } from './content';
 import { canonical, expand } from './pattern';
 import {
   allLessonRecords,
-  clearMiss,
+  allCards,
+  cardStats,
   formatMs,
   getPrefs,
-  missedCount,
-  missedItems,
+  recordAnswer,
   recordLesson,
-  recordMiss,
   resetProgress,
   setPrefs,
 } from './progress';
+import { planToday, shuffle } from './srs';
 import {
   hasBrowserCatalanVoice,
   lastSpeechError,
@@ -60,7 +60,6 @@ const LEVEL_INFO: Record<SpeedrunLevel, { name: string; blurb: string }> = {
   },
 };
 
-const REVIEW_SIZE = 12;
 const REQUEUE_GAP = 3;
 
 let cleanups: (() => void)[] = [];
@@ -258,11 +257,30 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav): void {
     ? Math.round((done.reduce((s, l) => s + (records[l.id]?.bestScore ?? 0), 0) / done.length) * 100)
     : 0;
   const next = content.lessons.find((l) => !records[l.id]);
-  const misses = missedCount();
+  const cards = cardStats();
 
   const prefs = getPrefs();
   const autoplay = el('input', { type: 'checkbox', checked: prefs.autoplay });
   autoplay.addEventListener('change', () => setPrefs({ ...getPrefs(), autoplay: autoplay.checked }));
+  const dictation = el('input', { type: 'checkbox', checked: prefs.dictation });
+  dictation.addEventListener('change', () => setPrefs({ ...getPrefs(), dictation: dictation.checked }));
+
+  const openLesson = next
+    ? iconButton(
+        `${cards.learned ? 'New lesson' : 'Start'} · ${next.id.toUpperCase()} ${next.title}`,
+        ICONS.play,
+        () => renderIntro(root, nav, next),
+        cards.learned ? 'sr-btn' : 'sr-btn primary',
+      )
+    : null;
+  const today = cards.learned
+    ? iconButton(
+        cards.due ? `Today · ${cards.due} due${next ? ' + new lesson' : ''}` : `Today · practice mix${next ? ' + new lesson' : ''}`,
+        ICONS.play,
+        () => startToday(root, nav),
+        'sr-btn primary',
+      )
+    : null;
 
   page.append(
     el(
@@ -282,24 +300,24 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav): void {
         el(
           'div',
           { class: 'sr-actions' },
-          next
-            ? iconButton(
-                `${done.length ? 'Continue' : 'Start'} · ${next.id.toUpperCase()} ${next.title}`,
-                ICONS.play,
-                () => renderIntro(root, nav, next),
-                'sr-btn primary',
-              )
-            : el('span', { class: 'sr-complete' }, 'Run complete. Beat your splits.'),
-          misses > 0
-            ? iconButton(`Review mistakes · ${misses}`, ICONS.refresh, () => startReview(root, nav), 'sr-btn')
-            : null,
+          today,
+          openLesson,
+          !next ? el('span', { class: 'sr-complete' }, 'All lessons done. Keep the reviews going.') : null,
+        ),
+        el(
+          'p',
+          { class: 'sr-muted' },
+          cards.learned
+            ? 'Daily: press Today. It brings back what is due, mixes in older items, then hands you the next lesson.'
+            : 'Start with the first lesson. From then on, a daily Today session schedules your reviews.',
         ),
       ),
       el(
         'div',
         { class: 'sr-hero-stats' },
         stat(`${done.length}/${content.lessons.length}`, 'Lessons'),
-        stat(formatMs(totalMs), 'Run time'),
+        stat(String(cards.due), 'Due today'),
+        stat(cards.learned ? `${cards.longTerm}/${cards.learned}` : '—', 'Long-term'),
         stat(done.length ? `${avg}%` : '—', 'First try'),
       ),
     ),
@@ -373,7 +391,13 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav): void {
     el(
       'footer',
       { class: 'sr-footer' },
-      el('label', { class: 'sr-toggle' }, autoplay, el('span', {}, 'Auto-play the answer after each check')),
+      el(
+        'div',
+        { class: 'sr-toggles' },
+        el('label', { class: 'sr-toggle' }, autoplay, el('span', {}, 'Auto-play the answer after each check')),
+        el('label', { class: 'sr-toggle' }, dictation, el('span', {}, 'Dictation: hear the Catalan and write it')),
+        el('span', { class: 'sr-muted' }, `Run time ${formatMs(totalMs)}`),
+      ),
       button('Reset progress', () => {
         if (confirm('Clear all Speedrun progress, best times and the review deck?')) {
           resetProgress();
@@ -470,16 +494,24 @@ interface Entry {
 const lessonEntries = (lesson: SpeedrunLesson): Entry[] =>
   lesson.items.map((item, index) => ({ lessonId: lesson.id, index, item }));
 
-function startReview(root: HTMLElement, nav: SpeedrunNav): void {
+/**
+ * Today's session: due reviews plus a few older items, shuffled together so
+ * consecutive items come from different lessons. The next new lesson follows.
+ */
+function startToday(root: HTMLElement, nav: SpeedrunNav): void {
   const content = loadSpeedrun();
   const byId = new Map(content.lessons.map((l) => [l.id, l]));
+  const plan = planToday(allCards(), Date.now());
   const entries: Entry[] = [];
-  for (const miss of missedItems(REVIEW_SIZE)) {
-    const item = byId.get(miss.lessonId)?.items[miss.index];
-    if (item) entries.push({ lessonId: miss.lessonId, index: miss.index, item });
+  for (const card of shuffle([...plan.due, ...plan.mix])) {
+    const item = byId.get(card.lessonId)?.items[card.index];
+    if (item) entries.push({ lessonId: card.lessonId, index: card.index, item });
   }
-  if (entries.length === 0) return renderSpeedrun(root, nav);
-  runSession(root, nav, entries, null);
+  if (entries.length > 0) return runSession(root, nav, entries, null);
+  const records = allLessonRecords();
+  const next = content.lessons.find((l) => !records[l.id]);
+  if (next) renderIntro(root, nav, next);
+  else renderSpeedrun(root, nav);
 }
 
 const ACCENT_KEYS = ['à', 'è', 'é', 'í', 'ï', 'ò', 'ó', 'ú', 'ü', 'ç', 'l·l', '·'];
@@ -524,13 +556,18 @@ function runSession(
   const stage = el('main', { class: 'sr-drill' });
   root.append(stage);
 
-  // Shortcuts: Esc leaves; L / S replay the answer once it is shown.
+  // Shortcuts: Esc leaves; L / S replay the audio. While typing in the box
+  // they need Alt, so they never eat a letter.
   let replay: ((slow: boolean) => void) | null = null;
   onKey((ev) => {
     if (ev.key === 'Escape') return backToMap();
-    if (!replay || ev.metaKey || ev.ctrlKey || ev.altKey) return;
-    if (ev.key === 'l' || ev.key === 'L') replay(false);
-    if (ev.key === 's' || ev.key === 'S') replay(true);
+    if (!replay || ev.metaKey || ev.ctrlKey) return;
+    if (ev.code !== 'KeyL' && ev.code !== 'KeyS') return;
+    const active = document.activeElement;
+    const typing = active instanceof HTMLInputElement && !active.disabled;
+    if (typing && !ev.altKey) return;
+    ev.preventDefault();
+    replay(ev.code === 'KeyS');
   });
 
   const updateBar = () => {
@@ -545,6 +582,8 @@ function runSession(
     const entry = queue[0];
     if (!entry) return finish();
     const [es, pattern, hint] = entry.item;
+    const dictation = getPrefs().dictation;
+    const spoken = canonical(pattern);
     clear(stage);
 
     const input = el('input', {
@@ -582,7 +621,9 @@ function runSession(
       { class: 'sr-drill-actions' },
       checkBtn,
       giveUp,
-      el('span', { class: 'sr-keys' }, kbd('Enter'), ' check', kbd('Esc'), ' map'),
+      dictation
+        ? el('span', { class: 'sr-keys' }, kbd('Enter'), ' check', kbd('Alt'), kbd('L'), ' replay')
+        : el('span', { class: 'sr-keys' }, kbd('Enter'), ' check', kbd('Esc'), ' map'),
     );
     const form = el('form', { class: 'sr-form' }, input, accentBar, actions);
     let answered = false;
@@ -593,13 +634,39 @@ function runSession(
       resolve(checkAnswer(pattern, input.value));
     });
 
+    const source = lesson ? '' : ` · from ${entry.lessonId.toUpperCase()}`;
+    const prompt = el('h1', { class: 'sr-prompt' }, es);
+    let promptBlock: HTMLElement[];
+    if (dictation) {
+      prompt.hidden = true;
+      const reveal = button('Show Castellano', () => {
+        prompt.hidden = false;
+        reveal.remove();
+        input.focus();
+      }, 'sr-btn ghost');
+      promptBlock = [
+        el('p', { class: 'sr-eyebrow' }, `Listen and write${source}`),
+        el(
+          'div',
+          { class: 'sr-listen-row' },
+          iconButton('Play', ICONS.speaker, () => void speak(spoken), 'sr-btn sr-play'),
+          listenButton(spoken, true),
+          reveal,
+        ),
+        prompt,
+      ];
+      replay = (slow) => void speak(spoken, slow);
+      void speak(spoken);
+    } else {
+      promptBlock = [el('p', { class: 'sr-eyebrow' }, `${lesson ? 'Translate into Catalan' : 'Today'}${source}`), prompt];
+    }
+
     stage.append(
       el(
         'section',
         { class: 'sr-card-prompt' },
-        el('p', { class: 'sr-eyebrow' }, lesson ? 'Translate into Catalan' : `Review · from ${entry.lessonId.toUpperCase()}`),
-        el('h1', { class: 'sr-prompt' }, es),
-        ...(hint ? [el('p', { class: 'sr-hint' }, hint)] : []),
+        ...promptBlock,
+        ...(hint && !dictation ? [el('p', { class: 'sr-hint' }, hint)] : []),
         form,
       ),
       feedback,
@@ -616,8 +683,7 @@ function runSession(
       const correct = result !== null && result.verdict !== 'wrong';
       if (!firstTry.has(k)) {
         firstTry.set(k, correct);
-        if (correct) clearMiss(entry.lessonId, entry.index);
-        else recordMiss(entry.lessonId, entry.index);
+        recordAnswer(entry.lessonId, entry.index, correct, lesson ? 'lesson' : 'review');
       }
       if (result?.verdict === 'spelling') slips += 1;
 
@@ -630,6 +696,7 @@ function runSession(
       feedback.className = `sr-feedback ${verdictClass(result)}`;
       feedback.append(
         renderFeedback(result, pattern, input.value),
+        ...(dictation ? [el('p', { class: 'sr-muted' }, 'Meaning: ', el('span', { lang: 'es' }, es))] : []),
         el(
           'div',
           { class: 'sr-drill-actions' },
@@ -640,7 +707,8 @@ function runSession(
         ),
       );
       next.focus();
-      if (getPrefs().autoplay) void speak(answer);
+      // In dictation the learner has just heard it; replay only when they missed it.
+      if (getPrefs().autoplay && (!dictation || result?.verdict !== 'exact')) void speak(answer);
     };
   };
 
@@ -654,19 +722,22 @@ function runSession(
 
     const rec = lesson ? recordLesson(lesson.id, ms, score) : null;
     const content = loadSpeedrun();
-    const nextLesson = lesson ? content.lessons[content.lessons.indexOf(lesson) + 1] : undefined;
+    const records = allLessonRecords();
+    const nextLesson = lesson
+      ? content.lessons[content.lessons.indexOf(lesson) + 1]
+      : content.lessons.find((l) => !records[l.id]);
     const newBest = rec !== null && rec.runs > 1 && rec.bestMs === ms;
 
     const nextBtn = nextLesson
-      ? iconButton(`Next · ${nextLesson.title}`, ICONS.arrow, () => renderIntro(root, nav, nextLesson), 'sr-btn primary')
+      ? iconButton(`${lesson ? 'Next' : 'New lesson'} · ${nextLesson.title}`, ICONS.arrow, () => renderIntro(root, nav, nextLesson), 'sr-btn primary')
       : iconButton('Back to map', ICONS.back, backToMap, 'sr-btn primary');
 
     stage.append(
       el(
         'section',
         { class: 'sr-summary' },
-        el('p', { class: 'sr-eyebrow' }, lesson ? `${lesson.level} · ${lesson.title}` : 'Review deck'),
-        el('h1', { class: 'sr-title' }, lesson ? (newBest ? 'New best.' : 'Lesson complete.') : 'Review complete.'),
+        el('p', { class: 'sr-eyebrow' }, lesson ? `${lesson.level} · ${lesson.title}` : 'Today'),
+        el('h1', { class: 'sr-title' }, lesson ? (newBest ? 'New best.' : 'Lesson complete.') : 'Reviews done.'),
         el(
           'div',
           { class: 'sr-hero-stats' },
@@ -682,7 +753,7 @@ function runSession(
           { class: 'sr-actions' },
           nextBtn,
           lesson ? iconButton('Retry', ICONS.refresh, () => runSession(root, nav, lessonEntries(lesson), lesson), 'sr-btn') : null,
-          lesson && nextLesson ? button('Map', backToMap, 'sr-btn ghost') : null,
+          nextLesson ? button('Map', backToMap, 'sr-btn ghost') : null,
         ),
       ),
     );

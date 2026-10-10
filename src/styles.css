@@ -489,3 +489,8 @@ kbd {
   .sr-btn.primary span { max-width: 62vw; }
   .unit { flex-direction: column; align-items: stretch; }
 }
+.sr-toggles { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; }
+.sr-toggles .sr-muted { margin: 0; font-variant-numeric: tabular-nums; }
+.sr-listen-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 4px 0 16px; }
+.sr-play { height: 48px; padding: 0 22px; font-size: 1rem; }
+.sr-prompt[hidden] { display: none; }

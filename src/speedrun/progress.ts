@@ -1,9 +1,11 @@
 /**
- * Speedrun progress: which lessons are done, best times, and the items you
- * missed (for the review deck). Kept in localStorage because it is a per-viewer
- * convenience; every access is guarded so a blocked or cleared store just
- * means starting fresh, never a broken page.
+ * Speedrun progress: lessons done with best times, the spaced-repetition
+ * cards for every item seen, and viewer preferences. Kept in localStorage
+ * because it is a per-viewer convenience; every access is guarded so a blocked
+ * or cleared store just means starting fresh, never a broken page.
  */
+
+import { LONG_TERM_STEP, enroll, isDue, review, type SrsCard } from './srs';
 
 const KEY = 'sr.progress.v1';
 
@@ -14,34 +16,42 @@ export interface LessonRecord {
   runs: number;
 }
 
-export interface MissRecord {
-  lessonId: string;
-  index: number;
-  count: number;
-  last: number;
-}
-
 export interface Prefs {
   /** Play the Catalan answer automatically after each check. */
   autoplay: boolean;
+  /** Hear the Catalan and type it, instead of translating from Castellano. */
+  dictation: boolean;
 }
 
 interface Store {
   lessons: Record<string, LessonRecord>;
-  missed: Record<string, MissRecord>;
+  cards: Record<string, SrsCard>;
   prefs: Prefs;
 }
 
-const empty = (): Store => ({ lessons: {}, missed: {}, prefs: { autoplay: true } });
+/** The pre-SRS "missed items" list, migrated into due cards on read. */
+interface LegacyMiss {
+  lessonId: string;
+  index: number;
+  count: number;
+}
+
+const empty = (): Store => ({ lessons: {}, cards: {}, prefs: { autoplay: true, dictation: false } });
+
+export const itemKey = (lessonId: string, index: number): string => `${lessonId}#${index}`;
 
 function read(): Store {
   try {
     const raw = localStorage.getItem(KEY);
     if (!raw) return empty();
-    const parsed = JSON.parse(raw) as Partial<Store>;
+    const parsed = JSON.parse(raw) as Partial<Store> & { missed?: Record<string, LegacyMiss> };
+    const cards = { ...(parsed.cards ?? {}) };
+    for (const [k, m] of Object.entries(parsed.missed ?? {})) {
+      cards[k] ??= { lessonId: m.lessonId, index: m.index, step: 0, due: 0, lapses: m.count };
+    }
     return {
       lessons: parsed.lessons ?? {},
-      missed: parsed.missed ?? {},
+      cards,
       prefs: { ...empty().prefs, ...(parsed.prefs ?? {}) },
     };
   } catch {
@@ -55,12 +65,6 @@ function write(store: Store): void {
   } catch {
     // Storage unavailable: progress lasts for this page only.
   }
-}
-
-export const itemKey = (lessonId: string, index: number): string => `${lessonId}#${index}`;
-
-export function getLessonRecord(id: string): LessonRecord | undefined {
-  return read().lessons[id];
 }
 
 export function allLessonRecords(): Record<string, LessonRecord> {
@@ -80,30 +84,40 @@ export function recordLesson(id: string, ms: number, score: number): LessonRecor
   return next;
 }
 
-export function recordMiss(lessonId: string, index: number): void {
+/**
+ * Records a first-try answer.
+ *
+ * In a review (Today) it moves the card up or down the ladder. In a lesson it
+ * enrolls items seen for the first time; re-running a lesson for speed never
+ * pushes a card's schedule out early, but a miss still sends it back down.
+ */
+export function recordAnswer(
+  lessonId: string,
+  index: number,
+  correct: boolean,
+  context: 'lesson' | 'review',
+  now = Date.now(),
+): void {
   const store = read();
-  const key = itemKey(lessonId, index);
-  const prev = store.missed[key];
-  store.missed[key] = { lessonId, index, count: (prev?.count ?? 0) + 1, last: Date.now() };
+  const k = itemKey(lessonId, index);
+  const card = store.cards[k];
+  if (!card) store.cards[k] = enroll(lessonId, index, correct, now);
+  else if (context === 'review' || !correct) store.cards[k] = review(card, correct, now);
+  else return;
   write(store);
 }
 
-/** A first-try hit on a missed item clears it from the review deck. */
-export function clearMiss(lessonId: string, index: number): void {
-  const store = read();
-  delete store.missed[itemKey(lessonId, index)];
-  write(store);
+export function allCards(): SrsCard[] {
+  return Object.values(read().cards);
 }
 
-/** Most recently and most often missed first. */
-export function missedItems(limit: number): MissRecord[] {
-  return Object.values(read().missed)
-    .sort((a, b) => b.last - a.last || b.count - a.count)
-    .slice(0, limit);
-}
-
-export function missedCount(): number {
-  return Object.keys(read().missed).length;
+export function cardStats(now = Date.now()): { learned: number; due: number; longTerm: number } {
+  const cards = allCards();
+  return {
+    learned: cards.length,
+    due: cards.filter((c) => isDue(c, now)).length,
+    longTerm: cards.filter((c) => c.step >= LONG_TERM_STEP).length,
+  };
 }
 
 export function getPrefs(): Prefs {
