@@ -137,4 +137,12 @@ describe('speedrun content', () => {
       expect(new Set(prompts).size, l.id).toBe(prompts.length);
     }
   });
+
+  it('follows the 2017 IEC accents (no pre-reform diacritics in shown answers)', () => {
+    const old = /(^|[^\p{L}])(sóc|dóna|dónes|vénen|véns|adéu|féu|vés)(?=$|[^\p{L}])/iu;
+    for (const l of lessons) {
+      for (const [, pattern] of l.items) expect(canonical(pattern), l.id).not.toMatch(old);
+      for (const [ca] of l.vocab ?? []) expect(ca, l.id).not.toMatch(old);
+    }
+  });
 });

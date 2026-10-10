@@ -6,7 +6,7 @@
       "id": "c1-01",
       "title": "Passat simple: the literary past",
       "goal": "Read and write the past tense of books, news and history.",
-      "note": "Writing (novels, history, formal news) often uses the **passat simple** instead of vaig + inf.:\n\n- **-ar**: parlí, parlares, **parlà**, parlàrem, parlàreu, **parlaren**\n- **-re**: perdí, perderes, **perdé**, perdérem, perdéreu, perderen\n- **-ir**: dormí, dormires, **dormí**, dormírem, dormíreu, dormiren\n\nIrregular 3rd persons: **fou / foren** (ser), **féu / feren** (fer), **digué**, **tingué**, **vingué**, **pogué**, **visqué**, **escriví**, **anà**.\n\nBoth answers are accepted; the passat simple is shown first.",
+      "note": "Writing (novels, history, formal news) often uses the **passat simple** instead of vaig + inf.:\n\n- **-ar**: parlí, parlares, **parlà**, parlàrem, parlàreu, **parlaren**\n- **-re**: perdí, perderes, **perdé**, perdérem, perdéreu, perderen\n- **-ir**: dormí, dormires, **dormí**, dormírem, dormíreu, dormiren\n\nIrregular 3rd persons: **fou / foren** (ser), **feu / feren** (fer), **digué**, **tingué**, **vingué**, **pogué**, **visqué**, **escriví**, **anà**.\n\nBoth answers are accepted; the passat simple is shown first.",
       "tables": [
         {
           "title": "passat simple — 3rd person",
@@ -23,7 +23,7 @@
             ],
             [
               "fer",
-              "féu",
+              "feu",
               "feren"
             ],
             [
@@ -96,7 +96,7 @@
         ],
         [
           "Hizo lo que pudo.",
-          "[Féu|Va fer] el que [pogué|va poder]."
+          "[Feu|Va fer] el que [pogué|va poder]."
         ],
         [
           "Tuvo tres hijos.",

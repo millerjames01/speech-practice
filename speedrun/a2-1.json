@@ -111,14 +111,14 @@
       "id": "a2-02",
       "title": "Conversation glue",
       "goal": "The little words that hold every conversation together.",
-      "note": "These sit in the top few hundred words of spoken Catalan. Learn them as chunks:\n\n- **Hola!** **Adéu!** **Bona nit.**\n- **De debò?** (¿De verdad?) — **Realment** (realmente)\n- **Suposo que sí.** (Supongo que sí.)\n- **Exactament.** **Perfecte.**\n- **Endavant!** (¡Adelante!) — **Tranquil.** (Tranquilo.)\n- **No importa.** **No passa res.**\n- **Què vol dir?** (¿Qué significa?)\n- **Perdona** (tú) / **Perdoni** (usted)",
+      "note": "These sit in the top few hundred words of spoken Catalan. Learn them as chunks:\n\n- **Hola!** **Adeu!** **Bona nit.**\n- **De debò?** (¿De verdad?) — **Realment** (realmente)\n- **Suposo que sí.** (Supongo que sí.)\n- **Exactament.** **Perfecte.**\n- **Endavant!** (¡Adelante!) — **Tranquil.** (Tranquilo.)\n- **No importa.** **No passa res.**\n- **Què vol dir?** (¿Qué significa?)\n- **Perdona** (tú) / **Perdoni** (usted)",
       "vocab": [
         [
           "hola",
           "hola"
         ],
         [
-          "adéu",
+          "adeu",
           "adiós"
         ],
         [
@@ -185,7 +185,7 @@
         ],
         [
           "Adiós, buenas noches.",
-          "Adéu(,) bona nit."
+          "Adeu(,) bona nit."
         ],
         [
           "¿Qué significa esto?",
@@ -575,7 +575,7 @@
         ],
         [
           "Muchas veces.",
-          "Moltes [vegades|cops]."
+          "[Moltes vegades|Molts cops]."
         ],
         [
           "Es un buen lugar.",
@@ -926,7 +926,7 @@
       "items": [
         [
           "No lo entiendo.",
-          "No (ho) entenc."
+          "No [ho entenc|l'entenc]."
         ],
         [
           "Vivo en Girona.",
