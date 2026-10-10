@@ -42,6 +42,7 @@ const SYNONYMS: Record<string, string> = {
   'fóra': 'fora',
   'móra': 'mora',
   'vés': 'ves',
+  'adéu': 'adeu',
   'féu': 'feu',
   'vàrem': 'vam',
   'vàreu': 'vau',
