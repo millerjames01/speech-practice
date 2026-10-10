@@ -130,6 +130,50 @@ export function setPrefs(prefs: Prefs): void {
   write(store);
 }
 
+const FILE_KIND = 'catalan-speedrun-progress';
+
+/** Everything needed to restore progress on another device, as JSON. */
+export function exportProgress(now = new Date()): string {
+  return JSON.stringify({ kind: FILE_KIND, version: 1, exportedAt: now.toISOString(), data: read() }, null, 2);
+}
+
+const isNum = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
+const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
+
+/**
+ * Replaces progress with an exported file. Validates every record first, so a
+ * wrong or damaged file changes nothing.
+ */
+export function importProgress(text: string): { lessons: number; cards: number } {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    throw new Error('That file is not valid JSON.');
+  }
+  if (!isRecord(parsed) || parsed.kind !== FILE_KIND || !isRecord(parsed.data)) {
+    throw new Error('That is not a Speedrun progress file.');
+  }
+  const { lessons = {}, cards = {}, prefs = {} } = parsed.data;
+  if (!isRecord(lessons) || !isRecord(cards) || !isRecord(prefs)) throw new Error('The progress file is damaged.');
+  for (const r of Object.values(lessons)) {
+    if (!isRecord(r) || !isNum(r.bestMs) || !isNum(r.bestScore) || !isNum(r.runs)) {
+      throw new Error('The progress file has a damaged lesson record.');
+    }
+  }
+  for (const c of Object.values(cards)) {
+    if (!isRecord(c) || typeof c.lessonId !== 'string' || !isNum(c.index) || !isNum(c.step) || !isNum(c.due) || !isNum(c.lapses)) {
+      throw new Error('The progress file has a damaged review card.');
+    }
+  }
+  write({
+    lessons: lessons as Record<string, LessonRecord>,
+    cards: cards as Record<string, SrsCard>,
+    prefs: { ...empty().prefs, ...(prefs as Partial<Prefs>) },
+  });
+  return { lessons: Object.keys(lessons).length, cards: Object.keys(cards).length };
+}
+
 export function resetProgress(): void {
   try {
     localStorage.removeItem(KEY);

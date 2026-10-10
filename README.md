@@ -39,6 +39,25 @@ Before practising, replace the `REPLACE_WITH_VOICE_ID` placeholders in
 
 ## Speedrun mode — Castellano → Català
 
+**Use it:** https://millerjames01.github.io/speech-practice/#speedrun
+
+- **Install it.** On iPhone: open the link in Safari → Share → *Add to Home
+  Screen*. On Android: Chrome menu → *Install app*. It opens full-screen.
+- **Offline.** After the first visit everything works without a connection:
+  lessons, checking, Today, progress, export. ElevenLabs needs a connection,
+  except for lines already played, which are cached.
+- **A Catalan voice.** Audio uses the device's own speech voices, which also
+  work offline once downloaded. iPhone/iPad/Mac: Settings → Accessibility →
+  Spoken Content → Voices → Català (Montse or Jordi). Android: Settings →
+  Text-to-speech → Google → install Català. Windows: Settings → Time & language
+  → Speech → add Catalan.
+- **Your progress lives on one device**, in the browser. Use *Export progress*
+  (bottom of the map) now and then, and *Import progress* to move it to a new
+  phone or restore it.
+- **Deploys automatically** from `main` (`.github/workflows/deploy.yml`: test,
+  build with the Pages base path, publish).
+
+
 A second, written mode for Castellano speakers: a speedrun to C1 built on the
 80/20 rule. It skips topic word lists (no fruit, animals, weather or jobs) and
 drills the small set of words and patterns that make up most of real speech:

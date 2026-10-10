@@ -18,8 +18,10 @@ import {
   allLessonRecords,
   allCards,
   cardStats,
+  exportProgress,
   formatMs,
   getPrefs,
+  importProgress,
   recordAnswer,
   recordLesson,
   resetProgress,
@@ -400,14 +402,47 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav): void {
         el('label', { class: 'sr-toggle' }, dictation, el('span', {}, 'Dictation: hear the Catalan and write it')),
         el('span', { class: 'sr-muted' }, `Run time ${formatMs(totalMs)}`),
       ),
-      button('Reset progress', () => {
+      el(
+        'div',
+        { class: 'sr-footer-actions' },
+        button('Export progress', () => downloadProgress(), 'sr-btn ghost small'),
+        button('Import progress', () => pickProgressFile(root, nav, banners), 'sr-btn ghost small'),
+        button('Reset progress', () => {
         if (confirm('Clear all Speedrun progress, best times and the review deck?')) {
           resetProgress();
           renderSpeedrun(root, nav);
         }
       }, 'sr-btn ghost small'),
+      ),
     ),
   );
+}
+
+function downloadProgress(): void {
+  const blob = new Blob([exportProgress()], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = el('a', { href: url, download: `catalan-speedrun-${new Date().toISOString().slice(0, 10)}.json` });
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function pickProgressFile(root: HTMLElement, nav: SpeedrunNav, banners: HTMLElement): void {
+  const input = el('input', { type: 'file', accept: 'application/json,.json' });
+  input.addEventListener('change', async () => {
+    const file = input.files?.[0];
+    if (!file) return;
+    if (!confirm('Replace the progress on this device with the progress in this file?')) return;
+    try {
+      importProgress(await file.text());
+      renderSpeedrun(root, nav);
+    } catch (err) {
+      banners.prepend(errorBox(err instanceof Error ? err.message : String(err)));
+      banners.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  });
+  input.click();
 }
 
 /* ---------- intro ---------- */

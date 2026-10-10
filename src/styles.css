@@ -533,3 +533,4 @@ body[data-mode="speedrun"] {
     transition: none !important;
   }
 }
+.sr-footer-actions { display: flex; flex-wrap: wrap; gap: 4px; }

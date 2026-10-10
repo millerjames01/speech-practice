@@ -75,4 +75,27 @@ describe('recordAnswer', () => {
     expect(allCards()).toEqual([{ lessonId: 'b1-02', index: 3, step: 0, due: 0, lapses: 2 }]);
     expect(cardStats(NOW).due).toBe(1);
   });
+
+  it('round-trips progress through export and import', async () => {
+    const { recordAnswer, recordLesson, exportProgress, importProgress, allCards, allLessonRecords, resetProgress } =
+      await import('../src/speedrun/progress');
+    recordLesson('a2-01', 61_000, 0.9);
+    recordAnswer('a2-01', 3, true, 'lesson', NOW);
+    const file = exportProgress();
+    resetProgress();
+    expect(allCards()).toEqual([]);
+    expect(importProgress(file)).toEqual({ lessons: 1, cards: 1 });
+    expect(allLessonRecords()['a2-01']).toMatchObject({ bestMs: 61_000, bestScore: 0.9, runs: 1 });
+    expect(allCards()[0]).toMatchObject({ lessonId: 'a2-01', index: 3 });
+  });
+
+  it('rejects files that are not intact progress files, changing nothing', async () => {
+    const { recordLesson, importProgress, allLessonRecords } = await import('../src/speedrun/progress');
+    recordLesson('b1-01', 1000, 1);
+    expect(() => importProgress('not json')).toThrow(/valid JSON/);
+    expect(() => importProgress('{"hello":1}')).toThrow(/not a Speedrun/);
+    const damaged = JSON.stringify({ kind: 'catalan-speedrun-progress', data: { cards: { x: { lessonId: 'a2-01' } } } });
+    expect(() => importProgress(damaged)).toThrow(/damaged/);
+    expect(Object.keys(allLessonRecords())).toEqual(['b1-01']);
+  });
 });

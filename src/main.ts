@@ -16,6 +16,7 @@ import { renderMonologue } from './ui/monologue';
 import { renderReport } from './ui/report';
 import { openSettings } from './ui/settings';
 import { leaveSpeedrun, renderSpeedrun } from './speedrun/ui';
+import { registerServiceWorker } from './pwa';
 
 const root = document.getElementById('app');
 if (!root) throw new Error('Missing #app');
@@ -176,6 +177,7 @@ function runPhase(unit: Unit, phase: Phase, turns: LearnerTurnLog[] = []): void 
   }
 }
 
+registerServiceWorker();
 loadRemembered();
 if (location.hash === '#speedrun') {
   // The speedrun works without keys (browser voice), so no settings prompt.
