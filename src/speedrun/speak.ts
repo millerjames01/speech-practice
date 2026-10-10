@@ -53,28 +53,66 @@ export function hasBrowserCatalanVoice(): boolean {
   return catalanVoice() !== null;
 }
 
+/**
+ * The utterance being spoken. Holding a reference matters: Chrome can garbage-
+ * collect an utterance nothing points to while it is still speaking, which cuts
+ * the audio off after the first word or two.
+ */
+let current: SpeechSynthesisUtterance | null = null;
+
+/** Gap after cancel() before speaking again; speaking immediately can clip or drop the new line. */
+const CANCEL_SETTLE_MS = 120;
+
+/** Bumped on every request, so a line waiting out the settle gap yields to a newer one. */
+let generation = 0;
+
+/** When the engine was last cancelled; new speech waits out CANCEL_SETTLE_MS from here. */
+let lastCancel = 0;
+
+function cancelEngine(): void {
+  speechSynthesis.cancel();
+  lastCancel = Date.now();
+}
+
 function browserSpeak(text: string, slow: boolean): Promise<void> {
   return new Promise((resolve) => {
     if (typeof speechSynthesis === 'undefined') return resolve();
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    const voice = catalanVoice();
-    if (voice) u.voice = voice;
-    u.lang = voice?.lang ?? 'ca-ES';
-    u.rate = slow ? 0.7 : 0.95;
-    u.onend = () => resolve();
-    u.onerror = () => resolve();
-    speechSynthesis.speak(u);
+    const synth = speechSynthesis;
+    const mine = ++generation;
+    const start = () => {
+      if (mine !== generation) return resolve();
+      const u = new SpeechSynthesisUtterance(text);
+      const voice = catalanVoice();
+      if (voice) u.voice = voice;
+      u.lang = voice?.lang ?? 'ca-ES';
+      u.rate = slow ? 0.7 : 0.95;
+      const done = () => {
+        if (current === u) current = null;
+        resolve();
+      };
+      u.onend = done;
+      u.onerror = done;
+      current = u;
+      synth.speak(u);
+    };
+    if (synth.speaking || synth.pending) cancelEngine();
+    const wait = lastCancel + CANCEL_SETTLE_MS - Date.now();
+    if (wait > 0) setTimeout(start, wait);
+    else start();
   });
 }
 
 export function stopSpeaking(): void {
   stopPlayback();
-  if (typeof speechSynthesis !== 'undefined') speechSynthesis.cancel();
+  current = null;
+  generation += 1;
+  if (typeof speechSynthesis !== 'undefined' && (speechSynthesis.speaking || speechSynthesis.pending)) cancelEngine();
 }
 
 export async function speak(text: string, slow = false): Promise<void> {
-  stopSpeaking();
+  // Only stop recorded audio here; browserSpeak cancels the speech engine itself, with the
+  // settle delay that keeps the new line from being clipped.
+  stopPlayback();
   const voice = narrator();
   if (hasElevenLabsKey() && voice) {
     try {
