@@ -582,7 +582,7 @@
       "id": "b2-07",
       "title": "Periphrases: acabar de, tornar a, soler",
       "goal": "Express just, again, stop, start and usually.",
-      "note": "- **acabar de** + inf. = acabar de: **Acabo d'arribar.**\n- **tornar a** + inf. = volver a: **Torna a ploure.**\n- **deixar de** = dejar de; **posar-se a** = ponerse a; **començar a** = empezar a\n- **soler** = soler: **solc, sols, sol, solem, soleu, solen**; imperfect **solia**. Also **acostumar a**.\n\nPronouns can climb: **No ho tornis a fer = No tornis a fer-ho.**",
+      "note": "- **acabar de** + inf. = acabar de: **Acabo d'arribar.**\n- **tornar a** + inf. = volver a: **Torna a ploure.**\n- **deixar de** = dejar de; **posar-se a** = ponerse a; **començar a** = empezar a\n- **soler** = soler: **solc, sols, sol, solem, soleu, solen**; imperfect **solia**. Also **acostumar a**.\n\nPronouns can climb: **No ho tornis a fer = No tornis a fer-ho.**\n\nThe one place **anar a + infinitive** is fine: the past, for *was about to*: **Anava a sortir quan vas trucar.** In the present it's still a Castilianism.",
       "vocab": [
         [
           "acabar de",
@@ -658,6 +658,10 @@
         [
           "Acabábamos de cenar cuando llamaron.",
           "Acabàvem de sopar quan van trucar."
+        ],
+        [
+          "Iba a salir cuando llamaste.",
+          "[Anava a sortir|Estava a punt de sortir] quan vas trucar."
         ]
       ]
     },

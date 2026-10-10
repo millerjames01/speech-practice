@@ -617,6 +617,109 @@
     },
     {
       "id": "a2-07",
+      "title": "Cognate rules: -tat, -ció, -ós",
+      "goal": "Turn thousands of Castellano words into Catalan with a few rules.",
+      "note": "Most of your Castellano vocabulary converts by rule. The big ones:\n\n- *-dad / -tad* → **-tat**: ciudad → **ciutat**, libertad → **llibertat**\n- *-ción / -sión* → **-ció / -sió**: situación → **situació**\n- *-oso* → **-ós** (fem. **-osa**): famoso → **famós**\n- *-ivo* → **-iu** (fem. **-iva**): activo → **actiu**\n- *-ico* → **-ic**: público → **públic**\n- *-mente* → **-ment**; *-ble* → **-ble** (posible → **possible**)\n- *ie / ue* → **e / o**: puerta → **porta**, tierra → **terra**, nuevo → **nou**, fuego → **foc**\n- *ñ* → **ny**: año → **any**, España → **Espanya**\n- initial *l-* → **ll-**: libro → **llibre**, libertad → **llibertat**\n\nRules have exceptions, but they're right far more often than a guess.",
+      "tables": [
+        {
+          "title": "conversions",
+          "rows": [
+            [
+              "-dad",
+              "ciutat"
+            ],
+            [
+              "-ción",
+              "situació"
+            ],
+            [
+              "-oso",
+              "famós"
+            ],
+            [
+              "-ivo",
+              "actiu"
+            ],
+            [
+              "-ico",
+              "públic"
+            ],
+            [
+              "ue → o",
+              "porta"
+            ],
+            [
+              "ie → e",
+              "terra"
+            ],
+            [
+              "ñ → ny",
+              "any"
+            ]
+          ]
+        }
+      ],
+      "items": [
+        [
+          "La libertad es importante.",
+          "La llibertat és important."
+        ],
+        [
+          "Una situación difícil.",
+          "Una situació difícil."
+        ],
+        [
+          "Un actor famoso.",
+          "Un actor famós."
+        ],
+        [
+          "Es posible.",
+          "És possible."
+        ],
+        [
+          "Normalmente trabajo en la universidad.",
+          "Normalment treballo a la universitat."
+        ],
+        [
+          "Una decisión positiva.",
+          "Una decisió positiva."
+        ],
+        [
+          "La economía y la política.",
+          "L'economia i la política."
+        ],
+        [
+          "Es un problema público.",
+          "És un problema públic."
+        ],
+        [
+          "La puerta nueva.",
+          "La porta nova."
+        ],
+        [
+          "Siete años en España.",
+          "Set anys a Espanya."
+        ],
+        [
+          "Un chico activo y creativo.",
+          "Un noi actiu i creatiu."
+        ],
+        [
+          "La información es necesaria.",
+          "La informació és necessària."
+        ],
+        [
+          "La comunicación es fundamental.",
+          "La comunicació és fonamental."
+        ],
+        [
+          "El fuego y la tierra.",
+          "El foc i la terra."
+        ]
+      ]
+    },
+    {
+      "id": "a2-08",
       "title": "-ar verbs: parlar",
       "goal": "Conjugate any regular -ar verb in the present.",
       "note": "The biggest family. First person ends in **-o**: **parlo**.\n\nSpelling keeps the sound before e: menjar → **menges**, buscar → **busques**, començar → **comences**, pagar → **pagues**.\n\nFalse friend: *coger* → **agafar**.",
@@ -741,7 +844,7 @@
       ]
     },
     {
-      "id": "a2-08",
+      "id": "a2-09",
       "title": "-re verbs and the -c first person",
       "goal": "Handle perdre, and the irregular jo forms entenc, bec, visc, escric.",
       "note": "Regular -re verbs: **perdo, perds, perd, perdem, perdeu, perden**.\n\nMany everyday verbs take a **-c** in the jo form: **entenc** (entendre), **aprenc** (aprendre), **venc** (vendre), **bec** (beure), **visc** (viure), **escric** (escriure), **prenc** (prendre: prenc, prens, pren). Beure, viure and escriure take a **v** in nosaltres/vosaltres: **bevem, vivim, escrivim**.",
@@ -877,7 +980,7 @@
       ]
     },
     {
-      "id": "a2-09",
+      "id": "a2-10",
       "title": "-ir verbs: dormir and llegir",
       "goal": "Tell pure -ir verbs from the -eix- ones and conjugate both.",
       "note": "A few -ir verbs are 'pure': **dormo, dorms, dorm**. Same for sortir (**surto, surts, surt** — note the u), obrir, sentir.\n\nMost -ir verbs add **-eix-** in the singular and 3rd plural: **llegeixo, llegeixes, llegeix, llegim, llegiu, llegeixen**. Same with preferir, servir, decidir, patir, construir.\n\n*Oír* is usually **sentir**: **Sento un soroll.**",
@@ -1003,7 +1106,7 @@
       ]
     },
     {
-      "id": "a2-10",
+      "id": "a2-11",
       "title": "Fer and anar",
       "goal": "Use the two busiest verbs in the language.",
       "note": "**Fer** = hacer, and also weather: **fa calor**, **fa fred**.\n\n**Anar** = ir. Careful: **vaig** is also the past-tense helper (**vaig menjar** = comí). So *voy a comer* is NOT \"vaig a menjar\" — that's a Castilianism. You'll learn the right way in the future lesson; for now use anar with places: **Vaig a la platja.**\n\n*¿Adónde?* → **On?** or **A on?**",
@@ -1127,7 +1230,7 @@
       ]
     },
     {
-      "id": "a2-11",
+      "id": "a2-12",
       "title": "Poder, voler, saber, conèixer",
       "goal": "Say what you can, want, know and who you know.",
       "note": "Four irregular essentials. Two things trip up Castellano speakers:\n\n- *No sé* → **No ho sé**. Catalan needs the **ho** (it) with saber, dir, fer...\n- No personal *a*: *conozco a tu hermano* → **Conec el teu germà**. *Veo a María* → **Veig la Maria**.",
@@ -1267,7 +1370,7 @@
       ]
     },
     {
-      "id": "a2-12",
+      "id": "a2-13",
       "title": "Venir, dir, veure",
       "goal": "Come, say and see — and the 'Ja vinc!' perspective switch.",
       "note": "Three irregulars with a jo form you must memorise: **vinc**, **dic**, **veig**.\n\nPerspective: Catalan moves toward the listener with **venir**. Someone calls you — *¡Ya voy!* → **Ja vinc!** *¿Vienes a mi fiesta?* still → **Vens a la meva festa?**\n\n*Oír* → **sentir**; *escuchar* → **escoltar**.",
@@ -1399,7 +1502,7 @@
       ]
     },
     {
-      "id": "a2-13",
+      "id": "a2-14",
       "title": "Negatives and question words",
       "goal": "Ask anything and say no to everything.",
       "note": "**res** (nada), **ningú** (nadie), **mai** (nunca), **cap** (ningún), **gens** (nada de, en absoluto), **tampoc** (tampoco). After the verb they need **no**: **No vull res.** Before it, no is optional: **Mai (no) menjo carn.**\n\n**No... pas** adds emphasis: **No és pas car** (¡no es caro!).\n\n*¿Qué hora?* → **Quina hora?** — use **quin/quina** before a noun, **què** alone.",
@@ -1521,7 +1624,7 @@
       ]
     },
     {
-      "id": "a2-14",
+      "id": "a2-15",
       "title": "Possessives and family",
       "goal": "Talk about your family with el meu, la teva, els seus...",
       "note": "Possessives take the article: *mi madre* → **la meva mare**, *tus hermanos* → **els teus germans**.\n\nWithout a noun, drop the article: **Aquest llibre és meu.**\n\n**El seu / la seva** covers su (de él, de ella, de usted, de ellos).",
@@ -1660,7 +1763,97 @@
       ]
     },
     {
-      "id": "a2-15",
+      "id": "a2-16",
+      "title": "Gender flips",
+      "goal": "Catch the nouns whose gender differs from Castellano.",
+      "note": "A short list causes most gender errors. Learn them with their article:\n\n- **la dent** (el diente), **l'olor** fem. (el olor), **la vall** (el valle), **l'anàlisi** fem. (el análisis)\n- **el dubte** (la duda), **el costum** (la costumbre), **el front** (la frente), **el corrent** (la corriente)\n- Different word, different gender: **el carrer** (la calle), **el compte** (la cuenta), **el nas** (la nariz), **el núvol** (la nube), **la xocolata** (el chocolate)\n- **les postres** (el postre) is feminine plural.\n\nAdjectives follow the Catalan gender: **una dent**, **un dubte**.",
+      "vocab": [
+        [
+          "la dent",
+          "el diente"
+        ],
+        [
+          "el dubte",
+          "la duda"
+        ],
+        [
+          "el costum",
+          "la costumbre"
+        ],
+        [
+          "l'olor (f.)",
+          "el olor"
+        ],
+        [
+          "el nas",
+          "la nariz"
+        ],
+        [
+          "el núvol",
+          "la nube"
+        ]
+      ],
+      "items": [
+        [
+          "Me duele un diente.",
+          "Em fa mal una dent."
+        ],
+        [
+          "Es una costumbre antigua.",
+          "És un costum antic."
+        ],
+        [
+          "Tengo una duda.",
+          "Tinc un dubte."
+        ],
+        [
+          "El olor es muy fuerte.",
+          "L'olor és molt forta."
+        ],
+        [
+          "La calle es estrecha.",
+          "El carrer és estret."
+        ],
+        [
+          "La cuenta, por favor.",
+          "El compte, si us plau."
+        ],
+        [
+          "La nariz roja.",
+          "El nas vermell."
+        ],
+        [
+          "Una nube negra.",
+          "Un núvol negre."
+        ],
+        [
+          "El postre está muy bueno.",
+          "Les postres [són|estan] molt bones."
+        ],
+        [
+          "El análisis es completo.",
+          "L'anàlisi és completa."
+        ],
+        [
+          "La corriente es fuerte.",
+          "El corrent és fort."
+        ],
+        [
+          "El chocolate está bueno.",
+          "La xocolata [és|està] bona."
+        ],
+        [
+          "Tiene la frente alta.",
+          "Té el front alt."
+        ],
+        [
+          "El valle es precioso.",
+          "La vall és preciosa."
+        ]
+      ]
+    },
+    {
+      "id": "a2-17",
       "title": "Aquest, aquell, això",
       "goal": "Point at things near and far.",
       "note": "Central Catalan has two degrees, not three: **aquest** covers both *este* and *ese*; **aquell** = *aquel*.\n\nNeuter: **això** (esto/eso), **allò** (aquello). Places: **aquí** (aquí), **allà** or **allí** (allí).\n\nGender trap: **la sabata** (el zapato) is feminine. *Este año* is also **enguany**.",
@@ -1763,129 +1956,6 @@
         [
           "Este año voy a Italia.",
           "[Aquest any|Enguany] vaig a Itàlia."
-        ]
-      ]
-    },
-    {
-      "id": "a2-16",
-      "title": "Daily routine and reflexives",
-      "goal": "Describe your day with em llevo, em dutxo, dino, sopo.",
-      "note": "Reflexive pronouns before the verb: **em, et, es, ens, us, es** (m', t', s' before a vowel). After an infinitive they attach with a hyphen: **dutxar-me**, **llevar-se**.\n\nFalse friend: *levantarse* → **llevar-se**. Meals are verbs: **esmorzar** (desayunar), **dinar** (comer al mediodía), **sopar** (cenar).\n\n*Temprano* → **d'hora**.",
-      "tables": [
-        {
-          "title": "llevar-se — present",
-          "rows": [
-            [
-              "jo",
-              "em llevo"
-            ],
-            [
-              "tu",
-              "et lleves"
-            ],
-            [
-              "ell, ella",
-              "es lleva"
-            ],
-            [
-              "nosaltres",
-              "ens llevem"
-            ],
-            [
-              "vosaltres",
-              "us lleveu"
-            ],
-            [
-              "ells, elles",
-              "es lleven"
-            ]
-          ]
-        }
-      ],
-      "vocab": [
-        [
-          "llevar-se",
-          "levantarse"
-        ],
-        [
-          "dutxar-se",
-          "ducharse"
-        ],
-        [
-          "vestir-se",
-          "vestirse"
-        ],
-        [
-          "rentar-se",
-          "lavarse"
-        ],
-        [
-          "esmorzar",
-          "desayunar"
-        ],
-        [
-          "dinar",
-          "comer"
-        ],
-        [
-          "sopar",
-          "cenar"
-        ],
-        [
-          "d'hora",
-          "temprano"
-        ]
-      ],
-      "items": [
-        [
-          "Me levanto a las siete.",
-          "Em llevo a les set.",
-          "levantarse → llevar-se"
-        ],
-        [
-          "¿A qué hora te duchas?",
-          "A quina hora et dutxes?"
-        ],
-        [
-          "Desayunamos en casa.",
-          "Esmorzem a casa."
-        ],
-        [
-          "Él se viste rápido.",
-          "(Ell) es vesteix [ràpid|de pressa]."
-        ],
-        [
-          "Comemos con los compañeros.",
-          "Dinem amb els companys.",
-          "comer (mediodía) → dinar"
-        ],
-        [
-          "Cenan tarde.",
-          "Sopen tard."
-        ],
-        [
-          "Nos acostamos a las once.",
-          "[Anem a dormir|Ens n'anem a dormir|Ens fiquem al llit] a les onze."
-        ],
-        [
-          "Me lavo las manos.",
-          "Em rento les mans."
-        ],
-        [
-          "¿Os levantáis temprano?",
-          "Us lleveu [d'hora|aviat]?"
-        ],
-        [
-          "Quiero ducharme.",
-          "[Vull dutxar-me|Em vull dutxar]."
-        ],
-        [
-          "Se llama Pau.",
-          "Es diu Pau."
-        ],
-        [
-          "Mi habitación es pequeña.",
-          "La meva habitació és petita."
         ]
       ]
     }

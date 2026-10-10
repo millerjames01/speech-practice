@@ -3,7 +3,130 @@
   "reviewed": false,
   "lessons": [
     {
-      "id": "a2-17",
+      "id": "a2-18",
+      "title": "Daily routine and reflexives",
+      "goal": "Describe your day with em llevo, em dutxo, dino, sopo.",
+      "note": "Reflexive pronouns before the verb: **em, et, es, ens, us, es** (m', t', s' before a vowel). After an infinitive they attach with a hyphen: **dutxar-me**, **llevar-se**.\n\nFalse friend: *levantarse* → **llevar-se**. Meals are verbs: **esmorzar** (desayunar), **dinar** (comer al mediodía), **sopar** (cenar).\n\n*Temprano* → **d'hora**.",
+      "tables": [
+        {
+          "title": "llevar-se — present",
+          "rows": [
+            [
+              "jo",
+              "em llevo"
+            ],
+            [
+              "tu",
+              "et lleves"
+            ],
+            [
+              "ell, ella",
+              "es lleva"
+            ],
+            [
+              "nosaltres",
+              "ens llevem"
+            ],
+            [
+              "vosaltres",
+              "us lleveu"
+            ],
+            [
+              "ells, elles",
+              "es lleven"
+            ]
+          ]
+        }
+      ],
+      "vocab": [
+        [
+          "llevar-se",
+          "levantarse"
+        ],
+        [
+          "dutxar-se",
+          "ducharse"
+        ],
+        [
+          "vestir-se",
+          "vestirse"
+        ],
+        [
+          "rentar-se",
+          "lavarse"
+        ],
+        [
+          "esmorzar",
+          "desayunar"
+        ],
+        [
+          "dinar",
+          "comer"
+        ],
+        [
+          "sopar",
+          "cenar"
+        ],
+        [
+          "d'hora",
+          "temprano"
+        ]
+      ],
+      "items": [
+        [
+          "Me levanto a las siete.",
+          "Em llevo a les set.",
+          "levantarse → llevar-se"
+        ],
+        [
+          "¿A qué hora te duchas?",
+          "A quina hora et dutxes?"
+        ],
+        [
+          "Desayunamos en casa.",
+          "Esmorzem a casa."
+        ],
+        [
+          "Él se viste rápido.",
+          "(Ell) es vesteix [ràpid|de pressa]."
+        ],
+        [
+          "Comemos con los compañeros.",
+          "Dinem amb els companys.",
+          "comer (mediodía) → dinar"
+        ],
+        [
+          "Cenan tarde.",
+          "Sopen tard."
+        ],
+        [
+          "Nos acostamos a las once.",
+          "[Anem a dormir|Ens n'anem a dormir|Ens fiquem al llit] a les onze."
+        ],
+        [
+          "Me lavo las manos.",
+          "Em rento les mans."
+        ],
+        [
+          "¿Os levantáis temprano?",
+          "Us lleveu [d'hora|aviat]?"
+        ],
+        [
+          "Quiero ducharme.",
+          "[Vull dutxar-me|Em vull dutxar]."
+        ],
+        [
+          "Se llama Pau.",
+          "Es diu Pau."
+        ],
+        [
+          "Mi habitación es pequeña.",
+          "La meva habitació és petita."
+        ]
+      ]
+    },
+    {
+      "id": "a2-19",
       "title": "Hours, quarters and days",
       "goal": "Tell the time the Catalan way and name the days.",
       "note": "**És la una. Són les dues.**\n\nThe traditional system counts quarters *toward* the next hour: **un quart de nou** = 8:15, **dos quarts de nou** = 8:30, **tres quarts de nou** = 8:45. You'll also hear *les vuit i quart*; both are accepted here, but learn the quarts — it's what you'll hear in Catalonia.\n\n**dilluns** = el lunes (this one), **els dilluns** = los lunes (every).",
@@ -137,7 +260,7 @@
       ]
     },
     {
-      "id": "a2-18",
+      "id": "a2-20",
       "title": "Agradar and fer mal",
       "goal": "Say what you like, love, and what hurts.",
       "note": "**Agradar** works like gustar: **m'agrada** + singular, **m'agraden** + plural.\n\nPronouns: **em, et, li, ens, us, els** (m', t' before a vowel). *A mis padres les gusta* → **Als meus pares els agrada**.\n\n*Doler* → **fer mal**: **Em fa mal el cap.** Gender trap: **la xocolata** is feminine.",
@@ -256,7 +379,7 @@
       ]
     },
     {
-      "id": "a2-19",
+      "id": "a2-21",
       "title": "Past I: vaig + infinitive",
       "goal": "Tell what happened with the passat perifràstic.",
       "note": "Catalan's everyday past (= *comí, hablaste, fuimos*) is **anar-like helper + infinitive**: **vaig menjar** = comí.\n\nThe helper: **vaig, vas, va, vam, vau, van**. The main verb never changes, so every verb is regular here.\n\nLonger forms **vàrem, vàreu, varen** also exist and are accepted.",
@@ -369,7 +492,7 @@
       ]
     },
     {
-      "id": "a2-20",
+      "id": "a2-22",
       "title": "Past II: fui, hice, tuve, vi",
       "goal": "Use the past of the irregular giants — which aren't irregular here.",
       "note": "The good news: Castellano's nightmare preterites (*fui, hice, tuve, dije, vine, pude*) are all just **vaig + infinitive** in Catalan:\n\n- **va ser** (fue), **vaig anar** (fui), **vaig fer** (hice), **vaig tenir** (tuve), **vaig veure** (vi), **vaig dir** (dije), **vaig venir** (vine), **vaig poder** (pude).\n\n*Hace dos años* → **fa dos anys**.",
@@ -451,7 +574,7 @@
       ]
     },
     {
-      "id": "a2-21",
+      "id": "a2-23",
       "title": "Perfet: he menjat",
       "goal": "Say what you have done today, already, or never.",
       "note": "Same use as Castellano *he comido*: today, this week, ya, todavía no, nunca.\n\n**haver** + participle: **he, has, ha, hem, heu, han**.\n\nRegular participles: **-ar → -at** (parlat), **-re/-er → -ut** (perdut, venut), **-ir → -it** (dormit, llegit).\n\n*Todavía* → **encara**. *Elegir* → **triar** or **escollir**.",
@@ -582,7 +705,7 @@
       ]
     },
     {
-      "id": "a2-22",
+      "id": "a2-24",
       "title": "Irregular participles",
       "goal": "Know fet, dit, vist, escrit, après, entès, tingut, vingut, plogut...",
       "note": "The participles you'll use every day. Two families:\n\n- Like Castellano: **fet** (hecho), **dit** (dicho), **vist** (visto), **escrit**, **obert**, **mort**.\n- The -ut family from -c verbs: **tingut**, **vingut**, **pogut**, **volgut**, **begut**, **viscut**, **conegut**, **plogut**.\n- Plus: **après** (aprendre), **entès** (entendre), **pres** (prendre).",
@@ -719,7 +842,7 @@
       ]
     },
     {
-      "id": "a2-23",
+      "id": "a2-25",
       "title": "Perfet or perifràstic?",
       "goal": "Pick the right past tense every time.",
       "note": "Map it straight from Castellano:\n\n- *he comido* → **he menjat** (today, this week, ya, nunca)\n- *comí* → **vaig menjar** (ayer, el año pasado, en 2010)\n\nOne twist: *¿alguna vez?* in a question is usually **mai**: **Has estat mai a Andorra?**\n\n*Nací* → **vaig néixer**.",
@@ -801,7 +924,7 @@
       ]
     },
     {
-      "id": "a2-24",
+      "id": "a2-26",
       "title": "Imperfet: parlava, dormia",
       "goal": "Describe how things used to be.",
       "note": "Same use as Castellano *hablaba, dormía*.\n\n- **-ar**: parlava, parlaves, parlava, **parlàvem, parlàveu**, parlaven\n- **-re / -ir**: perdia, dormia — **-ia, -ies, -ia, -íem, -íeu, -ien**\n\nNote the accent on nosaltres/vosaltres. *En la calle* → **al carrer**.",
@@ -926,7 +1049,7 @@
       ]
     },
     {
-      "id": "a2-25",
+      "id": "a2-27",
       "title": "Imperfet: era, feia, deia",
       "goal": "Handle the irregular imperfects of ser, fer, dir, veure.",
       "note": "**ser**: era, eres, era, **érem, éreu**, eren.\n\nVerbs whose stem ends in a vowel take **-ia** straight on: **feia** (fer), **deia** (dir), **veia** (veure), **creia** (creure), **reia** (riure). Beure, viure, escriure use **v**: **bevia, vivia, escrivia**.\n\n*Hacía mucho frío* → **Feia molt (de) fred**.",
@@ -1057,10 +1180,10 @@
       ]
     },
     {
-      "id": "a2-26",
+      "id": "a2-28",
       "title": "Future: parlaré",
       "goal": "Talk about plans — and stop saying 'vaig a'.",
-      "note": "Infinitive + **-é, -às, -à, -em, -eu, -an**: **parlaré**. Verbs in -re drop the e: perdre → **perdré**, viure → **viuré**.\n\nKey rule: *voy a + infinitivo* is NOT \"vaig a\" (vaig + infinitive means the past!). Use the **future**: *voy a comer* → **menjaré**, *va a llover* → **plourà**.\n\n*Llamar por teléfono* → **trucar**.",
+      "note": "Infinitive + **-é, -às, -à, -em, -eu, -an**: **parlaré**. Verbs in -re drop the e: perdre → **perdré**, viure → **viuré**.\n\nKey rule: *voy a + infinitivo* is NOT \"vaig a\" (vaig + infinitive means the past!). (In the past, *iba a* → **anava a** is fine — B2.) Use the **future**: *voy a comer* → **menjaré**, *va a llover* → **plourà**.\n\n*Llamar por teléfono* → **trucar**.\n\nTo say what you *plan* to do, use **pensar + infinitive**: **Penso anar a Roma** (pienso ir a Roma).",
       "tables": [
         {
           "title": "futur",
@@ -1186,11 +1309,15 @@
         [
           "¿Qué vas a comprar?",
           "Què compraràs?"
+        ],
+        [
+          "Pienso ir a Roma este verano.",
+          "Penso anar a Roma aquest estiu."
         ]
       ]
     },
     {
-      "id": "a2-27",
+      "id": "a2-29",
       "title": "Future: faré, tindré, aniré",
       "goal": "Use the irregular futures of the core verbs.",
       "note": "Only a handful, and they mirror the stems you know:\n\n**faré** (fer), **diré** (dir), **tindré** (tenir), **vindré** (venir), **voldré** (voler), **podré**, **sabré**, **hauré** (haver), **seré** (ser), **aniré** (anar).\n\n*Habrá* → **hi haurà**. *Boda* → **casament**.",
@@ -1324,7 +1451,7 @@
       ]
     },
     {
-      "id": "a2-28",
+      "id": "a2-30",
       "title": "Haver de and caldre",
       "goal": "Express obligation without the 'tenir que' Castilianism.",
       "note": "*Tener que* → **haver de**: **He de treballar** (also **haig de**). \"Tinc que\" is a classic Castilianism — avoid it.\n\n*Hay que* → **cal** + infinitive: **Cal pagar.**\n*No hace falta* → **No cal.**\n\nHaver de works in every tense: **vaig haver de**, **havia de**, **hauré de**.",
@@ -1438,7 +1565,7 @@
       ]
     },
     {
-      "id": "a2-29",
+      "id": "a2-31",
       "title": "Molt, poc, massa, gaire",
       "goal": "Talk about quantities like a native.",
       "note": "**molt** (mucho), **poc** (poco), **massa** (demasiado, never changes), **prou** (bastante, suficiente), **una mica** (un poco).\n\n**gaire** = *mucho* in negatives and questions: **No tinc gaire temps.** **Hi ha gaire gent?** It's the mark of natural Catalan.\n\n*Dinero* → **diners**, always plural. *Ya basta* → **Ja n'hi ha prou** (learn it as a chunk).",
@@ -1523,7 +1650,7 @@
       ]
     },
     {
-      "id": "a2-30",
+      "id": "a2-32",
       "title": "Prepositions: a, en, amb, per",
       "goal": "Put people and things in the right place.",
       "note": "- Place with a name or article → **a**: **a Barcelona**, **a la feina**, **a casa**.\n- Before un/una, aquest, algun → **en**: **en un poble**, **en aquest moment**.\n- **amb** = con (and transport: **amb tren**).\n- **per a** = para (destination/recipient): **per a tu**. **per** = por.\n- **des de... fins a** = desde... hasta. **cap a** = hacia. **sense** = sin.",
@@ -1609,7 +1736,7 @@
       ]
     },
     {
-      "id": "a2-31",
+      "id": "a2-33",
       "title": "Comparisons",
       "goal": "Compare anything: més, menys, tan, millor, pitjor.",
       "note": "**més... que**, **menys... que**, **tan... com** (adjective), **tant com** (amount).\n\n**millor** (mejor), **pitjor** (peor). *Mi hermano mayor* → **el meu germà gran**.\n\n*Cuanto más, mejor* → **Com més, millor.** Superlative: **el més...**, or **-íssim**: **boníssim**.",
@@ -1692,7 +1819,7 @@
       ]
     },
     {
-      "id": "a2-32",
+      "id": "a2-34",
       "title": "Imperative",
       "goal": "Give orders, ask favours, and tell people what not to do.",
       "note": "Positive **tu**: usually the 3rd-person present: **parla**, **menja**, **llegeix**. Irregulars: **fes** (haz), **digues** (di), **vine** (ven), **ves** (ve), **sigues** (sé), **tingues** (ten).\n\n**vostè**: **parli**, **passi**. **vosaltres**: **parleu**, **tingueu**.\n\nNegative uses the subjunctive, as in Castellano: **no parlis**, **no facis**, **no vinguis**.\n\nPronouns attach with a hyphen: **digues-me**.",

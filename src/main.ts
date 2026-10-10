@@ -15,7 +15,7 @@ import { renderFreeform } from './ui/freeform';
 import { renderMonologue } from './ui/monologue';
 import { renderReport } from './ui/report';
 import { openSettings } from './ui/settings';
-import { renderSpeedrun } from './speedrun/ui';
+import { leaveSpeedrun, renderSpeedrun } from './speedrun/ui';
 
 const root = document.getElementById('app');
 if (!root) throw new Error('Missing #app');
@@ -35,7 +35,7 @@ function header(subtitle?: string): HTMLElement {
     { class: 'app-header' },
     el('h1', {}, 'Conversation Trainer — Catalan'),
     subtitle ? el('p', { class: 'subtitle' }, subtitle) : null,
-    button('⚡ Speedrun', openSpeedrun),
+    button('Speedrun', openSpeedrun),
     button('Settings', () => openSettings(renderUnitList)),
   );
 }
@@ -45,6 +45,7 @@ function openSpeedrun(): void {
   if (location.hash !== '#speedrun') history.replaceState(null, '', '#speedrun');
   renderSpeedrun(root!, {
     onExit: () => {
+      leaveSpeedrun();
       history.replaceState(null, '', location.pathname);
       renderUnitList();
     },
@@ -73,7 +74,7 @@ function renderUnitList(): void {
       el(
         'div',
         {},
-        el('h3', {}, '⚡ Speedrun to C1 — Castellano → Català'),
+        el('h3', {}, 'Speedrun to C1 — Castellano → Català'),
         el(
           'p',
           { class: 'hint' },

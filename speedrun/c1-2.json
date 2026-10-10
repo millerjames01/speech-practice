@@ -483,7 +483,7 @@
       "id": "c1-16",
       "title": "Spoken discourse markers",
       "goal": "Sound natural in conversation: escolta, oi?, doncs res, i ara!",
-      "note": "- *oye* → **escolta**; *mira* → **mira**; *a ver* → **a veure**\n- *¿verdad?* → **oi?**\n- *pues nada* → **doncs res**\n- *¡qué va!* → **i ara!**\n- *me da igual* → **m'és igual**, **tant me fa**, **tant se val**\n- *¿qué le vamos a hacer?* → **què hi farem?**\n- *no pasa nada* → **no passa res**\n- *¡qué pasada! / ¡qué fuerte!* → **quina passada!** / **que fort!**\n- *mira por dónde* → **ves per on**",
+      "note": "- *oye* → **escolta**; *mira* → **mira**; *a ver* → **a veure**\n- *¿verdad?* → **oi?**\n- *pues nada* → **doncs res**\n- *¡qué va!* → **i ara!**\n- *me da igual* → **m'és igual**, **tant me fa**, **tant se val**\n- *¿qué le vamos a hacer?* → **què hi farem?**\n- *no pasa nada* → **no passa res**\n- *¡qué pasada! / ¡qué fuerte!* → **quina passada!** / **que fort!**\n- *mira por dónde* → **ves per on**\n\nColloquial speech leans on **fotre** (hacer, fastidiar, poner): **No em fotis!** (¡no me fastidies!). Informal, but you'll hear it constantly.",
       "vocab": [
         [
           "escolta",
@@ -558,6 +558,14 @@
         [
           "¡Hombre, cuánto tiempo!",
           "Home(,) quant de temps!"
+        ],
+        [
+          "¡No me fastidies!",
+          "No em fotis!"
+        ],
+        [
+          "Me importa un pimiento.",
+          "M'importa un rave."
         ]
       ]
     },

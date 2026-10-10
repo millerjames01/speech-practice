@@ -43,7 +43,7 @@ A second, written mode for Castellano speakers: a speedrun to C1 built on the
 80/20 rule. It skips topic word lists (no fruit, animals, weather or jobs) and
 drills the small set of words and patterns that make up most of real speech:
 the core verbs in every tense, weak pronouns, function words, connectors and
-the most frequent nouns and adverbs. Open it with **⚡ Speedrun** in the
+the most frequent nouns and adverbs. Open it with **Speedrun** in the
 header, or go to `/#speedrun`. It needs no keys.
 
 **101 bite-sized lessons**, about five minutes each:

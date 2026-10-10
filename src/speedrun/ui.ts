@@ -1,10 +1,13 @@
 /**
- * Speedrun views: the level map, a lesson's intro card, the typing drill, and
- * the end-of-lesson split.
+ * Speedrun views: the level map, a lesson's intro, the typing drill, and the
+ * end-of-lesson split.
  *
  * Every item has to be answered correctly once before a lesson ends: a miss
  * goes back into the queue a few items later, so the learner always finishes
  * on the right answer, and the score counts first tries only.
+ *
+ * Styling lives under body[data-mode="speedrun"] in styles.css, so none of it
+ * leaks into the conversation trainer.
  */
 
 import { button, clear, el, errorBox } from '../ui/dom';
@@ -41,19 +44,19 @@ export interface SpeedrunNav {
 const LEVEL_INFO: Record<SpeedrunLevel, { name: string; blurb: string }> = {
   A2: {
     name: 'Foundations',
-    blurb: 'Core verbs in the present, both pasts, the future, and the traps a Castellano ear walks into.',
+    blurb: 'Core verbs in every basic tense, cognate rules, core nouns and the traps a Castellano ear walks into.',
   },
   B1: {
-    name: 'Weak pronouns and moods',
-    blurb: 'Pronoms febles, conditional, present subjunctive, and the verbs that diverge from Castellano.',
+    name: 'Pronouns and moods',
+    blurb: 'Pronoms febles, conditional, present subjunctive, core verb forms and the verbs that diverge.',
   },
   B2: {
     name: 'Nuance',
-    blurb: 'Imperfect subjunctive, si-clauses, deure, periphrases, "lo" and the Castilianisms to unlearn.',
+    blurb: 'Imperfect subjunctive, si-clauses, deure, periphrases, Castellano "lo" and the Castilianisms to unlearn.',
   },
   C1: {
-    name: 'Register and idiom',
-    blurb: 'Formal writing, literary past, pronoun mastery, dislocation and frases fetes.',
+    name: 'Register',
+    blurb: 'Formal writing, literary past, pronoun mastery, dislocation and spoken idiom.',
   },
 };
 
@@ -67,18 +70,79 @@ function resetView(root: HTMLElement): void {
   cleanups = [];
   stopSpeaking();
   clear(root);
+  document.body.dataset.mode = 'speedrun';
 }
+
+/** Leaves speedrun styling; called when returning to the conversation trainer. */
+export function leaveSpeedrun(): void {
+  for (const fn of cleanups) fn();
+  cleanups = [];
+  stopSpeaking();
+  delete document.body.dataset.mode;
+}
+
+/** A document-level key handler that lives as long as the current view. */
+function onKey(handler: (ev: KeyboardEvent) => void): void {
+  document.addEventListener('keydown', handler);
+  cleanups.push(() => document.removeEventListener('keydown', handler));
+}
+
+/* ---------- icons ---------- */
+
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+function icon(paths: string[], size = 16): SVGSVGElement {
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('width', String(size));
+  svg.setAttribute('height', String(size));
+  svg.setAttribute('fill', 'none');
+  svg.setAttribute('stroke', 'currentColor');
+  svg.setAttribute('stroke-width', '1.8');
+  svg.setAttribute('stroke-linecap', 'round');
+  svg.setAttribute('stroke-linejoin', 'round');
+  svg.setAttribute('aria-hidden', 'true');
+  for (const d of paths) {
+    const p = document.createElementNS(SVG_NS, 'path');
+    p.setAttribute('d', d);
+    svg.append(p);
+  }
+  return svg;
+}
+
+const ICONS = {
+  speaker: ['M11 5 6 9H3v6h3l5 4V5z', 'M15.5 8.5a5 5 0 0 1 0 7', 'M18.5 5.5a9 9 0 0 1 0 13'],
+  check: ['M5 12.5l4.5 4.5L19 7.5'],
+  arrow: ['M5 12h14', 'M13 6l6 6-6 6'],
+  close: ['M6 6l12 12', 'M18 6 6 18'],
+  back: ['M19 12H5', 'M11 18l-6-6 6-6'],
+  play: ['M7 5v14l11-7z'],
+  refresh: ['M20 11a8 8 0 1 0-2.3 5.7', 'M20 5v6h-6'],
+};
+
+function iconButton(
+  label: string,
+  iconPaths: string[],
+  onClick: () => void,
+  className = 'sr-btn',
+): HTMLButtonElement {
+  const b = el('button', { class: className, type: 'button' }, icon(iconPaths), el('span', {}, label));
+  b.addEventListener('click', onClick);
+  return b;
+}
+
+const kbd = (key: string) => el('kbd', {}, key);
 
 /* ---------- shared bits ---------- */
 
-function listen(text: string, label = '🔊', slow = false): HTMLButtonElement {
-  const b = button(label, () => {
+function listenButton(text: string, slow = false): HTMLButtonElement {
+  const b = iconButton(slow ? '0.75×' : 'Listen', ICONS.speaker, () => {
     b.disabled = true;
     void speak(text, slow).finally(() => {
       b.disabled = false;
     });
-  }, 'btn tiny listen');
-  b.title = slow ? 'Listen slowly' : 'Listen';
+  }, 'sr-btn ghost');
+  b.title = slow ? 'Listen slowly (S)' : 'Listen (L)';
   return b;
 }
 
@@ -111,21 +175,39 @@ function rich(text: string): HTMLElement {
 
 function catalanCell(text: string): HTMLElement {
   if (!text.trim() || text.trim() === '—') return el('td', {}, text);
-  const cell = el('td', { class: 'sr-ca' }, text);
-  cell.title = 'Click to listen';
-  cell.addEventListener('click', () => void speak(text));
+  const cell = el('td', { class: 'sr-ca', tabIndex: 0 }, text);
+  cell.title = 'Listen';
+  const play = () => void speak(text);
+  cell.addEventListener('click', play);
+  cell.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Enter' || ev.key === ' ') {
+      ev.preventDefault();
+      play();
+    }
+  });
   return cell;
 }
 
-function header(root: HTMLElement, nav: SpeedrunNav, subtitle: string, back?: () => void): void {
+function topbar(root: HTMLElement, nav: SpeedrunNav, crumb?: { label: string; back: () => void }): void {
   root.append(
     el(
       'header',
-      { class: 'app-header' },
-      el('h1', {}, 'Speedrun to C1'),
-      el('p', { class: 'subtitle' }, subtitle),
-      back ? button('Map', back) : button('Conversation trainer', nav.onExit),
-      button('Settings', () => nav.onSettings(() => renderSpeedrun(root, nav))),
+      { class: 'sr-top' },
+      el(
+        'div',
+        { class: 'sr-brand' },
+        el('span', { class: 'sr-mark' }, 'CA'),
+        el('span', { class: 'sr-wordmark' }, 'Speedrun'),
+        crumb ? el('span', { class: 'sr-crumb' }, crumb.label) : null,
+      ),
+      el(
+        'nav',
+        { class: 'sr-nav' },
+        crumb
+          ? iconButton('Map', ICONS.back, crumb.back, 'sr-btn ghost')
+          : button('Conversation', nav.onExit, 'sr-btn ghost'),
+        button('Settings', () => nav.onSettings(() => renderSpeedrun(root, nav)), 'sr-btn ghost'),
+      ),
     ),
   );
 }
@@ -134,20 +216,27 @@ function audioNotice(): HTMLElement | null {
   const src = speechSource();
   const err = lastSpeechError();
   if (src === 'elevenlabs' && !err) return null;
-  if (err) {
-    return el('div', { class: 'notice' }, `ElevenLabs failed, using the browser voice instead. ${err}`);
-  }
+  if (err) return el('div', { class: 'sr-banner' }, `ElevenLabs failed; using the browser voice. ${err}`);
   if (src === 'browser' && !hasBrowserCatalanVoice()) {
     return el(
       'div',
-      { class: 'notice' },
-      'Audio: no Catalan voice found in this browser, so playback may sound Spanish or English. ' +
-        'Add an ElevenLabs key in Settings and a narrator voice id in curriculum.json for natural audio, ' +
-        'or install a Catalan (ca-ES) system voice.',
+      { class: 'sr-banner' },
+      'No Catalan voice in this browser, so audio may sound off. Add an ElevenLabs key in Settings ' +
+        'and a narrator voice id in curriculum.json, or install a ca-ES system voice.',
     );
   }
-  if (src === 'none') return el('div', { class: 'notice' }, 'Audio is unavailable in this browser.');
+  if (src === 'none') return el('div', { class: 'sr-banner' }, 'Audio is unavailable in this browser.');
   return null;
+}
+
+function stat(value: string, label: string): HTMLElement {
+  return el('div', { class: 'sr-stat' }, el('span', { class: 'sr-stat-value' }, value), el('span', { class: 'sr-stat-label' }, label));
+}
+
+function meter(fraction: number): HTMLElement {
+  const fill = el('span', { class: 'sr-meter-fill' });
+  fill.style.width = `${Math.round(Math.max(0, Math.min(1, fraction)) * 100)}%`;
+  return el('span', { class: 'sr-meter' }, fill);
 }
 
 /* ---------- map ---------- */
@@ -156,28 +245,12 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav): void {
   resetView(root);
   const content = loadSpeedrun();
   const records = allLessonRecords();
-  header(root, nav, 'Castellano → Català · written translation · 5-minute lessons');
+  topbar(root, nav);
 
-  for (const message of content.errors) root.append(errorBox(`Skipped an invalid lesson file — ${message}`));
+  const page = el('main', { class: 'sr-page' });
+  root.append(page);
 
-  if (content.unreviewed.size > 0) {
-    root.append(
-      el(
-        'div',
-        { class: 'notice warning' },
-        `Not yet reviewed by a Catalan speaker: ${[...content.unreviewed].join(', ')}. ` +
-          'The content follows the IEC norm (Central Catalan), but check anything that looks off.',
-      ),
-    );
-  }
-
-  const notice = audioNotice();
-  if (notice) root.append(notice);
-  void voicesReady().then(() => {
-    // The browser voice list arrives late; refresh the notice once it does.
-    const fresh = audioNotice();
-    if (!fresh && notice) notice.remove();
-  });
+  for (const message of content.errors) page.append(errorBox(`Skipped an invalid lesson file — ${message}`));
 
   const done = content.lessons.filter((l) => records[l.id]);
   const totalMs = done.reduce((sum, l) => sum + (records[l.id]?.bestMs ?? 0), 0);
@@ -185,55 +258,88 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav): void {
     ? Math.round((done.reduce((s, l) => s + (records[l.id]?.bestScore ?? 0), 0) / done.length) * 100)
     : 0;
   const next = content.lessons.find((l) => !records[l.id]);
+  const misses = missedCount();
 
   const prefs = getPrefs();
   const autoplay = el('input', { type: 'checkbox', checked: prefs.autoplay });
   autoplay.addEventListener('change', () => setPrefs({ ...getPrefs(), autoplay: autoplay.checked }));
 
-  const misses = missedCount();
-  root.append(
+  page.append(
     el(
       'section',
-      { class: 'sr-stats' },
+      { class: 'sr-hero' },
       el(
         'div',
-        { class: 'sr-stat-row' },
-        stat(`${done.length}/${content.lessons.length}`, 'lessons'),
-        stat(formatMs(totalMs), 'run time (sum of bests)'),
-        stat(done.length ? `${avg}%` : '—', 'first-try accuracy'),
+        { class: 'sr-hero-text' },
+        el('p', { class: 'sr-eyebrow' }, 'Castellano → Català'),
+        el('h1', { class: 'sr-title' }, 'From Castellano to C1, by the shortest route.'),
+        el(
+          'p',
+          { class: 'sr-lede' },
+          'Five-minute written drills on the verbs, pronouns and structures that carry most of real Catalan. ' +
+            'No topic lists.',
+        ),
+        el(
+          'div',
+          { class: 'sr-actions' },
+          next
+            ? iconButton(
+                `${done.length ? 'Continue' : 'Start'} · ${next.id.toUpperCase()} ${next.title}`,
+                ICONS.play,
+                () => renderIntro(root, nav, next),
+                'sr-btn primary',
+              )
+            : el('span', { class: 'sr-complete' }, 'Run complete. Beat your splits.'),
+          misses > 0
+            ? iconButton(`Review mistakes · ${misses}`, ICONS.refresh, () => startReview(root, nav), 'sr-btn')
+            : null,
+        ),
       ),
       el(
         'div',
-        { class: 'row' },
-        next
-          ? button(`▶ ${done.length ? 'Continue' : 'Start'}: ${next.id.toUpperCase()} ${next.title}`, () =>
-              renderIntro(root, nav, next),
-            'btn primary')
-          : el('span', { class: 'done' }, 'Run complete. Beat your splits or clear the review deck.'),
-        misses > 0
-          ? button(`Review mistakes (${misses})`, () => startReview(root, nav))
-          : null,
-      ),
-      el(
-        'label',
-        { class: 'checkbox' },
-        autoplay,
-        el('span', {}, 'Auto-play the Catalan answer after each check'),
+        { class: 'sr-hero-stats' },
+        stat(`${done.length}/${content.lessons.length}`, 'Lessons'),
+        stat(formatMs(totalMs), 'Run time'),
+        stat(done.length ? `${avg}%` : '—', 'First try'),
       ),
     ),
   );
+
+  const banners = el('div', { class: 'sr-banners' });
+  if (content.unreviewed.size > 0) {
+    banners.append(
+      el(
+        'div',
+        { class: 'sr-banner' },
+        `Content not yet reviewed by a Catalan speaker (${[...content.unreviewed].join(', ')}). ` +
+          'It follows the IEC norm for Central Catalan.',
+      ),
+    );
+  }
+  const notice = audioNotice();
+  if (notice) banners.append(notice);
+  void voicesReady().then(() => {
+    // The browser voice list arrives late; drop the notice once it does.
+    if (notice && !audioNotice()) notice.remove();
+  });
+  page.append(banners);
 
   for (const level of SPEEDRUN_LEVELS) {
     const lessons = content.byLevel[level];
     if (lessons.length === 0) continue;
     const levelDone = lessons.filter((l) => records[l.id]).length;
     const info = LEVEL_INFO[level];
-    root.append(
+    page.append(
       el(
         'section',
         { class: 'sr-level' },
-        el('h2', {}, `${level} · ${info.name}`, el('span', { class: 'hint' }, `  ${levelDone}/${lessons.length}`)),
-        el('p', { class: 'hint' }, info.blurb),
+        el(
+          'div',
+          { class: 'sr-level-head' },
+          el('span', { class: 'sr-level-tag' }, level),
+          el('div', { class: 'sr-level-text' }, el('h2', {}, info.name), el('p', {}, info.blurb)),
+          el('div', { class: 'sr-level-progress' }, el('span', {}, `${levelDone}/${lessons.length}`), meter(levelDone / lessons.length)),
+        ),
         el(
           'div',
           { class: 'sr-grid' },
@@ -241,13 +347,18 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav): void {
             const rec = records[lesson.id];
             const card = el(
               'button',
-              { class: `sr-card ${rec ? 'cleared' : ''} ${lesson === next ? 'next' : ''}`, type: 'button' },
-              el('span', { class: 'sr-num' }, lesson.id.slice(3)),
-              el('span', { class: 'sr-title' }, lesson.title),
+              { class: `sr-card${rec ? ' cleared' : ''}${lesson === next ? ' next' : ''}`, type: 'button' },
               el(
                 'span',
-                { class: 'sr-best' },
-                rec ? `✓ ${formatMs(rec.bestMs)} · ${Math.round(rec.bestScore * 100)}%` : `${lesson.items.length} items`,
+                { class: 'sr-card-top' },
+                el('span', { class: 'sr-num' }, lesson.id.slice(3)),
+                rec ? el('span', { class: 'sr-tick' }, icon(ICONS.check, 14)) : null,
+              ),
+              el('span', { class: 'sr-card-title' }, lesson.title),
+              el(
+                'span',
+                { class: 'sr-card-meta' },
+                rec ? `${formatMs(rec.bestMs)} · ${Math.round(rec.bestScore * 100)}%` : `${lesson.items.length} items`,
               ),
             );
             card.addEventListener('click', () => renderIntro(root, nav, lesson));
@@ -258,76 +369,91 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav): void {
     );
   }
 
-  root.append(
+  page.append(
     el(
-      'div',
-      { class: 'row sr-footer' },
+      'footer',
+      { class: 'sr-footer' },
+      el('label', { class: 'sr-toggle' }, autoplay, el('span', {}, 'Auto-play the answer after each check')),
       button('Reset progress', () => {
         if (confirm('Clear all Speedrun progress, best times and the review deck?')) {
           resetProgress();
           renderSpeedrun(root, nav);
         }
-      }, 'btn tiny'),
+      }, 'sr-btn ghost small'),
     ),
   );
-}
-
-function stat(value: string, label: string): HTMLElement {
-  return el('div', { class: 'sr-stat' }, el('strong', {}, value), el('span', { class: 'hint' }, label));
 }
 
 /* ---------- intro ---------- */
 
 function renderIntro(root: HTMLElement, nav: SpeedrunNav, lesson: SpeedrunLesson): void {
   resetView(root);
-  header(root, nav, `${lesson.level} · ${lesson.id.toUpperCase()}`, () => renderSpeedrun(root, nav));
+  const toMap = () => renderSpeedrun(root, nav);
+  topbar(root, nav, { label: `${lesson.level} · ${lesson.id.slice(3)}`, back: toMap });
 
-  const start = button('▶ Start', () => runSession(root, nav, lessonEntries(lesson), lesson), 'btn primary');
+  const begin = () => runSession(root, nav, lessonEntries(lesson), lesson);
+  const start = iconButton('Start', ICONS.play, begin, 'sr-btn primary');
+  onKey((ev) => {
+    if (ev.key === 'Escape') toMap();
+  });
 
   root.append(
     el(
       'main',
-      { class: 'stage sr-intro' },
-      el('h2', {}, lesson.title),
-      el('p', { class: 'cue' }, lesson.goal),
-      rich(lesson.note),
-      ...(lesson.tables ?? []).map((t) =>
-        el(
-          'div',
-          { class: 'sr-table-wrap' },
-          el('h4', {}, t.title),
-          el(
-            'table',
-            { class: 'sr-table' },
-            t.cols ? el('thead', {}, el('tr', {}, ...t.cols.map((c) => el('th', {}, c)))) : null,
-            el(
-              'tbody',
-              {},
-              ...t.rows.map((row) =>
-                el('tr', {}, el('th', {}, row[0] ?? ''), ...row.slice(1).map(catalanCell)),
-              ),
-            ),
-          ),
-        ),
+      { class: 'sr-page sr-intro' },
+      el(
+        'header',
+        { class: 'sr-intro-head' },
+        el('p', { class: 'sr-eyebrow' }, `${lesson.level} · Lesson ${lesson.id.slice(3)} · ${lesson.items.length} items`),
+        el('h1', { class: 'sr-title' }, lesson.title),
+        el('p', { class: 'sr-lede' }, lesson.goal),
       ),
-      lesson.vocab?.length
+      rich(lesson.note),
+      lesson.tables?.length
         ? el(
             'div',
-            {},
-            el('h4', {}, 'Core words'),
+            { class: 'sr-tables' },
+            ...lesson.tables.map((t) =>
+              el(
+                'figure',
+                { class: 'sr-table-card' },
+                el('figcaption', {}, t.title),
+                el(
+                  'table',
+                  { class: 'sr-table' },
+                  t.cols ? el('thead', {}, el('tr', {}, ...t.cols.map((c) => el('th', {}, c)))) : null,
+                  el(
+                    'tbody',
+                    {},
+                    ...t.rows.map((row) => el('tr', {}, el('th', {}, row[0] ?? ''), ...row.slice(1).map(catalanCell))),
+                  ),
+                ),
+              ),
+            ),
+          )
+        : null,
+      lesson.vocab?.length
+        ? el(
+            'section',
+            { class: 'sr-vocab' },
+            el('h2', { class: 'sr-section-label' }, 'Core words'),
             el(
               'div',
-              { class: 'chips' },
+              { class: 'sr-vocab-list' },
               ...lesson.vocab.map(([ca, es]) => {
-                const chip = el('button', { class: 'chip sr-vocab', type: 'button' }, el('strong', {}, ca), ` ${es}`);
+                const chip = el('button', { class: 'sr-word', type: 'button', title: 'Listen' }, el('span', { class: 'sr-word-ca' }, ca), el('span', { class: 'sr-word-es' }, es));
                 chip.addEventListener('click', () => void speak(ca));
                 return chip;
               }),
             ),
           )
         : null,
-      el('p', { class: 'hint' }, 'Tip: click any Catalan word in the tables to hear it.'),
-      el('div', { class: 'row' }, start),
+      el(
+        'div',
+        { class: 'sr-intro-foot' },
+        start,
+        el('span', { class: 'sr-keys' }, kbd('Enter'), ' start', kbd('Esc'), ' map', ' · Catalan in tables plays on click'),
+      ),
     ),
   );
   start.focus();
@@ -356,7 +482,7 @@ function startReview(root: HTMLElement, nav: SpeedrunNav): void {
   runSession(root, nav, entries, null);
 }
 
-const ACCENT_KEYS = ['à', 'è', 'é', 'í', 'ï', 'ò', 'ó', 'ú', 'ü', 'ç', 'l·l', "'"];
+const ACCENT_KEYS = ['à', 'è', 'é', 'í', 'ï', 'ò', 'ó', 'ú', 'ü', 'ç', 'l·l', '·'];
 
 function runSession(
   root: HTMLElement,
@@ -366,7 +492,6 @@ function runSession(
 ): void {
   resetView(root);
   const backToMap = () => renderSpeedrun(root, nav);
-  header(root, nav, lesson ? `${lesson.level} · ${lesson.title}` : 'Review deck', backToMap);
 
   const queue = [...entries];
   const firstTry = new Map<string, boolean>();
@@ -375,42 +500,63 @@ function runSession(
   const key = (e: Entry) => `${e.lessonId}#${e.index}`;
   const unique = new Set(entries.map(key)).size;
 
-  const bar = el('div', { class: 'sr-bar-fill' });
+  const fill = el('span', { class: 'sr-progress-fill' });
   const timer = el('span', { class: 'sr-timer' }, '0:00');
-  const counter = el('span', { class: 'hint' });
+  const counter = el('span', { class: 'sr-counter' });
   const tick = setInterval(() => {
     timer.textContent = formatMs(Date.now() - started);
   }, 500);
   cleanups.push(() => clearInterval(tick));
 
-  const stage = el('main', { class: 'stage sr-drill' });
+  const quit = el('button', { class: 'sr-icon-btn', type: 'button', title: 'Back to map (Esc)' }, icon(ICONS.close, 18));
+  quit.addEventListener('click', backToMap);
+
   root.append(
-    el('div', { class: 'sr-topbar' }, el('div', { class: 'sr-bar' }, bar), counter, timer),
-    stage,
+    el(
+      'header',
+      { class: 'sr-drill-top' },
+      quit,
+      el('span', { class: 'sr-progress' }, fill),
+      counter,
+      timer,
+    ),
   );
+  const stage = el('main', { class: 'sr-drill' });
+  root.append(stage);
+
+  // Shortcuts: Esc leaves; L / S replay the answer once it is shown.
+  let replay: ((slow: boolean) => void) | null = null;
+  onKey((ev) => {
+    if (ev.key === 'Escape') return backToMap();
+    if (!replay || ev.metaKey || ev.ctrlKey || ev.altKey) return;
+    if (ev.key === 'l' || ev.key === 'L') replay(false);
+    if (ev.key === 's' || ev.key === 'S') replay(true);
+  });
 
   const updateBar = () => {
     const cleared = [...firstTry.keys()].filter((k) => !queue.some((e) => key(e) === k)).length;
-    bar.style.width = `${(cleared / unique) * 100}%`;
-    counter.textContent = `${cleared}/${unique}`;
+    fill.style.width = `${(cleared / unique) * 100}%`;
+    counter.textContent = `${cleared} / ${unique}`;
   };
 
   const showItem = () => {
     updateBar();
+    replay = null;
     const entry = queue[0];
     if (!entry) return finish();
     const [es, pattern, hint] = entry.item;
     clear(stage);
 
     const input = el('input', {
-      class: 'input sr-input',
+      class: 'sr-input',
       type: 'text',
       autocomplete: 'off',
       spellcheck: false,
-      placeholder: 'Escriu-ho en català…',
+      placeholder: 'Escriu-ho en català',
     });
     input.setAttribute('autocapitalize', 'off');
     input.setAttribute('lang', 'ca');
+    input.setAttribute('aria-label', 'Your Catalan translation');
 
     const accentBar = el(
       'div',
@@ -422,30 +568,40 @@ function runSession(
           input.value = input.value.slice(0, s) + ch + input.value.slice(t);
           input.focus();
           input.setSelectionRange(s + ch.length, s + ch.length);
-        }, 'btn tiny');
+        }, 'sr-key');
         b.tabIndex = -1;
         return b;
       }),
     );
 
-    const feedback = el('div', { class: 'sr-feedback' });
-    const checkBtn = el('button', { class: 'btn primary', type: 'submit' }, 'Check');
-    const giveUp = button("Don't know", () => resolve(null));
-    const form = el('form', { class: 'sr-form' }, input, accentBar, el('div', { class: 'row' }, checkBtn, giveUp));
+    const feedback = el('div', { class: 'sr-feedback', role: 'status' });
+    const checkBtn = el('button', { class: 'sr-btn primary', type: 'submit' }, 'Check');
+    const giveUp = button('Show answer', () => resolve(null), 'sr-btn ghost');
+    const actions = el(
+      'div',
+      { class: 'sr-drill-actions' },
+      checkBtn,
+      giveUp,
+      el('span', { class: 'sr-keys' }, kbd('Enter'), ' check', kbd('Esc'), ' map'),
+    );
+    const form = el('form', { class: 'sr-form' }, input, accentBar, actions);
     let answered = false;
 
     form.addEventListener('submit', (ev) => {
       ev.preventDefault();
-      if (answered) return;
-      if (!input.value.trim()) return;
+      if (answered || !input.value.trim()) return;
       resolve(checkAnswer(pattern, input.value));
     });
 
     stage.append(
-      el('p', { class: 'hint' }, lesson ? 'Translate into Catalan' : `From ${entry.lessonId.toUpperCase()}`),
-      el('h2', { class: 'sr-prompt' }, es),
-      ...(hint ? [el('p', { class: 'sr-hint' }, hint)] : []),
-      form,
+      el(
+        'section',
+        { class: 'sr-card-prompt' },
+        el('p', { class: 'sr-eyebrow' }, lesson ? 'Translate into Catalan' : `Review · from ${entry.lessonId.toUpperCase()}`),
+        el('h1', { class: 'sr-prompt' }, es),
+        ...(hint ? [el('p', { class: 'sr-hint' }, hint)] : []),
+        form,
+      ),
       feedback,
     );
     input.focus();
@@ -453,9 +609,8 @@ function runSession(
     const resolve = (result: CheckResult | null) => {
       answered = true;
       input.disabled = true;
-      checkBtn.disabled = true;
-      giveUp.disabled = true;
       accentBar.remove();
+      actions.remove();
 
       const k = key(entry);
       const correct = result !== null && result.verdict !== 'wrong';
@@ -470,10 +625,19 @@ function runSession(
       if (!correct) queue.splice(Math.min(REQUEUE_GAP, queue.length), 0, entry);
 
       const answer = result?.target ?? canonical(pattern);
-      feedback.append(renderFeedback(result, pattern, input.value));
-      const next = button(queue.length ? 'Continue →' : 'Finish →', showItem, 'btn primary');
+      replay = (slow) => void speak(answer, slow);
+      const next = iconButton(queue.length ? 'Continue' : 'Finish', ICONS.arrow, showItem, 'sr-btn primary');
+      feedback.className = `sr-feedback ${verdictClass(result)}`;
       feedback.append(
-        el('div', { class: 'row' }, listen(answer, '🔊 Listen'), listen(answer, '🐢 Slow', true), next),
+        renderFeedback(result, pattern, input.value),
+        el(
+          'div',
+          { class: 'sr-drill-actions' },
+          next,
+          listenButton(answer),
+          listenButton(answer, true),
+          el('span', { class: 'sr-keys' }, kbd('Enter'), ' next', kbd('L'), ' listen', kbd('S'), ' slow'),
+        ),
       );
       next.focus();
       if (getPrefs().autoplay) void speak(answer);
@@ -482,6 +646,7 @@ function runSession(
 
   const finish = () => {
     clearInterval(tick);
+    replay = null;
     const ms = Date.now() - started;
     const hits = [...firstTry.values()].filter(Boolean).length;
     const score = unique ? hits / unique : 0;
@@ -490,29 +655,35 @@ function runSession(
     const rec = lesson ? recordLesson(lesson.id, ms, score) : null;
     const content = loadSpeedrun();
     const nextLesson = lesson ? content.lessons[content.lessons.indexOf(lesson) + 1] : undefined;
+    const newBest = rec !== null && rec.runs > 1 && rec.bestMs === ms;
 
     const nextBtn = nextLesson
-      ? button(`▶ Next: ${nextLesson.title}`, () => renderIntro(root, nav, nextLesson), 'btn primary')
-      : button('Back to map', backToMap, 'btn primary');
+      ? iconButton(`Next · ${nextLesson.title}`, ICONS.arrow, () => renderIntro(root, nav, nextLesson), 'sr-btn primary')
+      : iconButton('Back to map', ICONS.back, backToMap, 'sr-btn primary');
 
     stage.append(
-      el('h2', {}, lesson ? 'Lesson cleared' : 'Review done'),
       el(
-        'div',
-        { class: 'sr-stat-row' },
-        stat(formatMs(ms), rec && rec.bestMs === ms && rec.runs > 1 ? 'new best!' : 'time'),
-        stat(`${Math.round(score * 100)}%`, 'first try'),
-        stat(String(slips), 'spelling slips'),
-      ),
-      ...(rec
-        ? [el('p', { class: 'hint' }, `Best: ${formatMs(rec.bestMs)} · ${Math.round(rec.bestScore * 100)}% · runs: ${rec.runs}`)]
-        : []),
-      el(
-        'div',
-        { class: 'row' },
-        nextBtn,
-        lesson ? button('Retry', () => runSession(root, nav, lessonEntries(lesson), lesson)) : null,
-        lesson && nextLesson ? button('Map', backToMap) : null,
+        'section',
+        { class: 'sr-summary' },
+        el('p', { class: 'sr-eyebrow' }, lesson ? `${lesson.level} · ${lesson.title}` : 'Review deck'),
+        el('h1', { class: 'sr-title' }, lesson ? (newBest ? 'New best.' : 'Lesson complete.') : 'Review complete.'),
+        el(
+          'div',
+          { class: 'sr-hero-stats' },
+          stat(formatMs(ms), 'Time'),
+          stat(`${Math.round(score * 100)}%`, 'First try'),
+          stat(String(slips), 'Spelling slips'),
+        ),
+        ...(rec
+          ? [el('p', { class: 'sr-muted' }, `Personal best ${formatMs(rec.bestMs)} · ${Math.round(rec.bestScore * 100)}% · ${rec.runs} ${rec.runs === 1 ? 'run' : 'runs'}`)]
+          : []),
+        el(
+          'div',
+          { class: 'sr-actions' },
+          nextBtn,
+          lesson ? iconButton('Retry', ICONS.refresh, () => runSession(root, nav, lessonEntries(lesson), lesson), 'sr-btn') : null,
+          lesson && nextLesson ? button('Map', backToMap, 'sr-btn ghost') : null,
+        ),
       ),
     );
     nextBtn.focus();
@@ -521,41 +692,42 @@ function runSession(
   showItem();
 }
 
+function verdictClass(result: CheckResult | null): string {
+  if (result === null) return 'is-reveal';
+  return result.verdict === 'exact' ? 'is-pass' : result.verdict === 'spelling' ? 'is-slip' : 'is-fail';
+}
+
 function renderFeedback(result: CheckResult | null, pattern: string, typed: string): HTMLElement {
-  const box = el('div', {});
+  const box = el('div', { class: 'sr-feedback-body' });
+  const status = (text: string, withIcon?: string[]) =>
+    el('p', { class: 'sr-status' }, withIcon ? icon(withIcon, 16) : null, el('span', {}, text));
   const words = (r: CheckResult) =>
     el(
       'p',
-      { class: 'sr-answer' },
+      { class: 'sr-answer', lang: 'ca' },
       ...r.marks.flatMap((m, i) => [
         i > 0 ? ' ' : '',
-        m.mark === 'ok' ? m.word : el('span', { class: `sr-mark-${m.mark}` }, m.word),
+        m.mark === 'ok' ? m.word : el('mark', { class: `sr-mark-${m.mark}` }, m.word),
       ]),
     );
 
   if (result === null) {
-    box.append(
-      el('p', { class: 'reveal' }, 'Here it is — it comes back in a moment.'),
-      el('p', { class: 'sr-answer' }, canonical(pattern)),
-    );
+    box.append(status('Answer — it comes back in a moment'), el('p', { class: 'sr-answer', lang: 'ca' }, canonical(pattern)));
   } else if (result.verdict === 'exact') {
-    box.append(el('p', { class: 'pass' }, '✓ Correct'), el('p', { class: 'sr-answer' }, result.target));
+    box.append(status('Correct', ICONS.check), el('p', { class: 'sr-answer', lang: 'ca' }, result.target));
   } else if (result.verdict === 'spelling') {
-    box.append(
-      el('p', { class: 'sr-slip' }, '≈ Right words — check the spelling (accents, ç, l·l, hyphens)'),
-      words(result),
-    );
+    box.append(status('Right words — check the spelling'), words(result));
   } else {
     box.append(
-      el('p', { class: 'fail' }, '✗ Not quite — it comes back in a moment'),
+      status('Not quite — it comes back in a moment', ICONS.close),
+      words(result),
       el(
         'p',
-        { class: 'hint' },
-        'You wrote: ',
+        { class: 'sr-muted' },
+        'You wrote ',
         el('span', { class: 'sr-typed' }, typed),
-        result.extra.length ? el('span', {}, ` · extra: `, el('span', { class: 'strike' }, result.extra.join(' '))) : null,
+        ...(result.extra.length ? [' · extra ', el('s', {}, result.extra.join(' '))] : []),
       ),
-      words(result),
     );
   }
 
@@ -571,7 +743,7 @@ function renderFeedback(result: CheckResult | null, pattern: string, typed: stri
     })
     .slice(0, 3);
   if (others.length) {
-    box.append(el('p', { class: 'hint' }, `Also accepted: ${others.join(' · ')}`));
+    box.append(el('p', { class: 'sr-muted' }, 'Also accepted: ', el('span', { lang: 'ca' }, others.join(' · '))));
   }
   return box;
 }
