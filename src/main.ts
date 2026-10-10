@@ -36,13 +36,14 @@ function header(subtitle?: string): HTMLElement {
     { class: 'app-header' },
     el('h1', {}, 'Conversation Trainer — Catalan'),
     subtitle ? el('p', { class: 'subtitle' }, subtitle) : null,
-    button('Speedrun', openSpeedrun),
+    button('Speedrun', () => openSpeedrun()),
     button('Settings', () => openSettings(renderUnitList)),
   );
 }
 
 /** The written Castellano → Catalan speedrun. Lives at #speedrun so a reload stays there. */
-function openSpeedrun(): void {
+function openSpeedrun(incomingSync?: string): void {
+  // Replacing the hash also drops any #sync= code, so a reload can't re-import it.
   if (location.hash !== '#speedrun') history.replaceState(null, '', '#speedrun');
   renderSpeedrun(root!, {
     onExit: () => {
@@ -51,7 +52,7 @@ function openSpeedrun(): void {
       renderUnitList();
     },
     onSettings: (back) => openSettings(back),
-  });
+  }, incomingSync);
 }
 
 function renderUnitList(): void {
@@ -83,7 +84,7 @@ function renderUnitList(): void {
             'Works without keys using the browser voice.',
         ),
       ),
-      button('Open', openSpeedrun, 'btn primary'),
+      button('Open', () => openSpeedrun(), 'btn primary'),
     ),
   );
 
@@ -178,10 +179,15 @@ function runPhase(unit: Unit, phase: Phase, turns: LearnerTurnLog[] = []): void 
 }
 
 registerServiceWorker();
+// A sync link opened while the app is already loaded only changes the hash.
+window.addEventListener('hashchange', () => {
+  if (location.hash.startsWith('#sync=')) openSpeedrun(location.hash.slice('#sync='.length));
+});
 loadRemembered();
-if (location.hash === '#speedrun') {
+const incomingSync = location.hash.startsWith('#sync=') ? location.hash.slice('#sync='.length) : undefined;
+if (location.hash === '#speedrun' || incomingSync) {
   // The speedrun works without keys (browser voice), so no settings prompt.
-  openSpeedrun();
+  openSpeedrun(incomingSync);
 } else {
   renderUnitList();
   if (!hasElevenLabsKey()) openSettings(renderUnitList);

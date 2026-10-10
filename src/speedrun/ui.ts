@@ -22,12 +22,14 @@ import {
   formatMs,
   getPrefs,
   importProgress,
+  mergeProgress,
   recordAnswer,
   recordLesson,
   resetProgress,
   setPrefs,
 } from './progress';
 import { planToday, shuffle } from './srs';
+import { decodeSync, encodeSync } from './sync';
 import {
   hasBrowserCatalanVoice,
   lastSpeechError,
@@ -242,8 +244,9 @@ function meter(fraction: number): HTMLElement {
 
 /* ---------- map ---------- */
 
-export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav): void {
+export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync?: string): void {
   resetView(root);
+  if (incomingSync) queueMicrotask(() => void receiveSync(root, nav, incomingSync));
   const content = loadSpeedrun();
   const records = allLessonRecords();
   topbar(root, nav);
@@ -405,6 +408,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav): void {
       el(
         'div',
         { class: 'sr-footer-actions' },
+        button('Sync devices', () => openSyncPanel(root, nav), 'sr-btn ghost small'),
         button('Export progress', () => downloadProgress(), 'sr-btn ghost small'),
         button('Import progress', () => pickProgressFile(root, nav, banners), 'sr-btn ghost small'),
         button('Reset progress', () => {
@@ -416,6 +420,132 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav): void {
       ),
     ),
   );
+}
+
+/* ---------- sync ---------- */
+
+function modal(...children: (Node | null)[]): { overlay: HTMLElement; close: () => void } {
+  const overlay = el('div', { class: 'overlay sr-overlay' });
+  const close = () => overlay.remove();
+  overlay.addEventListener('click', (ev) => {
+    if (ev.target === overlay) close();
+  });
+  overlay.append(el('div', { class: 'modal sr-modal', role: 'dialog' }, ...children));
+  document.body.append(overlay);
+  return { overlay, close };
+}
+
+async function syncLink(): Promise<string> {
+  const code = await encodeSync(allLessonRecords(), allCards());
+  return `${location.origin}${location.pathname}#sync=${code}`;
+}
+
+function openSyncPanel(root: HTMLElement, nav: SpeedrunNav): void {
+  const status = el('p', { class: 'sr-muted', role: 'status' });
+  const manual = el('textarea', { class: 'sr-code', readOnly: true, rows: 3 });
+  manual.hidden = true;
+
+  const copy = async () => {
+    const url = await syncLink();
+    try {
+      await navigator.clipboard.writeText(url);
+      status.textContent = 'Link copied. Paste it on your other device, or into a note or message to yourself.';
+    } catch {
+      // No clipboard access (older browsers, insecure context): let the person copy it by hand.
+      manual.value = url;
+      manual.hidden = false;
+      manual.select();
+      status.textContent = 'Copy this link:';
+    }
+  };
+  const share = async () => {
+    const url = await syncLink();
+    try {
+      await navigator.share({ title: 'Catalan Speedrun progress', text: 'Open this on your other device to sync progress.', url });
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') return;
+      await copy();
+    }
+  };
+
+  const paste = el('textarea', { class: 'sr-code', rows: 3, placeholder: 'Paste a sync link or code here' });
+  let close = () => {};
+  const merge = button('Merge into this device', () => {
+    close();
+    void receiveSync(root, nav, paste.value);
+  }, 'sr-btn primary');
+
+  ({ close } = modal(
+    el('h2', { class: 'sr-modal-title' }, 'Sync devices'),
+    el(
+      'p',
+      { class: 'sr-muted' },
+      'Your progress travels inside a link — no account, no server. Send it from this device any way you like: ' +
+        'AirDrop, Messages or email to yourself, Notes, or copy and paste. Opening it on the other device merges ' +
+        'the two, keeping the newest state of every item. To end up identical, sync once in each direction.',
+    ),
+    el('h3', { class: 'sr-section-label' }, 'Send from this device'),
+    el(
+      'div',
+      { class: 'sr-actions' },
+      'share' in navigator ? iconButton('Share link', ICONS.arrow, () => void share(), 'sr-btn primary') : null,
+      button('Copy link', () => void copy(), 'share' in navigator ? 'sr-btn' : 'sr-btn primary'),
+    ),
+    status,
+    manual,
+    el('h3', { class: 'sr-section-label' }, 'Receive on this device'),
+    el(
+      'p',
+      { class: 'sr-muted' },
+      'Opening a sync link does this automatically. If the link opened in a browser instead of the installed app ' +
+        '(common on iPhone), copy it and paste it here.',
+    ),
+    paste,
+    el('div', { class: 'sr-actions' }, merge, button('Close', () => close(), 'sr-btn ghost')),
+  ));
+}
+
+async function receiveSync(root: HTMLElement, nav: SpeedrunNav, input: string): Promise<void> {
+  let payload: Awaited<ReturnType<typeof decodeSync>>;
+  try {
+    payload = await decodeSync(input);
+  } catch (err) {
+    const { close } = modal(
+      el('h2', { class: 'sr-modal-title' }, 'Couldn’t read that link'),
+      el('p', { class: 'sr-muted' }, err instanceof Error ? err.message : String(err)),
+      el('div', { class: 'sr-actions' }, button('Close', () => close(), 'sr-btn primary')),
+    );
+    return;
+  }
+  const lessons = Object.keys(payload.lessons).length;
+  const when = new Date(payload.createdAt).toLocaleDateString(undefined, { day: 'numeric', month: 'long' });
+  let close = () => {};
+  const accept = button('Merge', () => {
+    const result = mergeProgress(payload);
+    close();
+    renderSpeedrun(root, nav);
+    const done = modal(
+      el('h2', { class: 'sr-modal-title' }, 'Synced.'),
+      el(
+        'p',
+        { class: 'sr-muted' },
+        `${result.lessons} lesson ${result.lessons === 1 ? 'record' : 'records'} and ${result.cards} ` +
+          `review ${result.cards === 1 ? 'item' : 'items'} updated on this device.`,
+      ),
+      el('div', { class: 'sr-actions' }, button('Done', () => done.close(), 'sr-btn primary')),
+    );
+  }, 'sr-btn primary');
+  ({ close } = modal(
+    el('h2', { class: 'sr-modal-title' }, 'Merge progress from another device?'),
+    el(
+      'p',
+      { class: 'sr-muted' },
+      `Sent on ${when}: ${lessons} ${lessons === 1 ? 'lesson' : 'lessons'} and ${payload.cards.length} review ` +
+        `${payload.cards.length === 1 ? 'item' : 'items'}. Nothing is lost: for each item, the most recent answer wins.`,
+    ),
+    el('div', { class: 'sr-actions' }, accept, button('Cancel', () => close(), 'sr-btn ghost')),
+  ));
+  accept.focus();
 }
 
 function downloadProgress(): void {

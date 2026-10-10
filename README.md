@@ -51,9 +51,15 @@ Before practising, replace the `REPLACE_WITH_VOICE_ID` placeholders in
   Spoken Content → Voices → Català (Montse or Jordi). Android: Settings →
   Text-to-speech → Google → install Català. Windows: Settings → Time & language
   → Speech → add Catalan.
-- **Your progress lives on one device**, in the browser. Use *Export progress*
-  (bottom of the map) now and then, and *Import progress* to move it to a new
-  phone or restore it.
+- **Sync between phone and PC, no account.** *Sync devices* (bottom of the
+  map) packs your progress into a link. Send it however you like — AirDrop,
+  Messages or email to yourself, Notes, copy-paste — and open it on the other
+  device: it merges, keeping the newest state of every item. Sync once in each
+  direction to make both identical. On iPhone a link may open in Safari rather
+  than the home-screen app (they keep separate storage); paste it into the
+  *Receive* box instead.
+- **Backups.** *Export progress* saves a file; *Import progress* replaces
+  this device's progress with one.
 - **Deploys automatically** from `main` (`.github/workflows/deploy.yml`: test,
   build with the Pages base path, publish).
 
