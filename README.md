@@ -46,11 +46,11 @@ the core verbs in every tense, weak pronouns, function words, connectors and
 the most frequent nouns and adverbs. Open it with **Speedrun** in the
 header, or go to `/#speedrun`. It needs no keys.
 
-**101 bite-sized lessons**, about five minutes each:
+**103 bite-sized lessons**, about five minutes each:
 
 | Level | Lessons | Focus |
 | --- | --- | --- |
-| A2 | 32 | conversation glue, core nouns, ser/estar/tenir, the -ar/-re/-ir families, fer/anar/poder/voler/saber/venir/dir/veure, both pasts, imperfect, future, haver de / cal, imperative |
+| A2 | 34 | conversation glue, core nouns, cognate rules, gender flips, ser/estar/tenir, the -ar/-re/-ir families, fer/anar/poder/voler/saber/venir/dir/veure, both pasts, imperfect, future, haver de / cal, imperative |
 | B1 | 30 | weak pronouns (el, li, en, hi, ho and their pairs), anar-se'n, conditional, present subjunctive, por/para, core verb forms, tot/mateix/algun, frequent prepositions, Castilianisms, verbs that diverge |
 | B2 | 21 | imperfect subjunctive, si-clauses, compound moods, deure, periphrases, Castellano *lo*, en + infinitive, prepositions that drop or change, idiomatic verbs |
 | C1 | 18 | passat simple, formal register, el qual, pronoun clusters and dislocation, high-frequency adverbs, common idioms, subtle Castilianisms, academic writing |
