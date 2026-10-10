@@ -22,6 +22,8 @@ export interface SrsCard {
   /** Epoch ms when the card is next due. */
   due: number;
   lapses: number;
+  /** Epoch ms of the last answer; lets two devices' progress merge newest-first. */
+  last?: number;
 }
 
 export function startOfDay(t: number): number {
@@ -34,14 +36,14 @@ const dueIn = (days: number, now: number): number => startOfDay(now) + days * DA
 
 /** First sighting of an item, in a lesson: it enters the ladder at the bottom. */
 export function enroll(lessonId: string, index: number, correct: boolean, now: number): SrsCard {
-  return { lessonId, index, step: 0, due: dueIn(INTERVALS[0]!, now), lapses: correct ? 0 : 1 };
+  return { lessonId, index, step: 0, due: dueIn(INTERVALS[0]!, now), lapses: correct ? 0 : 1, last: now };
 }
 
 /** A first-try answer in review: climb one step, or drop to the bottom. */
 export function review(card: SrsCard, correct: boolean, now: number): SrsCard {
-  if (!correct) return { ...card, step: 0, due: dueIn(INTERVALS[0]!, now), lapses: card.lapses + 1 };
+  if (!correct) return { ...card, step: 0, due: dueIn(INTERVALS[0]!, now), lapses: card.lapses + 1, last: now };
   const step = Math.min(card.step + 1, INTERVALS.length - 1);
-  return { ...card, step, due: dueIn(INTERVALS[step]!, now) };
+  return { ...card, step, due: dueIn(INTERVALS[step]!, now), last: now };
 }
 
 export const isDue = (card: SrsCard, now: number): boolean => card.due <= now;

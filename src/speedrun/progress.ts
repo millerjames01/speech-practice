@@ -6,6 +6,7 @@
  */
 
 import { LONG_TERM_STEP, enroll, isDue, review, type SrsCard } from './srs';
+import { mergeLessons, newerCard, type SyncPayload } from './sync';
 
 const KEY = 'sr.progress.v1';
 
@@ -172,6 +173,27 @@ export function importProgress(text: string): { lessons: number; cards: number }
     prefs: { ...empty().prefs, ...(prefs as Partial<Prefs>) },
   });
   return { lessons: Object.keys(lessons).length, cards: Object.keys(cards).length };
+}
+
+/** Merges another device's progress into this one, newest state of every item wins. */
+export function mergeProgress(incoming: Pick<SyncPayload, 'lessons' | 'cards'>): { lessons: number; cards: number } {
+  const store = read();
+  let lessons = 0;
+  let cards = 0;
+  for (const [id, rec] of Object.entries(incoming.lessons)) {
+    const merged = mergeLessons(store.lessons[id], rec);
+    if (JSON.stringify(merged) !== JSON.stringify(store.lessons[id])) lessons += 1;
+    store.lessons[id] = merged;
+  }
+  for (const card of incoming.cards) {
+    const k = itemKey(card.lessonId, card.index);
+    const mine = store.cards[k];
+    const winner = mine ? newerCard(mine, card) : card;
+    if (winner !== mine) cards += 1;
+    store.cards[k] = winner;
+  }
+  write(store);
+  return { lessons, cards };
 }
 
 export function resetProgress(): void {

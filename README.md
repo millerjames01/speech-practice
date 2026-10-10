@@ -51,9 +51,20 @@ Before practising, replace the `REPLACE_WITH_VOICE_ID` placeholders in
   Spoken Content → Voices → Català (Montse or Jordi). Android: Settings →
   Text-to-speech → Google → install Català. Windows: Settings → Time & language
   → Speech → add Catalan.
-- **Your progress lives on one device**, in the browser. Use *Export progress*
-  (bottom of the map) now and then, and *Import progress* to move it to a new
-  phone or restore it.
+- **Sync between phone and PC, no account.** *Sync devices* (bottom of the
+  map) → *Get sync code* on one device shows a code like `AU4-DFN-HWN`; type it
+  under *Receive* on the other. Progress merges — for each item the newest
+  answer wins — so sync once in each direction to make both identical. Codes
+  live for 24 hours on [dpaste.com](https://dpaste.com), a free public paste
+  service that allows browser requests; they hold only lesson ids, scores and
+  review dates.
+  - *Offline or without a third party:* the same panel can put the progress
+    inside a link instead. Send it however you like (AirDrop, Messages, Notes)
+    and open it, or paste it, on the other device. On iPhone a link may open
+    in Safari rather than the home-screen app, which keeps separate storage;
+    paste it into the app there.
+- **Backups.** *Export progress* saves a file; *Import progress* replaces
+  this device's progress with one.
 - **Deploys automatically** from `main` (`.github/workflows/deploy.yml`: test,
   build with the Pages base path, publish).
 
