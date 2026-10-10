@@ -494,3 +494,42 @@ kbd {
 .sr-listen-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 4px 0 16px; }
 .sr-play { height: 48px; padding: 0 22px; font-size: 1rem; }
 .sr-prompt[hidden] { display: none; }
+
+/* ---------- Speedrun motion ----------
+ * Short, quiet and purely decorative: every element ends where it would be
+ * without animation, and reduced-motion users get none of it.
+ */
+@keyframes sr-enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes sr-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes sr-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes sr-nudge { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 60% { transform: translateX(3px); } }
+@keyframes sr-pop { 0% { transform: scale(0.6); opacity: 0; } 60% { transform: scale(1.15); opacity: 1; } 100% { transform: scale(1); } }
+
+body[data-mode="speedrun"] {
+  --sr-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.sr-hero-text, .sr-intro-head, .sr-summary { animation: sr-enter 0.36s var(--sr-ease) both; }
+.sr-hero-stats { animation: sr-fade 0.5s 0.08s var(--sr-ease) both; }
+.sr-banners, .sr-note, .sr-tables, .sr-vocab, .sr-intro-foot { animation: sr-enter 0.36s 0.06s var(--sr-ease) both; }
+.sr-level-head { animation: sr-fade 0.4s var(--sr-ease) both; }
+.sr-card { animation: sr-enter 0.32s calc(var(--i, 0) * 18ms) var(--sr-ease) both; }
+.sr-meter-fill { transform-origin: left center; animation: sr-grow 0.7s 0.15s var(--sr-ease) both; }
+.sr-summary .sr-stat { animation: sr-enter 0.4s var(--sr-ease) both; }
+.sr-summary .sr-stat:nth-child(2) { animation-delay: 0.06s; }
+.sr-summary .sr-stat:nth-child(3) { animation-delay: 0.12s; }
+
+.sr-card-prompt { animation: sr-enter 0.28s var(--sr-ease) both; }
+.sr-feedback { animation: sr-enter 0.24s var(--sr-ease) both; }
+.sr-feedback.is-fail { animation: sr-enter 0.24s var(--sr-ease) both, sr-nudge 0.32s 0.1s ease-in-out; }
+.sr-feedback.is-pass .sr-status svg { animation: sr-pop 0.36s var(--sr-ease) both; }
+.sr-answer mark { transition: color 0.2s; }
+.sr-tick svg { animation: sr-pop 0.4s 0.2s var(--sr-ease) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-mode="speedrun"] *,
+  body[data-mode="speedrun"] *::before,
+  body[data-mode="speedrun"] *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

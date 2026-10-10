@@ -361,7 +361,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav): void {
         el(
           'div',
           { class: 'sr-grid' },
-          ...lessons.map((lesson) => {
+          ...lessons.map((lesson, i) => {
             const rec = records[lesson.id];
             const card = el(
               'button',
@@ -379,6 +379,8 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav): void {
                 rec ? `${formatMs(rec.bestMs)} · ${Math.round(rec.bestScore * 100)}%` : `${lesson.items.length} items`,
               ),
             );
+            // Staggers the entrance animation; capped so long levels don't drag.
+            card.style.setProperty('--i', String(Math.min(i, 16)));
             card.addEventListener('click', () => renderIntro(root, nav, lesson));
             return card;
           }),
