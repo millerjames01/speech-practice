@@ -39,11 +39,18 @@ export function enroll(lessonId: string, index: number, correct: boolean, now: n
   return { lessonId, index, step: 0, due: dueIn(INTERVALS[0]!, now), lapses: correct ? 0 : 1, last: now };
 }
 
-/** A first-try answer in review: climb one step, or drop to the bottom. */
-export function review(card: SrsCard, correct: boolean, now: number): SrsCard {
+/**
+ * A first-try answer in review: climb one step, or drop to the bottom.
+ *
+ * Gaps of a week and longer are jittered ±15%, so a lesson's items, all
+ * learned on the same day, drift apart instead of returning as one block.
+ */
+export function review(card: SrsCard, correct: boolean, now: number, random: () => number = Math.random): SrsCard {
   if (!correct) return { ...card, step: 0, due: dueIn(INTERVALS[0]!, now), lapses: card.lapses + 1, last: now };
   const step = Math.min(card.step + 1, INTERVALS.length - 1);
-  return { ...card, step, due: dueIn(INTERVALS[step]!, now), last: now };
+  const base = INTERVALS[step]!;
+  const days = base >= 7 ? Math.max(1, Math.round(base * (0.85 + 0.3 * random()))) : base;
+  return { ...card, step, due: dueIn(days, now), last: now };
 }
 
 export const isDue = (card: SrsCard, now: number): boolean => card.due <= now;
@@ -55,20 +62,51 @@ export interface TodayPlan {
   overflow: number;
 }
 
+/** Days overdue plus three per past miss: the weakest items come first. */
+export const priority = (card: SrsCard, now: number): number =>
+  Math.max(0, (now - card.due) / DAY) + card.lapses * 3;
+
+/** Orders cards so consecutive ones come from different lessons, keeping each lesson's own order. */
+export function interleave(cards: SrsCard[]): SrsCard[] {
+  const byLesson = new Map<string, SrsCard[]>();
+  for (const c of cards) byLesson.set(c.lessonId, [...(byLesson.get(c.lessonId) ?? []), c]);
+  const queues = [...byLesson.values()];
+  const out: SrsCard[] = [];
+  while (out.length < cards.length) {
+    for (const q of queues) {
+      const next = q.shift();
+      if (next) out.push(next);
+    }
+  }
+  return out;
+}
+
 /**
- * Today's review: due cards (most overdue first, capped so a missed week does
- * not become a wall), plus a few not-yet-due cards from the lowest steps, so
- * the session interleaves material from different lessons.
+ * Today's mixed review: the weakest due cards first (capped, so a missed week
+ * does not become a wall), interleaved across lessons, plus a few not-yet-due
+ * cards from the lowest steps for variety.
  */
 export function planToday(
   cards: SrsCard[],
   now: number,
   { maxDue = 30, mix = 6, random = Math.random }: { maxDue?: number; mix?: number; random?: () => number } = {},
 ): TodayPlan {
-  const dueAll = cards.filter((c) => isDue(c, now)).sort((a, b) => a.due - b.due);
-  const due = dueAll.slice(0, maxDue);
+  const dueAll = cards.filter((c) => isDue(c, now)).sort((a, b) => priority(b, now) - priority(a, now));
+  const due = interleave(dueAll.slice(0, maxDue));
   const rest = shuffle(cards.filter((c) => !isDue(c, now)), random).sort((a, b) => a.step - b.step);
   return { due, mix: rest.slice(0, mix), overflow: dueAll.length - due.length };
+}
+
+/**
+ * One lesson's review: everything due in it, topped up with its weakest
+ * not-yet-due items, so a short targeted session always has something to do.
+ */
+export function planLessonReview(cards: SrsCard[], now: number, size = 8): TodayPlan {
+  const due = cards.filter((c) => isDue(c, now)).sort((a, b) => priority(b, now) - priority(a, now));
+  const weakest = cards
+    .filter((c) => !isDue(c, now))
+    .sort((a, b) => a.step - b.step || b.lapses - a.lapses || a.due - b.due);
+  return { due, mix: weakest.slice(0, Math.max(0, size - due.length)), overflow: 0 };
 }
 
 export function shuffle<T>(items: T[], random: () => number = Math.random): T[] {

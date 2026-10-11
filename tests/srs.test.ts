@@ -16,11 +16,20 @@ describe('scheduling', () => {
     let c = enroll('a2-01', 0, true, NOW);
     const steps: number[] = [];
     for (let i = 0; i < 8; i += 1) {
-      c = review(c, true, NOW);
+      c = review(c, true, NOW, () => 0.5);
       steps.push(c.step);
     }
     expect(steps).toEqual([1, 2, 3, 4, 5, 5, 5, 5]);
     expect(c.due).toBe(today + INTERVALS[5]! * DAY);
+  });
+
+  it('jitters gaps of a week and longer by at most 15%, never the short ones', () => {
+    const at = (step: number, r: number) => review({ lessonId: 'a2-01', index: 0, step, due: 0, lapses: 0 }, true, NOW, () => r);
+    expect(at(0, 0).due).toBe(today + 3 * DAY); // 3-day gap: exact
+    const lows = [0, 0.5, 0.999].map((r) => (at(4, r).due - today) / DAY); // 60-day gap
+    expect(lows[0]).toBe(51);
+    expect(lows[1]).toBe(60);
+    expect(lows[2]).toBe(69);
   });
 
   it('drops to the bottom on a miss and counts the lapse', () => {

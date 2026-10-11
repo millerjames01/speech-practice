@@ -1,0 +1,2094 @@
+{
+  "reviewed": false,
+  "source": "Ranked by FrequencyWords ca_50k (OpenSubtitles), subtitle-genre words demoted; words already taught in the lessons are excluded. 120 words per level.",
+  "sets": [
+    {
+      "id": "v01",
+      "level": "A2",
+      "title": "Most common I",
+      "words": [
+        [
+          "el cos",
+          "el cuerpo"
+        ],
+        [
+          "la mort",
+          "la muerte"
+        ],
+        [
+          "l'amor",
+          "el amor"
+        ],
+        [
+          "la guerra",
+          "la guerra"
+        ],
+        [
+          "la cara",
+          "la cara"
+        ],
+        [
+          "l'ull",
+          "el ojo"
+        ],
+        [
+          "el cor",
+          "el corazón"
+        ],
+        [
+          "únic",
+          "único"
+        ],
+        [
+          "el minut",
+          "el minuto"
+        ],
+        [
+          "el treball",
+          "el trabajo (la obra, no 'feina')"
+        ],
+        [
+          "la força",
+          "la fuerza"
+        ],
+        [
+          "la forma",
+          "la forma"
+        ],
+        [
+          "la reina",
+          "la reina"
+        ],
+        [
+          "la fe",
+          "la fe"
+        ],
+        [
+          "el nord",
+          "el norte"
+        ],
+        [
+          "l'oportunitat",
+          "la oportunidad"
+        ],
+        [
+          "el torn",
+          "el turno"
+        ],
+        [
+          "el final",
+          "el final"
+        ],
+        [
+          "la nena",
+          "la niña"
+        ],
+        [
+          "la seguretat",
+          "la seguridad"
+        ]
+      ]
+    },
+    {
+      "id": "v02",
+      "level": "A2",
+      "title": "Most common II",
+      "words": [
+        [
+          "el telèfon",
+          "el teléfono"
+        ],
+        [
+          "la resta",
+          "el resto"
+        ],
+        [
+          "l'ordre",
+          "la orden / el orden"
+        ],
+        [
+          "el record",
+          "el recuerdo"
+        ],
+        [
+          "diferent",
+          "diferente"
+        ],
+        [
+          "el parell",
+          "el par"
+        ],
+        [
+          "seguir",
+          "seguir"
+        ],
+        [
+          "salvar",
+          "salvar"
+        ],
+        [
+          "la paraula",
+          "la palabra"
+        ],
+        [
+          "el perill",
+          "el peligro"
+        ],
+        [
+          "l'escola",
+          "la escuela"
+        ],
+        [
+          "lliure",
+          "libre"
+        ],
+        [
+          "l'equip",
+          "el equipo"
+        ],
+        [
+          "el president",
+          "el presidente"
+        ],
+        [
+          "el joc",
+          "el juego"
+        ],
+        [
+          "lluitar",
+          "luchar"
+        ],
+        [
+          "el país",
+          "el país"
+        ],
+        [
+          "el secret",
+          "el secreto"
+        ],
+        [
+          "el número",
+          "el número"
+        ],
+        [
+          "el dret",
+          "el derecho"
+        ]
+      ]
+    },
+    {
+      "id": "v03",
+      "level": "A2",
+      "title": "Most common III",
+      "words": [
+        [
+          "el vaixell",
+          "el barco"
+        ],
+        [
+          "correcte",
+          "correcto"
+        ],
+        [
+          "el control",
+          "el control"
+        ],
+        [
+          "enviar",
+          "enviar"
+        ],
+        [
+          "la prova",
+          "la prueba"
+        ],
+        [
+          "la broma",
+          "la broma"
+        ],
+        [
+          "la companyia",
+          "la compañía"
+        ],
+        [
+          "especial",
+          "especial"
+        ],
+        [
+          "l'hospital",
+          "el hospital"
+        ],
+        [
+          "la classe",
+          "la clase"
+        ],
+        [
+          "el viatge",
+          "el viaje"
+        ],
+        [
+          "l'atac",
+          "el ataque"
+        ],
+        [
+          "guanyar",
+          "ganar"
+        ],
+        [
+          "la sal",
+          "la sal"
+        ],
+        [
+          "dolent",
+          "malo"
+        ],
+        [
+          "l'atenció",
+          "la atención"
+        ],
+        [
+          "la llei",
+          "la ley"
+        ],
+        [
+          "el grup",
+          "el grupo"
+        ],
+        [
+          "l'honor",
+          "el honor"
+        ],
+        [
+          "la calma",
+          "la calma"
+        ]
+      ]
+    },
+    {
+      "id": "v04",
+      "level": "A2",
+      "title": "Most common IV",
+      "words": [
+        [
+          "el sistema",
+          "el sistema"
+        ],
+        [
+          "el consell",
+          "el consejo"
+        ],
+        [
+          "la boca",
+          "la boca"
+        ],
+        [
+          "real",
+          "real"
+        ],
+        [
+          "preparat",
+          "preparado"
+        ],
+        [
+          "l'illa",
+          "la isla"
+        ],
+        [
+          "capaç",
+          "capaz"
+        ],
+        [
+          "el dolor",
+          "el dolor"
+        ],
+        [
+          "la notícia",
+          "la noticia"
+        ],
+        [
+          "el somni",
+          "el sueño (lo que se sueña)"
+        ],
+        [
+          "l'objectiu",
+          "el objetivo"
+        ],
+        [
+          "la foto",
+          "la foto"
+        ],
+        [
+          "oficial",
+          "oficial"
+        ],
+        [
+          "el servei",
+          "el servicio"
+        ],
+        [
+          "la llista",
+          "la lista"
+        ],
+        [
+          "el cavall",
+          "el caballo"
+        ],
+        [
+          "el plaer",
+          "el placer"
+        ],
+        [
+          "l'avió",
+          "el avión"
+        ],
+        [
+          "el vi",
+          "el vino"
+        ],
+        [
+          "següent",
+          "siguiente"
+        ]
+      ]
+    },
+    {
+      "id": "v05",
+      "level": "A2",
+      "title": "Most common V",
+      "words": [
+        [
+          "la relació",
+          "la relación"
+        ],
+        [
+          "sa",
+          "sano"
+        ],
+        [
+          "divertit",
+          "divertido"
+        ],
+        [
+          "l'espai",
+          "el espacio"
+        ],
+        [
+          "mantenir",
+          "mantener"
+        ],
+        [
+          "la meitat",
+          "la mitad"
+        ],
+        [
+          "normal",
+          "normal"
+        ],
+        [
+          "el sud",
+          "el sur"
+        ],
+        [
+          "el mestre",
+          "el maestro"
+        ],
+        [
+          "el senyal",
+          "la señal"
+        ],
+        [
+          "la clau",
+          "la llave"
+        ],
+        [
+          "el govern",
+          "el gobierno"
+        ],
+        [
+          "el cervell",
+          "el cerebro"
+        ],
+        [
+          "la salut",
+          "la salud"
+        ],
+        [
+          "el tracte",
+          "el trato"
+        ],
+        [
+          "l'est",
+          "el este"
+        ],
+        [
+          "el fons",
+          "el fondo"
+        ],
+        [
+          "el coll",
+          "el cuello"
+        ],
+        [
+          "el riu",
+          "el río"
+        ],
+        [
+          "l'edifici",
+          "el edificio"
+        ]
+      ]
+    },
+    {
+      "id": "v06",
+      "level": "A2",
+      "title": "Most common VI",
+      "words": [
+        [
+          "la majoria",
+          "la mayoría"
+        ],
+        [
+          "el truc",
+          "el truco"
+        ],
+        [
+          "confiar",
+          "confiar"
+        ],
+        [
+          "rebre",
+          "recibir"
+        ],
+        [
+          "la trucada",
+          "la llamada"
+        ],
+        [
+          "ensenyar",
+          "enseñar"
+        ],
+        [
+          "robar",
+          "robar"
+        ],
+        [
+          "l'edat",
+          "la edad"
+        ],
+        [
+          "matar",
+          "matar"
+        ],
+        [
+          "perillós",
+          "peligroso"
+        ],
+        [
+          "ple",
+          "lleno"
+        ],
+        [
+          "el mur",
+          "el muro"
+        ],
+        [
+          "el respecte",
+          "el respeto"
+        ],
+        [
+          "la qüestió",
+          "la cuestión"
+        ],
+        [
+          "pobre",
+          "pobre"
+        ],
+        [
+          "la línia",
+          "la línea"
+        ],
+        [
+          "l'aire",
+          "el aire"
+        ],
+        [
+          "amable",
+          "amable"
+        ],
+        [
+          "la investigació",
+          "la investigación"
+        ],
+        [
+          "la ment",
+          "la mente"
+        ]
+      ]
+    },
+    {
+      "id": "v07",
+      "level": "B1",
+      "title": "Very common I",
+      "words": [
+        [
+          "arreu",
+          "en todas partes"
+        ],
+        [
+          "humà",
+          "humano"
+        ],
+        [
+          "suficient",
+          "suficiente"
+        ],
+        [
+          "la justícia",
+          "la justicia"
+        ],
+        [
+          "llest",
+          "listo"
+        ],
+        [
+          "protegir",
+          "proteger"
+        ],
+        [
+          "l'energia",
+          "la energía"
+        ],
+        [
+          "el planeta",
+          "el planeta"
+        ],
+        [
+          "la zona",
+          "la zona"
+        ],
+        [
+          "el paper",
+          "el papel"
+        ],
+        [
+          "el contacte",
+          "el contacto"
+        ],
+        [
+          "el castell",
+          "el castillo"
+        ],
+        [
+          "el pont",
+          "el puente"
+        ],
+        [
+          "el judici",
+          "el juicio"
+        ],
+        [
+          "provar",
+          "probar"
+        ],
+        [
+          "el negoci",
+          "el negocio"
+        ],
+        [
+          "la caixa",
+          "la caja"
+        ],
+        [
+          "l'esperança",
+          "la esperanza"
+        ],
+        [
+          "la posició",
+          "la posición"
+        ],
+        [
+          "la màquina",
+          "la máquina"
+        ]
+      ]
+    },
+    {
+      "id": "v08",
+      "level": "B1",
+      "title": "Very common II",
+      "words": [
+        [
+          "terrible",
+          "terrible"
+        ],
+        [
+          "la causa",
+          "la causa"
+        ],
+        [
+          "estúpid",
+          "estúpido"
+        ],
+        [
+          "escapar",
+          "escapar"
+        ],
+        [
+          "la policia",
+          "la policía"
+        ],
+        [
+          "interessant",
+          "interesante"
+        ],
+        [
+          "l'opció",
+          "la opción"
+        ],
+        [
+          "l'ànima",
+          "el alma"
+        ],
+        [
+          "la sorpresa",
+          "la sorpresa"
+        ],
+        [
+          "el bosc",
+          "el bosque"
+        ],
+        [
+          "fugir",
+          "huir"
+        ],
+        [
+          "l'experiència",
+          "la experiencia"
+        ],
+        [
+          "l'advocat",
+          "el abogado"
+        ],
+        [
+          "l'heroi",
+          "el héroe"
+        ],
+        [
+          "aturar",
+          "parar, detener"
+        ],
+        [
+          "el tema",
+          "el tema"
+        ],
+        [
+          "el motiu",
+          "el motivo"
+        ],
+        [
+          "la pell",
+          "la piel"
+        ],
+        [
+          "veritable",
+          "verdadero"
+        ],
+        [
+          "lent",
+          "lento"
+        ]
+      ]
+    },
+    {
+      "id": "v09",
+      "level": "B1",
+      "title": "Very common III",
+      "words": [
+        [
+          "permetre",
+          "permitir"
+        ],
+        [
+          "el permís",
+          "el permiso"
+        ],
+        [
+          "el tresor",
+          "el tesoro"
+        ],
+        [
+          "triar",
+          "elegir"
+        ],
+        [
+          "la base",
+          "la base"
+        ],
+        [
+          "la neu",
+          "la nieve"
+        ],
+        [
+          "decidir",
+          "decidir"
+        ],
+        [
+          "la bossa",
+          "la bolsa"
+        ],
+        [
+          "horrible",
+          "horrible"
+        ],
+        [
+          "el principi",
+          "el principio"
+        ],
+        [
+          "la sang",
+          "la sangre"
+        ],
+        [
+          "enlloc",
+          "en ningún sitio"
+        ],
+        [
+          "sobreviure",
+          "sobrevivir"
+        ],
+        [
+          "utilitzar",
+          "utilizar"
+        ],
+        [
+          "exacte",
+          "exacto"
+        ],
+        [
+          "el codi",
+          "el código"
+        ],
+        [
+          "l'acte",
+          "el acto"
+        ],
+        [
+          "moure",
+          "mover"
+        ],
+        [
+          "el nivell",
+          "el nivel"
+        ],
+        [
+          "el matrimoni",
+          "el matrimonio"
+        ]
+      ]
+    },
+    {
+      "id": "v10",
+      "level": "B1",
+      "title": "Very common IV",
+      "words": [
+        [
+          "l'esposa",
+          "la esposa"
+        ],
+        [
+          "el departament",
+          "el departamento"
+        ],
+        [
+          "la mentida",
+          "la mentira"
+        ],
+        [
+          "el programa",
+          "el programa"
+        ],
+        [
+          "descobrir",
+          "descubrir"
+        ],
+        [
+          "l'esquena",
+          "la espalda"
+        ],
+        [
+          "l'ou",
+          "el huevo"
+        ],
+        [
+          "la visita",
+          "la visita"
+        ],
+        [
+          "la pedra",
+          "la piedra"
+        ],
+        [
+          "la cervesa",
+          "la cerveza"
+        ],
+        [
+          "la sortida",
+          "la salida"
+        ],
+        [
+          "la confiança",
+          "la confianza"
+        ],
+        [
+          "desaparèixer",
+          "desaparecer"
+        ],
+        [
+          "el ganivet",
+          "el cuchillo"
+        ],
+        [
+          "l'intent",
+          "el intento"
+        ],
+        [
+          "l'escena",
+          "la escena"
+        ],
+        [
+          "el nadó",
+          "el bebé"
+        ],
+        [
+          "el client",
+          "el cliente"
+        ],
+        [
+          "la càmera",
+          "la cámara"
+        ],
+        [
+          "el destí",
+          "el destino"
+        ]
+      ]
+    },
+    {
+      "id": "v11",
+      "level": "B1",
+      "title": "Very common V",
+      "words": [
+        [
+          "l'entrada",
+          "la entrada"
+        ],
+        [
+          "el ferro",
+          "el hierro"
+        ],
+        [
+          "l'art",
+          "el arte"
+        ],
+        [
+          "atacar",
+          "atacar"
+        ],
+        [
+          "el risc",
+          "el riesgo"
+        ],
+        [
+          "l'operació",
+          "la operación"
+        ],
+        [
+          "simple",
+          "simple"
+        ],
+        [
+          "tractar",
+          "tratar"
+        ],
+        [
+          "evitar",
+          "evitar"
+        ],
+        [
+          "principal",
+          "principal"
+        ],
+        [
+          "la defensa",
+          "la defensa"
+        ],
+        [
+          "innocent",
+          "inocente"
+        ],
+        [
+          "l'ordinador",
+          "el ordenador"
+        ],
+        [
+          "agradable",
+          "agradable"
+        ],
+        [
+          "destruir",
+          "destruir"
+        ],
+        [
+          "l'amenaça",
+          "la amenaza"
+        ],
+        [
+          "el forat",
+          "el agujero"
+        ],
+        [
+          "crear",
+          "crear"
+        ],
+        [
+          "la unitat",
+          "la unidad"
+        ],
+        [
+          "la recerca",
+          "la búsqueda / la investigación"
+        ]
+      ]
+    },
+    {
+      "id": "v12",
+      "level": "B1",
+      "title": "Very common VI",
+      "words": [
+        [
+          "el capità",
+          "el capitán"
+        ],
+        [
+          "mentir",
+          "mentir"
+        ],
+        [
+          "el braç",
+          "el brazo"
+        ],
+        [
+          "la cama",
+          "la pierna"
+        ],
+        [
+          "el cabell",
+          "el pelo"
+        ],
+        [
+          "els cabells",
+          "el pelo"
+        ],
+        [
+          "el laboratori",
+          "el laboratorio"
+        ],
+        [
+          "l'univers",
+          "el universo"
+        ],
+        [
+          "baixar",
+          "bajar"
+        ],
+        [
+          "recuperar",
+          "recuperar"
+        ],
+        [
+          "l'oferta",
+          "la oferta"
+        ],
+        [
+          "el partit",
+          "el partido"
+        ],
+        [
+          "la direcció",
+          "la dirección"
+        ],
+        [
+          "responsable",
+          "responsable"
+        ],
+        [
+          "la memòria",
+          "la memoria"
+        ],
+        [
+          "el testimoni",
+          "el testigo"
+        ],
+        [
+          "la cuina",
+          "la cocina"
+        ],
+        [
+          "la premsa",
+          "la prensa"
+        ],
+        [
+          "la cançó",
+          "la canción"
+        ],
+        [
+          "el valor",
+          "el valor"
+        ]
+      ]
+    },
+    {
+      "id": "v13",
+      "level": "B2",
+      "title": "Common I",
+      "words": [
+        [
+          "caminar",
+          "caminar"
+        ],
+        [
+          "legal",
+          "legal"
+        ],
+        [
+          "l'oest",
+          "el oeste"
+        ],
+        [
+          "la pols",
+          "el polvo"
+        ],
+        [
+          "ferit",
+          "herido"
+        ],
+        [
+          "el moviment",
+          "el movimiento"
+        ],
+        [
+          "ocupat",
+          "ocupado"
+        ],
+        [
+          "el sentiment",
+          "el sentimiento"
+        ],
+        [
+          "acceptar",
+          "aceptar"
+        ],
+        [
+          "net",
+          "limpio"
+        ],
+        [
+          "la mel",
+          "la miel"
+        ],
+        [
+          "valent",
+          "valiente"
+        ],
+        [
+          "tallar",
+          "cortar"
+        ],
+        [
+          "culpable",
+          "culpable"
+        ],
+        [
+          "trist",
+          "triste"
+        ],
+        [
+          "la protecció",
+          "la protección"
+        ],
+        [
+          "el xicot",
+          "el novio"
+        ],
+        [
+          "la imatge",
+          "la imagen"
+        ],
+        [
+          "el desig",
+          "el deseo"
+        ],
+        [
+          "la llar",
+          "el hogar"
+        ]
+      ]
+    },
+    {
+      "id": "v14",
+      "level": "B2",
+      "title": "Common II",
+      "words": [
+        [
+          "la foscor",
+          "la oscuridad"
+        ],
+        [
+          "l'apartament",
+          "el apartamento"
+        ],
+        [
+          "la promesa",
+          "la promesa"
+        ],
+        [
+          "maco",
+          "bonito, majo"
+        ],
+        [
+          "el vent",
+          "el viento"
+        ],
+        [
+          "el membre",
+          "el miembro"
+        ],
+        [
+          "volar",
+          "volar"
+        ],
+        [
+          "arreglar",
+          "arreglar"
+        ],
+        [
+          "l'efecte",
+          "el efecto"
+        ],
+        [
+          "l'alerta",
+          "la alerta"
+        ],
+        [
+          "el detall",
+          "el detalle"
+        ],
+        [
+          "esbrinar",
+          "averiguar"
+        ],
+        [
+          "proper",
+          "próximo"
+        ],
+        [
+          "privat",
+          "privado"
+        ],
+        [
+          "la copa",
+          "la copa"
+        ],
+        [
+          "conduir",
+          "conducir"
+        ],
+        [
+          "l'assumpte",
+          "el asunto"
+        ],
+        [
+          "la pèrdua",
+          "la pérdida"
+        ],
+        [
+          "ximple",
+          "tonto"
+        ],
+        [
+          "el gel",
+          "el hielo"
+        ]
+      ]
+    },
+    {
+      "id": "v15",
+      "level": "B2",
+      "title": "Common III",
+      "words": [
+        [
+          "la teoria",
+          "la teoría"
+        ],
+        [
+          "la nota",
+          "la nota"
+        ],
+        [
+          "amagar",
+          "esconder"
+        ],
+        [
+          "enamorat",
+          "enamorado"
+        ],
+        [
+          "la conversa",
+          "la conversación"
+        ],
+        [
+          "la bellesa",
+          "la belleza"
+        ],
+        [
+          "salvatge",
+          "salvaje"
+        ],
+        [
+          "probable",
+          "probable"
+        ],
+        [
+          "quiet",
+          "quieto"
+        ],
+        [
+          "l'obra",
+          "la obra"
+        ],
+        [
+          "l'estrella",
+          "la estrella"
+        ],
+        [
+          "la ciència",
+          "la ciencia"
+        ],
+        [
+          "la carretera",
+          "la carretera"
+        ],
+        [
+          "la llengua",
+          "la lengua"
+        ],
+        [
+          "el jutge",
+          "el juez"
+        ],
+        [
+          "central",
+          "central"
+        ],
+        [
+          "local",
+          "local"
+        ],
+        [
+          "l'hivern",
+          "el invierno"
+        ],
+        [
+          "la intenció",
+          "la intención"
+        ],
+        [
+          "el propòsit",
+          "el propósito"
+        ]
+      ]
+    },
+    {
+      "id": "v16",
+      "level": "B2",
+      "title": "Common IV",
+      "words": [
+        [
+          "el peix",
+          "el pez"
+        ],
+        [
+          "la cambra",
+          "la habitación, la cámara"
+        ],
+        [
+          "resoldre",
+          "resolver"
+        ],
+        [
+          "l'elecció",
+          "la elección"
+        ],
+        [
+          "comú",
+          "común"
+        ],
+        [
+          "el ministre",
+          "el ministro"
+        ],
+        [
+          "l'accés",
+          "el acceso"
+        ],
+        [
+          "nacional",
+          "nacional"
+        ],
+        [
+          "l'institut",
+          "el instituto"
+        ],
+        [
+          "la criatura",
+          "la criatura"
+        ],
+        [
+          "cremar",
+          "quemar"
+        ],
+        [
+          "l'aspecte",
+          "el aspecto"
+        ],
+        [
+          "el començament",
+          "el comienzo"
+        ],
+        [
+          "el camió",
+          "el camión"
+        ],
+        [
+          "el petó",
+          "el beso"
+        ],
+        [
+          "la via",
+          "la vía"
+        ],
+        [
+          "la voluntat",
+          "la voluntad"
+        ],
+        [
+          "brillant",
+          "brillante"
+        ],
+        [
+          "el ball",
+          "el baile"
+        ],
+        [
+          "abandonar",
+          "abandonar"
+        ]
+      ]
+    },
+    {
+      "id": "v17",
+      "level": "B2",
+      "title": "Common V",
+      "words": [
+        [
+          "la distància",
+          "la distancia"
+        ],
+        [
+          "l'adreça",
+          "la dirección (postal)"
+        ],
+        [
+          "meravellós",
+          "maravilloso"
+        ],
+        [
+          "la ferida",
+          "la herida"
+        ],
+        [
+          "el comandament",
+          "el mando"
+        ],
+        [
+          "l'esperit",
+          "el espíritu"
+        ],
+        [
+          "el porc",
+          "el cerdo"
+        ],
+        [
+          "total",
+          "total"
+        ],
+        [
+          "discutir",
+          "discutir"
+        ],
+        [
+          "la velocitat",
+          "la velocidad"
+        ],
+        [
+          "la torre",
+          "la torre"
+        ],
+        [
+          "la victòria",
+          "la victoria"
+        ],
+        [
+          "l'arbre",
+          "el árbol"
+        ],
+        [
+          "la carrera",
+          "la carrera"
+        ],
+        [
+          "la mirada",
+          "la mirada"
+        ],
+        [
+          "buit",
+          "vacío"
+        ],
+        [
+          "el despatx",
+          "el despacho"
+        ],
+        [
+          "la felicitat",
+          "la felicidad"
+        ],
+        [
+          "l'acció",
+          "la acción"
+        ],
+        [
+          "oferir",
+          "ofrecer"
+        ]
+      ]
+    },
+    {
+      "id": "v18",
+      "level": "B2",
+      "title": "Common VI",
+      "words": [
+        [
+          "l'estil",
+          "el estilo"
+        ],
+        [
+          "espantat",
+          "asustado"
+        ],
+        [
+          "l'alcalde",
+          "el alcalde"
+        ],
+        [
+          "embarassada",
+          "embarazada"
+        ],
+        [
+          "el vídeo",
+          "el vídeo"
+        ],
+        [
+          "militar",
+          "militar"
+        ],
+        [
+          "familiar",
+          "familiar"
+        ],
+        [
+          "l'anell",
+          "el anillo"
+        ],
+        [
+          "la corona",
+          "la corona"
+        ],
+        [
+          "la targeta",
+          "la tarjeta"
+        ],
+        [
+          "la societat",
+          "la sociedad"
+        ],
+        [
+          "tirar",
+          "tirar"
+        ],
+        [
+          "orgullós",
+          "orgulloso"
+        ],
+        [
+          "la quantitat",
+          "la cantidad"
+        ],
+        [
+          "la trobada",
+          "el encuentro"
+        ],
+        [
+          "la pressió",
+          "la presión"
+        ],
+        [
+          "els pantalons",
+          "los pantalones"
+        ],
+        [
+          "l'interès",
+          "el interés"
+        ],
+        [
+          "cantar",
+          "cantar"
+        ],
+        [
+          "borratxo",
+          "borracho"
+        ]
+      ]
+    },
+    {
+      "id": "v19",
+      "level": "C1",
+      "title": "Useful I",
+      "words": [
+        [
+          "la norma",
+          "la norma"
+        ],
+        [
+          "la paret",
+          "la pared"
+        ],
+        [
+          "la malaltia",
+          "la enfermedad"
+        ],
+        [
+          "la propietat",
+          "la propiedad"
+        ],
+        [
+          "calent",
+          "caliente"
+        ],
+        [
+          "ridícul",
+          "ridículo"
+        ],
+        [
+          "directe",
+          "directo"
+        ],
+        [
+          "preciós",
+          "precioso"
+        ],
+        [
+          "compartir",
+          "compartir"
+        ],
+        [
+          "l'aeroport",
+          "el aeropuerto"
+        ],
+        [
+          "patir",
+          "sufrir"
+        ],
+        [
+          "la xarxa",
+          "la red"
+        ],
+        [
+          "l'època",
+          "la época"
+        ],
+        [
+          "el pit",
+          "el pecho"
+        ],
+        [
+          "la tempesta",
+          "la tormenta"
+        ],
+        [
+          "la cua",
+          "la cola"
+        ],
+        [
+          "l'espècie",
+          "la especie"
+        ],
+        [
+          "el rastre",
+          "el rastro"
+        ],
+        [
+          "l'autobús",
+          "el autobús"
+        ],
+        [
+          "gros",
+          "gordo, grueso"
+        ]
+      ]
+    },
+    {
+      "id": "v20",
+      "level": "C1",
+      "title": "Useful II",
+      "words": [
+        [
+          "doble",
+          "doble"
+        ],
+        [
+          "controlar",
+          "controlar"
+        ],
+        [
+          "verd",
+          "verde"
+        ],
+        [
+          "contrari",
+          "contrario"
+        ],
+        [
+          "la sensació",
+          "la sensación"
+        ],
+        [
+          "l'emergència",
+          "la emergencia"
+        ],
+        [
+          "el desastre",
+          "el desastre"
+        ],
+        [
+          "el pes",
+          "el peso"
+        ],
+        [
+          "dolç",
+          "dulce"
+        ],
+        [
+          "el pilot",
+          "el piloto"
+        ],
+        [
+          "suportar",
+          "soportar"
+        ],
+        [
+          "funcionar",
+          "funcionar"
+        ],
+        [
+          "actuar",
+          "actuar"
+        ],
+        [
+          "el resultat",
+          "el resultado"
+        ],
+        [
+          "el concert",
+          "el concierto"
+        ],
+        [
+          "la capital",
+          "la capital"
+        ],
+        [
+          "útil",
+          "útil"
+        ],
+        [
+          "la baralla",
+          "la pelea"
+        ],
+        [
+          "l'os",
+          "el hueso"
+        ],
+        [
+          "aparèixer",
+          "aparecer"
+        ]
+      ]
+    },
+    {
+      "id": "v21",
+      "level": "C1",
+      "title": "Useful III",
+      "words": [
+        [
+          "el pensament",
+          "el pensamiento"
+        ],
+        [
+          "enorme",
+          "enorme"
+        ],
+        [
+          "el quilòmetre",
+          "el kilómetro"
+        ],
+        [
+          "el magatzem",
+          "el almacén"
+        ],
+        [
+          "graciós",
+          "gracioso"
+        ],
+        [
+          "natural",
+          "natural"
+        ],
+        [
+          "senzill",
+          "sencillo"
+        ],
+        [
+          "la visió",
+          "la visión"
+        ],
+        [
+          "la beguda",
+          "la bebida"
+        ],
+        [
+          "impressionant",
+          "impresionante"
+        ],
+        [
+          "la font",
+          "la fuente"
+        ],
+        [
+          "la connexió",
+          "la conexión"
+        ],
+        [
+          "despertar",
+          "despertar"
+        ],
+        [
+          "el mapa",
+          "el mapa"
+        ],
+        [
+          "el miracle",
+          "el milagro"
+        ],
+        [
+          "l'agent",
+          "el agente"
+        ],
+        [
+          "cec",
+          "ciego"
+        ],
+        [
+          "respondre",
+          "responder"
+        ],
+        [
+          "conscient",
+          "consciente"
+        ],
+        [
+          "l'autoritat",
+          "la autoridad"
+        ]
+      ]
+    },
+    {
+      "id": "v22",
+      "level": "C1",
+      "title": "Useful IV",
+      "words": [
+        [
+          "aixecar",
+          "levantar"
+        ],
+        [
+          "la tieta",
+          "la tía"
+        ],
+        [
+          "el barret",
+          "el sombrero"
+        ],
+        [
+          "el jardí",
+          "el jardín"
+        ],
+        [
+          "recollir",
+          "recoger"
+        ],
+        [
+          "la consciència",
+          "la conciencia"
+        ],
+        [
+          "la campanya",
+          "la campaña"
+        ],
+        [
+          "convèncer",
+          "convencer"
+        ],
+        [
+          "netejar",
+          "limpiar"
+        ],
+        [
+          "la responsabilitat",
+          "la responsabilidad"
+        ],
+        [
+          "el llop",
+          "el lobo"
+        ],
+        [
+          "escollir",
+          "escoger, elegir"
+        ],
+        [
+          "complicat",
+          "complicado"
+        ],
+        [
+          "la violència",
+          "la violencia"
+        ],
+        [
+          "cometre",
+          "cometer"
+        ],
+        [
+          "covard",
+          "cobarde"
+        ],
+        [
+          "la declaració",
+          "la declaración"
+        ],
+        [
+          "la butxaca",
+          "el bolsillo"
+        ],
+        [
+          "mostrar",
+          "mostrar"
+        ],
+        [
+          "la granja",
+          "la granja"
+        ]
+      ]
+    },
+    {
+      "id": "v23",
+      "level": "C1",
+      "title": "Useful V",
+      "words": [
+        [
+          "l'orella",
+          "la oreja"
+        ],
+        [
+          "el soterrani",
+          "el sótano"
+        ],
+        [
+          "demostrar",
+          "demostrar"
+        ],
+        [
+          "complir",
+          "cumplir"
+        ],
+        [
+          "el palau",
+          "el palacio"
+        ],
+        [
+          "l'ombra",
+          "la sombra"
+        ],
+        [
+          "saltar",
+          "saltar"
+        ],
+        [
+          "comprovar",
+          "comprobar"
+        ],
+        [
+          "l'àngel",
+          "el ángel"
+        ],
+        [
+          "el premi",
+          "el premio"
+        ],
+        [
+          "el discurs",
+          "el discurso"
+        ],
+        [
+          "el contracte",
+          "el contrato"
+        ],
+        [
+          "la marca",
+          "la marca"
+        ],
+        [
+          "l'arma",
+          "el arma"
+        ],
+        [
+          "el conte",
+          "el cuento"
+        ],
+        [
+          "el sostre",
+          "el techo"
+        ],
+        [
+          "preparar",
+          "preparar"
+        ],
+        [
+          "la trampa",
+          "la trampa"
+        ],
+        [
+          "el procés",
+          "el proceso"
+        ],
+        [
+          "l'habilitat",
+          "la habilidad"
+        ]
+      ]
+    },
+    {
+      "id": "v24",
+      "level": "C1",
+      "title": "Useful VI",
+      "words": [
+        [
+          "el coneixement",
+          "el conocimiento"
+        ],
+        [
+          "usar",
+          "usar"
+        ],
+        [
+          "el tribunal",
+          "el tribunal"
+        ],
+        [
+          "defensar",
+          "defender"
+        ],
+        [
+          "el pacient",
+          "el paciente"
+        ],
+        [
+          "curt",
+          "corto"
+        ],
+        [
+          "la infermera",
+          "la enfermera"
+        ],
+        [
+          "la resistència",
+          "la resistencia"
+        ],
+        [
+          "l'humor",
+          "el humor"
+        ],
+        [
+          "el formatge",
+          "el queso"
+        ],
+        [
+          "el seient",
+          "el asiento"
+        ],
+        [
+          "l'afecte",
+          "el afecto"
+        ],
+        [
+          "superior",
+          "superior"
+        ],
+        [
+          "la cadena",
+          "la cadena"
+        ],
+        [
+          "la poma",
+          "la manzana"
+        ],
+        [
+          "l'artista",
+          "el artista"
+        ],
+        [
+          "la comunitat",
+          "la comunidad"
+        ],
+        [
+          "la frontera",
+          "la frontera"
+        ],
+        [
+          "cruel",
+          "cruel"
+        ],
+        [
+          "la fàbrica",
+          "la fábrica"
+        ]
+      ]
+    }
+  ]
+}

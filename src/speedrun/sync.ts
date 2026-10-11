@@ -13,6 +13,11 @@ export interface SyncPayload {
   createdAt: number;
   lessons: Record<string, LessonRecord>;
   cards: SrsCard[];
+  /** XP per local day. */
+  xp: Record<string, number>;
+  sprintBest: number;
+  /** Conjugation form key → consecutive right answers. */
+  forms: Record<string, number>;
 }
 
 const PREFIX = 'ca1.';
@@ -44,7 +49,9 @@ function fromBase64Url(text: string): Uint8Array<ArrayBuffer> {
 }
 
 /* ---------- encoding ----------
- * v1|<base: start of export day, epoch minutes>|<lessons>|<cards>
+ * v1|<base: start of export day, epoch minutes>|<lessons>|<cards>|<xp>|<sprintBest>|<forms>
+ * xp:     YYYYMMDD:points  (the last three fields are optional, so older codes still decode)
+ * forms:  key:streak       (only forms with a streak)
  * lesson: id:bestSeconds:scorePercent:runs
  * card:   lessonId.index.step.dueDays.lapses.lastHours   (relative to base; due is always
  *         a midnight, last answer keeps hour precision so same-day merges order correctly)
@@ -54,6 +61,7 @@ export async function encodeSync(
   lessons: Record<string, LessonRecord>,
   cards: SrsCard[],
   now = Date.now(),
+  extras: { xp?: Record<string, number>; sprintBest?: number; forms?: Record<string, number> } = {},
 ): Promise<string> {
   const base = startOfDay(now);
   const days = (t: number) => Math.round((t - base) / DAY);
@@ -64,7 +72,15 @@ export async function encodeSync(
   const cs = cards
     .map((c) => `${c.lessonId}.${c.index}.${c.step}.${days(c.due)}.${c.lapses}.${c.last ? hours(c.last) : ''}`)
     .join(',');
-  const text = `v1|${Math.round(base / MINUTE)}|${ls}|${cs}`;
+  const xs = Object.entries(extras.xp ?? {})
+    .filter(([, n]) => n > 0)
+    .map(([day, n]) => `${day.replace(/-/g, '')}:${n}`)
+    .join(',');
+  const fs = Object.entries(extras.forms ?? {})
+    .filter(([k, n]) => n > 0 && /^[a-z0-9]+$/.test(k))
+    .map(([k, n]) => `${k}:${n}`)
+    .join(',');
+  const text = `v1|${Math.round(base / MINUTE)}|${ls}|${cs}|${xs}|${extras.sprintBest ?? 0}|${fs}`;
   return PREFIX + toBase64Url(await deflate(text));
 }
 
@@ -83,7 +99,7 @@ export async function decodeSync(input: string): Promise<SyncPayload> {
   } catch {
     throw new Error('The sync code is incomplete or damaged. Copy the whole link and try again.');
   }
-  const [version, baseRaw, ls = '', cs = ''] = text.split('|');
+  const [version, baseRaw, ls = '', cs = '', xs = '', sprintRaw = '0', fs = ''] = text.split('|');
   const baseMin = Number(baseRaw);
   if (version !== 'v1' || !Number.isFinite(baseMin)) throw new Error('This sync code is from a newer or unknown version.');
   const base = baseMin * MINUTE;
@@ -110,7 +126,20 @@ export async function decodeSync(input: string): Promise<SyncPayload> {
       ...(last ? { last: base + Number(last) * HOUR } : {}),
     });
   }
-  return { createdAt: base, lessons, cards };
+  const xp: Record<string, number> = {};
+  for (const part of xs ? xs.split(',') : []) {
+    const [day, n] = part.split(':');
+    if (!day || !/^\d{8}$/.test(day) || !Number.isFinite(Number(n))) throw new Error('The sync code is damaged.');
+    xp[`${day.slice(0, 4)}-${day.slice(4, 6)}-${day.slice(6)}`] = Number(n);
+  }
+  const sprintBest = Number.isFinite(Number(sprintRaw)) ? Number(sprintRaw) : 0;
+  const forms: Record<string, number> = {};
+  for (const part of fs ? fs.split(',') : []) {
+    const [k, n] = part.split(':');
+    if (!k || !Number.isFinite(Number(n))) throw new Error('The sync code is damaged.');
+    forms[k] = Number(n);
+  }
+  return { createdAt: base, lessons, cards, xp, sprintBest, forms };
 }
 
 /* ---------- merging ---------- */

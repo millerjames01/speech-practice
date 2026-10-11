@@ -38,6 +38,11 @@ describe('sync codes', () => {
     expect((await decodeSync(code)).cards).toHaveLength(cards.length);
   });
 
+  it('carries XP, sprint best and conjugation forms', async () => {
+    const code = await encodeSync({}, [], NOW, { xp: { '2026-10-09': 40 }, sprintBest: 17, forms: { abc12: 2, zz: 0 } });
+    expect(await decodeSync(code)).toMatchObject({ xp: { '2026-10-09': 40 }, sprintBest: 17, forms: { abc12: 2 } });
+  });
+
   it('finds the code inside whatever was pasted', () => {
     expect(extractCode('look: https://x.io/#sync=ca1.AbC_-9 thanks')).toBe('ca1.AbC_-9');
     expect(extractCode('nothing here')).toBeNull();
@@ -153,5 +158,37 @@ describe('short codes', () => {
     await expect(downloadSync('AU4DFNHWN', fake(() => new Response('<html>spam</html>')))).rejects.toThrow(/doesn’t hold/);
     await expect(downloadSync('AU4DFNHWN', (async () => { throw new TypeError('offline'); }) as typeof fetch)).rejects.toThrow(/connection/);
     await expect(downloadSync('??', fake(() => new Response('')))).rejects.toThrow(/9 letters/);
+  });
+});
+
+describe('migration from older progress', () => {
+  it('backfills XP and streak, seeds forms once, and never lowers anything', async () => {
+    const store = new Map<string, string>();
+    (globalThis as { localStorage?: unknown }).localStorage = {
+      getItem: (k: string) => store.get(k) ?? null,
+      setItem: (k: string, v: string) => void store.set(k, v),
+      removeItem: (k: string) => void store.delete(k),
+    };
+    const p = await import('../src/speedrun/progress');
+    // A store from before XP: one card with a timestamp, one without (dated from its schedule).
+    const today = startOfDay(NOW);
+    store.set('sr.progress.v1', JSON.stringify({
+      lessons: { 'a2-01': { bestMs: 60_000, bestScore: 1, runs: 1 } },
+      cards: {
+        'a2-01#0': { lessonId: 'a2-01', index: 0, step: 1, due: today + 2 * DAY, lapses: 0, last: today - DAY + 3_600_000 },
+        'a2-01#1': { lessonId: 'a2-01', index: 1, step: 0, due: today + DAY, lapses: 0 },
+      },
+      prefs: { autoplay: true, dictation: false },
+    }));
+    expect(p.needsMigration()).toBe(true);
+    expect(p.migrateProgress(['k1', 'k2'], NOW)).toEqual({ xp: 20, forms: 2 });
+    expect(p.needsMigration()).toBe(false);
+    expect(p.xpStats(NOW)).toMatchObject({ total: 20, streak: 2 });
+    expect(p.allCards()).toHaveLength(2);
+    p.recordForms([['k1', true]]);
+    expect(p.migrateProgress(['k1'], NOW)).toEqual({ xp: 0, forms: 0 });
+    expect(p.allForms().k1).toBe(2);
+    p.resetProgress();
+    expect(p.needsMigration()).toBe(false);
   });
 });

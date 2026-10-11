@@ -90,18 +90,49 @@ Each lesson is a short concept note with clickable conjugation tables, then
 three items later, so every lesson ends on the right answer; the score counts
 first tries only. Lessons record a best time and first-try accuracy.
 
-**Daily practice: the Today button.** Every item you meet enters a simple
+**Daily practice: Today and lesson reviews.** Every item you meet enters a
 spaced-repetition ladder (`src/speedrun/srs.ts`): a first-try hit moves it to
-the next interval (1, 3, 7, 14, 30, 60 days), a miss sends it back to
-tomorrow. Today builds one session: everything due (most overdue first,
-capped at 30), plus six not-yet-due items from the lowest steps, all shuffled
-so consecutive items come from different lessons. Then it hands you the next
-new lesson. Re-running a lesson for a better time never pushes a schedule out
-early. The map shows lessons done, items due today, and how many items have
-reached the two-week step ("long-term").
+the next interval (1, 3, 7, 14, 30, 60 days; gaps of a week or more get ±15%
+jitter so a lesson's items drift apart), a miss sends it back to tomorrow.
+*Today* takes the weakest due items first (days overdue + 3 × lapses, capped at
+30), interleaved so neighbours come from different lessons, plus a few early
+items; then it offers the next lesson, or another review round when more than
+30 are due. *Review this lesson* (on a finished lesson's page) runs everything
+of that lesson that is due, topped up with its weakest items. Items shown early
+never get pushed further out by a hit, and re-running a lesson for time
+doesn't either.
+
+**Progress: one source of truth.** Stars, level percentages and due counts are
+all read off the review cards (`src/speedrun/mastery.ts`), so every mode feeds
+the same numbers:
+- ★ lesson finished · ★★ every item recalled after a week · ★★★ every item
+  held at a month. Stars fade when items slip.
+- **Level %** is the headline: how much of the level is held long-term (an
+  item earns full credit at the month step).
+- **Side-track ratings** use the same A2–C1 scale, so they read against the
+  course: *Conjugation* (forms from each level's tables, credited after two
+  right answers in a row in the sprint) and *Vocab* (each level's words,
+  credited like lesson items). A rating sits at the first level not yet 80%
+  held; the map says whether a track is at or behind your course level.
+- **Course overview** (bottom of the map): the hero stays on your current
+  level, and this section shows the whole course: lessons, conjugation and
+  vocab held per level and overall, plus lessons done, stars, XP and run time.
+- **XP** (10 per first-try answer, 2 per retry, 5 per vocab word, 2 per sprint
+  form) feeds a daily streak and never moves a level %.
+
+**Side tracks.** The *conjugation sprint* is 60 seconds of forms pulled from
+the tables of the lessons you have finished, unknown forms first. The *vocab
+builder* holds 480 frequent words the lessons skip (`speedrun/vocab/words.json`,
+120 per level); each level's words unlock when the course reaches that level,
+and they review on their own schedule, separate from Today.
+
+**Older progress** converts once, on first open: lessons and cards carry over
+unchanged (stars and percentages come straight from them), XP and streak are
+backfilled from when each item was last answered, and conjugation forms from
+lessons already at ★★ are credited with one right answer.
 
 Suggested routine, about 25 minutes a day: press Today, do the new lesson it
-offers, and stop. Skip the new lesson on days when more than 30 items are
+offers, then a sprint or a vocab round if you have five minutes more. Skip the new lesson on days when more than 30 items are
 due. Don't move on from a level until its boss lesson clears at 90% first try.
 Pair it with real Catalan input (TV3/3Cat, podcasts) — this course builds
 accurate production of the core; listening hours build the ear.
