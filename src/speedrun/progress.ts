@@ -40,6 +40,12 @@ interface Store {
   sprintBest: number;
   /** Conjugation forms by key: consecutive right answers, 0-3. Two in a row counts as known. */
   forms: Record<string, number>;
+  /**
+   * When each form was last answered, in epoch minutes, so the sprint can space
+   * them. Kept per device (not in sync codes): on another device a form is
+   * simply treated as due.
+   */
+  formsSeen: Record<string, number>;
   /** Store layout; anything older than STORE_VERSION is converted once by migrateProgress. */
   version: number;
 }
@@ -54,7 +60,7 @@ interface LegacyMiss {
   count: number;
 }
 
-const empty = (): Store => ({ lessons: {}, cards: {}, prefs: { autoplay: true, dictation: false, voice: '', voiceTipHidden: false }, xp: {}, sprintBest: 0, forms: {}, version: STORE_VERSION });
+const empty = (): Store => ({ lessons: {}, cards: {}, prefs: { autoplay: true, dictation: false, voice: '', voiceTipHidden: false }, xp: {}, sprintBest: 0, forms: {}, formsSeen: {}, version: STORE_VERSION });
 
 export const itemKey = (lessonId: string, index: number): string => `${lessonId}#${index}`;
 
@@ -74,6 +80,7 @@ function read(): Store {
       xp: parsed.xp ?? {},
       sprintBest: parsed.sprintBest ?? 0,
       forms: parsed.forms ?? {},
+      formsSeen: parsed.formsSeen ?? {},
       version: parsed.version ?? 1,
     };
   } catch {
@@ -201,6 +208,7 @@ export function importProgress(text: string): { lessons: number; cards: number }
     xp: xp as Record<string, number>,
     sprintBest,
     forms: forms as Record<string, number>,
+    formsSeen: isRecord(parsed.data.formsSeen) && Object.values(parsed.data.formsSeen).every(isNum) ? (parsed.data.formsSeen as Record<string, number>) : {},
     version: isNum(parsed.data.version) ? parsed.data.version : 1,
   });
   return { lessons: Object.keys(lessons).length, cards: Object.keys(cards).length };
@@ -348,11 +356,20 @@ export function allForms(): Record<string, number> {
   return read().forms;
 }
 
+/** When each form was last answered on this device (epoch minutes). */
+export function allFormsSeen(): Record<string, number> {
+  return read().formsSeen;
+}
+
 /** Records sprint answers in one write: a right answer climbs (to 3), a miss resets. */
-export function recordForms(results: [key: string, correct: boolean][]): void {
+export function recordForms(results: [key: string, correct: boolean][], now = Date.now()): void {
   if (results.length === 0) return;
   const store = read();
-  for (const [k, correct] of results) store.forms[k] = correct ? Math.min(3, (store.forms[k] ?? 0) + 1) : 0;
+  const minute = Math.floor(now / 60_000);
+  for (const [k, correct] of results) {
+    store.forms[k] = correct ? Math.min(3, (store.forms[k] ?? 0) + 1) : 0;
+    store.formsSeen[k] = minute;
+  }
   write(store);
 }
 

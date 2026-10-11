@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { availableStars, compareLevels, conjugationRating, courseRating, indexCards, isPerfect, nextStarOpensIn, itemCredit, lessonDue, lessonStars, levelProgress, toRating, vocabRating } from '../src/speedrun/mastery';
 import { DAY, interleave, planLessonReview, planToday, startOfDay, type SrsCard } from '../src/speedrun/srs';
-import { conjugation, conjugationPool, formKey, openTenses, sprintRound } from '../src/speedrun/sprint';
+import { conjugation, conjugationPool, formKey, openTenses, sprintQueue, sprintRound } from '../src/speedrun/sprint';
 import { loadSpeedrun } from '../src/speedrun/content';
 import { isVocabCard, planVocab, unlockedSets, vocab, vocabPattern, vocabStats } from '../src/speedrun/vocab';
 import { checkAnswer } from '../src/speedrun/check';
@@ -134,17 +134,33 @@ describe('conjugation sprint', () => {
   it('opens tenses with the lessons that teach them', () => {
     expect([...openTenses(new Set())]).toEqual(['pres']);
     expect([...openTenses(new Set(['a2-21', 'b1-14']))]).toEqual(['pres', 'perif', 'subj']);
-    const round = sprintRound(new Set(), {}, () => 0.3);
+    const round = sprintRound(new Set(), {}, {}, NOW);
     expect(round.every((c) => c.tense === 'pres')).toBe(true);
     expect(round).toHaveLength(45 * 6);
   });
 
-  it('serves missed forms first, then half-learned, then new, then known', () => {
-    const pres = pool.filter((c) => c.tense === 'pres');
-    const forms = { [pres[0]!.key]: 2, [pres[1]!.key]: 1, [pres[2]!.key]: 0 };
-    const round = sprintRound(new Set(), forms, () => 0.7);
-    expect(round.slice(0, 2).map((c) => c.key)).toEqual([pres[2]!.key, pres[1]!.key]);
-    expect(round.at(-1)?.key).toBe(pres[0]!.key);
+  it('serves new forms in order: verb by verb, tense by tense, person by person', () => {
+    const round = sprintRound(new Set(['a2-21']), {}, {}, NOW);
+    expect(round.slice(0, 7).map((c) => c.prompt)).toEqual(['yo soy', 'tú eres', 'él es', 'nosotros somos', 'vosotros sois', 'ellos son', 'yo fui']);
+    expect(round[12]?.context).toBe('estar · present');
+  });
+
+  it('brings misses straight back but rests right answers, so the next round is new', () => {
+    const minute = Math.floor(NOW / 60_000);
+    const first = sprintRound(new Set(), {}, {}, NOW).slice(0, 14);
+    const forms: Record<string, number> = {};
+    const seen: Record<string, number> = {};
+    first.forEach((c, i) => {
+      forms[c.key] = i === 3 ? 0 : 1;
+      seen[c.key] = minute;
+    });
+    const next = sprintRound(new Set(), forms, seen, NOW + 60_000).slice(0, 14);
+    expect(next[0]?.key).toBe(first[3]?.key);
+    expect(next.slice(1).filter((c) => first.some((f) => f.key === c.key))).toEqual([]);
+    // A day later the right answers are due for review, ahead of new forms.
+    const later = sprintQueue(new Set(), forms, seen, NOW + 25 * 3_600_000);
+    expect(later.review).toHaveLength(13);
+    expect(later.missed).toHaveLength(1);
   });
 
   it('keys forms stably and compactly', () => {

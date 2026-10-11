@@ -106,27 +106,66 @@ export function openTenses(finished: Set<string>, data: ConjData = conjugation):
 /** Two right answers in a row: the form counts as known. */
 export const FORM_KNOWN = 2;
 
-/**
- * The cards for a round, from the open tenses: forms missed last time first,
- * then ones half-learned, then new ones, then known ones for upkeep; shuffled
- * within each group.
- */
+/** Minutes a form rests after its last answer, by streak: a miss can come straight back; right answers space out. */
+export const FORM_REST_MINUTES = [0, 24 * 60, 4 * 24 * 60, 10 * 24 * 60];
+
+export interface SprintQueue {
+  /** Missed last time: first, to fix them while fresh. */
+  missed: SprintCard[];
+  /** Right before and now due again, most overdue first. */
+  review: SprintCard[];
+  /** Never answered, in order: verb by verb (most common first), tense by tense, person by person. */
+  fresh: SprintCard[];
+  /** Answered recently and resting; only used if a fast round runs out of everything else. */
+  resting: SprintCard[];
+}
+
+/** Sorts the open forms by what they need, so a round never repeats what was just learned. */
+export function sprintQueue(
+  finished: Set<string>,
+  forms: Record<string, number>,
+  seen: Record<string, number>,
+  now: number,
+  random = Math.random,
+  data: ConjData = conjugation,
+): SprintQueue {
+  const open = openTenses(finished, data);
+  const minute = Math.floor(now / 60_000);
+  const q: SprintQueue = { missed: [], review: [], fresh: [], resting: [] };
+  const overdue = new Map<string, number>();
+  for (const c of conjugationPool(data)) {
+    if (!open.has(c.tense)) continue;
+    const n = forms[c.key];
+    if (n === undefined) {
+      q.fresh.push(c);
+      continue;
+    }
+    const rest = FORM_REST_MINUTES[Math.min(n, FORM_REST_MINUTES.length - 1)]!;
+    const since = seen[c.key] === undefined ? Infinity : minute - seen[c.key]!;
+    if (rest > 0 && since < rest) q.resting.push(c);
+    else if (n === 0) q.missed.push(c);
+    else {
+      overdue.set(c.key, since === Infinity ? Infinity : since / rest);
+      q.review.push(c);
+    }
+  }
+  q.missed = shuffle(q.missed, random);
+  q.review = shuffle(q.review, random).sort((a, b) => (overdue.get(b.key) ?? 0) - (overdue.get(a.key) ?? 0));
+  q.resting.sort((a, b) => (seen[a.key] ?? 0) - (seen[b.key] ?? 0));
+  return q;
+}
+
+/** The cards for a round, in the order they are asked. */
 export function sprintRound(
   finished: Set<string>,
   forms: Record<string, number>,
+  seen: Record<string, number> = {},
+  now = Date.now(),
   random = Math.random,
   data: ConjData = conjugation,
 ): SprintCard[] {
-  const open = openTenses(finished, data);
-  const pool = shuffle(
-    conjugationPool(data).filter((c) => open.has(c.tense)),
-    random,
-  );
-  const rank = (c: SprintCard) => {
-    const n = forms[c.key];
-    return n === 0 ? 0 : n === 1 ? 1 : n === undefined ? 2 : 3;
-  };
-  return [0, 1, 2, 3].flatMap((r) => pool.filter((c) => rank(c) === r));
+  const q = sprintQueue(finished, forms, seen, now, random, data);
+  return [...q.missed, ...q.review, ...q.fresh, ...q.resting];
 }
 
 export const SPRINT_SECONDS = 60;
