@@ -83,7 +83,8 @@ describe('vocab builder', () => {
   });
 
   it('plans due words first, then new ones in order', () => {
-    const plan = planVocab([card('w001', 4, 1, today - DAY)], NOW, { fresh: 3 });
+    const plan = planVocab([card('w001', 4, 1, today - DAY)], NOW, { size: 4 });
+    expect(planVocab([], NOW)).toHaveLength(20);
     expect(plan.map((e) => `${e.lessonId}#${e.index}`)).toEqual(['w001#4', 'w001#0', 'w001#1', 'w001#2']);
     expect(vocabStats([card('w001', 4, 2), card('a2-01', 0, 4)], NOW, vocab, 'A2')).toMatchObject({ seen: 1, known: 1, total: 2000, unlocked: 400 });
   });
@@ -93,7 +94,7 @@ describe('vocab builder', () => {
     expect(unlockedSets('B2')).toHaveLength(70);
     const seenA2 = vocab.sets.filter((s) => s.level === 'A2').flatMap((s) => s.words.map((_, i) => card(s.id, i, 1)));
     expect(planVocab(seenA2, NOW, { maxLevel: 'A2' })).toEqual([]);
-    expect(planVocab(seenA2, NOW, { maxLevel: 'B1', fresh: 2 }).map((e) => e.lessonId)).toEqual(['w021', 'w021']);
+    expect(planVocab(seenA2, NOW, { maxLevel: 'B1', size: 2 }).map((e) => e.lessonId)).toEqual(['w021', 'w021']);
   });
 
   it('does not repeat any word the lessons already teach', () => {

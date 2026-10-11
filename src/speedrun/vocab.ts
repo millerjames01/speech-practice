@@ -67,26 +67,28 @@ export function unlockedSets(maxLevel: SpeedrunLevel, pack = vocab): VocabSet[] 
   return pack.sets.filter((s) => SPEEDRUN_LEVELS.indexOf(s.level) <= top);
 }
 
+/** Words per vocab round. */
+export const VOCAB_ROUND = 20;
+
 /**
- * A vocab round: the weakest due words first, then the next words never seen,
- * in frequency order, from the sets unlocked so far.
+ * A vocab round of up to `size` words: the weakest due words first, then new
+ * words in set order from the sets unlocked so far, filling the rest.
  */
 export function planVocab(
   cards: SrsCard[],
   now: number,
   {
-    maxDue = 20,
-    fresh = 8,
+    size = VOCAB_ROUND,
     pack = vocab,
     maxLevel = 'C1',
-  }: { maxDue?: number; fresh?: number; pack?: VocabPack; maxLevel?: SpeedrunLevel } = {},
+  }: { size?: number; pack?: VocabPack; maxLevel?: SpeedrunLevel } = {},
 ): VocabEntry[] {
   const byKey = new Map(cards.filter(isVocabCard).map((c) => [`${c.lessonId}#${c.index}`, c]));
   const wordAt = (id: string, i: number) => pack.sets.find((s) => s.id === id)?.words[i];
   const due = [...byKey.values()]
     .filter((c) => isDue(c, now))
     .sort((a, b) => priority(b, now) - priority(a, now))
-    .slice(0, maxDue)
+    .slice(0, size)
     .flatMap((c) => {
       const w = wordAt(c.lessonId, c.index);
       return w ? [{ lessonId: c.lessonId, index: c.index, item: vocabItem(w), due: true }] : [];
@@ -94,7 +96,7 @@ export function planVocab(
   const unseen: VocabEntry[] = [];
   for (const set of unlockedSets(maxLevel, pack)) {
     set.words.forEach((w, i) => {
-      if (unseen.length < fresh && !byKey.has(`${set.id}#${i}`)) unseen.push({ lessonId: set.id, index: i, item: vocabItem(w), due: true });
+      if (due.length + unseen.length < size && !byKey.has(`${set.id}#${i}`)) unseen.push({ lessonId: set.id, index: i, item: vocabItem(w), due: true });
     });
   }
   return [...due, ...unseen];
