@@ -146,8 +146,10 @@ the same numbers:
   the A2 lessons teach, then 12 everyday verbs at B1, 8 spelling-shift verbs at
   B2 (començar → comencés) and 6 irregular ones at C1. A form counts in the
   rating at the higher of its verb's and its tense's level. Misses come back
-  next round; right answers rest 1, 4 and then 10 days; new forms come in
-  order, verb by verb. The
+  next round; right answers rest 1, 4 and then 10 days; new forms are mixed
+  from a working set of the five most common verbs not yet fully seen, across
+  every open tense, never the same verb twice running, and due reviews are
+  mixed in among them. The
   Catalan forms come from the Softcatalà conjugator (Central variant; other
   standard variants are accepted) and the Castellano from conjugacion.es, via
   `scripts/build-conjugation.py`.

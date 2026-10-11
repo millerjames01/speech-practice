@@ -583,6 +583,9 @@ details.sr-level[open] { padding-bottom: 28px; }
 .sr-verb-levels .sr-level-tag { height: 22px; font-size: 0.68rem; margin: 0; padding: 0 6px; flex: none; }
 .sr-verb-levels .sr-muted { margin: 0 0 0 auto; font-size: 0.74rem; white-space: nowrap; }
 
+.sr-working { margin: 14px 0 0; color: var(--sr-muted); font-size: 0.92rem; }
+.sr-working strong { color: var(--sr-text); font-weight: 600; }
+
 /* voice */
 .sr-voice-tip { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .sr-voice-tip .sr-btn { flex: none; }
