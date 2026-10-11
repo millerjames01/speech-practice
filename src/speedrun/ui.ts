@@ -55,10 +55,11 @@ import {
   setPrefs,
   xpStats,
 } from './progress';
+import { bestHearing, canListen, listen, type Listening } from './listen';
 import { buildMigrationPlan } from './migrate';
 import { SPRINT_SECONDS, conjugation, openTenses, roundFrom, sprintQueue, workingVerbs, type SprintCard } from './sprint';
 import { planLessonReview, planToday, type SrsCard } from './srs';
-import { planVocab, unlockedSets, vocab, vocabStats } from './vocab';
+import { planVocab, planVocabSet, setDue, unlockedSets, vocab, vocabStats } from './vocab';
 import { decodeSync, downloadSync, encodeSync, formatShortCode, uploadSync } from './sync';
 import {
   betterVoiceTip,
@@ -153,6 +154,7 @@ const ICONS = {
   back: ['M19 12H5', 'M11 18l-6-6 6-6'],
   play: ['M7 5v14l11-7z'],
   refresh: ['M20 11a8 8 0 1 0-2.3 5.7', 'M20 5v6h-6'],
+  mic: ['M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z', 'M19 11a7 7 0 0 1-14 0', 'M12 18v3'],
 };
 
 function iconButton(
@@ -398,6 +400,8 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
   autoplay.addEventListener('change', () => setPrefs({ ...getPrefs(), autoplay: autoplay.checked }));
   const dictation = el('input', { type: 'checkbox', checked: prefs.dictation });
   dictation.addEventListener('change', () => setPrefs({ ...getPrefs(), dictation: dictation.checked }));
+  const voiceAnswers = el('input', { type: 'checkbox', checked: prefs.voiceAnswers });
+  voiceAnswers.addEventListener('change', () => setPrefs({ ...getPrefs(), voiceAnswers: voiceAnswers.checked }));
   const voicePicker = el('label', { class: 'sr-toggle sr-voice-pick' });
   const fillVoices = () => {
     clear(voicePicker);
@@ -626,6 +630,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
         { class: 'sr-toggles' },
         el('label', { class: 'sr-toggle' }, autoplay, el('span', {}, 'Auto-play the answer after each check')),
         el('label', { class: 'sr-toggle' }, dictation, el('span', {}, 'Dictation: hear the Catalan and write it')),
+        canListen() ? el('label', { class: 'sr-toggle' }, voiceAnswers, el('span', {}, 'Voice: say the answer instead of typing')) : null,
         voicePicker,
               ),
       el(
@@ -998,7 +1003,7 @@ type SessionMode =
   | { kind: 'lesson'; lesson: SpeedrunLesson }
   | { kind: 'today' }
   | { kind: 'lessonReview'; lesson: SpeedrunLesson }
-  | { kind: 'vocab' };
+  | { kind: 'vocab'; setId?: string };
 
 const lessonEntries = (lesson: SpeedrunLesson): Entry[] =>
   lesson.items.map((item, index) => ({ lessonId: lesson.id, index, item }));
@@ -1106,16 +1111,29 @@ function runSession(
   const stage = el('main', { class: 'sr-drill' });
   root.append(stage);
 
-  // Shortcuts: Esc leaves; L / S replay the audio. While typing in the box
-  // they need Alt, so they never eat a letter.
+  // Shortcuts: Esc leaves; L / S replay the audio; M speaks the answer in
+  // voice mode. While typing in the box they need Alt, so they never eat a letter.
   let replay: ((slow: boolean) => void) | null = null;
+  let mic: (() => void) | null = null;
+  let listening: Listening | null = null;
+  const stopListening = () => {
+    listening?.stop();
+    listening = null;
+  };
+  cleanups.push(stopListening);
   onKey((ev) => {
     if (ev.key === 'Escape') return backToMap();
-    if (!replay || ev.metaKey || ev.ctrlKey) return;
-    if (ev.code !== 'KeyL' && ev.code !== 'KeyS') return;
+    if (ev.metaKey || ev.ctrlKey) return;
+    if (ev.code !== 'KeyL' && ev.code !== 'KeyS' && ev.code !== 'KeyM') return;
     const active = document.activeElement;
     const typing = active instanceof HTMLInputElement && !active.disabled;
     if (typing && !ev.altKey) return;
+    if (ev.code === 'KeyM') {
+      if (!mic) return;
+      ev.preventDefault();
+      return mic();
+    }
+    if (!replay) return;
     ev.preventDefault();
     replay(ev.code === 'KeyS');
   });
@@ -1129,10 +1147,13 @@ function runSession(
   const showItem = () => {
     updateBar();
     replay = null;
+    mic = null;
+    stopListening();
     const entry = queue[0];
     if (!entry) return finish();
     const [es, pattern, hint] = entry.item;
     const dictation = getPrefs().dictation;
+    const voice = getPrefs().voiceAnswers && canListen();
     const spoken = canonical(pattern);
     clear(stage);
 
@@ -1152,17 +1173,67 @@ function runSession(
     const feedback = el('div', { class: 'sr-feedback', role: 'status' });
     const checkBtn = el('button', { class: 'sr-btn primary', type: 'submit' }, 'Check');
     const giveUp = button('Show answer', () => resolve(null), 'sr-btn ghost');
+    // Voice mode: say the answer; any of the recogniser's guesses that is right counts.
+    const heardLine = el('p', { class: 'sr-heard', role: 'status' });
+    const micBtn = voice ? iconButton('Speak', ICONS.mic, () => mic?.(), 'sr-btn sr-mic') : null;
     const actions = el(
       'div',
       { class: 'sr-drill-actions' },
+      micBtn,
       checkBtn,
       giveUp,
-      dictation
-        ? el('span', { class: 'sr-keys' }, kbd('Enter'), ' check', kbd('Alt'), kbd('L'), ' replay')
-        : el('span', { class: 'sr-keys' }, kbd('Enter'), ' check', kbd('Esc'), ' map'),
+      voice
+        ? el('span', { class: 'sr-keys' }, kbd('Alt'), kbd('M'), ' speak', kbd('Enter'), ' check')
+        : dictation
+          ? el('span', { class: 'sr-keys' }, kbd('Enter'), ' check', kbd('Alt'), kbd('L'), ' replay')
+          : el('span', { class: 'sr-keys' }, kbd('Enter'), ' check', kbd('Esc'), ' map'),
     );
-    const form = el('form', { class: 'sr-form' }, input, accents, actions);
+    const form = el('form', { class: 'sr-form' }, input, accents, actions, heardLine);
     let answered = false;
+
+    if (voice && micBtn) {
+      const label = micBtn.querySelector('span')!;
+      const idle = () => {
+        micBtn.classList.remove('is-listening');
+        label.textContent = 'Speak';
+      };
+      mic = () => {
+        if (answered) return;
+        if (listening) return stopListening();
+        stopSpeaking();
+        const mine = listen();
+        listening = mine;
+        micBtn.classList.add('is-listening');
+        label.textContent = 'Listening…';
+        heardLine.textContent = '';
+        void mine.result
+          .then((heard) => {
+            if (listening !== mine || answered) return;
+            listening = null;
+            idle();
+            const best = bestHearing(pattern, heard);
+            if (!best) {
+              heardLine.textContent = 'Didn’t catch that. Tap Speak to try again, or type it.';
+              return;
+            }
+            input.value = best.text;
+            if (best.result.verdict !== 'wrong') return resolve(best.result);
+            heardLine.textContent = `Heard “${best.text}”. Try again, fix it and press Check, or Show answer.`;
+            input.focus();
+          })
+          .catch((err: unknown) => {
+            if (listening === mine) listening = null;
+            idle();
+            heardLine.textContent = err instanceof Error ? err.message : String(err);
+          });
+      };
+      // Typing takes over from listening.
+      input.addEventListener('input', () => {
+        if (!listening) return;
+        stopListening();
+        idle();
+      });
+    }
 
     form.addEventListener('submit', (ev) => {
       ev.preventDefault();
@@ -1174,7 +1245,7 @@ function runSession(
     const label =
       mode.kind === 'lesson' ? 'Translate into Catalan'
       : mode.kind === 'today' ? 'Today'
-      : mode.kind === 'vocab' ? 'Vocab · translate the word'
+      : mode.kind === 'vocab' ? `Vocab · ${vocab.sets.find((x) => x.id === mode.setId)?.title ?? 'translate the word'}`
       : `Review · ${mode.lesson.title}`;
     const prompt = el('h1', { class: 'sr-prompt' }, es);
     let promptBlock: HTMLElement[];
@@ -1213,9 +1284,13 @@ function runSession(
       feedback,
     );
     input.focus();
+    if (voice && !dictation) setTimeout(() => mic?.(), 250);
 
     const resolve = (result: CheckResult | null) => {
       answered = true;
+      mic = null;
+      stopListening();
+      heardLine.remove();
       input.disabled = true;
       accents.remove();
       actions.remove();
@@ -1295,10 +1370,13 @@ function runSession(
       eyebrow = `Review · ${l.title}`;
       title = 'Lesson reviewed.';
     } else if (mode.kind === 'vocab') {
-      nextBtn = iconButton('Another round', ICONS.refresh, () => startVocab(root, nav), 'sr-btn primary');
+      const set = mode.setId ? vocab.sets.find((x) => x.id === mode.setId) : undefined;
+      nextBtn = set
+        ? iconButton('Practise this set again', ICONS.refresh, () => startVocabSet(root, nav, set.id), 'sr-btn primary')
+        : iconButton('Another round', ICONS.refresh, () => startVocab(root, nav), 'sr-btn primary');
       extra = [button('Vocab builder', () => renderVocab(root, nav), 'sr-btn')];
-      eyebrow = 'Vocab builder';
-      title = 'Round done.';
+      eyebrow = set ? `Vocab · ${set.title}` : 'Vocab builder';
+      title = set ? 'Set done.' : 'Round done.';
     } else {
       // A heavy backlog means more reviews first; otherwise the next lesson.
       nextBtn = heavy
@@ -1576,6 +1654,13 @@ function uniqueMisses(results: [SprintCard, boolean][]): SprintCard[] {
 
 /* ---------- vocab builder ---------- */
 
+/** Practise one vocab set: all 20 words. */
+function startVocabSet(root: HTMLElement, nav: SpeedrunNav, setId: string): void {
+  const plan = planVocabSet(allCards(), Date.now(), setId);
+  if (plan.length === 0) return renderVocab(root, nav);
+  runSession(root, nav, plan.map(({ lessonId, index, item, due }) => ({ lessonId, index, item, due })), { kind: 'vocab', setId });
+}
+
 function startVocab(root: HTMLElement, nav: SpeedrunNav): void {
   const plan = planVocab(allCards(), Date.now(), { maxLevel: courseLevel() });
   if (plan.length === 0) return renderVocab(root, nav);
@@ -1646,13 +1731,21 @@ function renderVocab(root: HTMLElement, nav: SpeedrunNav): void {
         ...vocab.sets.map((set) => {
           const locked = !open.has(set.id);
           const credit = set.words.reduce((n, _, i) => n + itemCredit(index.get(`${set.id}#${i}`)), 0) / set.words.length;
-          return el(
-            'div',
-            { class: `sr-vocab-set${locked ? ' locked' : ''}` },
-            el('span', { class: 'sr-quest-title' }, set.title, el('span', { class: 'sr-badge' }, set.level)),
+          const due = setDue(cards, now, set.id);
+          const tile = el(
+            locked ? 'div' : 'button',
+            { class: `sr-vocab-set${locked ? ' locked' : ''}`, ...(locked ? {} : { type: 'button', title: `Practise ${set.title}` }) },
+            el(
+              'span',
+              { class: 'sr-quest-title' },
+              set.title,
+              el('span', { class: 'sr-vocab-set-tags' }, due ? el('span', { class: 'sr-due' }, `${due} due`) : null, el('span', { class: 'sr-badge' }, set.level)),
+            ),
             locked ? el('span', { class: 'sr-muted' }, `Unlocks at ${set.level}`) : meter(credit),
             el('span', { class: 'sr-vocab-preview', lang: 'ca' }, locked ? '' : set.words.slice(0, 5).map(([ca]) => ca).join(' · ')),
           );
+          if (!locked) tile.addEventListener('click', () => startVocabSet(root, nav, set.id));
+          return tile;
         }),
       ),
     ),

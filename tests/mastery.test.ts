@@ -3,7 +3,7 @@ import { availableStars, compareLevels, conjugationRating, courseRating, indexCa
 import { DAY, interleave, planLessonReview, planToday, startOfDay, type SrsCard } from '../src/speedrun/srs';
 import { conjugation, conjugationPool, formKey, openTenses, sprintQueue, sprintRound } from '../src/speedrun/sprint';
 import { loadSpeedrun } from '../src/speedrun/content';
-import { isVocabCard, planVocab, unlockedSets, vocab, vocabPattern, vocabStats } from '../src/speedrun/vocab';
+import { isVocabCard, planVocab, planVocabSet, setDue, unlockedSets, vocab, vocabPattern, vocabStats } from '../src/speedrun/vocab';
 import { checkAnswer } from '../src/speedrun/check';
 import type { SpeedrunLesson } from '../src/speedrun/types';
 
@@ -266,5 +266,18 @@ describe('stars open over time', () => {
     expect(isPerfect({ bestScore: 1 })).toBe(true);
     expect(isPerfect({ bestScore: 0.92 })).toBe(false);
     expect(isPerfect(undefined)).toBe(false);
+  });
+});
+
+describe('vocab by set', () => {
+  it('runs a whole set: due first, then new, then the rest marked early', () => {
+    const cs = [card('w001', 3, 2, today - DAY), card('w001', 5, 3, today + 9 * DAY)];
+    const plan = planVocabSet(cs, NOW, 'w001');
+    expect(plan).toHaveLength(20);
+    expect(plan[0]).toMatchObject({ index: 3, due: true });
+    expect(plan.at(-1)).toMatchObject({ index: 5, due: false });
+    expect(plan.filter((e) => e.due)).toHaveLength(19);
+    expect(setDue(cs, NOW, 'w001')).toBe(1);
+    expect(planVocabSet(cs, NOW, 'nope')).toEqual([]);
   });
 });

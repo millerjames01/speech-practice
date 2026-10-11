@@ -158,7 +158,9 @@ the same numbers:
   C1. No verbs (the sprint has them) and no transparent cognates (the cognate
   rules give those away): different roots, false friends, gender flips. Each
   level's sets unlock when the course reaches that level, and they review on
-  their own schedule, separate from Today.
+  their own schedule, separate from Today. *Practice* runs a mixed round of 20
+  (due words first, then new ones); tap any unlocked set to practise just that
+  set.
 
 **Older progress** converts once, on first open: lessons and cards carry over
 unchanged (stars and percentages come straight from them), XP and streak are
@@ -172,6 +174,15 @@ offers, then a sprint or a vocab round if you have five minutes more. Skip the n
 due. Don't move on from a level until its boss lesson clears at 90% first try.
 Pair it with real Catalan input (TV3/3Cat, podcasts) — this course builds
 accurate production of the core; listening hours build the ear.
+
+**Voice answers.** A toggle on the map (shown when the browser has speech
+recognition: Chrome and Edge on desktop and Android, Safari where it supports
+Catalan) lets you say the answer instead of typing it, in lessons, Today,
+lesson reviews and vocab. The mic starts when each item appears (or press
+Speak / Alt+M); the recogniser's guesses are all checked and any right one
+counts. If none is right, the box shows what was heard so you can try again,
+correct it, or show the answer. Typing takes over at any time. Recognition is
+done by the browser's speech service; the app stores nothing.
 
 **Dictation.** A toggle on the map switches every drill to *hear the Catalan,
 write it*: the Castellano stays hidden (one click reveals it), Play and 0.75×
