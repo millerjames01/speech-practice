@@ -189,12 +189,13 @@ describe('migration from older progress', () => {
       prefs: { autoplay: true, dictation: false },
     }));
     expect(p.needsMigration()).toBe(true);
-    expect(p.migrateProgress(['k1', 'k2'], NOW)).toEqual({ xp: 20, forms: 2 });
+    const plan = (seedForms: string[]) => ({ seedForms, mapForms: (f: Record<string, number>) => ({ ...f }), mapCard: (c: SrsCard) => c });
+    expect(p.migrateProgress(plan(['k1', 'k2']), NOW)).toEqual({ xp: 20, forms: 2, words: 0 });
     expect(p.needsMigration()).toBe(false);
     expect(p.xpStats(NOW)).toMatchObject({ total: 20, streak: 2 });
     expect(p.allCards()).toHaveLength(2);
     p.recordForms([['k1', true]]);
-    expect(p.migrateProgress(['k1'], NOW)).toEqual({ xp: 0, forms: 0 });
+    expect(p.migrateProgress(plan(['k1']), NOW)).toEqual({ xp: 0, forms: 2, words: 0 });
     expect(p.allForms().k1).toBe(2);
     p.resetProgress();
     expect(p.needsMigration()).toBe(false);

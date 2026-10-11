@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { availableStars, compareLevels, conjugationRating, courseRating, indexCards, isPerfect, nextStarOpensIn, itemCredit, lessonDue, lessonStars, levelProgress, toRating, vocabRating } from '../src/speedrun/mastery';
 import { DAY, interleave, planLessonReview, planToday, startOfDay, type SrsCard } from '../src/speedrun/srs';
-import { formKey, sprintPool, sprintRound, uniqueForms } from '../src/speedrun/sprint';
+import { conjugation, conjugationPool, formKey, openTenses, sprintRound } from '../src/speedrun/sprint';
 import { loadSpeedrun } from '../src/speedrun/content';
 import { isVocabCard, planVocab, unlockedSets, vocab, vocabPattern, vocabStats } from '../src/speedrun/vocab';
 import { checkAnswer } from '../src/speedrun/check';
@@ -63,11 +63,15 @@ describe('review plans', () => {
 });
 
 describe('vocab builder', () => {
-  it('ships a frequency-ordered pack with no duplicates and keeps its own track', () => {
-    expect(vocab.sets).toHaveLength(24);
+  it('ships topic sets per level, no duplicates, no verbs, on its own track', () => {
+    const perLevel = { A2: 20, B1: 25, B2: 25, C1: 30 } as const;
+    expect(vocab.sets).toHaveLength(100);
     expect(vocab.sets.every((s) => s.words.length === 20)).toBe(true);
-    for (const level of ['A2', 'B1', 'B2', 'C1'] as const) expect(vocab.sets.filter((s) => s.level === level)).toHaveLength(6);
-    expect(isVocabCard(card('v03', 1, 0))).toBe(true);
+    for (const [level, n] of Object.entries(perLevel)) expect(vocab.sets.filter((s) => s.level === level)).toHaveLength(n);
+    const sprintVerbs = new Set(conjugation.verbs.map((v) => v.ca));
+    expect(vocab.sets.flatMap((s) => s.words.map(([ca]) => ca)).filter((ca) => sprintVerbs.has(ca) || / -?se$|-se$/.test(ca))).toEqual([]);
+    expect(isVocabCard(card('w003', 1, 0))).toBe(true);
+    expect(isVocabCard(card('v03', 1, 0))).toBe(false);
     expect(isVocabCard(card('a2-03', 1, 0))).toBe(false);
   });
 
@@ -79,17 +83,17 @@ describe('vocab builder', () => {
   });
 
   it('plans due words first, then new ones in order', () => {
-    const plan = planVocab([card('v01', 4, 1, today - DAY)], NOW, { fresh: 3 });
-    expect(plan.map((e) => `${e.lessonId}#${e.index}`)).toEqual(['v01#4', 'v01#0', 'v01#1', 'v01#2']);
-    expect(vocabStats([card('v01', 4, 2), card('a2-01', 0, 4)], NOW, vocab, 'A2')).toMatchObject({ seen: 1, known: 1, total: 480, unlocked: 120 });
+    const plan = planVocab([card('w001', 4, 1, today - DAY)], NOW, { fresh: 3 });
+    expect(plan.map((e) => `${e.lessonId}#${e.index}`)).toEqual(['w001#4', 'w001#0', 'w001#1', 'w001#2']);
+    expect(vocabStats([card('w001', 4, 2), card('a2-01', 0, 4)], NOW, vocab, 'A2')).toMatchObject({ seen: 1, known: 1, total: 2000, unlocked: 400 });
   });
 
   it('unlocks sets level by level, and only offers new words from open sets', () => {
-    expect(unlockedSets('A2').map((s) => s.id)).toEqual(['v01', 'v02', 'v03', 'v04', 'v05', 'v06']);
-    expect(unlockedSets('B2')).toHaveLength(18);
+    expect(unlockedSets('A2').map((s) => s.id)).toEqual(Array.from({ length: 20 }, (_, i) => `w${String(i + 1).padStart(3, '0')}`));
+    expect(unlockedSets('B2')).toHaveLength(70);
     const seenA2 = vocab.sets.filter((s) => s.level === 'A2').flatMap((s) => s.words.map((_, i) => card(s.id, i, 1)));
     expect(planVocab(seenA2, NOW, { maxLevel: 'A2' })).toEqual([]);
-    expect(planVocab(seenA2, NOW, { maxLevel: 'B1', fresh: 2 }).map((e) => e.lessonId)).toEqual(['v07', 'v07']);
+    expect(planVocab(seenA2, NOW, { maxLevel: 'B1', fresh: 2 }).map((e) => e.lessonId)).toEqual(['w021', 'w021']);
   });
 
   it('does not repeat any word the lessons already teach', () => {
@@ -103,25 +107,48 @@ describe('vocab builder', () => {
 });
 
 describe('conjugation sprint', () => {
-  const lessons = loadSpeedrun().lessons;
+  const pool = conjugationPool();
+  const find = (context: string, prompt: string) => pool.find((c) => c.context === context && c.prompt === prompt);
 
-  it('turns reference tables into prompts, with every listed form accepted', () => {
-    const pool = sprintPool(lessons.filter((l) => l.id === 'a2-01'));
-    expect(pool.find((c) => c.prompt === 'nosaltres')).toMatchObject({ context: 'ser — present', answer: 'som' });
-    const multi = sprintPool(lessons).find((c) => c.answer.includes(' / '));
-    expect(multi && checkAnswer(multi.pattern, multi.answer.split(' / ')[1]!).verdict).toBe('exact');
+  it('translates Castellano forms into Catalan across 45 verbs and 12 tenses', () => {
+    expect(conjugation.verbs).toHaveLength(45);
+    expect(conjugation.tenses).toHaveLength(12);
+    expect(pool.length).toBe(3060);
+    expect(new Set(pool.map((c) => c.key)).size).toBe(pool.length);
+    expect(find('tenir · present', 'nosotros tenemos')).toMatchObject({ answer: 'tenim', level: 'A2' });
+    expect(find('anar · present', 'nosotros vamos')?.answer).toBe('anem');
+    expect(find('anar · passat', 'nosotros fuimos')?.answer).toBe('vam anar');
   });
 
-  it('labels multi-column tables with the column', () => {
-    const pool = sprintPool(lessons.filter((l) => l.title.startsWith('-ar verbs')));
-    expect(pool.find((c) => c.prompt === 'menjar · tu')?.answer).toBe('menges');
+  it('accepts every standard variant, a subject pronoun, and que in the subjunctive', () => {
+    const past = find('fer · passat', 'yo hice')!;
+    for (const a of ['vaig fer', 'fiu', 'jo vaig fer']) expect(checkAnswer(past.pattern, a).verdict).toBe('exact');
+    const subj = find('ser · subjuntiu present', 'que nosotros seamos')!;
+    for (const a of ['siguem', 'que siguem']) expect(checkAnswer(subj.pattern, a).verdict).toBe('exact');
+    const imper = find('tenir · imperatiu', '¡ten! (tú)')!;
+    expect(imper.answer).toBe('tingues');
+    expect(checkAnswer(imper.pattern, 'té').verdict).toBe('exact');
   });
 
-  it('skips non-lookup tables and falls back to early lessons when little is finished', () => {
-    expect(sprintPool(lessons).some((c) => c.context === 'conversions')).toBe(false);
-    const round = sprintRound(lessons, new Set(), () => 0.3);
-    expect(round.length).toBeGreaterThanOrEqual(30);
-    expect(new Set(round.map((c) => `${c.context}|${c.prompt}`)).size).toBe(round.length);
+  it('opens tenses with the lessons that teach them', () => {
+    expect([...openTenses(new Set())]).toEqual(['pres']);
+    expect([...openTenses(new Set(['a2-21', 'b1-14']))]).toEqual(['pres', 'perif', 'subj']);
+    const round = sprintRound(new Set(), {}, () => 0.3);
+    expect(round.every((c) => c.tense === 'pres')).toBe(true);
+    expect(round).toHaveLength(45 * 6);
+  });
+
+  it('serves missed forms first, then half-learned, then new, then known', () => {
+    const pres = pool.filter((c) => c.tense === 'pres');
+    const forms = { [pres[0]!.key]: 2, [pres[1]!.key]: 1, [pres[2]!.key]: 0 };
+    const round = sprintRound(new Set(), forms, () => 0.7);
+    expect(round.slice(0, 2).map((c) => c.key)).toEqual([pres[2]!.key, pres[1]!.key]);
+    expect(round.at(-1)?.key).toBe(pres[0]!.key);
+  });
+
+  it('keys forms stably and compactly', () => {
+    expect(formKey('tenir|pres', '3')).toBe(formKey('tenir|pres', '3'));
+    expect(formKey('tenir|pres', '3')).toMatch(/^[a-z0-9]{1,7}$/);
   });
 });
 
@@ -136,14 +163,14 @@ describe('ratings', () => {
     expect(compareLevels('B1', 'B1')).toBe(0);
   });
 
-  it('rates conjugation by the forms in each level, two right in a row for full credit', () => {
-    expect(conjugationRating(content.byLevel, {})).toMatchObject({ level: 'A2', pct: 0 });
-    const a2 = uniqueForms(sprintPool(content.byLevel.A2));
-    const half = conjugationRating(content.byLevel, Object.fromEntries(a2.map((c) => [c.key, 1])));
-    expect(half.byLevel.A2).toBeCloseTo(0.5);
-    const all = conjugationRating(content.byLevel, Object.fromEntries(a2.map((c) => [c.key, 2])));
-    expect(all.byLevel.A2).toBe(1);
-    expect(all.level).toBe('B1');
+  it('rates conjugation by each level\'s tenses, two right in a row for full credit', () => {
+    const pool = conjugationPool();
+    expect(conjugationRating({})).toMatchObject({ level: 'A2', pct: 0 });
+    const a2 = pool.filter((c) => c.level === 'A2');
+    expect(conjugationRating(Object.fromEntries(a2.map((c) => [c.key, 1]))).byLevel.A2).toBeCloseTo(0.5);
+    const all = conjugationRating(Object.fromEntries(a2.map((c) => [c.key, 2])));
+    expect(all).toMatchObject({ level: 'B1', pct: 0 });
+    expect(all.overall).toBeCloseTo(a2.length / pool.length);
   });
 
   it('weights the whole-course figure by each level\'s size', () => {
@@ -160,18 +187,6 @@ describe('ratings', () => {
     expect(vocabRating(indexCards(a2), vocab)).toMatchObject({ level: 'B1', pct: 0 });
   });
 
-  it('keys forms stably and compactly', () => {
-    expect(formKey('ser — present', 'jo')).toBe(formKey('ser — present', 'jo'));
-    expect(formKey('ser — present', 'jo')).not.toBe(formKey('ser — present', 'tu'));
-    expect(formKey('ser — present', 'jo')).toMatch(/^[a-z0-9]{1,7}$/);
-  });
-
-  it('serves forms not yet known first in a sprint', () => {
-    const pool = uniqueForms(sprintPool(content.lessons.slice(0, 6)));
-    const known = Object.fromEntries(pool.slice(0, pool.length - 5).map((c) => [c.key, 2]));
-    const round = sprintRound(content.lessons.slice(0, 6), new Set(content.lessons.slice(0, 6).map((l) => l.id)), () => 0.4, known);
-    expect(round.slice(0, 5).every((c) => !known[c.key])).toBe(true);
-  });
 });
 
 describe('stars open over time', () => {

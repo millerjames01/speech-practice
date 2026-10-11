@@ -570,6 +570,13 @@ details.sr-level[open] { padding-bottom: 28px; }
 .sr-star-rules li.locked { color: var(--sr-faint); }
 .sr-star-when { margin-left: auto; padding-left: 12px; color: var(--sr-faint); font-size: 0.78rem; font-variant-numeric: tabular-nums; }
 
+/* sprint tenses */
+.sr-tense-list { list-style: none; padding: 0; margin: 24px 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 6px 16px; font-size: 0.86rem; }
+.sr-tense-list li { display: flex; align-items: center; gap: 10px; color: var(--sr-faint); }
+.sr-tense-list li.open { color: var(--sr-text); }
+.sr-tense-list .sr-level-tag { height: 22px; font-size: 0.68rem; margin: 0; padding: 0 6px; }
+.sr-tense-list .sr-muted { margin: 0 0 0 auto; font-size: 0.74rem; }
+
 /* voice */
 .sr-voice-tip { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .sr-voice-tip .sr-btn { flex: none; }

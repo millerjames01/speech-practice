@@ -105,13 +105,19 @@ function canonicalSeq(nodes: Node[]): string {
     .join('');
 }
 
-/** Collapses the gaps left by dropped optionals: double spaces, space before punctuation. */
+/**
+ * Collapses the gaps left by dropped optionals: double spaces, space before
+ * punctuation. Sentences (they end in punctuation) start with a capital even
+ * when an optional first word was dropped; single words and verb forms
+ * ("el cos", "tingues") keep their lower case.
+ */
 export function tidy(text: string): string {
   const out = text
     .replace(/\s+/g, ' ')
     .replace(/\s+([.,!?;:…»)])/g, '$1')
     .replace(/([«¿¡(])\s+/g, '$1')
     .trim();
+  if (!/[.,!?;:…»"]$/.test(out)) return out;
   return out.charAt(0).toUpperCase() + out.slice(1);
 }
 

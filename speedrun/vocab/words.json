@@ -1,2094 +1,8706 @@
 {
-  "reviewed": false,
-  "source": "Ranked by FrequencyWords ca_50k (OpenSubtitles), subtitle-genre words demoted; words already taught in the lessons are excluded. 120 words per level.",
-  "sets": [
-    {
-      "id": "v01",
-      "level": "A2",
-      "title": "Most common I",
-      "words": [
-        [
-          "el cos",
-          "el cuerpo"
-        ],
-        [
-          "la mort",
-          "la muerte"
-        ],
-        [
-          "l'amor",
-          "el amor"
-        ],
-        [
-          "la guerra",
-          "la guerra"
-        ],
-        [
-          "la cara",
-          "la cara"
-        ],
-        [
-          "l'ull",
-          "el ojo"
-        ],
-        [
-          "el cor",
-          "el corazón"
-        ],
-        [
-          "únic",
-          "único"
-        ],
-        [
-          "el minut",
-          "el minuto"
-        ],
-        [
-          "el treball",
-          "el trabajo (la obra, no 'feina')"
-        ],
-        [
-          "la força",
-          "la fuerza"
-        ],
-        [
-          "la forma",
-          "la forma"
-        ],
-        [
-          "la reina",
-          "la reina"
-        ],
-        [
-          "la fe",
-          "la fe"
-        ],
-        [
-          "el nord",
-          "el norte"
-        ],
-        [
-          "l'oportunitat",
-          "la oportunidad"
-        ],
-        [
-          "el torn",
-          "el turno"
-        ],
-        [
-          "el final",
-          "el final"
-        ],
-        [
-          "la nena",
-          "la niña"
-        ],
-        [
-          "la seguretat",
-          "la seguridad"
-        ]
-      ]
-    },
-    {
-      "id": "v02",
-      "level": "A2",
-      "title": "Most common II",
-      "words": [
-        [
-          "el telèfon",
-          "el teléfono"
-        ],
-        [
-          "la resta",
-          "el resto"
-        ],
-        [
-          "l'ordre",
-          "la orden / el orden"
-        ],
-        [
-          "el record",
-          "el recuerdo"
-        ],
-        [
-          "diferent",
-          "diferente"
-        ],
-        [
-          "el parell",
-          "el par"
-        ],
-        [
-          "seguir",
-          "seguir"
-        ],
-        [
-          "salvar",
-          "salvar"
-        ],
-        [
-          "la paraula",
-          "la palabra"
-        ],
-        [
-          "el perill",
-          "el peligro"
-        ],
-        [
-          "l'escola",
-          "la escuela"
-        ],
-        [
-          "lliure",
-          "libre"
-        ],
-        [
-          "l'equip",
-          "el equipo"
-        ],
-        [
-          "el president",
-          "el presidente"
-        ],
-        [
-          "el joc",
-          "el juego"
-        ],
-        [
-          "lluitar",
-          "luchar"
-        ],
-        [
-          "el país",
-          "el país"
-        ],
-        [
-          "el secret",
-          "el secreto"
-        ],
-        [
-          "el número",
-          "el número"
-        ],
-        [
-          "el dret",
-          "el derecho"
-        ]
-      ]
-    },
-    {
-      "id": "v03",
-      "level": "A2",
-      "title": "Most common III",
-      "words": [
-        [
-          "el vaixell",
-          "el barco"
-        ],
-        [
-          "correcte",
-          "correcto"
-        ],
-        [
-          "el control",
-          "el control"
-        ],
-        [
-          "enviar",
-          "enviar"
-        ],
-        [
-          "la prova",
-          "la prueba"
-        ],
-        [
-          "la broma",
-          "la broma"
-        ],
-        [
-          "la companyia",
-          "la compañía"
-        ],
-        [
-          "especial",
-          "especial"
-        ],
-        [
-          "l'hospital",
-          "el hospital"
-        ],
-        [
-          "la classe",
-          "la clase"
-        ],
-        [
-          "el viatge",
-          "el viaje"
-        ],
-        [
-          "l'atac",
-          "el ataque"
-        ],
-        [
-          "guanyar",
-          "ganar"
-        ],
-        [
-          "la sal",
-          "la sal"
-        ],
-        [
-          "dolent",
-          "malo"
-        ],
-        [
-          "l'atenció",
-          "la atención"
-        ],
-        [
-          "la llei",
-          "la ley"
-        ],
-        [
-          "el grup",
-          "el grupo"
-        ],
-        [
-          "l'honor",
-          "el honor"
-        ],
-        [
-          "la calma",
-          "la calma"
-        ]
-      ]
-    },
-    {
-      "id": "v04",
-      "level": "A2",
-      "title": "Most common IV",
-      "words": [
-        [
-          "el sistema",
-          "el sistema"
-        ],
-        [
-          "el consell",
-          "el consejo"
-        ],
-        [
-          "la boca",
-          "la boca"
-        ],
-        [
-          "real",
-          "real"
-        ],
-        [
-          "preparat",
-          "preparado"
-        ],
-        [
-          "l'illa",
-          "la isla"
-        ],
-        [
-          "capaç",
-          "capaz"
-        ],
-        [
-          "el dolor",
-          "el dolor"
-        ],
-        [
-          "la notícia",
-          "la noticia"
-        ],
-        [
-          "el somni",
-          "el sueño (lo que se sueña)"
-        ],
-        [
-          "l'objectiu",
-          "el objetivo"
-        ],
-        [
-          "la foto",
-          "la foto"
-        ],
-        [
-          "oficial",
-          "oficial"
-        ],
-        [
-          "el servei",
-          "el servicio"
-        ],
-        [
-          "la llista",
-          "la lista"
-        ],
-        [
-          "el cavall",
-          "el caballo"
-        ],
-        [
-          "el plaer",
-          "el placer"
-        ],
-        [
-          "l'avió",
-          "el avión"
-        ],
-        [
-          "el vi",
-          "el vino"
-        ],
-        [
-          "següent",
-          "siguiente"
-        ]
-      ]
-    },
-    {
-      "id": "v05",
-      "level": "A2",
-      "title": "Most common V",
-      "words": [
-        [
-          "la relació",
-          "la relación"
-        ],
-        [
-          "sa",
-          "sano"
-        ],
-        [
-          "divertit",
-          "divertido"
-        ],
-        [
-          "l'espai",
-          "el espacio"
-        ],
-        [
-          "mantenir",
-          "mantener"
-        ],
-        [
-          "la meitat",
-          "la mitad"
-        ],
-        [
-          "normal",
-          "normal"
-        ],
-        [
-          "el sud",
-          "el sur"
-        ],
-        [
-          "el mestre",
-          "el maestro"
-        ],
-        [
-          "el senyal",
-          "la señal"
-        ],
-        [
-          "la clau",
-          "la llave"
-        ],
-        [
-          "el govern",
-          "el gobierno"
-        ],
-        [
-          "el cervell",
-          "el cerebro"
-        ],
-        [
-          "la salut",
-          "la salud"
-        ],
-        [
-          "el tracte",
-          "el trato"
-        ],
-        [
-          "l'est",
-          "el este"
-        ],
-        [
-          "el fons",
-          "el fondo"
-        ],
-        [
-          "el coll",
-          "el cuello"
-        ],
-        [
-          "el riu",
-          "el río"
-        ],
-        [
-          "l'edifici",
-          "el edificio"
-        ]
-      ]
-    },
-    {
-      "id": "v06",
-      "level": "A2",
-      "title": "Most common VI",
-      "words": [
-        [
-          "la majoria",
-          "la mayoría"
-        ],
-        [
-          "el truc",
-          "el truco"
-        ],
-        [
-          "confiar",
-          "confiar"
-        ],
-        [
-          "rebre",
-          "recibir"
-        ],
-        [
-          "la trucada",
-          "la llamada"
-        ],
-        [
-          "ensenyar",
-          "enseñar"
-        ],
-        [
-          "robar",
-          "robar"
-        ],
-        [
-          "l'edat",
-          "la edad"
-        ],
-        [
-          "matar",
-          "matar"
-        ],
-        [
-          "perillós",
-          "peligroso"
-        ],
-        [
-          "ple",
-          "lleno"
-        ],
-        [
-          "el mur",
-          "el muro"
-        ],
-        [
-          "el respecte",
-          "el respeto"
-        ],
-        [
-          "la qüestió",
-          "la cuestión"
-        ],
-        [
-          "pobre",
-          "pobre"
-        ],
-        [
-          "la línia",
-          "la línea"
-        ],
-        [
-          "l'aire",
-          "el aire"
-        ],
-        [
-          "amable",
-          "amable"
-        ],
-        [
-          "la investigació",
-          "la investigación"
-        ],
-        [
-          "la ment",
-          "la mente"
-        ]
-      ]
-    },
-    {
-      "id": "v07",
-      "level": "B1",
-      "title": "Very common I",
-      "words": [
-        [
-          "arreu",
-          "en todas partes"
-        ],
-        [
-          "humà",
-          "humano"
-        ],
-        [
-          "suficient",
-          "suficiente"
-        ],
-        [
-          "la justícia",
-          "la justicia"
-        ],
-        [
-          "llest",
-          "listo"
-        ],
-        [
-          "protegir",
-          "proteger"
-        ],
-        [
-          "l'energia",
-          "la energía"
-        ],
-        [
-          "el planeta",
-          "el planeta"
-        ],
-        [
-          "la zona",
-          "la zona"
-        ],
-        [
-          "el paper",
-          "el papel"
-        ],
-        [
-          "el contacte",
-          "el contacto"
-        ],
-        [
-          "el castell",
-          "el castillo"
-        ],
-        [
-          "el pont",
-          "el puente"
-        ],
-        [
-          "el judici",
-          "el juicio"
-        ],
-        [
-          "provar",
-          "probar"
-        ],
-        [
-          "el negoci",
-          "el negocio"
-        ],
-        [
-          "la caixa",
-          "la caja"
-        ],
-        [
-          "l'esperança",
-          "la esperanza"
-        ],
-        [
-          "la posició",
-          "la posición"
-        ],
-        [
-          "la màquina",
-          "la máquina"
-        ]
-      ]
-    },
-    {
-      "id": "v08",
-      "level": "B1",
-      "title": "Very common II",
-      "words": [
-        [
-          "terrible",
-          "terrible"
-        ],
-        [
-          "la causa",
-          "la causa"
-        ],
-        [
-          "estúpid",
-          "estúpido"
-        ],
-        [
-          "escapar",
-          "escapar"
-        ],
-        [
-          "la policia",
-          "la policía"
-        ],
-        [
-          "interessant",
-          "interesante"
-        ],
-        [
-          "l'opció",
-          "la opción"
-        ],
-        [
-          "l'ànima",
-          "el alma"
-        ],
-        [
-          "la sorpresa",
-          "la sorpresa"
-        ],
-        [
-          "el bosc",
-          "el bosque"
-        ],
-        [
-          "fugir",
-          "huir"
-        ],
-        [
-          "l'experiència",
-          "la experiencia"
-        ],
-        [
-          "l'advocat",
-          "el abogado"
-        ],
-        [
-          "l'heroi",
-          "el héroe"
-        ],
-        [
-          "aturar",
-          "parar, detener"
-        ],
-        [
-          "el tema",
-          "el tema"
-        ],
-        [
-          "el motiu",
-          "el motivo"
-        ],
-        [
-          "la pell",
-          "la piel"
-        ],
-        [
-          "veritable",
-          "verdadero"
-        ],
-        [
-          "lent",
-          "lento"
-        ]
-      ]
-    },
-    {
-      "id": "v09",
-      "level": "B1",
-      "title": "Very common III",
-      "words": [
-        [
-          "permetre",
-          "permitir"
-        ],
-        [
-          "el permís",
-          "el permiso"
-        ],
-        [
-          "el tresor",
-          "el tesoro"
-        ],
-        [
-          "triar",
-          "elegir"
-        ],
-        [
-          "la base",
-          "la base"
-        ],
-        [
-          "la neu",
-          "la nieve"
-        ],
-        [
-          "decidir",
-          "decidir"
-        ],
-        [
-          "la bossa",
-          "la bolsa"
-        ],
-        [
-          "horrible",
-          "horrible"
-        ],
-        [
-          "el principi",
-          "el principio"
-        ],
-        [
-          "la sang",
-          "la sangre"
-        ],
-        [
-          "enlloc",
-          "en ningún sitio"
-        ],
-        [
-          "sobreviure",
-          "sobrevivir"
-        ],
-        [
-          "utilitzar",
-          "utilizar"
-        ],
-        [
-          "exacte",
-          "exacto"
-        ],
-        [
-          "el codi",
-          "el código"
-        ],
-        [
-          "l'acte",
-          "el acto"
-        ],
-        [
-          "moure",
-          "mover"
-        ],
-        [
-          "el nivell",
-          "el nivel"
-        ],
-        [
-          "el matrimoni",
-          "el matrimonio"
-        ]
-      ]
-    },
-    {
-      "id": "v10",
-      "level": "B1",
-      "title": "Very common IV",
-      "words": [
-        [
-          "l'esposa",
-          "la esposa"
-        ],
-        [
-          "el departament",
-          "el departamento"
-        ],
-        [
-          "la mentida",
-          "la mentira"
-        ],
-        [
-          "el programa",
-          "el programa"
-        ],
-        [
-          "descobrir",
-          "descubrir"
-        ],
-        [
-          "l'esquena",
-          "la espalda"
-        ],
-        [
-          "l'ou",
-          "el huevo"
-        ],
-        [
-          "la visita",
-          "la visita"
-        ],
-        [
-          "la pedra",
-          "la piedra"
-        ],
-        [
-          "la cervesa",
-          "la cerveza"
-        ],
-        [
-          "la sortida",
-          "la salida"
-        ],
-        [
-          "la confiança",
-          "la confianza"
-        ],
-        [
-          "desaparèixer",
-          "desaparecer"
-        ],
-        [
-          "el ganivet",
-          "el cuchillo"
-        ],
-        [
-          "l'intent",
-          "el intento"
-        ],
-        [
-          "l'escena",
-          "la escena"
-        ],
-        [
-          "el nadó",
-          "el bebé"
-        ],
-        [
-          "el client",
-          "el cliente"
-        ],
-        [
-          "la càmera",
-          "la cámara"
-        ],
-        [
-          "el destí",
-          "el destino"
-        ]
-      ]
-    },
-    {
-      "id": "v11",
-      "level": "B1",
-      "title": "Very common V",
-      "words": [
-        [
-          "l'entrada",
-          "la entrada"
-        ],
-        [
-          "el ferro",
-          "el hierro"
-        ],
-        [
-          "l'art",
-          "el arte"
-        ],
-        [
-          "atacar",
-          "atacar"
-        ],
-        [
-          "el risc",
-          "el riesgo"
-        ],
-        [
-          "l'operació",
-          "la operación"
-        ],
-        [
-          "simple",
-          "simple"
-        ],
-        [
-          "tractar",
-          "tratar"
-        ],
-        [
-          "evitar",
-          "evitar"
-        ],
-        [
-          "principal",
-          "principal"
-        ],
-        [
-          "la defensa",
-          "la defensa"
-        ],
-        [
-          "innocent",
-          "inocente"
-        ],
-        [
-          "l'ordinador",
-          "el ordenador"
-        ],
-        [
-          "agradable",
-          "agradable"
-        ],
-        [
-          "destruir",
-          "destruir"
-        ],
-        [
-          "l'amenaça",
-          "la amenaza"
-        ],
-        [
-          "el forat",
-          "el agujero"
-        ],
-        [
-          "crear",
-          "crear"
-        ],
-        [
-          "la unitat",
-          "la unidad"
-        ],
-        [
-          "la recerca",
-          "la búsqueda / la investigación"
-        ]
-      ]
-    },
-    {
-      "id": "v12",
-      "level": "B1",
-      "title": "Very common VI",
-      "words": [
-        [
-          "el capità",
-          "el capitán"
-        ],
-        [
-          "mentir",
-          "mentir"
-        ],
-        [
-          "el braç",
-          "el brazo"
-        ],
-        [
-          "la cama",
-          "la pierna"
-        ],
-        [
-          "el cabell",
-          "el pelo"
-        ],
-        [
-          "els cabells",
-          "el pelo"
-        ],
-        [
-          "el laboratori",
-          "el laboratorio"
-        ],
-        [
-          "l'univers",
-          "el universo"
-        ],
-        [
-          "baixar",
-          "bajar"
-        ],
-        [
-          "recuperar",
-          "recuperar"
-        ],
-        [
-          "l'oferta",
-          "la oferta"
-        ],
-        [
-          "el partit",
-          "el partido"
-        ],
-        [
-          "la direcció",
-          "la dirección"
-        ],
-        [
-          "responsable",
-          "responsable"
-        ],
-        [
-          "la memòria",
-          "la memoria"
-        ],
-        [
-          "el testimoni",
-          "el testigo"
-        ],
-        [
-          "la cuina",
-          "la cocina"
-        ],
-        [
-          "la premsa",
-          "la prensa"
-        ],
-        [
-          "la cançó",
-          "la canción"
-        ],
-        [
-          "el valor",
-          "el valor"
-        ]
-      ]
-    },
-    {
-      "id": "v13",
-      "level": "B2",
-      "title": "Common I",
-      "words": [
-        [
-          "caminar",
-          "caminar"
-        ],
-        [
-          "legal",
-          "legal"
-        ],
-        [
-          "l'oest",
-          "el oeste"
-        ],
-        [
-          "la pols",
-          "el polvo"
-        ],
-        [
-          "ferit",
-          "herido"
-        ],
-        [
-          "el moviment",
-          "el movimiento"
-        ],
-        [
-          "ocupat",
-          "ocupado"
-        ],
-        [
-          "el sentiment",
-          "el sentimiento"
-        ],
-        [
-          "acceptar",
-          "aceptar"
-        ],
-        [
-          "net",
-          "limpio"
-        ],
-        [
-          "la mel",
-          "la miel"
-        ],
-        [
-          "valent",
-          "valiente"
-        ],
-        [
-          "tallar",
-          "cortar"
-        ],
-        [
-          "culpable",
-          "culpable"
-        ],
-        [
-          "trist",
-          "triste"
-        ],
-        [
-          "la protecció",
-          "la protección"
-        ],
-        [
-          "el xicot",
-          "el novio"
-        ],
-        [
-          "la imatge",
-          "la imagen"
-        ],
-        [
-          "el desig",
-          "el deseo"
-        ],
-        [
-          "la llar",
-          "el hogar"
-        ]
-      ]
-    },
-    {
-      "id": "v14",
-      "level": "B2",
-      "title": "Common II",
-      "words": [
-        [
-          "la foscor",
-          "la oscuridad"
-        ],
-        [
-          "l'apartament",
-          "el apartamento"
-        ],
-        [
-          "la promesa",
-          "la promesa"
-        ],
-        [
-          "maco",
-          "bonito, majo"
-        ],
-        [
-          "el vent",
-          "el viento"
-        ],
-        [
-          "el membre",
-          "el miembro"
-        ],
-        [
-          "volar",
-          "volar"
-        ],
-        [
-          "arreglar",
-          "arreglar"
-        ],
-        [
-          "l'efecte",
-          "el efecto"
-        ],
-        [
-          "l'alerta",
-          "la alerta"
-        ],
-        [
-          "el detall",
-          "el detalle"
-        ],
-        [
-          "esbrinar",
-          "averiguar"
-        ],
-        [
-          "proper",
-          "próximo"
-        ],
-        [
-          "privat",
-          "privado"
-        ],
-        [
-          "la copa",
-          "la copa"
-        ],
-        [
-          "conduir",
-          "conducir"
-        ],
-        [
-          "l'assumpte",
-          "el asunto"
-        ],
-        [
-          "la pèrdua",
-          "la pérdida"
-        ],
-        [
-          "ximple",
-          "tonto"
-        ],
-        [
-          "el gel",
-          "el hielo"
-        ]
-      ]
-    },
-    {
-      "id": "v15",
-      "level": "B2",
-      "title": "Common III",
-      "words": [
-        [
-          "la teoria",
-          "la teoría"
-        ],
-        [
-          "la nota",
-          "la nota"
-        ],
-        [
-          "amagar",
-          "esconder"
-        ],
-        [
-          "enamorat",
-          "enamorado"
-        ],
-        [
-          "la conversa",
-          "la conversación"
-        ],
-        [
-          "la bellesa",
-          "la belleza"
-        ],
-        [
-          "salvatge",
-          "salvaje"
-        ],
-        [
-          "probable",
-          "probable"
-        ],
-        [
-          "quiet",
-          "quieto"
-        ],
-        [
-          "l'obra",
-          "la obra"
-        ],
-        [
-          "l'estrella",
-          "la estrella"
-        ],
-        [
-          "la ciència",
-          "la ciencia"
-        ],
-        [
-          "la carretera",
-          "la carretera"
-        ],
-        [
-          "la llengua",
-          "la lengua"
-        ],
-        [
-          "el jutge",
-          "el juez"
-        ],
-        [
-          "central",
-          "central"
-        ],
-        [
-          "local",
-          "local"
-        ],
-        [
-          "l'hivern",
-          "el invierno"
-        ],
-        [
-          "la intenció",
-          "la intención"
-        ],
-        [
-          "el propòsit",
-          "el propósito"
-        ]
-      ]
-    },
-    {
-      "id": "v16",
-      "level": "B2",
-      "title": "Common IV",
-      "words": [
-        [
-          "el peix",
-          "el pez"
-        ],
-        [
-          "la cambra",
-          "la habitación, la cámara"
-        ],
-        [
-          "resoldre",
-          "resolver"
-        ],
-        [
-          "l'elecció",
-          "la elección"
-        ],
-        [
-          "comú",
-          "común"
-        ],
-        [
-          "el ministre",
-          "el ministro"
-        ],
-        [
-          "l'accés",
-          "el acceso"
-        ],
-        [
-          "nacional",
-          "nacional"
-        ],
-        [
-          "l'institut",
-          "el instituto"
-        ],
-        [
-          "la criatura",
-          "la criatura"
-        ],
-        [
-          "cremar",
-          "quemar"
-        ],
-        [
-          "l'aspecte",
-          "el aspecto"
-        ],
-        [
-          "el començament",
-          "el comienzo"
-        ],
-        [
-          "el camió",
-          "el camión"
-        ],
-        [
-          "el petó",
-          "el beso"
-        ],
-        [
-          "la via",
-          "la vía"
-        ],
-        [
-          "la voluntat",
-          "la voluntad"
-        ],
-        [
-          "brillant",
-          "brillante"
-        ],
-        [
-          "el ball",
-          "el baile"
-        ],
-        [
-          "abandonar",
-          "abandonar"
-        ]
-      ]
-    },
-    {
-      "id": "v17",
-      "level": "B2",
-      "title": "Common V",
-      "words": [
-        [
-          "la distància",
-          "la distancia"
-        ],
-        [
-          "l'adreça",
-          "la dirección (postal)"
-        ],
-        [
-          "meravellós",
-          "maravilloso"
-        ],
-        [
-          "la ferida",
-          "la herida"
-        ],
-        [
-          "el comandament",
-          "el mando"
-        ],
-        [
-          "l'esperit",
-          "el espíritu"
-        ],
-        [
-          "el porc",
-          "el cerdo"
-        ],
-        [
-          "total",
-          "total"
-        ],
-        [
-          "discutir",
-          "discutir"
-        ],
-        [
-          "la velocitat",
-          "la velocidad"
-        ],
-        [
-          "la torre",
-          "la torre"
-        ],
-        [
-          "la victòria",
-          "la victoria"
-        ],
-        [
-          "l'arbre",
-          "el árbol"
-        ],
-        [
-          "la carrera",
-          "la carrera"
-        ],
-        [
-          "la mirada",
-          "la mirada"
-        ],
-        [
-          "buit",
-          "vacío"
-        ],
-        [
-          "el despatx",
-          "el despacho"
-        ],
-        [
-          "la felicitat",
-          "la felicidad"
-        ],
-        [
-          "l'acció",
-          "la acción"
-        ],
-        [
-          "oferir",
-          "ofrecer"
-        ]
-      ]
-    },
-    {
-      "id": "v18",
-      "level": "B2",
-      "title": "Common VI",
-      "words": [
-        [
-          "l'estil",
-          "el estilo"
-        ],
-        [
-          "espantat",
-          "asustado"
-        ],
-        [
-          "l'alcalde",
-          "el alcalde"
-        ],
-        [
-          "embarassada",
-          "embarazada"
-        ],
-        [
-          "el vídeo",
-          "el vídeo"
-        ],
-        [
-          "militar",
-          "militar"
-        ],
-        [
-          "familiar",
-          "familiar"
-        ],
-        [
-          "l'anell",
-          "el anillo"
-        ],
-        [
-          "la corona",
-          "la corona"
-        ],
-        [
-          "la targeta",
-          "la tarjeta"
-        ],
-        [
-          "la societat",
-          "la sociedad"
-        ],
-        [
-          "tirar",
-          "tirar"
-        ],
-        [
-          "orgullós",
-          "orgulloso"
-        ],
-        [
-          "la quantitat",
-          "la cantidad"
-        ],
-        [
-          "la trobada",
-          "el encuentro"
-        ],
-        [
-          "la pressió",
-          "la presión"
-        ],
-        [
-          "els pantalons",
-          "los pantalones"
-        ],
-        [
-          "l'interès",
-          "el interés"
-        ],
-        [
-          "cantar",
-          "cantar"
-        ],
-        [
-          "borratxo",
-          "borracho"
-        ]
-      ]
-    },
-    {
-      "id": "v19",
-      "level": "C1",
-      "title": "Useful I",
-      "words": [
-        [
-          "la norma",
-          "la norma"
-        ],
-        [
-          "la paret",
-          "la pared"
-        ],
-        [
-          "la malaltia",
-          "la enfermedad"
-        ],
-        [
-          "la propietat",
-          "la propiedad"
-        ],
-        [
-          "calent",
-          "caliente"
-        ],
-        [
-          "ridícul",
-          "ridículo"
-        ],
-        [
-          "directe",
-          "directo"
-        ],
-        [
-          "preciós",
-          "precioso"
-        ],
-        [
-          "compartir",
-          "compartir"
-        ],
-        [
-          "l'aeroport",
-          "el aeropuerto"
-        ],
-        [
-          "patir",
-          "sufrir"
-        ],
-        [
-          "la xarxa",
-          "la red"
-        ],
-        [
-          "l'època",
-          "la época"
-        ],
-        [
-          "el pit",
-          "el pecho"
-        ],
-        [
-          "la tempesta",
-          "la tormenta"
-        ],
-        [
-          "la cua",
-          "la cola"
-        ],
-        [
-          "l'espècie",
-          "la especie"
-        ],
-        [
-          "el rastre",
-          "el rastro"
-        ],
-        [
-          "l'autobús",
-          "el autobús"
-        ],
-        [
-          "gros",
-          "gordo, grueso"
-        ]
-      ]
-    },
-    {
-      "id": "v20",
-      "level": "C1",
-      "title": "Useful II",
-      "words": [
-        [
-          "doble",
-          "doble"
-        ],
-        [
-          "controlar",
-          "controlar"
-        ],
-        [
-          "verd",
-          "verde"
-        ],
-        [
-          "contrari",
-          "contrario"
-        ],
-        [
-          "la sensació",
-          "la sensación"
-        ],
-        [
-          "l'emergència",
-          "la emergencia"
-        ],
-        [
-          "el desastre",
-          "el desastre"
-        ],
-        [
-          "el pes",
-          "el peso"
-        ],
-        [
-          "dolç",
-          "dulce"
-        ],
-        [
-          "el pilot",
-          "el piloto"
-        ],
-        [
-          "suportar",
-          "soportar"
-        ],
-        [
-          "funcionar",
-          "funcionar"
-        ],
-        [
-          "actuar",
-          "actuar"
-        ],
-        [
-          "el resultat",
-          "el resultado"
-        ],
-        [
-          "el concert",
-          "el concierto"
-        ],
-        [
-          "la capital",
-          "la capital"
-        ],
-        [
-          "útil",
-          "útil"
-        ],
-        [
-          "la baralla",
-          "la pelea"
-        ],
-        [
-          "l'os",
-          "el hueso"
-        ],
-        [
-          "aparèixer",
-          "aparecer"
-        ]
-      ]
-    },
-    {
-      "id": "v21",
-      "level": "C1",
-      "title": "Useful III",
-      "words": [
-        [
-          "el pensament",
-          "el pensamiento"
-        ],
-        [
-          "enorme",
-          "enorme"
-        ],
-        [
-          "el quilòmetre",
-          "el kilómetro"
-        ],
-        [
-          "el magatzem",
-          "el almacén"
-        ],
-        [
-          "graciós",
-          "gracioso"
-        ],
-        [
-          "natural",
-          "natural"
-        ],
-        [
-          "senzill",
-          "sencillo"
-        ],
-        [
-          "la visió",
-          "la visión"
-        ],
-        [
-          "la beguda",
-          "la bebida"
-        ],
-        [
-          "impressionant",
-          "impresionante"
-        ],
-        [
-          "la font",
-          "la fuente"
-        ],
-        [
-          "la connexió",
-          "la conexión"
-        ],
-        [
-          "despertar",
-          "despertar"
-        ],
-        [
-          "el mapa",
-          "el mapa"
-        ],
-        [
-          "el miracle",
-          "el milagro"
-        ],
-        [
-          "l'agent",
-          "el agente"
-        ],
-        [
-          "cec",
-          "ciego"
-        ],
-        [
-          "respondre",
-          "responder"
-        ],
-        [
-          "conscient",
-          "consciente"
-        ],
-        [
-          "l'autoritat",
-          "la autoridad"
-        ]
-      ]
-    },
-    {
-      "id": "v22",
-      "level": "C1",
-      "title": "Useful IV",
-      "words": [
-        [
-          "aixecar",
-          "levantar"
-        ],
-        [
-          "la tieta",
-          "la tía"
-        ],
-        [
-          "el barret",
-          "el sombrero"
-        ],
-        [
-          "el jardí",
-          "el jardín"
-        ],
-        [
-          "recollir",
-          "recoger"
-        ],
-        [
-          "la consciència",
-          "la conciencia"
-        ],
-        [
-          "la campanya",
-          "la campaña"
-        ],
-        [
-          "convèncer",
-          "convencer"
-        ],
-        [
-          "netejar",
-          "limpiar"
-        ],
-        [
-          "la responsabilitat",
-          "la responsabilidad"
-        ],
-        [
-          "el llop",
-          "el lobo"
-        ],
-        [
-          "escollir",
-          "escoger, elegir"
-        ],
-        [
-          "complicat",
-          "complicado"
-        ],
-        [
-          "la violència",
-          "la violencia"
-        ],
-        [
-          "cometre",
-          "cometer"
-        ],
-        [
-          "covard",
-          "cobarde"
-        ],
-        [
-          "la declaració",
-          "la declaración"
-        ],
-        [
-          "la butxaca",
-          "el bolsillo"
-        ],
-        [
-          "mostrar",
-          "mostrar"
-        ],
-        [
-          "la granja",
-          "la granja"
-        ]
-      ]
-    },
-    {
-      "id": "v23",
-      "level": "C1",
-      "title": "Useful V",
-      "words": [
-        [
-          "l'orella",
-          "la oreja"
-        ],
-        [
-          "el soterrani",
-          "el sótano"
-        ],
-        [
-          "demostrar",
-          "demostrar"
-        ],
-        [
-          "complir",
-          "cumplir"
-        ],
-        [
-          "el palau",
-          "el palacio"
-        ],
-        [
-          "l'ombra",
-          "la sombra"
-        ],
-        [
-          "saltar",
-          "saltar"
-        ],
-        [
-          "comprovar",
-          "comprobar"
-        ],
-        [
-          "l'àngel",
-          "el ángel"
-        ],
-        [
-          "el premi",
-          "el premio"
-        ],
-        [
-          "el discurs",
-          "el discurso"
-        ],
-        [
-          "el contracte",
-          "el contrato"
-        ],
-        [
-          "la marca",
-          "la marca"
-        ],
-        [
-          "l'arma",
-          "el arma"
-        ],
-        [
-          "el conte",
-          "el cuento"
-        ],
-        [
-          "el sostre",
-          "el techo"
-        ],
-        [
-          "preparar",
-          "preparar"
-        ],
-        [
-          "la trampa",
-          "la trampa"
-        ],
-        [
-          "el procés",
-          "el proceso"
-        ],
-        [
-          "l'habilitat",
-          "la habilidad"
-        ]
-      ]
-    },
-    {
-      "id": "v24",
-      "level": "C1",
-      "title": "Useful VI",
-      "words": [
-        [
-          "el coneixement",
-          "el conocimiento"
-        ],
-        [
-          "usar",
-          "usar"
-        ],
-        [
-          "el tribunal",
-          "el tribunal"
-        ],
-        [
-          "defensar",
-          "defender"
-        ],
-        [
-          "el pacient",
-          "el paciente"
-        ],
-        [
-          "curt",
-          "corto"
-        ],
-        [
-          "la infermera",
-          "la enfermera"
-        ],
-        [
-          "la resistència",
-          "la resistencia"
-        ],
-        [
-          "l'humor",
-          "el humor"
-        ],
-        [
-          "el formatge",
-          "el queso"
-        ],
-        [
-          "el seient",
-          "el asiento"
-        ],
-        [
-          "l'afecte",
-          "el afecto"
-        ],
-        [
-          "superior",
-          "superior"
-        ],
-        [
-          "la cadena",
-          "la cadena"
-        ],
-        [
-          "la poma",
-          "la manzana"
-        ],
-        [
-          "l'artista",
-          "el artista"
-        ],
-        [
-          "la comunitat",
-          "la comunidad"
-        ],
-        [
-          "la frontera",
-          "la frontera"
-        ],
-        [
-          "cruel",
-          "cruel"
-        ],
-        [
-          "la fàbrica",
-          "la fábrica"
-        ]
-      ]
-    }
-  ]
+ "reviewed": false,
+ "source": "Topic sets for the Catalan certificate levels (A2 Bàsic to C1 Suficiència): non-verb words a Castellano speaker cannot guess, false friends and gender flips. Verbs are drilled in the conjugation sprint.",
+ "sets": [
+  {
+   "id": "w001",
+   "level": "A2",
+   "title": "Family and people",
+   "words": [
+    [
+     "el net",
+     "el nieto"
+    ],
+    [
+     "la neta",
+     "la nieta"
+    ],
+    [
+     "el nebot",
+     "el sobrino"
+    ],
+    [
+     "la neboda",
+     "la sobrina"
+    ],
+    [
+     "el sogre",
+     "el suegro"
+    ],
+    [
+     "la sogra",
+     "la suegra"
+    ],
+    [
+     "el gendre",
+     "el yerno"
+    ],
+    [
+     "la nora",
+     "la nuera"
+    ],
+    [
+     "el cunyat",
+     "el cuñado"
+    ],
+    [
+     "la cunyada",
+     "la cuñada"
+    ],
+    [
+     "el nadó",
+     "el bebé"
+    ],
+    [
+     "el bessó",
+     "el gemelo"
+    ],
+    [
+     "el besavi",
+     "el bisabuelo"
+    ],
+    [
+     "el padrí",
+     "el padrino"
+    ],
+    [
+     "la padrina",
+     "la madrina"
+    ],
+    [
+     "el veí",
+     "el vecino"
+    ],
+    [
+     "la veïna",
+     "la vecina"
+    ],
+    [
+     "el nuvi",
+     "el novio (en la boda)"
+    ],
+    [
+     "la núvia",
+     "la novia (en la boda)"
+    ],
+    [
+     "el vidu",
+     "el viudo"
+    ]
+   ]
+  },
+  {
+   "id": "w002",
+   "level": "A2",
+   "title": "The body",
+   "words": [
+    [
+     "la cama",
+     "la pierna"
+    ],
+    [
+     "el braç",
+     "el brazo"
+    ],
+    [
+     "l'espatlla",
+     "el hombro"
+    ],
+    [
+     "el genoll",
+     "la rodilla"
+    ],
+    [
+     "el colze",
+     "el codo"
+    ],
+    [
+     "el canell",
+     "la muñeca (del brazo)"
+    ],
+    [
+     "el turmell",
+     "el tobillo"
+    ],
+    [
+     "l'ungla",
+     "la uña"
+    ],
+    [
+     "el coll",
+     "el cuello"
+    ],
+    [
+     "l'esquena",
+     "la espalda"
+    ],
+    [
+     "el pit",
+     "el pecho"
+    ],
+    [
+     "la panxa",
+     "la barriga"
+    ],
+    [
+     "l'orella",
+     "la oreja"
+    ],
+    [
+     "el llavi",
+     "el labio"
+    ],
+    [
+     "la cella",
+     "la ceja"
+    ],
+    [
+     "el cabell",
+     "el pelo (de la cabeza)"
+    ],
+    [
+     "la galta",
+     "la mejilla"
+    ],
+    [
+     "el maluc",
+     "la cadera"
+    ],
+    [
+     "l'os",
+     "el hueso"
+    ],
+    [
+     "la pell",
+     "la piel"
+    ]
+   ]
+  },
+  {
+   "id": "w003",
+   "level": "A2",
+   "title": "Health basics",
+   "words": [
+    [
+     "la malaltia",
+     "la enfermedad"
+    ],
+    [
+     "el refredat",
+     "el resfriado"
+    ],
+    [
+     "constipat",
+     "resfriado (no 'estreñido')"
+    ],
+    [
+     "la febre",
+     "la fiebre"
+    ],
+    [
+     "la grip",
+     "la gripe"
+    ],
+    [
+     "el mareig",
+     "el mareo"
+    ],
+    [
+     "marejat",
+     "mareado"
+    ],
+    [
+     "la ferida",
+     "la herida"
+    ],
+    [
+     "la cremada",
+     "la quemadura"
+    ],
+    [
+     "l'infermer",
+     "el enfermero"
+    ],
+    [
+     "la recepta",
+     "la receta (médica)"
+    ],
+    [
+     "l'esternut",
+     "el estornudo"
+    ],
+    [
+     "l'embenat",
+     "el vendaje"
+    ],
+    [
+     "el xarop",
+     "el jarabe"
+    ],
+    [
+     "la picada",
+     "la picadura"
+    ],
+    [
+     "el gra",
+     "el grano (de la piel)"
+    ],
+    [
+     "la sang",
+     "la sangre"
+    ],
+    [
+     "el cor",
+     "el corazón"
+    ],
+    [
+     "la gola",
+     "la garganta"
+    ],
+    [
+     "el guix",
+     "la escayola"
+    ]
+   ]
+  },
+  {
+   "id": "w004",
+   "level": "A2",
+   "title": "Home and rooms",
+   "words": [
+    [
+     "la sala d'estar",
+     "el salón"
+    ],
+    [
+     "el menjador",
+     "el comedor"
+    ],
+    [
+     "el passadís",
+     "el pasillo"
+    ],
+    [
+     "l'escala",
+     "la escalera"
+    ],
+    [
+     "el sostre",
+     "el techo"
+    ],
+    [
+     "la paret",
+     "la pared"
+    ],
+    [
+     "la teulada",
+     "el tejado"
+    ],
+    [
+     "el terrat",
+     "la azotea"
+    ],
+    [
+     "les golfes",
+     "el desván"
+    ],
+    [
+     "el soterrani",
+     "el sótano"
+    ],
+    [
+     "el rebedor",
+     "el recibidor"
+    ],
+    [
+     "el replà",
+     "el rellano"
+    ],
+    [
+     "la rajola",
+     "el azulejo"
+    ],
+    [
+     "l'endoll",
+     "el enchufe"
+    ],
+    [
+     "l'aixeta",
+     "el grifo"
+    ],
+    [
+     "la banyera",
+     "la bañera"
+    ],
+    [
+     "el pany",
+     "la cerradura"
+    ],
+    [
+     "el traster",
+     "el trastero"
+    ],
+    [
+     "el safareig",
+     "el lavadero"
+    ],
+    [
+     "la xemeneia",
+     "la chimenea"
+    ]
+   ]
+  },
+  {
+   "id": "w005",
+   "level": "A2",
+   "title": "Furniture and objects",
+   "words": [
+    [
+     "el moble",
+     "el mueble"
+    ],
+    [
+     "el calaix",
+     "el cajón"
+    ],
+    [
+     "el prestatge",
+     "el estante"
+    ],
+    [
+     "la butaca",
+     "el sillón"
+    ],
+    [
+     "el tamboret",
+     "el taburete"
+    ],
+    [
+     "el coixí",
+     "la almohada, el cojín"
+    ],
+    [
+     "el llençol",
+     "la sábana"
+    ],
+    [
+     "el matalàs",
+     "el colchón"
+    ],
+    [
+     "la tovallola",
+     "la toalla"
+    ],
+    [
+     "la catifa",
+     "la alfombra"
+    ],
+    [
+     "el mirall",
+     "el espejo"
+    ],
+    [
+     "la rentadora",
+     "la lavadora"
+    ],
+    [
+     "el rentaplats",
+     "el lavavajillas"
+    ],
+    [
+     "el forn",
+     "el horno"
+    ],
+    [
+     "la planxa",
+     "la plancha"
+    ],
+    [
+     "l'escombra",
+     "la escoba"
+    ],
+    [
+     "la galleda",
+     "el cubo"
+    ],
+    [
+     "la bombeta",
+     "la bombilla"
+    ],
+    [
+     "el penjador",
+     "la percha"
+    ],
+    [
+     "les tisores",
+     "las tijeras"
+    ]
+   ]
+  },
+  {
+   "id": "w006",
+   "level": "A2",
+   "title": "Food",
+   "words": [
+    [
+     "l'ou",
+     "el huevo"
+    ],
+    [
+     "el formatge",
+     "el queso"
+    ],
+    [
+     "la mantega",
+     "la mantequilla"
+    ],
+    [
+     "l'oli",
+     "el aceite"
+    ],
+    [
+     "el pernil",
+     "el jamón"
+    ],
+    [
+     "el pollastre",
+     "el pollo"
+    ],
+    [
+     "el peix",
+     "el pescado"
+    ],
+    [
+     "l'arròs",
+     "el arroz"
+    ],
+    [
+     "la pastanaga",
+     "la zanahoria"
+    ],
+    [
+     "la ceba",
+     "la cebolla"
+    ],
+    [
+     "l'all",
+     "el ajo"
+    ],
+    [
+     "la poma",
+     "la manzana"
+    ],
+    [
+     "el préssec",
+     "el melocotón"
+    ],
+    [
+     "la maduixa",
+     "la fresa"
+    ],
+    [
+     "el raïm",
+     "la uva"
+    ],
+    [
+     "la taronja",
+     "la naranja"
+    ],
+    [
+     "la mongeta",
+     "la judía"
+    ],
+    [
+     "l'enciam",
+     "la lechuga"
+    ],
+    [
+     "el tomàquet",
+     "el tomate"
+    ],
+    [
+     "la llimona",
+     "el limón"
+    ]
+   ]
+  },
+  {
+   "id": "w007",
+   "level": "A2",
+   "title": "Drinks, meals and table",
+   "words": [
+    [
+     "el vi",
+     "el vino"
+    ],
+    [
+     "la cervesa",
+     "la cerveza"
+    ],
+    [
+     "el suc",
+     "el zumo"
+    ],
+    [
+     "la beguda",
+     "la bebida"
+    ],
+    [
+     "el tallat",
+     "el cortado (café)"
+    ],
+    [
+     "el gel",
+     "el hielo"
+    ],
+    [
+     "el berenar",
+     "la merienda"
+    ],
+    [
+     "l'àpat",
+     "la comida (cada comida del día)"
+    ],
+    [
+     "l'entrepà",
+     "el bocadillo"
+    ],
+    [
+     "l'amanida",
+     "la ensalada"
+    ],
+    [
+     "la truita",
+     "la tortilla"
+    ],
+    [
+     "la llesca",
+     "la rebanada"
+    ],
+    [
+     "la forquilla",
+     "el tenedor"
+    ],
+    [
+     "la cullera",
+     "la cuchara"
+    ],
+    [
+     "la culleradeta",
+     "la cucharilla"
+    ],
+    [
+     "el ganivet",
+     "el cuchillo"
+    ],
+    [
+     "la tassa",
+     "la taza"
+    ],
+    [
+     "l'ampolla",
+     "la botella"
+    ],
+    [
+     "el tovalló",
+     "la servilleta"
+    ],
+    [
+     "les estovalles",
+     "el mantel"
+    ]
+   ]
+  },
+  {
+   "id": "w008",
+   "level": "A2",
+   "title": "Shopping and money",
+   "words": [
+    [
+     "la targeta",
+     "la tarjeta"
+    ],
+    [
+     "les rebaixes",
+     "las rebajas"
+    ],
+    [
+     "el rebut",
+     "el recibo"
+    ],
+    [
+     "la caixa",
+     "la caja"
+    ],
+    [
+     "el caixer",
+     "el cajero"
+    ],
+    [
+     "la cua",
+     "la cola (fila)"
+    ],
+    [
+     "la bossa",
+     "la bolsa"
+    ],
+    [
+     "el carretó",
+     "el carro (de la compra)"
+    ],
+    [
+     "la cistella",
+     "la cesta"
+    ],
+    [
+     "el descompte",
+     "el descuento"
+    ],
+    [
+     "la fleca",
+     "la panadería"
+    ],
+    [
+     "la carnisseria",
+     "la carnicería"
+    ],
+    [
+     "la peixateria",
+     "la pescadería"
+    ],
+    [
+     "l'adrogueria",
+     "la droguería"
+    ],
+    [
+     "el quiosc",
+     "el quiosco"
+    ],
+    [
+     "l'estanc",
+     "el estanco"
+    ],
+    [
+     "l'emprovador",
+     "el probador"
+    ],
+    [
+     "el taulell",
+     "el mostrador"
+    ],
+    [
+     "l'aparador",
+     "el escaparate"
+    ],
+    [
+     "la dotzena",
+     "la docena"
+    ]
+   ]
+  },
+  {
+   "id": "w009",
+   "level": "A2",
+   "title": "Clothes and accessories",
+   "words": [
+    [
+     "la samarreta",
+     "la camiseta"
+    ],
+    [
+     "la faldilla",
+     "la falda"
+    ],
+    [
+     "els mitjons",
+     "los calcetines"
+    ],
+    [
+     "les mitges",
+     "las medias"
+    ],
+    [
+     "les calces",
+     "las bragas"
+    ],
+    [
+     "els calçotets",
+     "los calzoncillos"
+    ],
+    [
+     "els texans",
+     "los vaqueros"
+    ],
+    [
+     "el xandall",
+     "el chándal"
+    ],
+    [
+     "el banyador",
+     "el bañador"
+    ],
+    [
+     "les sabatilles",
+     "las zapatillas"
+    ],
+    [
+     "les xancletes",
+     "las chanclas"
+    ],
+    [
+     "el barret",
+     "el sombrero"
+    ],
+    [
+     "la butxaca",
+     "el bolsillo"
+    ],
+    [
+     "la màniga",
+     "la manga"
+    ],
+    [
+     "l'anell",
+     "el anillo"
+    ],
+    [
+     "l'arracada",
+     "el pendiente"
+    ],
+    [
+     "el collaret",
+     "el collar"
+    ],
+    [
+     "la polsera",
+     "la pulsera"
+    ],
+    [
+     "la motxilla",
+     "la mochila"
+    ],
+    [
+     "el moneder",
+     "el monedero"
+    ]
+   ]
+  },
+  {
+   "id": "w010",
+   "level": "A2",
+   "title": "Colours, shapes, materials",
+   "words": [
+    [
+     "groc",
+     "amarillo"
+    ],
+    [
+     "blanc",
+     "blanco"
+    ],
+    [
+     "verd",
+     "verde"
+    ],
+    [
+     "marró",
+     "marrón"
+    ],
+    [
+     "morat",
+     "morado"
+    ],
+    [
+     "daurat",
+     "dorado"
+    ],
+    [
+     "rodó",
+     "redondo"
+    ],
+    [
+     "quadrat",
+     "cuadrado"
+    ],
+    [
+     "la ratlla",
+     "la raya"
+    ],
+    [
+     "el forat",
+     "el agujero"
+    ],
+    [
+     "llis",
+     "liso"
+    ],
+    [
+     "la fusta",
+     "la madera"
+    ],
+    [
+     "el ferro",
+     "el hierro"
+    ],
+    [
+     "el vidre",
+     "el vidrio"
+    ],
+    [
+     "la pedra",
+     "la piedra"
+    ],
+    [
+     "la llana",
+     "la lana"
+    ],
+    [
+     "el cotó",
+     "el algodón"
+    ],
+    [
+     "el cuir",
+     "el cuero"
+    ],
+    [
+     "el cartró",
+     "el cartón"
+    ],
+    [
+     "l'or",
+     "el oro"
+    ]
+   ]
+  },
+  {
+   "id": "w011",
+   "level": "A2",
+   "title": "Time, calendar, weather",
+   "words": [
+    [
+     "la tardor",
+     "el otoño"
+    ],
+    [
+     "l'hivern",
+     "el invierno"
+    ],
+    [
+     "el migdia",
+     "el mediodía"
+    ],
+    [
+     "la matinada",
+     "la madrugada"
+    ],
+    [
+     "la quinzena",
+     "la quincena"
+    ],
+    [
+     "la data",
+     "la fecha"
+    ],
+    [
+     "feiner",
+     "laborable"
+    ],
+    [
+     "el Nadal",
+     "la Navidad"
+    ],
+    [
+     "el febrer",
+     "febrero"
+    ],
+    [
+     "el juliol",
+     "julio"
+    ],
+    [
+     "el vent",
+     "el viento"
+    ],
+    [
+     "la neu",
+     "la nieve"
+    ],
+    [
+     "la boira",
+     "la niebla"
+    ],
+    [
+     "la tempesta",
+     "la tormenta"
+    ],
+    [
+     "el llamp",
+     "el rayo"
+    ],
+    [
+     "la calamarsa",
+     "el granizo"
+    ],
+    [
+     "l'aiguat",
+     "el aguacero"
+    ],
+    [
+     "la xafogor",
+     "el bochorno"
+    ],
+    [
+     "assolellat",
+     "soleado"
+    ],
+    [
+     "humit",
+     "húmedo"
+    ]
+   ]
+  },
+  {
+   "id": "w012",
+   "level": "A2",
+   "title": "Town and places",
+   "words": [
+    [
+     "l'ajuntament",
+     "el ayuntamiento"
+    ],
+    [
+     "el barri",
+     "el barrio"
+    ],
+    [
+     "la cantonada",
+     "la esquina"
+    ],
+    [
+     "la vorera",
+     "la acera"
+    ],
+    [
+     "el vianant",
+     "el peatón"
+    ],
+    [
+     "l'avinguda",
+     "la avenida"
+    ],
+    [
+     "el passeig",
+     "el paseo"
+    ],
+    [
+     "el pont",
+     "el puente"
+    ],
+    [
+     "la font",
+     "la fuente"
+    ],
+    [
+     "el riu",
+     "el río"
+    ],
+    [
+     "el port",
+     "el puerto"
+    ],
+    [
+     "el bosc",
+     "el bosque"
+    ],
+    [
+     "el llac",
+     "el lago"
+    ],
+    [
+     "el castell",
+     "el castillo"
+    ],
+    [
+     "la presó",
+     "la cárcel"
+    ],
+    [
+     "els afores",
+     "las afueras"
+    ],
+    [
+     "el carreró",
+     "el callejón"
+    ],
+    [
+     "el gratacel",
+     "el rascacielos"
+    ],
+    [
+     "el veïnat",
+     "el vecindario"
+    ],
+    [
+     "el racó",
+     "el rincón"
+    ]
+   ]
+  },
+  {
+   "id": "w013",
+   "level": "A2",
+   "title": "Transport and travel",
+   "words": [
+    [
+     "el vaixell",
+     "el barco"
+    ],
+    [
+     "l'andana",
+     "el andén"
+    ],
+    [
+     "la sortida",
+     "la salida"
+    ],
+    [
+     "l'arribada",
+     "la llegada"
+    ],
+    [
+     "l'anada",
+     "la ida"
+    ],
+    [
+     "la tornada",
+     "la vuelta"
+    ],
+    [
+     "el seient",
+     "el asiento"
+    ],
+    [
+     "l'equipatge",
+     "el equipaje"
+    ],
+    [
+     "el maleter",
+     "el maletero"
+    ],
+    [
+     "el carnet",
+     "el carné (de conducir)"
+    ],
+    [
+     "la benzinera",
+     "la gasolinera"
+    ],
+    [
+     "el peatge",
+     "el peaje"
+    ],
+    [
+     "l'embús",
+     "el atasco"
+    ],
+    [
+     "l'avaria",
+     "la avería"
+    ],
+    [
+     "la roda",
+     "la rueda"
+    ],
+    [
+     "la duana",
+     "la aduana"
+    ],
+    [
+     "l'enlairament",
+     "el despegue"
+    ],
+    [
+     "el creuer",
+     "el crucero"
+    ],
+    [
+     "el destí",
+     "el destino"
+    ],
+    [
+     "l'estada",
+     "la estancia"
+    ]
+   ]
+  },
+  {
+   "id": "w014",
+   "level": "A2",
+   "title": "School and work basics",
+   "words": [
+    [
+     "l'escola",
+     "la escuela"
+    ],
+    [
+     "el mestre",
+     "el maestro"
+    ],
+    [
+     "l'alumne",
+     "el alumno"
+    ],
+    [
+     "la pissarra",
+     "la pizarra"
+    ],
+    [
+     "el llapis",
+     "el lápiz"
+    ],
+    [
+     "la llibreta",
+     "la libreta"
+    ],
+    [
+     "el quadern",
+     "el cuaderno"
+    ],
+    [
+     "l'estoig",
+     "el estuche"
+    ],
+    [
+     "el regle",
+     "la regla (para medir)"
+    ],
+    [
+     "el retolador",
+     "el rotulador"
+    ],
+    [
+     "l'esbarjo",
+     "el recreo"
+    ],
+    [
+     "el full",
+     "la hoja (de papel)"
+    ],
+    [
+     "l'ordinador",
+     "el ordenador"
+    ],
+    [
+     "el despatx",
+     "el despacho (oficina)"
+    ],
+    [
+     "la tasca",
+     "la tarea"
+    ],
+    [
+     "el torn",
+     "el turno"
+    ],
+    [
+     "l'encàrrec",
+     "el encargo"
+    ],
+    [
+     "l'encarregat",
+     "el encargado"
+    ],
+    [
+     "la vaga",
+     "la huelga"
+    ],
+    [
+     "el becari",
+     "el becario"
+    ]
+   ]
+  },
+  {
+   "id": "w015",
+   "level": "A2",
+   "title": "Free time and hobbies",
+   "words": [
+    [
+     "el lleure",
+     "el ocio"
+    ],
+    [
+     "el joc",
+     "el juego"
+    ],
+    [
+     "la joguina",
+     "el juguete"
+    ],
+    [
+     "el ball",
+     "el baile"
+    ],
+    [
+     "el dibuix",
+     "el dibujo"
+    ],
+    [
+     "els escacs",
+     "el ajedrez"
+    ],
+    [
+     "la pilota",
+     "la pelota"
+    ],
+    [
+     "la colla",
+     "la pandilla"
+    ],
+    [
+     "el partit",
+     "el partido"
+    ],
+    [
+     "l'equip",
+     "el equipo"
+    ],
+    [
+     "la cursa",
+     "la carrera (competición)"
+    ],
+    [
+     "la novel·la",
+     "la novela"
+    ],
+    [
+     "l'hort",
+     "el huerto"
+    ],
+    [
+     "la caça",
+     "la caza"
+    ],
+    [
+     "el ganxet",
+     "el ganchillo"
+    ],
+    [
+     "el trencaclosques",
+     "el rompecabezas"
+    ],
+    [
+     "el passatemps",
+     "el pasatiempo"
+    ],
+    [
+     "la fira",
+     "la feria"
+    ],
+    [
+     "el titella",
+     "el títere"
+    ],
+    [
+     "el circ",
+     "el circo"
+    ]
+   ]
+  },
+  {
+   "id": "w016",
+   "level": "A2",
+   "title": "Describing people",
+   "words": [
+    [
+     "prim",
+     "delgado"
+    ],
+    [
+     "gras",
+     "gordo"
+    ],
+    [
+     "ros",
+     "rubio"
+    ],
+    [
+     "pèl-roig",
+     "pelirrojo"
+    ],
+    [
+     "calb",
+     "calvo"
+    ],
+    [
+     "arrissat",
+     "rizado"
+    ],
+    [
+     "maco",
+     "guapo, majo"
+    ],
+    [
+     "lleig",
+     "feo"
+    ],
+    [
+     "bufó",
+     "mono (bonito)"
+    ],
+    [
+     "xerraire",
+     "hablador"
+    ],
+    [
+     "mandrós",
+     "perezoso"
+    ],
+    [
+     "trempat",
+     "majo, simpático"
+    ],
+    [
+     "eixerit",
+     "espabilado"
+    ],
+    [
+     "tossut",
+     "testarudo"
+    ],
+    [
+     "avorrit",
+     "aburrido"
+    ],
+    [
+     "gelós",
+     "celoso"
+    ],
+    [
+     "valent",
+     "valiente"
+    ],
+    [
+     "covard",
+     "cobarde"
+    ],
+    [
+     "ximple",
+     "tonto"
+    ],
+    [
+     "maldestre",
+     "torpe"
+    ]
+   ]
+  },
+  {
+   "id": "w017",
+   "level": "A2",
+   "title": "Describing things",
+   "words": [
+    [
+     "curt",
+     "corto"
+    ],
+    [
+     "ample",
+     "ancho"
+    ],
+    [
+     "pesat",
+     "pesado"
+    ],
+    [
+     "lleuger",
+     "ligero"
+    ],
+    [
+     "ple",
+     "lleno"
+    ],
+    [
+     "buit",
+     "vacío"
+    ],
+    [
+     "net",
+     "limpio"
+    ],
+    [
+     "brut",
+     "sucio"
+    ],
+    [
+     "tou",
+     "blando"
+    ],
+    [
+     "calent",
+     "caliente"
+    ],
+    [
+     "tebi",
+     "tibio"
+    ],
+    [
+     "sec",
+     "seco"
+    ],
+    [
+     "mullat",
+     "mojado"
+    ],
+    [
+     "gruixut",
+     "grueso"
+    ],
+    [
+     "dolç",
+     "dulce"
+    ],
+    [
+     "salat",
+     "salado"
+    ],
+    [
+     "amarg",
+     "amargo"
+    ],
+    [
+     "cru",
+     "crudo"
+    ],
+    [
+     "espatllat",
+     "estropeado"
+    ],
+    [
+     "gratuït",
+     "gratuito"
+    ]
+   ]
+  },
+  {
+   "id": "w018",
+   "level": "A2",
+   "title": "Feelings and states",
+   "words": [
+    [
+     "trist",
+     "triste"
+    ],
+    [
+     "espantat",
+     "asustado"
+    ],
+    [
+     "sorprès",
+     "sorprendido"
+    ],
+    [
+     "decebut",
+     "decepcionado"
+    ],
+    [
+     "emprenyat",
+     "cabreado"
+    ],
+    [
+     "avergonyit",
+     "avergonzado"
+    ],
+    [
+     "satisfet",
+     "satisfecho"
+    ],
+    [
+     "agraït",
+     "agradecido"
+    ],
+    [
+     "adormit",
+     "dormido"
+    ],
+    [
+     "despert",
+     "despierto"
+    ],
+    [
+     "l'angoixa",
+     "la angustia"
+    ],
+    [
+     "el somni",
+     "el sueño (lo que se sueña)"
+    ],
+    [
+     "la llàgrima",
+     "la lágrima"
+    ],
+    [
+     "el somriure",
+     "la sonrisa"
+    ],
+    [
+     "la rialla",
+     "la risa"
+    ],
+    [
+     "l'enveja",
+     "la envidia"
+    ],
+    [
+     "la gelosia",
+     "los celos"
+    ],
+    [
+     "l'enuig",
+     "el enfado"
+    ],
+    [
+     "l'ensurt",
+     "el susto"
+    ],
+    [
+     "el neguit",
+     "la inquietud"
+    ]
+   ]
+  },
+  {
+   "id": "w019",
+   "level": "A2",
+   "title": "Small words",
+   "words": [
+    [
+     "força",
+     "bastante, muy"
+    ],
+    [
+     "per a",
+     "para"
+    ],
+    [
+     "per tant",
+     "por lo tanto"
+    ],
+    [
+     "a més",
+     "además"
+    ],
+    [
+     "sobretot",
+     "sobre todo"
+    ],
+    [
+     "d'hora",
+     "temprano"
+    ],
+    [
+     "abans-d'ahir",
+     "anteayer"
+    ],
+    [
+     "demà passat",
+     "pasado mañana"
+    ],
+    [
+     "tot d'una",
+     "de repente"
+    ],
+    [
+     "enlloc",
+     "en ningún sitio"
+    ],
+    [
+     "arreu",
+     "por todas partes"
+    ],
+    [
+     "amunt",
+     "arriba (hacia arriba)"
+    ],
+    [
+     "avall",
+     "abajo (hacia abajo)"
+    ],
+    [
+     "damunt",
+     "encima"
+    ],
+    [
+     "dessota",
+     "debajo"
+    ],
+    [
+     "dintre",
+     "dentro"
+    ],
+    [
+     "endins",
+     "hacia dentro"
+    ],
+    [
+     "enfora",
+     "hacia fuera"
+    ],
+    [
+     "enmig",
+     "en medio"
+    ],
+    [
+     "plegats",
+     "juntos"
+    ]
+   ]
+  },
+  {
+   "id": "w020",
+   "level": "A2",
+   "title": "Services and communication",
+   "words": [
+    [
+     "l'adreça",
+     "la dirección (postal)"
+    ],
+    [
+     "el segell",
+     "el sello"
+    ],
+    [
+     "la bústia",
+     "el buzón"
+    ],
+    [
+     "el carter",
+     "el cartero"
+    ],
+    [
+     "la tramesa",
+     "el envío"
+    ],
+    [
+     "la trucada",
+     "la llamada"
+    ],
+    [
+     "la contrasenya",
+     "la contraseña"
+    ],
+    [
+     "la xarxa",
+     "la red"
+    ],
+    [
+     "el carregador",
+     "el cargador"
+    ],
+    [
+     "la signatura",
+     "la firma (no 'la asignatura')"
+    ],
+    [
+     "l'imprès",
+     "el impreso (formulario)"
+    ],
+    [
+     "la cita prèvia",
+     "la cita previa"
+    ],
+    [
+     "el centre de salut",
+     "el centro de salud"
+    ],
+    [
+     "el préstec",
+     "el préstamo"
+    ],
+    [
+     "el pagament",
+     "el pago"
+    ],
+    [
+     "l'ingrés",
+     "el ingreso"
+    ],
+    [
+     "la quota",
+     "la cuota"
+    ],
+    [
+     "la perruqueria",
+     "la peluquería"
+    ],
+    [
+     "el lampista",
+     "el fontanero"
+    ],
+    [
+     "el paleta",
+     "el albañil"
+    ]
+   ]
+  },
+  {
+   "id": "w021",
+   "level": "B1",
+   "title": "Relationships and social life",
+   "words": [
+    [
+     "el fillol",
+     "el ahijado"
+    ],
+    [
+     "el conegut",
+     "el conocido"
+    ],
+    [
+     "l'acudit",
+     "el chiste"
+    ],
+    [
+     "la baralla",
+     "la pelea, la riña"
+    ],
+    [
+     "el petó",
+     "el beso"
+    ],
+    [
+     "l'abraçada",
+     "el abrazo"
+    ],
+    [
+     "la xerrada",
+     "la charla"
+    ],
+    [
+     "la trobada",
+     "el encuentro, la quedada"
+    ],
+    [
+     "el tracte",
+     "el trato"
+    ],
+    [
+     "el promès",
+     "el prometido"
+    ],
+    [
+     "el lligam",
+     "el vínculo, el lazo"
+    ],
+    [
+     "l'estima",
+     "el cariño, el aprecio"
+    ],
+    [
+     "el convidat",
+     "el invitado"
+    ],
+    [
+     "el comiat",
+     "la despedida"
+    ],
+    [
+     "la benvinguda",
+     "la bienvenida"
+    ],
+    [
+     "la sobretaula",
+     "la sobremesa"
+    ],
+    [
+     "la xafarderia",
+     "el cotilleo"
+    ],
+    [
+     "vidu",
+     "viudo"
+    ],
+    [
+     "el desconegut",
+     "el desconocido"
+    ],
+    [
+     "la mainada",
+     "la chiquillería, los niños"
+    ]
+   ]
+  },
+  {
+   "id": "w022",
+   "level": "B1",
+   "title": "Character and personality",
+   "words": [
+    [
+     "murri",
+     "pillo, astuto"
+    ],
+    [
+     "llepafils",
+     "tiquismiquis (con la comida)"
+    ],
+    [
+     "somiatruites",
+     "soñador, iluso"
+    ],
+    [
+     "garrepa",
+     "tacaño"
+    ],
+    [
+     "caparrut",
+     "cabezota"
+    ],
+    [
+     "llest",
+     "listo"
+    ],
+    [
+     "espavilat",
+     "espabilado"
+    ],
+    [
+     "saberut",
+     "sabelotodo"
+    ],
+    [
+     "entremaliat",
+     "travieso"
+    ],
+    [
+     "esquerp",
+     "arisco"
+    ],
+    [
+     "assenyat",
+     "sensato"
+    ],
+    [
+     "agosarat",
+     "atrevido, osado"
+    ],
+    [
+     "poruc",
+     "miedoso"
+    ],
+    [
+     "endreçat",
+     "ordenado"
+    ],
+    [
+     "desendreçat",
+     "desordenado"
+    ],
+    [
+     "cregut",
+     "creído, engreído"
+    ],
+    [
+     "gandul",
+     "vago, holgazán"
+    ],
+    [
+     "bocamoll",
+     "bocazas, indiscreto"
+    ],
+    [
+     "tafaner",
+     "curioso, fisgón"
+    ],
+    [
+     "rondinaire",
+     "gruñón, quejica"
+    ]
+   ]
+  },
+  {
+   "id": "w023",
+   "level": "B1",
+   "title": "Illness and pharmacy",
+   "words": [
+    [
+     "la benda",
+     "la venda"
+    ],
+    [
+     "el constipat",
+     "el resfriado (no estreñimiento)"
+    ],
+    [
+     "el cabestrell",
+     "el cabestrillo"
+    ],
+    [
+     "l'esquinç",
+     "el esguince"
+    ],
+    [
+     "el bony",
+     "el chichón, el bulto"
+    ],
+    [
+     "la farmaciola",
+     "el botiquín"
+    ],
+    [
+     "la tireta",
+     "la tirita"
+    ],
+    [
+     "la butllofa",
+     "la ampolla (en la piel)"
+    ],
+    [
+     "el morat",
+     "el moratón"
+    ],
+    [
+     "els mocs",
+     "los mocos"
+    ],
+    [
+     "el calfred",
+     "el escalofrío"
+    ],
+    [
+     "la suor",
+     "el sudor"
+    ],
+    [
+     "la picor",
+     "el picor"
+    ],
+    [
+     "inflat",
+     "hinchado"
+    ],
+    [
+     "l'analítica",
+     "el análisis (de sangre)"
+    ],
+    [
+     "la baixa",
+     "la baja (médica)"
+    ],
+    [
+     "la crossa",
+     "la muleta"
+    ],
+    [
+     "coix",
+     "cojo"
+    ],
+    [
+     "la mascareta",
+     "la mascarilla"
+    ],
+    [
+     "el restrenyiment",
+     "el estreñimiento"
+    ]
+   ]
+  },
+  {
+   "id": "w024",
+   "level": "B1",
+   "title": "Housing and repairs",
+   "words": [
+    [
+     "el lloguer",
+     "el alquiler"
+    ],
+    [
+     "el llogater",
+     "el inquilino"
+    ],
+    [
+     "la finca",
+     "el edificio (de viviendas)"
+    ],
+    [
+     "l'habitatge",
+     "la vivienda"
+    ],
+    [
+     "la fiança",
+     "la fianza"
+    ],
+    [
+     "la llar",
+     "el hogar"
+    ],
+    [
+     "la façana",
+     "la fachada"
+    ],
+    [
+     "la barana",
+     "la barandilla"
+    ],
+    [
+     "la claraboia",
+     "el tragaluz"
+    ],
+    [
+     "el desguàs",
+     "el desagüe"
+    ],
+    [
+     "l'escalfador",
+     "el calentador"
+    ],
+    [
+     "la canonada",
+     "la tubería"
+    ],
+    [
+     "la fuita",
+     "la fuga (de agua, gas)"
+    ],
+    [
+     "el manyà",
+     "el cerrajero"
+    ],
+    [
+     "el pestell",
+     "el pestillo"
+    ],
+    [
+     "la frontissa",
+     "la bisagra"
+    ],
+    [
+     "l'esquerda",
+     "la grieta"
+    ],
+    [
+     "la taca",
+     "la mancha"
+    ],
+    [
+     "moblat",
+     "amueblado"
+    ],
+    [
+     "adossat",
+     "adosado"
+    ]
+   ]
+  },
+  {
+   "id": "w025",
+   "level": "B1",
+   "title": "Cooking and the kitchen",
+   "words": [
+    [
+     "el fogó",
+     "el fogón, el fuego"
+    ],
+    [
+     "cuit",
+     "cocido, hecho"
+    ],
+    [
+     "la pica",
+     "el fregadero"
+    ],
+    [
+     "la cassola",
+     "la cazuela"
+    ],
+    [
+     "el cassó",
+     "el cazo"
+    ],
+    [
+     "l'escumadora",
+     "la espumadera"
+    ],
+    [
+     "el ratllador",
+     "el rallador"
+    ],
+    [
+     "l'obrellaunes",
+     "el abrelatas"
+    ],
+    [
+     "el drap",
+     "el trapo"
+    ],
+    [
+     "el davantal",
+     "el delantal"
+    ],
+    [
+     "la safata",
+     "la bandeja"
+    ],
+    [
+     "el corró",
+     "el rodillo"
+    ],
+    [
+     "la llauna",
+     "la lata"
+    ],
+    [
+     "el sofregit",
+     "el sofrito"
+    ],
+    [
+     "el pessic",
+     "la pizca"
+    ],
+    [
+     "la cullerada",
+     "la cucharada"
+    ],
+    [
+     "la plata",
+     "la fuente (para servir)"
+    ],
+    [
+     "bullit",
+     "hervido"
+    ],
+    [
+     "rostit",
+     "asado"
+    ],
+    [
+     "fat",
+     "soso, insípido"
+    ]
+   ]
+  },
+  {
+   "id": "w026",
+   "level": "B1",
+   "title": "Restaurants and bars",
+   "words": [
+    [
+     "la carmanyola",
+     "la fiambrera, el táper"
+    ],
+    [
+     "el celler",
+     "la bodega"
+    ],
+    [
+     "els coberts",
+     "los cubiertos"
+    ],
+    [
+     "la cullereta",
+     "la cucharilla"
+    ],
+    [
+     "la gerra",
+     "la jarra"
+    ],
+    [
+     "el cullerot",
+     "el cucharón"
+    ],
+    [
+     "la mostassa",
+     "la mostaza"
+    ],
+    [
+     "el refresc",
+     "el refresco"
+    ],
+    [
+     "la clara",
+     "la clara (cerveza con gaseosa)"
+    ],
+    [
+     "la torrada",
+     "la tostada"
+    ],
+    [
+     "l'escuradents",
+     "el palillo (de dientes)"
+    ],
+    [
+     "el saler",
+     "el salero"
+    ],
+    [
+     "el setrill",
+     "la aceitera, la vinagrera"
+    ],
+    [
+     "la terrassa",
+     "la terraza"
+    ],
+    [
+     "el cuiner",
+     "el cocinero"
+    ],
+    [
+     "la vaixella",
+     "la vajilla"
+    ],
+    [
+     "el llevataps",
+     "el sacacorchos"
+    ],
+    [
+     "el tap",
+     "el tapón, el corcho"
+    ],
+    [
+     "el porró",
+     "el porrón"
+    ],
+    [
+     "el cendrer",
+     "el cenicero"
+    ]
+   ]
+  },
+  {
+   "id": "w027",
+   "level": "B1",
+   "title": "Shops and complaints",
+   "words": [
+    [
+     "la sabateria",
+     "la zapatería"
+    ],
+    [
+     "la papereria",
+     "la papelería"
+    ],
+    [
+     "la pastisseria",
+     "la pastelería"
+    ],
+    [
+     "els queviures",
+     "los comestibles, los víveres"
+    ],
+    [
+     "la mercaderia",
+     "la mercancía"
+    ],
+    [
+     "esgotat",
+     "agotado (sin existencias)"
+    ],
+    [
+     "l'envàs",
+     "el envase"
+    ],
+    [
+     "la mostra",
+     "la muestra"
+    ],
+    [
+     "el dependent",
+     "el dependiente"
+    ],
+    [
+     "la venda",
+     "la venta"
+    ],
+    [
+     "l'import",
+     "el importe"
+    ],
+    [
+     "el venedor",
+     "el vendedor"
+    ],
+    [
+     "l'etiqueta",
+     "la etiqueta"
+    ],
+    [
+     "la comanda",
+     "el pedido"
+    ],
+    [
+     "el lliurament",
+     "la entrega"
+    ],
+    [
+     "l'embolcall",
+     "el envoltorio"
+    ],
+    [
+     "la parada",
+     "el puesto (de mercado)"
+    ],
+    [
+     "el regateig",
+     "el regateo"
+    ],
+    [
+     "la floristeria",
+     "la floristería"
+    ],
+    [
+     "el reemborsament",
+     "el reembolso"
+    ]
+   ]
+  },
+  {
+   "id": "w028",
+   "level": "B1",
+   "title": "Jobs and the workplace",
+   "words": [
+    [
+     "la nòmina",
+     "la nómina"
+    ],
+    [
+     "el magatzem",
+     "el almacén"
+    ],
+    [
+     "l'acomiadament",
+     "el despido"
+    ],
+    [
+     "la nau",
+     "la nave (industrial)"
+    ],
+    [
+     "el proveïdor",
+     "el proveedor"
+    ],
+    [
+     "l'autònom",
+     "el autónomo"
+    ],
+    [
+     "la pujada",
+     "la subida (de sueldo)"
+    ],
+    [
+     "el teletreball",
+     "el teletrabajo"
+    ],
+    [
+     "l'esborrany",
+     "el borrador"
+    ],
+    [
+     "el termini",
+     "el plazo"
+    ],
+    [
+     "el permís",
+     "el permiso"
+    ],
+    [
+     "la feinada",
+     "el montón de trabajo"
+    ],
+    [
+     "l'aturat",
+     "el parado"
+    ],
+    [
+     "el rendiment",
+     "el rendimiento"
+    ],
+    [
+     "la sol·licitud",
+     "la solicitud"
+    ],
+    [
+     "el requisit",
+     "el requisito"
+    ],
+    [
+     "el capatàs",
+     "el capataz"
+    ],
+    [
+     "el gerent",
+     "el gerente"
+    ],
+    [
+     "l'ascens",
+     "el ascenso"
+    ],
+    [
+     "fix",
+     "fijo (contrato)"
+    ]
+   ]
+  },
+  {
+   "id": "w029",
+   "level": "B1",
+   "title": "School and university",
+   "words": [
+    [
+     "el bidell",
+     "el conserje (de escuela)"
+    ],
+    [
+     "les colònies",
+     "las colonias (escolares)"
+    ],
+    [
+     "el parvulari",
+     "el parvulario"
+    ],
+    [
+     "l'assignatura",
+     "la asignatura"
+    ],
+    [
+     "el dictat",
+     "el dictado"
+    ],
+    [
+     "la tesi",
+     "la tesis"
+    ],
+    [
+     "el temari",
+     "el temario"
+    ],
+    [
+     "les oposicions",
+     "las oposiciones"
+    ],
+    [
+     "el grau",
+     "el grado (universitario)"
+    ],
+    [
+     "el pati",
+     "el patio"
+    ],
+    [
+     "el suspens",
+     "el suspenso"
+    ],
+    [
+     "els apunts",
+     "los apuntes"
+    ],
+    [
+     "la recerca",
+     "la investigación"
+    ],
+    [
+     "la prova",
+     "la prueba, el examen"
+    ],
+    [
+     "la lliçó",
+     "la lección"
+    ],
+    [
+     "l'ensenyament",
+     "la enseñanza"
+    ],
+    [
+     "l'aprenentatge",
+     "el aprendizaje"
+    ],
+    [
+     "el coneixement",
+     "el conocimiento"
+    ],
+    [
+     "el batxillerat",
+     "el bachillerato"
+    ],
+    [
+     "el claustre",
+     "el claustro (de profesores)"
+    ]
+   ]
+  },
+  {
+   "id": "w030",
+   "level": "B1",
+   "title": "Holidays and tourism",
+   "words": [
+    [
+     "l'allotjament",
+     "el alojamiento"
+    ],
+    [
+     "l'alberg",
+     "el albergue"
+    ],
+    [
+     "la tenda",
+     "la tienda (de campaña)"
+    ],
+    [
+     "la llanterna",
+     "la linterna"
+    ],
+    [
+     "la brúixola",
+     "la brújula"
+    ],
+    [
+     "el refugi",
+     "el refugio (de montaña)"
+    ],
+    [
+     "el recorregut",
+     "el recorrido"
+    ],
+    [
+     "el moll",
+     "el muelle"
+    ],
+    [
+     "la travessia",
+     "la travesía"
+    ],
+    [
+     "el trajecte",
+     "el trayecto"
+    ],
+    [
+     "el transbord",
+     "el transbordo"
+    ],
+    [
+     "la sorra",
+     "la arena"
+    ],
+    [
+     "la gandula",
+     "la tumbona"
+    ],
+    [
+     "el para-sol",
+     "la sombrilla"
+    ],
+    [
+     "l'aterratge",
+     "el aterrizaje"
+    ],
+    [
+     "el visat",
+     "el visado"
+    ],
+    [
+     "el record",
+     "el recuerdo (souvenir)"
+    ],
+    [
+     "el fullet",
+     "el folleto"
+    ],
+    [
+     "el plànol",
+     "el plano"
+    ],
+    [
+     "el balneari",
+     "el balneario"
+    ]
+   ]
+  },
+  {
+   "id": "w031",
+   "level": "B1",
+   "title": "Roads and the car",
+   "words": [
+    [
+     "la cruïlla",
+     "el cruce"
+    ],
+    [
+     "el pneumàtic",
+     "el neumático"
+    ],
+    [
+     "l'embragatge",
+     "el embrague"
+    ],
+    [
+     "el revolt",
+     "la curva"
+    ],
+    [
+     "el remolc",
+     "el remolque"
+    ],
+    [
+     "el patinet",
+     "el patinete"
+    ],
+    [
+     "el fre",
+     "el freno"
+    ],
+    [
+     "l'atropellament",
+     "el atropello"
+    ],
+    [
+     "la punxada",
+     "el pinchazo"
+    ],
+    [
+     "la baixada",
+     "la bajada"
+    ],
+    [
+     "el senyal",
+     "la señal"
+    ],
+    [
+     "el voral",
+     "el arcén"
+    ],
+    [
+     "el parquímetre",
+     "el parquímetro"
+    ],
+    [
+     "el desviament",
+     "el desvío"
+    ],
+    [
+     "el xoc",
+     "el choque"
+    ],
+    [
+     "el cinturó",
+     "el cinturón"
+    ],
+    [
+     "el parabrisa",
+     "el parabrisas"
+    ],
+    [
+     "la calçada",
+     "la calzada"
+    ],
+    [
+     "la variant",
+     "la variante (carretera)"
+    ],
+    [
+     "la frenada",
+     "el frenazo"
+    ]
+   ]
+  },
+  {
+   "id": "w032",
+   "level": "B1",
+   "title": "City services and paperwork",
+   "words": [
+    [
+     "el padró",
+     "el padrón"
+    ],
+    [
+     "la casella",
+     "la casilla"
+    ],
+    [
+     "la brossa",
+     "la basura"
+    ],
+    [
+     "el fanal",
+     "la farola"
+    ],
+    [
+     "el justificant",
+     "el justificante"
+    ],
+    [
+     "la deixalleria",
+     "el punto limpio"
+    ],
+    [
+     "la recollida",
+     "la recogida"
+    ],
+    [
+     "l'enllumenat",
+     "el alumbrado"
+    ],
+    [
+     "el clavegueram",
+     "el alcantarillado"
+    ],
+    [
+     "l'escombriaire",
+     "el basurero (persona)"
+    ],
+    [
+     "el gual",
+     "el vado"
+    ],
+    [
+     "la paperera",
+     "la papelera"
+    ],
+    [
+     "el poliesportiu",
+     "el polideportivo"
+    ],
+    [
+     "el funcionari",
+     "el funcionario"
+    ],
+    [
+     "la comissaria",
+     "la comisaría"
+    ],
+    [
+     "el bomber",
+     "el bombero"
+    ],
+    [
+     "el regidor",
+     "el concejal"
+    ],
+    [
+     "el jutjat",
+     "el juzgado"
+    ],
+    [
+     "el resguard",
+     "el resguardo"
+    ],
+    [
+     "el tràmit",
+     "el trámite"
+    ]
+   ]
+  },
+  {
+   "id": "w033",
+   "level": "B1",
+   "title": "Landscape and nature",
+   "words": [
+    [
+     "el salt d'aigua",
+     "el salto de agua, la cascada"
+    ],
+    [
+     "el còdol",
+     "el canto rodado"
+    ],
+    [
+     "el turó",
+     "la colina"
+    ],
+    [
+     "el cim",
+     "la cima, la cumbre"
+    ],
+    [
+     "el penya-segat",
+     "el acantilado"
+    ],
+    [
+     "la cova",
+     "la cueva"
+    ],
+    [
+     "l'estany",
+     "el lago pequeño, el estanque"
+    ],
+    [
+     "el rierol",
+     "el arroyo"
+    ],
+    [
+     "la riba",
+     "la orilla"
+    ],
+    [
+     "la vora",
+     "el borde, la orilla"
+    ],
+    [
+     "la plana",
+     "la llanura"
+    ],
+    [
+     "el fang",
+     "el barro"
+    ],
+    [
+     "la pols",
+     "el polvo"
+    ],
+    [
+     "l'herba",
+     "la hierba"
+    ],
+    [
+     "l'onada",
+     "la ola"
+    ],
+    [
+     "el matoll",
+     "el matorral"
+    ],
+    [
+     "el corriol",
+     "el sendero"
+    ],
+    [
+     "el congost",
+     "el desfiladero"
+    ],
+    [
+     "el pou",
+     "el pozo"
+    ],
+    [
+     "l'embassament",
+     "el embalse"
+    ]
+   ]
+  },
+  {
+   "id": "w034",
+   "level": "B1",
+   "title": "Weather in detail",
+   "words": [
+    [
+     "el baf",
+     "el vaho"
+    ],
+    [
+     "la boirina",
+     "la neblina"
+    ],
+    [
+     "la calitja",
+     "la calima"
+    ],
+    [
+     "la rosada",
+     "el rocío"
+    ],
+    [
+     "la gelada",
+     "la helada"
+    ],
+    [
+     "el gebre",
+     "la escarcha"
+    ],
+    [
+     "la pedregada",
+     "la granizada"
+    ],
+    [
+     "rúfol",
+     "desapacible (tiempo)"
+    ],
+    [
+     "el llampec",
+     "el relámpago"
+    ],
+    [
+     "el xàfec",
+     "el chaparrón"
+    ],
+    [
+     "el ruixat",
+     "el chubasco"
+    ],
+    [
+     "la ventada",
+     "el ventarrón"
+    ],
+    [
+     "la fresca",
+     "el fresco (de la tarde)"
+    ],
+    [
+     "la sequera",
+     "la sequía"
+    ],
+    [
+     "serè",
+     "despejado"
+    ],
+    [
+     "la clariana",
+     "el claro (entre nubes)"
+    ],
+    [
+     "la marinada",
+     "la brisa marina"
+    ],
+    [
+     "el desglaç",
+     "el deshielo"
+    ],
+    [
+     "la tronada",
+     "la tormenta (con truenos)"
+    ],
+    [
+     "xop",
+     "empapado"
+    ]
+   ]
+  },
+  {
+   "id": "w035",
+   "level": "B1",
+   "title": "Sport and fitness",
+   "words": [
+    [
+     "el davanter",
+     "el delantero"
+    ],
+    [
+     "la travessa",
+     "la quiniela"
+    ],
+    [
+     "l'escalfament",
+     "el calentamiento"
+    ],
+    [
+     "la caminada",
+     "la caminata"
+    ],
+    [
+     "el xiulet",
+     "el silbato"
+    ],
+    [
+     "la remuntada",
+     "la remontada"
+    ],
+    [
+     "les peses",
+     "las pesas"
+    ],
+    [
+     "l'empat",
+     "el empate"
+    ],
+    [
+     "la lliga",
+     "la liga"
+    ],
+    [
+     "el vestidor",
+     "el vestuario"
+    ],
+    [
+     "les agulletes",
+     "las agujetas"
+    ],
+    [
+     "el xut",
+     "el chut, el tiro"
+    ],
+    [
+     "el torneig",
+     "el torneo"
+    ],
+    [
+     "guanyador",
+     "ganador"
+    ],
+    [
+     "el soci",
+     "el socio"
+    ],
+    [
+     "l'estirament",
+     "el estiramiento"
+    ],
+    [
+     "el rem",
+     "el remo"
+    ],
+    [
+     "l'esforç",
+     "el esfuerzo"
+    ],
+    [
+     "el casc",
+     "el casco"
+    ],
+    [
+     "el porter",
+     "el portero"
+    ]
+   ]
+  },
+  {
+   "id": "w036",
+   "level": "B1",
+   "title": "Music, film and books",
+   "words": [
+    [
+     "el llargmetratge",
+     "el largometraje"
+    ],
+    [
+     "el curtmetratge",
+     "el cortometraje"
+    ],
+    [
+     "el guió",
+     "el guion"
+    ],
+    [
+     "el repartiment",
+     "el reparto"
+    ],
+    [
+     "el personatge",
+     "el personaje"
+    ],
+    [
+     "el desenllaç",
+     "el desenlace"
+    ],
+    [
+     "el doblatge",
+     "el doblaje"
+    ],
+    [
+     "el conte",
+     "el cuento"
+    ],
+    [
+     "la lletra",
+     "la letra (de canción)"
+    ],
+    [
+     "el capítol",
+     "el capítulo"
+    ],
+    [
+     "l'escenari",
+     "el escenario"
+    ],
+    [
+     "l'aplaudiment",
+     "el aplauso"
+    ],
+    [
+     "el rodatge",
+     "el rodaje"
+    ],
+    [
+     "l'estrena",
+     "el estreno"
+    ],
+    [
+     "la ressenya",
+     "la reseña"
+    ],
+    [
+     "l'assaig",
+     "el ensayo"
+    ],
+    [
+     "el muntatge",
+     "el montaje"
+    ],
+    [
+     "el relat",
+     "el relato"
+    ],
+    [
+     "la cançó",
+     "la canción"
+    ],
+    [
+     "l'actriu",
+     "la actriz"
+    ]
+   ]
+  },
+  {
+   "id": "w037",
+   "level": "B1",
+   "title": "Media, internet and phones",
+   "words": [
+    [
+     "els auriculars",
+     "los auriculares"
+    ],
+    [
+     "l'altaveu",
+     "el altavoz"
+    ],
+    [
+     "l'enregistrament",
+     "la grabación"
+    ],
+    [
+     "el reportatge",
+     "el reportaje"
+    ],
+    [
+     "el fitxer",
+     "el archivo, el fichero"
+    ],
+    [
+     "el ratolí",
+     "el ratón (ordenador)"
+    ],
+    [
+     "el teclat",
+     "el teclado"
+    ],
+    [
+     "l'enllaç",
+     "el enlace"
+    ],
+    [
+     "el cercador",
+     "el buscador"
+    ],
+    [
+     "la descàrrega",
+     "la descarga"
+    ],
+    [
+     "el programari",
+     "el software"
+    ],
+    [
+     "el maquinari",
+     "el hardware"
+    ],
+    [
+     "la tauleta",
+     "la tableta"
+    ],
+    [
+     "la impressora",
+     "la impresora"
+    ],
+    [
+     "la premsa",
+     "la prensa"
+    ],
+    [
+     "el telenotícies",
+     "el telediario"
+    ],
+    [
+     "l'emissora",
+     "la emisora"
+    ],
+    [
+     "la videotrucada",
+     "la videollamada"
+    ],
+    [
+     "el comandament",
+     "el mando (a distancia)"
+    ],
+    [
+     "el mitjà",
+     "el medio (de comunicación)"
+    ]
+   ]
+  },
+  {
+   "id": "w038",
+   "level": "B1",
+   "title": "Money, banks and bills",
+   "words": [
+    [
+     "l'avançament",
+     "el adelanto, el anticipo"
+    ],
+    [
+     "el deute",
+     "la deuda"
+    ],
+    [
+     "l'estalvi",
+     "el ahorro"
+    ],
+    [
+     "la despesa",
+     "el gasto"
+    ],
+    [
+     "el reintegrament",
+     "el reintegro"
+    ],
+    [
+     "el cobrament",
+     "el cobro"
+    ],
+    [
+     "l'impost",
+     "el impuesto"
+    ],
+    [
+     "el comptador",
+     "el contador"
+    ],
+    [
+     "el guany",
+     "la ganancia"
+    ],
+    [
+     "la pèrdua",
+     "la pérdida"
+    ],
+    [
+     "la guardiola",
+     "la hucha"
+    ],
+    [
+     "l'assegurança",
+     "el seguro"
+    ],
+    [
+     "la pòlissa",
+     "la póliza"
+    ],
+    [
+     "el venciment",
+     "el vencimiento"
+    ],
+    [
+     "l'ajut",
+     "la ayuda (subvención)"
+    ],
+    [
+     "l'extracte",
+     "el extracto (bancario)"
+    ],
+    [
+     "el xec",
+     "el cheque"
+    ],
+    [
+     "la caixa forta",
+     "la caja fuerte"
+    ],
+    [
+     "la xifra",
+     "la cifra"
+    ],
+    [
+     "la renda",
+     "la renta"
+    ]
+   ]
+  },
+  {
+   "id": "w039",
+   "level": "B1",
+   "title": "Emotions and reactions",
+   "words": [
+    [
+     "el patiment",
+     "el sufrimiento"
+    ],
+    [
+     "la recança",
+     "el pesar, la pena"
+    ],
+    [
+     "el despit",
+     "el despecho"
+    ],
+    [
+     "l'enyorança",
+     "la añoranza, la nostalgia"
+    ],
+    [
+     "l'esglai",
+     "el espanto, el susto"
+    ],
+    [
+     "el dol",
+     "el luto, el duelo"
+    ],
+    [
+     "la joia",
+     "la alegría (también 'la joya')"
+    ],
+    [
+     "el plor",
+     "el llanto"
+    ],
+    [
+     "commogut",
+     "conmovido"
+    ],
+    [
+     "atabalat",
+     "agobiado, aturdido"
+    ],
+    [
+     "l'avorriment",
+     "el aburrimiento"
+    ],
+    [
+     "enrabiat",
+     "rabioso, enfadado"
+    ],
+    [
+     "capficat",
+     "preocupado, absorto"
+    ],
+    [
+     "engrescat",
+     "entusiasmado, animado"
+    ],
+    [
+     "empipat",
+     "molesto, enfadado"
+    ],
+    [
+     "alleujat",
+     "aliviado"
+    ],
+    [
+     "amoïnat",
+     "preocupado, inquieto"
+    ],
+    [
+     "esverat",
+     "alterado, alarmado"
+    ],
+    [
+     "la tendresa",
+     "la ternura"
+    ],
+    [
+     "la tristor",
+     "la tristeza"
+    ]
+   ]
+  },
+  {
+   "id": "w040",
+   "level": "B1",
+   "title": "Celebrations and traditions",
+   "words": [
+    [
+     "el bateig",
+     "el bautizo"
+    ],
+    [
+     "el sant",
+     "el santo (onomástica)"
+    ],
+    [
+     "l'espelma",
+     "la vela"
+    ],
+    [
+     "la revetlla",
+     "la verbena"
+    ],
+    [
+     "el coet",
+     "el cohete"
+    ],
+    [
+     "la cercavila",
+     "el pasacalles"
+    ],
+    [
+     "la cavalcada",
+     "la cabalgata"
+    ],
+    [
+     "el pessebre",
+     "el belén"
+    ],
+    [
+     "el torró",
+     "el turrón"
+    ],
+    [
+     "la mona",
+     "la mona (de Pascua)"
+    ],
+    [
+     "el capgròs",
+     "el cabezudo"
+    ],
+    [
+     "el gegant",
+     "el gigante"
+    ],
+    [
+     "la disfressa",
+     "el disfraz"
+    ],
+    [
+     "el carnestoltes",
+     "el carnaval"
+    ],
+    [
+     "la diada",
+     "la jornada festiva"
+    ],
+    [
+     "l'aplec",
+     "la romería, el encuentro popular"
+    ],
+    [
+     "l'enhorabona",
+     "la enhorabuena"
+    ],
+    [
+     "el ram",
+     "el ramo"
+    ],
+    [
+     "el tió",
+     "el tió (tronco navideño)"
+    ],
+    [
+     "la desfilada",
+     "el desfile"
+    ]
+   ]
+  },
+  {
+   "id": "w041",
+   "level": "B1",
+   "title": "Tools and DIY",
+   "words": [
+    [
+     "l'eina",
+     "la herramienta"
+    ],
+    [
+     "el martell",
+     "el martillo"
+    ],
+    [
+     "el clau",
+     "el clavo"
+    ],
+    [
+     "el cargol",
+     "el tornillo"
+    ],
+    [
+     "el tornavís",
+     "el destornillador"
+    ],
+    [
+     "el trepant",
+     "el taladro"
+    ],
+    [
+     "el pinzell",
+     "el pincel"
+    ],
+    [
+     "el cordill",
+     "el cordel"
+    ],
+    [
+     "el filferro",
+     "el alambre"
+    ],
+    [
+     "la llima",
+     "la lima (herramienta)"
+    ],
+    [
+     "el fuster",
+     "el carpintero"
+    ],
+    [
+     "el formigó",
+     "el hormigón"
+    ],
+    [
+     "l'acer",
+     "el acero"
+    ],
+    [
+     "barroer",
+     "chapucero"
+    ],
+    [
+     "el coure",
+     "el cobre"
+    ],
+    [
+     "el maó",
+     "el ladrillo"
+    ],
+    [
+     "el rasclet",
+     "el rastrillo"
+    ],
+    [
+     "la femella",
+     "la tuerca"
+    ],
+    [
+     "la mànega",
+     "la manguera"
+    ],
+    [
+     "el suro",
+     "el corcho"
+    ]
+   ]
+  },
+  {
+   "id": "w042",
+   "level": "B1",
+   "title": "Narrative connectors",
+   "words": [
+    [
+     "llevat de",
+     "salvo, excepto"
+    ],
+    [
+     "ara bé",
+     "ahora bien"
+    ],
+    [
+     "altrament",
+     "de lo contrario"
+    ],
+    [
+     "per cert",
+     "por cierto"
+    ],
+    [
+     "en canvi",
+     "en cambio"
+    ],
+    [
+     "així mateix",
+     "asimismo"
+    ],
+    [
+     "de cop",
+     "de golpe"
+    ],
+    [
+     "amb tot",
+     "con todo, aun así"
+    ],
+    [
+     "per fi",
+     "por fin"
+    ],
+    [
+     "tot seguit",
+     "acto seguido"
+    ],
+    [
+     "o sigui",
+     "o sea"
+    ],
+    [
+     "quant a",
+     "en cuanto a"
+    ],
+    [
+     "com que",
+     "como (causal)"
+    ],
+    [
+     "encara que",
+     "aunque"
+    ],
+    [
+     "de fet",
+     "de hecho"
+    ],
+    [
+     "d'altra banda",
+     "por otra parte"
+    ],
+    [
+     "tot just",
+     "apenas, justo (recién)"
+    ],
+    [
+     "darrerament",
+     "últimamente"
+    ],
+    [
+     "ja que",
+     "ya que"
+    ],
+    [
+     "sens dubte",
+     "sin duda"
+    ]
+   ]
+  },
+  {
+   "id": "w043",
+   "level": "B1",
+   "title": "Everyday abstract nouns",
+   "words": [
+    [
+     "el repte",
+     "el reto"
+    ],
+    [
+     "l'encert",
+     "el acierto"
+    ],
+    [
+     "l'errada",
+     "el error, la errata"
+    ],
+    [
+     "l'esdeveniment",
+     "el acontecimiento"
+    ],
+    [
+     "l'assumpte",
+     "el asunto"
+    ],
+    [
+     "la mena",
+     "el tipo, la clase"
+    ],
+    [
+     "la mesura",
+     "la medida"
+    ],
+    [
+     "l'entrebanc",
+     "el obstáculo, el contratiempo"
+    ],
+    [
+     "la nosa",
+     "el estorbo, la molestia"
+    ],
+    [
+     "el maldecap",
+     "el quebradero de cabeza"
+    ],
+    [
+     "l'embolic",
+     "el lío"
+    ],
+    [
+     "el perill",
+     "el peligro"
+    ],
+    [
+     "la fita",
+     "el hito, la meta"
+    ],
+    [
+     "l'assoliment",
+     "el logro"
+    ],
+    [
+     "la millora",
+     "la mejora"
+    ],
+    [
+     "el desenvolupament",
+     "el desarrollo"
+    ],
+    [
+     "la sospita",
+     "la sospecha"
+    ],
+    [
+     "l'oblit",
+     "el olvido"
+    ],
+    [
+     "la tria",
+     "la elección"
+    ],
+    [
+     "el malentès",
+     "el malentendido"
+    ]
+   ]
+  },
+  {
+   "id": "w044",
+   "level": "B1",
+   "title": "Geography and countries",
+   "words": [
+    [
+     "la serralada",
+     "la cordillera"
+    ],
+    [
+     "l'illa",
+     "la isla"
+    ],
+    [
+     "el ponent",
+     "el poniente, el oeste"
+    ],
+    [
+     "el llevant",
+     "el levante, el este"
+    ],
+    [
+     "la badia",
+     "la bahía"
+    ],
+    [
+     "la tramuntana",
+     "la tramontana (viento del norte)"
+    ],
+    [
+     "l'altiplà",
+     "la meseta, el altiplano"
+    ],
+    [
+     "la conca",
+     "la cuenca"
+    ],
+    [
+     "la llengua",
+     "la lengua (idioma)"
+    ],
+    [
+     "la vila",
+     "la villa"
+    ],
+    [
+     "el llogaret",
+     "la aldea"
+    ],
+    [
+     "el mas",
+     "la masía"
+    ],
+    [
+     "les rodalies",
+     "los alrededores, las cercanías"
+    ],
+    [
+     "l'illot",
+     "el islote"
+    ],
+    [
+     "la contrada",
+     "la comarca, la región"
+    ],
+    [
+     "el terratrèmol",
+     "el terremoto"
+    ],
+    [
+     "l'aiguamoll",
+     "el humedal, la marisma"
+    ],
+    [
+     "l'estranger",
+     "el extranjero (otros países)"
+    ],
+    [
+     "la riuada",
+     "la riada"
+    ],
+    [
+     "el volcà",
+     "el volcán"
+    ]
+   ]
+  },
+  {
+   "id": "w045",
+   "level": "B1",
+   "title": "Animals and plants",
+   "words": [
+    [
+     "l'ocell",
+     "el pájaro"
+    ],
+    [
+     "el colom",
+     "la paloma"
+    ],
+    [
+     "la gavina",
+     "la gaviota"
+    ],
+    [
+     "el pardal",
+     "el gorrión"
+    ],
+    [
+     "l'abella",
+     "la abeja"
+    ],
+    [
+     "la papallona",
+     "la mariposa"
+    ],
+    [
+     "el cuc",
+     "el gusano"
+    ],
+    [
+     "la sargantana",
+     "la lagartija"
+    ],
+    [
+     "el conill",
+     "el conejo"
+    ],
+    [
+     "la granota",
+     "la rana"
+    ],
+    [
+     "la guineu",
+     "el zorro"
+    ],
+    [
+     "el senglar",
+     "el jabalí"
+    ],
+    [
+     "el ratpenat",
+     "el murciélago"
+    ],
+    [
+     "la puça",
+     "la pulga"
+    ],
+    [
+     "la branca",
+     "la rama"
+    ],
+    [
+     "la fulla",
+     "la hoja (de planta)"
+    ],
+    [
+     "l'arrel",
+     "la raíz"
+    ],
+    [
+     "el test",
+     "la maceta"
+    ],
+    [
+     "la gespa",
+     "el césped"
+    ],
+    [
+     "el bolet",
+     "la seta"
+    ]
+   ]
+  },
+  {
+   "id": "w046",
+   "level": "B2",
+   "title": "Society and social issues",
+   "words": [
+    [
+     "la pobresa",
+     "la pobreza"
+    ],
+    [
+     "la vellesa",
+     "la vejez"
+    ],
+    [
+     "el voluntariat",
+     "el voluntariado"
+    ],
+    [
+     "el teixit social",
+     "el tejido social"
+    ],
+    [
+     "l'assetjament",
+     "el acoso"
+    ],
+    [
+     "el maltractament",
+     "el maltrato"
+    ],
+    [
+     "l'entitat",
+     "la entidad (asociación)"
+    ],
+    [
+     "la joventut",
+     "la juventud"
+    ],
+    [
+     "la infantesa",
+     "la infancia"
+    ],
+    [
+     "la xacra",
+     "la lacra"
+    ],
+    [
+     "el desnonament",
+     "el desahucio"
+    ],
+    [
+     "l'envelliment",
+     "el envejecimiento"
+    ],
+    [
+     "la bretxa",
+     "la brecha"
+    ],
+    [
+     "el col·lectiu",
+     "el colectivo"
+    ],
+    [
+     "la pertinença",
+     "la pertenencia"
+    ],
+    [
+     "el menyspreu",
+     "el desprecio"
+    ],
+    [
+     "el prejudici",
+     "el prejuicio"
+    ],
+    [
+     "el captaire",
+     "el mendigo"
+    ],
+    [
+     "l'aïllament",
+     "el aislamiento"
+    ],
+    [
+     "la mendicitat",
+     "la mendicidad"
+    ]
+   ]
+  },
+  {
+   "id": "w047",
+   "level": "B2",
+   "title": "Politics and institutions",
+   "words": [
+    [
+     "el míting",
+     "el mitin"
+    ],
+    [
+     "l'hemicicle",
+     "el hemiciclo"
+    ],
+    [
+     "el ple",
+     "el pleno"
+    ],
+    [
+     "el govern",
+     "el gobierno"
+    ],
+    [
+     "el consistori",
+     "el consistorio"
+    ],
+    [
+     "l'escó",
+     "el escaño"
+    ],
+    [
+     "el consell",
+     "el consejo"
+    ],
+    [
+     "el conseller",
+     "el consejero (ministro autonómico)"
+    ],
+    [
+     "la conselleria",
+     "la consejería"
+    ],
+    [
+     "la cambra",
+     "la cámara (parlamentaria)"
+    ],
+    [
+     "el mandat",
+     "el mandato"
+    ],
+    [
+     "el portaveu",
+     "el portavoz"
+    ],
+    [
+     "l'escrutini",
+     "el escrutinio"
+    ],
+    [
+     "la sobirania",
+     "la soberanía"
+    ],
+    [
+     "l'autogovern",
+     "el autogobierno"
+    ],
+    [
+     "la papereta",
+     "la papeleta (de voto)"
+    ],
+    [
+     "el recompte",
+     "el recuento"
+    ],
+    [
+     "el sondeig",
+     "el sondeo"
+    ],
+    [
+     "la campanya",
+     "la campaña"
+    ],
+    [
+     "el decret",
+     "el decreto"
+    ]
+   ]
+  },
+  {
+   "id": "w048",
+   "level": "B2",
+   "title": "Economy and business",
+   "words": [
+    [
+     "l'empresari",
+     "el empresario"
+    ],
+    [
+     "el benefici",
+     "el beneficio"
+    ],
+    [
+     "les pèrdues",
+     "las pérdidas"
+    ],
+    [
+     "el balanç",
+     "el balance"
+    ],
+    [
+     "el creixement",
+     "el crecimiento"
+    ],
+    [
+     "la davallada",
+     "el descenso (caída)"
+    ],
+    [
+     "l'endeutament",
+     "el endeudamiento"
+    ],
+    [
+     "la hisenda",
+     "la hacienda (fisco)"
+    ],
+    [
+     "l'encariment",
+     "el encarecimiento"
+    ],
+    [
+     "la borsa",
+     "la bolsa (de valores)"
+    ],
+    [
+     "la retallada",
+     "el recorte"
+    ],
+    [
+     "el rescat",
+     "el rescate"
+    ],
+    [
+     "l'estancament",
+     "el estancamiento"
+    ],
+    [
+     "la fallida",
+     "la quiebra"
+    ],
+    [
+     "la crisi",
+     "la crisis"
+    ],
+    [
+     "l'aranzel",
+     "el arancel"
+    ],
+    [
+     "el dividend",
+     "el dividendo"
+    ],
+    [
+     "l'alça",
+     "el alza"
+    ],
+    [
+     "la pime",
+     "la pyme"
+    ],
+    [
+     "la rendibilitat",
+     "la rentabilidad"
+    ]
+   ]
+  },
+  {
+   "id": "w049",
+   "level": "B2",
+   "title": "Work and labour rights",
+   "words": [
+    [
+     "l'ocupació",
+     "el empleo (trabajo)"
+    ],
+    [
+     "el piquet",
+     "el piquete"
+    ],
+    [
+     "el comitè d'empresa",
+     "el comité de empresa"
+    ],
+    [
+     "el sindicat",
+     "el sindicato"
+    ],
+    [
+     "la patronal",
+     "la patronal"
+    ],
+    [
+     "el contracte",
+     "el contrato"
+    ],
+    [
+     "el vaguista",
+     "el huelguista"
+    ],
+    [
+     "la contractació",
+     "la contratación"
+    ],
+    [
+     "la retribució",
+     "la retribución"
+    ],
+    [
+     "el pensionista",
+     "el pensionista"
+    ],
+    [
+     "el conveni",
+     "el convenio"
+    ],
+    [
+     "la reivindicació",
+     "la reivindicación"
+    ],
+    [
+     "el sindicalista",
+     "el sindicalista"
+    ],
+    [
+     "la conciliació",
+     "la conciliación"
+    ],
+    [
+     "la desocupació",
+     "el desempleo"
+    ],
+    [
+     "l'assalariat",
+     "el asalariado"
+    ],
+    [
+     "la indemnització",
+     "la indemnización"
+    ],
+    [
+     "el salari",
+     "el salario"
+    ],
+    [
+     "el subsidi",
+     "el subsidio"
+    ],
+    [
+     "la mà d'obra",
+     "la mano de obra"
+    ]
+   ]
+  },
+  {
+   "id": "w050",
+   "level": "B2",
+   "title": "Law, justice and crime",
+   "words": [
+    [
+     "la llei",
+     "la ley"
+    ],
+    [
+     "el jutge",
+     "el juez"
+    ],
+    [
+     "el judici",
+     "el juicio"
+    ],
+    [
+     "la sentència",
+     "la sentencia"
+    ],
+    [
+     "l'advocat",
+     "el abogado"
+    ],
+    [
+     "el delicte",
+     "el delito"
+    ],
+    [
+     "el delinqüent",
+     "el delincuente"
+    ],
+    [
+     "el robatori",
+     "el robo"
+    ],
+    [
+     "el furt",
+     "el hurto"
+    ],
+    [
+     "l'assassinat",
+     "el asesinato"
+    ],
+    [
+     "l'atracament",
+     "el atraco"
+    ],
+    [
+     "el pres",
+     "el preso"
+    ],
+    [
+     "la condemna",
+     "la condena"
+    ],
+    [
+     "el testimoni",
+     "el testigo"
+    ],
+    [
+     "el dret",
+     "el derecho"
+    ],
+    [
+     "el plet",
+     "el pleito"
+    ],
+    [
+     "l'homicidi",
+     "el homicidio"
+    ],
+    [
+     "el segrest",
+     "el secuestro"
+    ],
+    [
+     "el suborn",
+     "el soborno"
+    ],
+    [
+     "el frau",
+     "el fraude"
+    ]
+   ]
+  },
+  {
+   "id": "w051",
+   "level": "B2",
+   "title": "Environment and ecology",
+   "words": [
+    [
+     "el medi ambient",
+     "el medio ambiente"
+    ],
+    [
+     "el sòl",
+     "el suelo (terreno)"
+    ],
+    [
+     "el vessament",
+     "el vertido"
+    ],
+    [
+     "l'erosió",
+     "la erosión"
+    ],
+    [
+     "el reciclatge",
+     "el reciclaje"
+    ],
+    [
+     "l'abocador",
+     "el vertedero"
+    ],
+    [
+     "la deixalla",
+     "el desecho"
+    ],
+    [
+     "l'efecte hivernacle",
+     "el efecto invernadero"
+    ],
+    [
+     "la desertització",
+     "la desertización"
+    ],
+    [
+     "el cabal",
+     "el caudal"
+    ],
+    [
+     "l'aqüífer",
+     "el acuífero"
+    ],
+    [
+     "l'incendi",
+     "el incendio"
+    ],
+    [
+     "l'abocament",
+     "el vertido (descarga)"
+    ],
+    [
+     "el fum",
+     "el humo"
+    ],
+    [
+     "l'espècie",
+     "la especie"
+    ],
+    [
+     "la gota freda",
+     "la gota fría"
+    ],
+    [
+     "la depuradora",
+     "la depuradora"
+    ],
+    [
+     "l'hàbitat",
+     "el hábitat"
+    ],
+    [
+     "la petjada",
+     "la huella"
+    ],
+    [
+     "el paisatge",
+     "el paisaje"
+    ]
+   ]
+  },
+  {
+   "id": "w052",
+   "level": "B2",
+   "title": "Energy and resources",
+   "words": [
+    [
+     "el molí",
+     "el molino"
+    ],
+    [
+     "el proveïment",
+     "el abastecimiento"
+    ],
+    [
+     "la refineria",
+     "la refinería"
+    ],
+    [
+     "el carbó",
+     "el carbón"
+    ],
+    [
+     "el petroli",
+     "el petróleo"
+    ],
+    [
+     "el carburant",
+     "el carburante"
+    ],
+    [
+     "el gasoli",
+     "el gasóleo"
+    ],
+    [
+     "el gasoducte",
+     "el gasoducto"
+    ],
+    [
+     "el subministrament",
+     "el suministro"
+    ],
+    [
+     "l'urani",
+     "el uranio"
+    ],
+    [
+     "l'autoconsum",
+     "el autoconsumo"
+    ],
+    [
+     "el jaciment",
+     "el yacimiento"
+    ],
+    [
+     "l'escassetat",
+     "la escasez"
+    ],
+    [
+     "l'apagada",
+     "el apagón"
+    ],
+    [
+     "la llenya",
+     "la leña"
+    ],
+    [
+     "l'aprofitament",
+     "el aprovechamiento"
+    ],
+    [
+     "l'aerogenerador",
+     "el aerogenerador"
+    ],
+    [
+     "el cablejat",
+     "el cableado"
+    ],
+    [
+     "el consum",
+     "el consumo"
+    ],
+    [
+     "el recurs",
+     "el recurso"
+    ]
+   ]
+  },
+  {
+   "id": "w053",
+   "level": "B2",
+   "title": "Science and research",
+   "words": [
+    [
+     "la patent",
+     "la patente"
+    ],
+    [
+     "la proveta",
+     "la probeta"
+    ],
+    [
+     "la troballa",
+     "el hallazgo"
+    ],
+    [
+     "el descobriment",
+     "el descubrimiento"
+    ],
+    [
+     "la hipòtesi",
+     "la hipótesis"
+    ],
+    [
+     "la dada",
+     "el dato"
+    ],
+    [
+     "la lent",
+     "la lente"
+    ],
+    [
+     "el nucli",
+     "el núcleo"
+    ],
+    [
+     "la cèl·lula",
+     "la célula"
+    ],
+    [
+     "el buit",
+     "el vacío"
+    ],
+    [
+     "el savi",
+     "el sabio"
+    ],
+    [
+     "la molècula",
+     "la molécula"
+    ],
+    [
+     "el mesurament",
+     "la medición"
+    ],
+    [
+     "el percentatge",
+     "el porcentaje"
+    ],
+    [
+     "la mitjana",
+     "la media (promedio)"
+    ],
+    [
+     "l'avenç",
+     "el avance"
+    ],
+    [
+     "el càlcul",
+     "el cálculo"
+    ],
+    [
+     "la gravetat",
+     "la gravedad"
+    ],
+    [
+     "el satèl·lit",
+     "el satélite"
+    ],
+    [
+     "l'invent",
+     "el invento"
+    ]
+   ]
+  },
+  {
+   "id": "w054",
+   "level": "B2",
+   "title": "Technology and digital life",
+   "words": [
+    [
+     "el ciberassetjament",
+     "el ciberacoso"
+    ],
+    [
+     "la banda ampla",
+     "la banda ancha"
+    ],
+    [
+     "la fibra òptica",
+     "la fibra óptica"
+    ],
+    [
+     "l'emmagatzematge",
+     "el almacenamiento"
+    ],
+    [
+     "el comerç electrònic",
+     "el comercio electrónico"
+    ],
+    [
+     "la signatura electrònica",
+     "la firma electrónica"
+    ],
+    [
+     "el correu brossa",
+     "el correo basura (spam)"
+    ],
+    [
+     "el pirata informàtic",
+     "el pirata informático"
+    ],
+    [
+     "l'internauta",
+     "el internauta"
+    ],
+    [
+     "el servidor",
+     "el servidor"
+    ],
+    [
+     "l'emoticona",
+     "el emoticono"
+    ],
+    [
+     "el videojoc",
+     "el videojuego"
+    ],
+    [
+     "la ciberseguretat",
+     "la ciberseguridad"
+    ],
+    [
+     "la galeta",
+     "la cookie"
+    ],
+    [
+     "la piulada",
+     "el tuit"
+    ],
+    [
+     "la privadesa",
+     "la privacidad"
+    ],
+    [
+     "el dispositiu",
+     "el dispositivo"
+    ],
+    [
+     "l'algoritme",
+     "el algoritmo"
+    ],
+    [
+     "el codi",
+     "el código"
+    ],
+    [
+     "la safata d'entrada",
+     "la bandeja de entrada"
+    ]
+   ]
+  },
+  {
+   "id": "w055",
+   "level": "B2",
+   "title": "Health system and wellbeing",
+   "words": [
+    [
+     "el benestar",
+     "el bienestar"
+    ],
+    [
+     "l'ambulatori",
+     "el ambulatorio"
+    ],
+    [
+     "les urgències",
+     "las urgencias"
+    ],
+    [
+     "el contagi",
+     "el contagio"
+    ],
+    [
+     "el cirurgià",
+     "el cirujano"
+    ],
+    [
+     "el quiròfan",
+     "el quirófano"
+    ],
+    [
+     "el brot",
+     "el brote"
+    ],
+    [
+     "la llista d'espera",
+     "la lista de espera"
+    ],
+    [
+     "el tractament",
+     "el tratamiento"
+    ],
+    [
+     "la mútua",
+     "la mutua"
+    ],
+    [
+     "el confinament",
+     "el confinamiento"
+    ],
+    [
+     "la quarantena",
+     "la cuarentena"
+    ],
+    [
+     "l'embaràs",
+     "el embarazo"
+    ],
+    [
+     "la cirurgia",
+     "la cirugía"
+    ],
+    [
+     "el calmant",
+     "el calmante"
+    ],
+    [
+     "la dolència",
+     "la dolencia"
+    ],
+    [
+     "el donant",
+     "el donante"
+    ],
+    [
+     "el sobrepès",
+     "el sobrepeso"
+    ],
+    [
+     "el trasplantament",
+     "el trasplante"
+    ],
+    [
+     "el cribratge",
+     "el cribado"
+    ]
+   ]
+  },
+  {
+   "id": "w056",
+   "level": "B2",
+   "title": "Housing and urbanism",
+   "words": [
+    [
+     "la bombolla",
+     "la burbuja (inmobiliaria)"
+    ],
+    [
+     "l'ocupa",
+     "el okupa"
+    ],
+    [
+     "la zona verda",
+     "la zona verde"
+    ],
+    [
+     "l'arrendament",
+     "el arrendamiento"
+    ],
+    [
+     "el propietari",
+     "el propietario"
+    ],
+    [
+     "l'immoble",
+     "el inmueble"
+    ],
+    [
+     "l'arrendatari",
+     "el arrendatario"
+    ],
+    [
+     "la parcel·la",
+     "la parcela"
+    ],
+    [
+     "l'obra nova",
+     "la obra nueva"
+    ],
+    [
+     "el planejament",
+     "el planeamiento"
+    ],
+    [
+     "la requalificació",
+     "la recalificación"
+    ],
+    [
+     "la immobiliària",
+     "la inmobiliaria"
+    ],
+    [
+     "l'enderroc",
+     "el derribo"
+    ],
+    [
+     "la llicència d'obres",
+     "la licencia de obras"
+    ],
+    [
+     "la cèdula d'habitabilitat",
+     "la cédula de habitabilidad"
+    ],
+    [
+     "el polígon",
+     "el polígono"
+    ],
+    [
+     "l'eixample",
+     "el ensanche"
+    ],
+    [
+     "el casc antic",
+     "el casco antiguo"
+    ],
+    [
+     "la mudança",
+     "la mudanza"
+    ],
+    [
+     "la grua",
+     "la grúa"
+    ]
+   ]
+  },
+  {
+   "id": "w057",
+   "level": "B2",
+   "title": "Education system",
+   "words": [
+    [
+     "la llengua vehicular",
+     "la lengua vehicular"
+    ],
+    [
+     "la revàlida",
+     "la reválida"
+    ],
+    [
+     "la matrícula",
+     "la matrícula"
+    ],
+    [
+     "el doctorat",
+     "el doctorado"
+    ],
+    [
+     "el consell escolar",
+     "el consejo escolar"
+    ],
+    [
+     "la selectivitat",
+     "la selectividad (PAU)"
+    ],
+    [
+     "la immersió lingüística",
+     "la inmersión lingüística"
+    ],
+    [
+     "l'alumnat",
+     "el alumnado"
+    ],
+    [
+     "el professorat",
+     "el profesorado"
+    ],
+    [
+     "la docència",
+     "la docencia"
+    ],
+    [
+     "la tutoria",
+     "la tutoría"
+    ],
+    [
+     "l'escola bressol",
+     "la escuela infantil"
+    ],
+    [
+     "el fracàs",
+     "el fracaso"
+    ],
+    [
+     "l'abandonament",
+     "el abandono (escolar)"
+    ],
+    [
+     "l'escolarització",
+     "la escolarización"
+    ],
+    [
+     "la ràtio",
+     "la ratio"
+    ],
+    [
+     "la concertada",
+     "la escuela concertada"
+    ],
+    [
+     "l'expedient",
+     "el expediente"
+    ],
+    [
+     "el títol",
+     "el título"
+    ],
+    [
+     "el col·legi",
+     "el colegio"
+    ]
+   ]
+  },
+  {
+   "id": "w058",
+   "level": "B2",
+   "title": "Press and journalism",
+   "words": [
+    [
+     "l'editorial",
+     "el editorial"
+    ],
+    [
+     "els mitjans",
+     "los medios (de comunicación)"
+    ],
+    [
+     "el reporter",
+     "el reportero"
+    ],
+    [
+     "la crònica",
+     "la crónica"
+    ],
+    [
+     "el corresponsal",
+     "el corresponsal"
+    ],
+    [
+     "la redacció",
+     "la redacción"
+    ],
+    [
+     "la tertúlia",
+     "la tertulia"
+    ],
+    [
+     "el tertulià",
+     "el tertuliano"
+    ],
+    [
+     "el lector",
+     "el lector"
+    ],
+    [
+     "el subscriptor",
+     "el suscriptor"
+    ],
+    [
+     "el desmentiment",
+     "el desmentido"
+    ],
+    [
+     "l'engany",
+     "el engaño"
+    ],
+    [
+     "la primícia",
+     "la primicia"
+    ],
+    [
+     "la graella",
+     "la parrilla (de programación)"
+    ],
+    [
+     "el butlletí",
+     "el boletín"
+    ],
+    [
+     "el setmanari",
+     "el semanario"
+    ],
+    [
+     "el comunicat",
+     "el comunicado"
+    ],
+    [
+     "el peu de foto",
+     "el pie de foto"
+    ],
+    [
+     "la capçalera",
+     "la cabecera"
+    ],
+    [
+     "l'entradeta",
+     "la entradilla"
+    ]
+   ]
+  },
+  {
+   "id": "w059",
+   "level": "B2",
+   "title": "Arts and heritage",
+   "words": [
+    [
+     "el patrimoni",
+     "el patrimonio"
+    ],
+    [
+     "l'obra mestra",
+     "la obra maestra"
+    ],
+    [
+     "el quadre",
+     "el cuadro"
+    ],
+    [
+     "el retrat",
+     "el retrato"
+    ],
+    [
+     "el llenç",
+     "el lienzo"
+    ],
+    [
+     "el comissari",
+     "el comisario (de exposición)"
+    ],
+    [
+     "el gravat",
+     "el grabado"
+    ],
+    [
+     "el fresc",
+     "el fresco (pintura)"
+    ],
+    [
+     "el campanar",
+     "el campanario"
+    ],
+    [
+     "la volta",
+     "la bóveda"
+    ],
+    [
+     "el vitrall",
+     "la vidriera"
+    ],
+    [
+     "el mecenatge",
+     "el mecenazgo"
+    ],
+    [
+     "les restes",
+     "los restos"
+    ],
+    [
+     "la peça",
+     "la pieza"
+    ],
+    [
+     "el teló",
+     "el telón"
+    ],
+    [
+     "el fons",
+     "el fondo (colección)"
+    ],
+    [
+     "el decorat",
+     "el decorado"
+    ],
+    [
+     "el vestuari",
+     "el vestuario"
+    ],
+    [
+     "l'aquarel·la",
+     "la acuarela"
+    ],
+    [
+     "el dramaturg",
+     "el dramaturgo"
+    ]
+   ]
+  },
+  {
+   "id": "w060",
+   "level": "B2",
+   "title": "History",
+   "words": [
+    [
+     "l'edat mitjana",
+     "la Edad Media"
+    ],
+    [
+     "l'exèrcit",
+     "el ejército"
+    ],
+    [
+     "el regne",
+     "el reino"
+    ],
+    [
+     "el comte",
+     "el conde"
+    ],
+    [
+     "la noblesa",
+     "la nobleza"
+    ],
+    [
+     "la revolta",
+     "la revuelta"
+    ],
+    [
+     "la postguerra",
+     "la posguerra"
+    ],
+    [
+     "l'exili",
+     "el exilio"
+    ],
+    [
+     "el setge",
+     "el asedio"
+    ],
+    [
+     "la conquesta",
+     "la conquista"
+    ],
+    [
+     "el tractat",
+     "el tratado"
+    ],
+    [
+     "la treva",
+     "la tregua"
+    ],
+    [
+     "el vençut",
+     "el vencido"
+    ],
+    [
+     "l'esclau",
+     "el esclavo"
+    ],
+    [
+     "el bàndol",
+     "el bando"
+    ],
+    [
+     "el cavaller",
+     "el caballero"
+    ],
+    [
+     "l'espasa",
+     "la espada"
+    ],
+    [
+     "l'avantpassat",
+     "el antepasado"
+    ],
+    [
+     "el llegat",
+     "el legado"
+    ],
+    [
+     "la llegenda",
+     "la leyenda"
+    ]
+   ]
+  },
+  {
+   "id": "w061",
+   "level": "B2",
+   "title": "Beliefs and traditions",
+   "words": [
+    [
+     "la creença",
+     "la creencia"
+    ],
+    [
+     "el creient",
+     "el creyente"
+    ],
+    [
+     "el capellà",
+     "el cura"
+    ],
+    [
+     "el bisbe",
+     "el obispo"
+    ],
+    [
+     "el monjo",
+     "el monje"
+    ],
+    [
+     "el monestir",
+     "el monasterio"
+    ],
+    [
+     "la mesquita",
+     "la mezquita"
+    ],
+    [
+     "la pregària",
+     "la oración (rezo)"
+    ],
+    [
+     "el pecat",
+     "el pecado"
+    ],
+    [
+     "l'ànima",
+     "el alma"
+    ],
+    [
+     "l'ateu",
+     "el ateo"
+    ],
+    [
+     "la festa major",
+     "la fiesta mayor"
+    ],
+    [
+     "el pelegrí",
+     "el peregrino"
+    ],
+    [
+     "el casteller",
+     "el casteller (de las torres humanas)"
+    ],
+    [
+     "el correfoc",
+     "el correfoc (fiesta con fuego)"
+    ],
+    [
+     "el seguici",
+     "el séquito (cortejo)"
+    ],
+    [
+     "l'ofrena",
+     "la ofrenda"
+    ],
+    [
+     "el ciri",
+     "el cirio"
+    ],
+    [
+     "l'enterrament",
+     "el entierro"
+    ],
+    [
+     "la creu",
+     "la cruz"
+    ]
+   ]
+  },
+  {
+   "id": "w062",
+   "level": "B2",
+   "title": "Migration and diversity",
+   "words": [
+    [
+     "el desplaçat",
+     "el desplazado"
+    ],
+    [
+     "l'asil",
+     "el asilo"
+    ],
+    [
+     "l'acollida",
+     "la acogida"
+    ],
+    [
+     "l'estrangeria",
+     "la extranjería"
+    ],
+    [
+     "la pastera",
+     "la patera"
+    ],
+    [
+     "la xenofòbia",
+     "la xenofobia"
+    ],
+    [
+     "la ciutadania",
+     "la ciudadanía"
+    ],
+    [
+     "l'arrelament",
+     "el arraigo"
+    ],
+    [
+     "el desarrelament",
+     "el desarraigo"
+    ],
+    [
+     "el mestissatge",
+     "el mestizaje"
+    ],
+    [
+     "el retorn",
+     "el retorno"
+    ],
+    [
+     "els papers",
+     "los papeles (documentación)"
+    ],
+    [
+     "el reagrupament",
+     "la reagrupación (familiar)"
+    ],
+    [
+     "el flux",
+     "el flujo"
+    ],
+    [
+     "l'empadronament",
+     "el empadronamiento"
+    ],
+    [
+     "la diàspora",
+     "la diáspora"
+    ],
+    [
+     "el nouvingut",
+     "el recién llegado"
+    ],
+    [
+     "l'ètnia",
+     "la etnia"
+    ],
+    [
+     "el vel",
+     "el velo"
+    ],
+    [
+     "el compatriota",
+     "el compatriota"
+    ]
+   ]
+  },
+  {
+   "id": "w063",
+   "level": "B2",
+   "title": "Consumer rights",
+   "words": [
+    [
+     "el tiquet",
+     "el tíquet"
+    ],
+    [
+     "el comprovant",
+     "el comprobante"
+    ],
+    [
+     "la garantia",
+     "la garantía"
+    ],
+    [
+     "l'albarà",
+     "el albarán"
+    ],
+    [
+     "la permanència",
+     "la permanencia (contrato)"
+    ],
+    [
+     "l'enviament",
+     "el envío"
+    ],
+    [
+     "la clàusula",
+     "la cláusula"
+    ],
+    [
+     "el missatger",
+     "el mensajero"
+    ],
+    [
+     "l'alta",
+     "el alta (de un servicio)"
+    ],
+    [
+     "la lletra petita",
+     "la letra pequeña"
+    ],
+    [
+     "la publicitat enganyosa",
+     "la publicidad engañosa"
+    ],
+    [
+     "el reclam",
+     "el reclamo (publicitario)"
+    ],
+    [
+     "l'etiquetatge",
+     "el etiquetado"
+    ],
+    [
+     "el recàrrec",
+     "el recargo"
+    ],
+    [
+     "la traçabilitat",
+     "la trazabilidad"
+    ],
+    [
+     "la caducitat",
+     "la caducidad"
+    ],
+    [
+     "la penalització",
+     "la penalización"
+    ],
+    [
+     "la portabilitat",
+     "la portabilidad"
+    ],
+    [
+     "l'arbitratge",
+     "el arbitraje"
+    ],
+    [
+     "l'abonament",
+     "el abono"
+    ]
+   ]
+  },
+  {
+   "id": "w064",
+   "level": "B2",
+   "title": "Argument connectors",
+   "words": [
+    [
+     "indubtablement",
+     "indudablemente"
+    ],
+    [
+     "paral·lelament",
+     "paralelamente"
+    ],
+    [
+     "llevat que",
+     "salvo que"
+    ],
+    [
+     "posteriorment",
+     "posteriormente"
+    ],
+    [
+     "majorment",
+     "mayormente"
+    ],
+    [
+     "al contrari",
+     "al contrario"
+    ],
+    [
+     "respecte de",
+     "respecto a"
+    ],
+    [
+     "primerament",
+     "en primer lugar"
+    ],
+    [
+     "en conclusió",
+     "en conclusión"
+    ],
+    [
+     "en efecte",
+     "en efecto"
+    ],
+    [
+     "efectivament",
+     "efectivamente"
+    ],
+    [
+     "certament",
+     "ciertamente"
+    ],
+    [
+     "precisament",
+     "precisamente"
+    ],
+    [
+     "concretament",
+     "en concreto"
+    ],
+    [
+     "consegüentment",
+     "consiguientemente"
+    ],
+    [
+     "tot plegat",
+     "todo ello (en conjunto)"
+    ],
+    [
+     "nogensmenys",
+     "no obstante (formal)"
+    ],
+    [
+     "àdhuc",
+     "incluso (formal)"
+    ],
+    [
+     "ans bé",
+     "sino más bien"
+    ],
+    [
+     "envers",
+     "hacia (respecto a)"
+    ]
+   ]
+  },
+  {
+   "id": "w065",
+   "level": "B2",
+   "title": "Opinion and debate",
+   "words": [
+    [
+     "el raonament",
+     "el razonamiento"
+    ],
+    [
+     "el desacord",
+     "el desacuerdo"
+    ],
+    [
+     "el consens",
+     "el consenso"
+    ],
+    [
+     "el retret",
+     "el reproche"
+    ],
+    [
+     "el matís",
+     "el matiz"
+    ],
+    [
+     "el plantejament",
+     "el planteamiento"
+    ],
+    [
+     "la premissa",
+     "la premisa"
+    ],
+    [
+     "el convenciment",
+     "el convencimiento"
+    ],
+    [
+     "convençut",
+     "convencido"
+    ],
+    [
+     "contundent",
+     "contundente"
+    ],
+    [
+     "rotund",
+     "rotundo"
+    ],
+    [
+     "raonable",
+     "razonable"
+    ],
+    [
+     "encertat",
+     "acertado"
+    ],
+    [
+     "el biaix",
+     "el sesgo"
+    ],
+    [
+     "partidari",
+     "partidario"
+    ],
+    [
+     "esbiaixat",
+     "sesgado"
+    ],
+    [
+     "el rebuig",
+     "el rechazo"
+    ],
+    [
+     "l'enfocament",
+     "el enfoque"
+    ],
+    [
+     "la fal·làcia",
+     "la falacia"
+    ],
+    [
+     "l'inconvenient",
+     "el inconveniente"
+    ]
+   ]
+  },
+  {
+   "id": "w066",
+   "level": "B2",
+   "title": "Abstract qualities",
+   "words": [
+    [
+     "la gosadia",
+     "la osadía"
+    ],
+    [
+     "la covardia",
+     "la cobardía"
+    ],
+    [
+     "la destresa",
+     "la destreza"
+    ],
+    [
+     "la saviesa",
+     "la sabiduría"
+    ],
+    [
+     "la lletjor",
+     "la fealdad"
+    ],
+    [
+     "la feblesa",
+     "la debilidad"
+    ],
+    [
+     "la senzillesa",
+     "la sencillez"
+    ],
+    [
+     "la franquesa",
+     "la franqueza"
+    ],
+    [
+     "l'honradesa",
+     "la honradez"
+    ],
+    [
+     "la lleialtat",
+     "la lealtad"
+    ],
+    [
+     "l'orgull",
+     "el orgullo"
+    ],
+    [
+     "la supèrbia",
+     "la soberbia"
+    ],
+    [
+     "la tossuderia",
+     "la terquedad"
+    ],
+    [
+     "la cobdícia",
+     "la codicia"
+    ],
+    [
+     "la mesquinesa",
+     "la mezquindad"
+    ],
+    [
+     "la serenor",
+     "la serenidad"
+    ],
+    [
+     "la bogeria",
+     "la locura"
+    ],
+    [
+     "l'enginy",
+     "el ingenio"
+    ],
+    [
+     "la fermesa",
+     "la firmeza"
+    ],
+    [
+     "la foscor",
+     "la oscuridad"
+    ]
+   ]
+  },
+  {
+   "id": "w067",
+   "level": "B2",
+   "title": "Agriculture and countryside",
+   "words": [
+    [
+     "el pagès",
+     "el campesino (agricultor)"
+    ],
+    [
+     "la collita",
+     "la cosecha"
+    ],
+    [
+     "la sembra",
+     "la siembra"
+    ],
+    [
+     "la llavor",
+     "la semilla"
+    ],
+    [
+     "el blat",
+     "el trigo"
+    ],
+    [
+     "l'ordi",
+     "la cebada"
+    ],
+    [
+     "la vinya",
+     "la viña"
+    ],
+    [
+     "la verema",
+     "la vendimia"
+    ],
+    [
+     "l'olivera",
+     "el olivo"
+    ],
+    [
+     "el ramat",
+     "el rebaño"
+    ],
+    [
+     "el bestiar",
+     "el ganado"
+    ],
+    [
+     "la ramaderia",
+     "la ganadería"
+    ],
+    [
+     "el pinso",
+     "el pienso"
+    ],
+    [
+     "el regadiu",
+     "el regadío"
+    ],
+    [
+     "el secà",
+     "el secano"
+    ],
+    [
+     "el reg",
+     "el riego"
+    ],
+    [
+     "l'adob",
+     "el abono (fertilizante)"
+    ],
+    [
+     "el conreu",
+     "el cultivo"
+    ],
+    [
+     "la masia",
+     "la masía"
+    ],
+    [
+     "l'escorxador",
+     "el matadero"
+    ]
+   ]
+  },
+  {
+   "id": "w068",
+   "level": "B2",
+   "title": "Transport and infrastructure",
+   "words": [
+    [
+     "la infraestructura",
+     "la infraestructura"
+    ],
+    [
+     "la sinistralitat",
+     "la siniestralidad"
+    ],
+    [
+     "l'alta velocitat",
+     "la alta velocidad"
+    ],
+    [
+     "el corredor",
+     "el corredor (ferroviario)"
+    ],
+    [
+     "el traçat",
+     "el trazado"
+    ],
+    [
+     "el soterrament",
+     "el soterramiento"
+    ],
+    [
+     "el semàfor",
+     "el semáforo"
+    ],
+    [
+     "la col·lisió",
+     "la colisión"
+    ],
+    [
+     "el transbordament",
+     "el transbordo"
+    ],
+    [
+     "l'embarcament",
+     "el embarque"
+    ],
+    [
+     "la tripulació",
+     "la tripulación"
+    ],
+    [
+     "l'autovia",
+     "la autovía"
+    ],
+    [
+     "el camió",
+     "el camión"
+    ],
+    [
+     "la rotonda",
+     "la rotonda"
+    ],
+    [
+     "el túnel",
+     "el túnel"
+    ],
+    [
+     "l'accés",
+     "el acceso"
+    ],
+    [
+     "l'aparcament",
+     "el aparcamiento"
+    ],
+    [
+     "la terminal",
+     "la terminal"
+    ],
+    [
+     "el carril bici",
+     "el carril bici"
+    ],
+    [
+     "el viaducte",
+     "el viaducto"
+    ]
+   ]
+  },
+  {
+   "id": "w069",
+   "level": "B2",
+   "title": "Psychology and behaviour",
+   "words": [
+    [
+     "el comportament",
+     "el comportamiento"
+    ],
+    [
+     "l'estat d'ànim",
+     "el estado de ánimo"
+    ],
+    [
+     "el temperament",
+     "el temperamento"
+    ],
+    [
+     "el desengany",
+     "el desengaño"
+    ],
+    [
+     "l'esgotament",
+     "el agotamiento"
+    ],
+    [
+     "el trastorn",
+     "el trastorno"
+    ],
+    [
+     "la resiliència",
+     "la resiliencia"
+    ],
+    [
+     "el remordiment",
+     "el remordimiento"
+    ],
+    [
+     "l'autoestima",
+     "la autoestima"
+    ],
+    [
+     "el desig",
+     "el deseo"
+    ],
+    [
+     "el plaer",
+     "el placer"
+    ],
+    [
+     "el malson",
+     "la pesadilla"
+    ],
+    [
+     "el desànim",
+     "el desánimo"
+    ],
+    [
+     "l'insomni",
+     "el insomnio"
+    ],
+    [
+     "la ment",
+     "la mente"
+    ],
+    [
+     "el capritx",
+     "el capricho"
+    ],
+    [
+     "el cervell",
+     "el cerebro"
+    ],
+    [
+     "l'addicció",
+     "la adicción"
+    ],
+    [
+     "la fòbia",
+     "la fobia"
+    ],
+    [
+     "l'empatia",
+     "la empatía"
+    ]
+   ]
+  },
+  {
+   "id": "w070",
+   "level": "B2",
+   "title": "Personal finance and insurance",
+   "words": [
+    [
+     "el risc",
+     "el riesgo"
+    ],
+    [
+     "l'aval",
+     "el aval"
+    ],
+    [
+     "el deutor",
+     "el deudor"
+    ],
+    [
+     "els interessos",
+     "los intereses"
+    ],
+    [
+     "el creditor",
+     "el acreedor"
+    ],
+    [
+     "el dipòsit",
+     "el depósito"
+    ],
+    [
+     "el descobert",
+     "el descubierto"
+    ],
+    [
+     "el morós",
+     "el moroso"
+    ],
+    [
+     "la domiciliació",
+     "la domiciliación (bancaria)"
+    ],
+    [
+     "l'asseguradora",
+     "la aseguradora"
+    ],
+    [
+     "l'embargament",
+     "el embargo"
+    ],
+    [
+     "el sinistre",
+     "el siniestro"
+    ],
+    [
+     "la franquícia",
+     "la franquicia"
+    ],
+    [
+     "l'herència",
+     "la herencia"
+    ],
+    [
+     "la liquiditat",
+     "la liquidez"
+    ],
+    [
+     "els guanys",
+     "las ganancias"
+    ],
+    [
+     "el fons d'inversió",
+     "el fondo de inversión"
+    ],
+    [
+     "la caixa d'estalvis",
+     "la caja de ahorros"
+    ],
+    [
+     "el testament",
+     "el testamento"
+    ],
+    [
+     "la transferència",
+     "la transferencia"
+    ]
+   ]
+  },
+  {
+   "id": "w071",
+   "level": "C1",
+   "title": "False friends I",
+   "words": [
+    [
+     "la pinta",
+     "el peine (no la pinta)"
+    ],
+    [
+     "la falda",
+     "el regazo (no la prenda)"
+    ],
+    [
+     "el tall",
+     "el corte (no el talle)"
+    ],
+    [
+     "la cerca",
+     "la búsqueda (no la cerca)"
+    ],
+    [
+     "el pèsol",
+     "el guisante (no el peso)"
+    ],
+    [
+     "el porro",
+     "el puerro (no el porro)"
+    ],
+    [
+     "la fam",
+     "el hambre (no la fama)"
+    ],
+    [
+     "el lluç",
+     "la merluza (no el lucio)"
+    ],
+    [
+     "el lloro",
+     "el loro (no el lloro)"
+    ],
+    [
+     "el tràfec",
+     "el ajetreo (no el tráfico)"
+    ],
+    [
+     "la trona",
+     "el púlpito (no el trono)"
+    ],
+    [
+     "l'escudella",
+     "el cocido (también 'la escudilla')"
+    ],
+    [
+     "la bleda",
+     "la acelga (no el bledo)"
+    ],
+    [
+     "el grill",
+     "el grillo (no la parrilla)"
+    ],
+    [
+     "la brutícia",
+     "la suciedad (no la brutalidad)"
+    ],
+    [
+     "la falç",
+     "la hoz (no la falsa)"
+    ],
+    [
+     "la dalla",
+     "la guadaña (no la dalia)"
+    ],
+    [
+     "el mató",
+     "el requesón"
+    ],
+    [
+     "la topada",
+     "el choque (encontronazo)"
+    ],
+    [
+     "el parany",
+     "la trampa (de caza)"
+    ]
+   ]
+  },
+  {
+   "id": "w072",
+   "level": "C1",
+   "title": "False friends II",
+   "words": [
+    [
+     "la molla",
+     "la miga (del pan; también 'el muelle' = resorte)"
+    ],
+    [
+     "la nina",
+     "la muñeca (juguete; no la niña)"
+    ],
+    [
+     "el bec",
+     "el pico (de ave; no la beca)"
+    ],
+    [
+     "el munt",
+     "el montón (no el monte)"
+    ],
+    [
+     "el poll",
+     "el piojo (no el pollo)"
+    ],
+    [
+     "el musclo",
+     "el mejillón (no el músculo)"
+    ],
+    [
+     "la garsa",
+     "la urraca (no la garza)"
+    ],
+    [
+     "la cigala",
+     "la cigarra (no el crustáceo)"
+    ],
+    [
+     "el corb",
+     "el cuervo (no curvo)"
+    ],
+    [
+     "la llinda",
+     "el dintel (no linda)"
+    ],
+    [
+     "l'estel",
+     "la cometa (juguete; también estrella)"
+    ],
+    [
+     "el ventall",
+     "el abanico (no el ventanal)"
+    ],
+    [
+     "l'esquella",
+     "el cencerro (no la esquela)"
+    ],
+    [
+     "la llagosta",
+     "el saltamontes (también langosta)"
+    ],
+    [
+     "el marro",
+     "el poso (del café)"
+    ],
+    [
+     "la fona",
+     "la honda (arma; no la fonda)"
+    ],
+    [
+     "el caire",
+     "el cariz (aspecto)"
+    ],
+    [
+     "el raspall",
+     "el cepillo (no la raspa)"
+    ],
+    [
+     "la carota",
+     "la mueca (no la carota)"
+    ],
+    [
+     "la sínia",
+     "la noria"
+    ]
+   ]
+  },
+  {
+   "id": "w073",
+   "level": "C1",
+   "title": "Catalan-only roots I",
+   "words": [
+    [
+     "l'abast",
+     "el alcance"
+    ],
+    [
+     "l'enrenou",
+     "el alboroto"
+    ],
+    [
+     "la gresca",
+     "la juerga"
+    ],
+    [
+     "el xafardeig",
+     "el cotilleo"
+    ],
+    [
+     "les pessigolles",
+     "las cosquillas"
+    ],
+    [
+     "el badall",
+     "el bostezo"
+    ],
+    [
+     "el singlot",
+     "el hipo"
+    ],
+    [
+     "l'esma",
+     "el tino (ánimo, instinto)"
+    ],
+    [
+     "la fal·lera",
+     "la manía (afición obsesiva)"
+    ],
+    [
+     "el daler",
+     "el afán"
+    ],
+    [
+     "l'empenta",
+     "el empuje"
+    ],
+    [
+     "el desfici",
+     "la desazón"
+    ],
+    [
+     "el gargot",
+     "el garabato"
+    ],
+    [
+     "l'engruna",
+     "la migaja"
+    ],
+    [
+     "el tarannà",
+     "el talante (carácter)"
+    ],
+    [
+     "el rebombori",
+     "el revuelo (alboroto)"
+    ],
+    [
+     "l'ensopiment",
+     "el sopor (aburrimiento)"
+    ],
+    [
+     "la cabòria",
+     "la cavilación (preocupación)"
+    ],
+    [
+     "el capficament",
+     "la preocupación (ensimismamiento)"
+    ],
+    [
+     "el rebuf",
+     "el desaire (desplante)"
+    ]
+   ]
+  },
+  {
+   "id": "w074",
+   "level": "C1",
+   "title": "Catalan-only roots II",
+   "words": [
+    [
+     "el seny",
+     "el sentido común (sensatez)"
+    ],
+    [
+     "la rauxa",
+     "el arrebato"
+    ],
+    [
+     "l'avinentesa",
+     "la ocasión oportuna"
+    ],
+    [
+     "el sotrac",
+     "la sacudida (bache)"
+    ],
+    [
+     "el rampell",
+     "el arranque (impulso repentino)"
+    ],
+    [
+     "el bri",
+     "la brizna"
+    ],
+    [
+     "la gatzara",
+     "el jolgorio"
+    ],
+    [
+     "el xivarri",
+     "el griterío"
+    ],
+    [
+     "la disbauxa",
+     "el desenfreno"
+    ],
+    [
+     "la xerrameca",
+     "la palabrería"
+    ],
+    [
+     "la teranyina",
+     "la telaraña"
+    ],
+    [
+     "el bassal",
+     "el charco"
+    ],
+    [
+     "la mida",
+     "la medida (talla)"
+    ],
+    [
+     "el gruix",
+     "el grosor"
+    ],
+    [
+     "l'escreix",
+     "el exceso (creces)"
+    ],
+    [
+     "el caliu",
+     "el rescoldo (calor humano)"
+    ],
+    [
+     "la frisança",
+     "la impaciencia"
+    ],
+    [
+     "el desgavell",
+     "el desbarajuste"
+    ],
+    [
+     "la bretolada",
+     "la trastada"
+    ],
+    [
+     "la malifeta",
+     "la fechoría"
+    ]
+   ]
+  },
+  {
+   "id": "w075",
+   "level": "C1",
+   "title": "Gender differences",
+   "words": [
+    [
+     "la síndrome",
+     "el síndrome"
+    ],
+    [
+     "el llegum",
+     "la legumbre"
+    ],
+    [
+     "la resta",
+     "el resto"
+    ],
+    [
+     "la fi",
+     "el fin"
+    ],
+    [
+     "el pebre",
+     "la pimienta"
+    ],
+    [
+     "la frescor",
+     "el frescor"
+    ],
+    [
+     "l'amargor",
+     "el amargor (femenino en catalán)"
+    ],
+    [
+     "la icona",
+     "el icono"
+    ],
+    [
+     "la marató",
+     "el maratón"
+    ],
+    [
+     "la dolçor",
+     "el dulzor"
+    ],
+    [
+     "la remor",
+     "el rumor (sonido)"
+    ],
+    [
+     "la verdor",
+     "el verdor"
+    ],
+    [
+     "el dot",
+     "la dote"
+    ],
+    [
+     "el lleixiu",
+     "la lejía"
+    ],
+    [
+     "l'allau",
+     "el alud (femenino en catalán)"
+    ],
+    [
+     "l'escalfor",
+     "el calor (femenino en catalán)"
+    ],
+    [
+     "la sida",
+     "el sida"
+    ],
+    [
+     "l'empara",
+     "el amparo (femenino en catalán)"
+    ],
+    [
+     "la pudor",
+     "el hedor"
+    ],
+    [
+     "el fel",
+     "la hiel"
+    ]
+   ]
+  },
+  {
+   "id": "w076",
+   "level": "C1",
+   "title": "Administration and bureaucracy",
+   "words": [
+    [
+     "la paperassa",
+     "el papeleo"
+    ],
+    [
+     "la pròrroga",
+     "la prórroga"
+    ],
+    [
+     "la gestoria",
+     "la gestoría"
+    ],
+    [
+     "la taxa",
+     "la tasa"
+    ],
+    [
+     "la instància",
+     "la instancia"
+    ],
+    [
+     "l'esmena",
+     "la enmienda (corrección)"
+    ],
+    [
+     "el volant",
+     "el volante (de empadronamiento)"
+    ],
+    [
+     "la butlleta",
+     "la papeleta (boleta)"
+    ],
+    [
+     "el contribuent",
+     "el contribuyente"
+    ],
+    [
+     "l'exempció",
+     "la exención"
+    ],
+    [
+     "el tauler",
+     "el tablón (de anuncios)"
+    ],
+    [
+     "la tramitació",
+     "la tramitación"
+    ],
+    [
+     "el requeriment",
+     "el requerimiento"
+    ],
+    [
+     "la seu electrònica",
+     "la sede electrónica"
+    ],
+    [
+     "l'apoderament",
+     "el apoderamiento"
+    ],
+    [
+     "la convalidació",
+     "la convalidación"
+    ],
+    [
+     "la desestimació",
+     "la desestimación"
+    ],
+    [
+     "la cèdula",
+     "la cédula"
+    ],
+    [
+     "el talonari",
+     "el talonario"
+    ],
+    [
+     "la bonificació",
+     "la bonificación"
+    ]
+   ]
+  },
+  {
+   "id": "w077",
+   "level": "C1",
+   "title": "Formal letters and documents",
+   "words": [
+    [
+     "el destinatari",
+     "el destinatario"
+    ],
+    [
+     "el remitent",
+     "el remitente"
+    ],
+    [
+     "l'encapçalament",
+     "el encabezamiento"
+    ],
+    [
+     "el sotasignat",
+     "el abajo firmante"
+    ],
+    [
+     "l'annex",
+     "el anexo"
+    ],
+    [
+     "l'apartat",
+     "el apartado"
+    ],
+    [
+     "el plec",
+     "el pliego"
+    ],
+    [
+     "el vistiplau",
+     "el visto bueno"
+    ],
+    [
+     "l'al·legació",
+     "la alegación"
+    ],
+    [
+     "el revers",
+     "el reverso (dorso)"
+    ],
+    [
+     "l'ofici",
+     "el oficio (escrito oficial)"
+    ],
+    [
+     "l'acta",
+     "el acta"
+    ],
+    [
+     "l'anvers",
+     "el anverso"
+    ],
+    [
+     "la diligència",
+     "la diligencia (trámite)"
+    ],
+    [
+     "la compulsa",
+     "la compulsa (copia cotejada)"
+    ],
+    [
+     "el duplicat",
+     "el duplicado"
+    ],
+    [
+     "la salutació",
+     "el saludo (encabezamiento)"
+    ],
+    [
+     "la rúbrica",
+     "la rúbrica"
+    ],
+    [
+     "el dictamen",
+     "el dictamen"
+    ],
+    [
+     "la circular",
+     "la circular"
+    ]
+   ]
+  },
+  {
+   "id": "w078",
+   "level": "C1",
+   "title": "Law and contracts",
+   "words": [
+    [
+     "l'arrendador",
+     "el arrendador"
+    ],
+    [
+     "la rescissió",
+     "la rescisión"
+    ],
+    [
+     "l'incompliment",
+     "el incumplimiento"
+    ],
+    [
+     "el demandant",
+     "el demandante"
+    ],
+    [
+     "l'escriptura",
+     "la escritura (pública)"
+    ],
+    [
+     "el marmessor",
+     "el albacea"
+    ],
+    [
+     "el greuge",
+     "el agravio"
+    ],
+    [
+     "el perjudici",
+     "el perjuicio"
+    ],
+    [
+     "la nul·litat",
+     "la nulidad"
+    ],
+    [
+     "el signant",
+     "el firmante"
+    ],
+    [
+     "vigent",
+     "vigente"
+    ],
+    [
+     "la penyora",
+     "la prenda (garantía)"
+    ],
+    [
+     "la vigència",
+     "la vigencia"
+    ],
+    [
+     "l'usdefruit",
+     "el usufructo"
+    ],
+    [
+     "la servitud",
+     "la servidumbre (legal)"
+    ],
+    [
+     "el fedatari",
+     "el fedatario"
+    ],
+    [
+     "la caució",
+     "la caución"
+    ],
+    [
+     "la querella",
+     "la querella"
+    ],
+    [
+     "la prescripció",
+     "la prescripción"
+    ],
+    [
+     "el litigi",
+     "el litigio"
+    ]
+   ]
+  },
+  {
+   "id": "w079",
+   "level": "C1",
+   "title": "Institutions and public life",
+   "words": [
+    [
+     "la regidoria",
+     "la concejalía"
+    ],
+    [
+     "el batlle",
+     "el alcalde"
+    ],
+    [
+     "el síndic",
+     "el síndico (defensor del pueblo)"
+    ],
+    [
+     "la investidura",
+     "la investidura"
+    ],
+    [
+     "el traspàs",
+     "el traspaso (de competencias)"
+    ],
+    [
+     "la mancomunitat",
+     "la mancomunidad"
+    ],
+    [
+     "la moció",
+     "la moción"
+    ],
+    [
+     "la legislatura",
+     "la legislatura"
+    ],
+    [
+     "el cens",
+     "el censo (electoral)"
+    ],
+    [
+     "la vegueria",
+     "la veguería"
+    ],
+    [
+     "el consell comarcal",
+     "el consejo comarcal"
+    ],
+    [
+     "la diputació",
+     "la diputación"
+    ],
+    [
+     "l'alcaldia",
+     "la alcaldía"
+    ],
+    [
+     "el comissionat",
+     "el comisionado"
+    ],
+    [
+     "el tripartit",
+     "el tripartito"
+    ],
+    [
+     "la presidència",
+     "la presidencia"
+    ],
+    [
+     "la ponència",
+     "la ponencia"
+    ],
+    [
+     "el reglament",
+     "el reglamento"
+    ],
+    [
+     "el sufragi",
+     "el sufragio"
+    ],
+    [
+     "l'ens local",
+     "el ente local (organismo municipal)"
+    ]
+   ]
+  },
+  {
+   "id": "w080",
+   "level": "C1",
+   "title": "Academic and essay vocabulary",
+   "words": [
+    [
+     "l'enunciat",
+     "el enunciado"
+    ],
+    [
+     "el marc",
+     "el marco (teórico)"
+    ],
+    [
+     "l'enquesta",
+     "la encuesta"
+    ],
+    [
+     "el plagi",
+     "el plagio"
+    ],
+    [
+     "el degà",
+     "el decano"
+    ],
+    [
+     "el catedràtic",
+     "el catedrático"
+    ],
+    [
+     "la qualificació",
+     "la calificación"
+    ],
+    [
+     "l'apèndix",
+     "el apéndice"
+    ],
+    [
+     "la tesina",
+     "la tesina"
+    ],
+    [
+     "l'erudit",
+     "el erudito"
+    ],
+    [
+     "l'estudiós",
+     "el estudioso"
+    ],
+    [
+     "la monografia",
+     "la monografía"
+    ],
+    [
+     "el rectorat",
+     "el rectorado"
+    ],
+    [
+     "el deganat",
+     "el decanato"
+    ],
+    [
+     "el sumari",
+     "el sumario (índice)"
+    ],
+    [
+     "l'epígraf",
+     "el epígrafe"
+    ],
+    [
+     "la dissertació",
+     "la disertación"
+    ],
+    [
+     "el qüestionari",
+     "el cuestionario"
+    ],
+    [
+     "la síntesi",
+     "la síntesis"
+    ],
+    [
+     "el marc teòric",
+     "el marco teórico"
+    ]
+   ]
+  },
+  {
+   "id": "w081",
+   "level": "C1",
+   "title": "Formal connectors",
+   "words": [
+    [
+     "per consegüent",
+     "por consiguiente"
+    ],
+    [
+     "si bé",
+     "si bien"
+    ],
+    [
+     "per contra",
+     "por el contrario"
+    ],
+    [
+     "tret que",
+     "a menos que"
+    ],
+    [
+     "arran de",
+     "a raíz de"
+    ],
+    [
+     "atès que",
+     "dado que"
+    ],
+    [
+     "mitjançant",
+     "mediante"
+    ],
+    [
+     "en definitiva",
+     "en definitiva"
+    ],
+    [
+     "no obstant",
+     "no obstante"
+    ],
+    [
+     "ço és",
+     "esto es"
+    ],
+    [
+     "puix que",
+     "puesto que"
+    ],
+    [
+     "tocant a",
+     "tocante a (en cuanto a)"
+    ],
+    [
+     "en conseqüència",
+     "en consecuencia"
+    ],
+    [
+     "d'una banda",
+     "por un lado"
+    ],
+    [
+     "cosa que",
+     "lo cual"
+    ],
+    [
+     "sinó que",
+     "sino que"
+    ],
+    [
+     "en suma",
+     "en suma"
+    ],
+    [
+     "mentre que",
+     "mientras que"
+    ],
+    [
+     "així doncs",
+     "así pues"
+    ],
+    [
+     "per això",
+     "por eso"
+    ]
+   ]
+  },
+  {
+   "id": "w082",
+   "level": "C1",
+   "title": "Adjectives of judgement",
+   "words": [
+    [
+     "desencertat",
+     "desacertado"
+    ],
+    [
+     "escaient",
+     "apropiado (oportuno)"
+    ],
+    [
+     "adient",
+     "adecuado"
+    ],
+    [
+     "carregós",
+     "pesado (molesto)"
+    ],
+    [
+     "engrescador",
+     "estimulante (entusiasmante)"
+    ],
+    [
+     "encoratjador",
+     "alentador"
+    ],
+    [
+     "decebedor",
+     "decepcionante"
+    ],
+    [
+     "colpidor",
+     "conmovedor"
+    ],
+    [
+     "corprenedor",
+     "sobrecogedor"
+    ],
+    [
+     "enlluernador",
+     "deslumbrante"
+    ],
+    [
+     "esbalaïdor",
+     "asombroso"
+    ],
+    [
+     "fefaent",
+     "fehaciente"
+    ],
+    [
+     "versemblant",
+     "verosímil"
+    ],
+    [
+     "reeixit",
+     "logrado (exitoso)"
+    ],
+    [
+     "palès",
+     "patente (evidente)"
+    ],
+    [
+     "lloable",
+     "loable"
+    ],
+    [
+     "menyspreable",
+     "despreciable"
+    ],
+    [
+     "aclaparador",
+     "abrumador"
+    ],
+    [
+     "profitós",
+     "provechoso"
+    ],
+    [
+     "desgavellat",
+     "desbaratado (incoherente)"
+    ]
+   ]
+  },
+  {
+   "id": "w083",
+   "level": "C1",
+   "title": "Nuanced emotions",
+   "words": [
+    [
+     "la rancúnia",
+     "el rencor"
+    ],
+    [
+     "la basarda",
+     "el pavor"
+    ],
+    [
+     "l'angúnia",
+     "la angustia (aprensión)"
+    ],
+    [
+     "la melangia",
+     "la melancolía"
+    ],
+    [
+     "el desencís",
+     "el desencanto"
+    ],
+    [
+     "l'empipament",
+     "el enfado (fastidio)"
+    ],
+    [
+     "l'agraïment",
+     "el agradecimiento"
+    ],
+    [
+     "el recel",
+     "el recelo"
+    ],
+    [
+     "el delit",
+     "el deleite"
+    ],
+    [
+     "la cobejança",
+     "la codicia (anhelo)"
+    ],
+    [
+     "la candidesa",
+     "el candor"
+    ],
+    [
+     "l'assossec",
+     "el sosiego"
+    ],
+    [
+     "el penediment",
+     "el arrepentimiento"
+    ],
+    [
+     "el desconsol",
+     "el desconsuelo"
+    ],
+    [
+     "l'abatiment",
+     "el abatimiento"
+    ],
+    [
+     "el desdeny",
+     "el desdén"
+    ],
+    [
+     "l'aversió",
+     "la aversión"
+    ],
+    [
+     "la complaença",
+     "la complacencia"
+    ],
+    [
+     "l'anhel",
+     "el anhelo"
+    ],
+    [
+     "la placidesa",
+     "la placidez"
+    ]
+   ]
+  },
+  {
+   "id": "w084",
+   "level": "C1",
+   "title": "Character in depth",
+   "words": [
+    [
+     "primmirat",
+     "quisquilloso (escrupuloso)"
+    ],
+    [
+     "malfiat",
+     "desconfiado"
+    ],
+    [
+     "bonàs",
+     "bonachón"
+    ],
+    [
+     "feréstec",
+     "huraño"
+    ],
+    [
+     "rebec",
+     "rebelde (indócil)"
+    ],
+    [
+     "cofoi",
+     "ufano (satisfecho de sí)"
+    ],
+    [
+     "fatxenda",
+     "fanfarrón"
+    ],
+    [
+     "groller",
+     "grosero"
+    ],
+    [
+     "llagoter",
+     "zalamero"
+    ],
+    [
+     "desprès",
+     "desprendido (generoso)"
+    ],
+    [
+     "altiu",
+     "altivo"
+    ],
+    [
+     "geniüt",
+     "de mal genio"
+    ],
+    [
+     "malcarat",
+     "malcarado"
+    ],
+    [
+     "queixós",
+     "quejica"
+    ],
+    [
+     "ploraner",
+     "llorón"
+    ],
+    [
+     "xafarder",
+     "chismoso"
+    ],
+    [
+     "malgastador",
+     "derrochador"
+    ],
+    [
+     "manyac",
+     "dócil (cariñoso)"
+    ],
+    [
+     "trapella",
+     "pillastre"
+    ],
+    [
+     "poca-solta",
+     "insensato"
+    ]
+   ]
+  },
+  {
+   "id": "w085",
+   "level": "C1",
+   "title": "Literature and writing",
+   "words": [
+    [
+     "el recull",
+     "la recopilación"
+    ],
+    [
+     "el poemari",
+     "el poemario"
+    ],
+    [
+     "l'estrofa",
+     "la estrofa"
+    ],
+    [
+     "la rondalla",
+     "el cuento popular"
+    ],
+    [
+     "la faula",
+     "la fábula"
+    ],
+    [
+     "el nus",
+     "el nudo (de la trama)"
+    ],
+    [
+     "el pròleg",
+     "el prólogo"
+    ],
+    [
+     "la dedicatòria",
+     "la dedicatoria"
+    ],
+    [
+     "la coberta",
+     "la cubierta (de un libro)"
+    ],
+    [
+     "el llom",
+     "el lomo (de un libro)"
+    ],
+    [
+     "la contraportada",
+     "la contraportada"
+    ],
+    [
+     "l'acotació",
+     "la acotación"
+    ],
+    [
+     "la poetessa",
+     "la poetisa"
+    ],
+    [
+     "el dietari",
+     "el diario personal"
+    ],
+    [
+     "l'epistolari",
+     "el epistolario"
+    ],
+    [
+     "l'assagista",
+     "el ensayista"
+    ],
+    [
+     "la versemblança",
+     "la verosimilitud"
+    ],
+    [
+     "el vers",
+     "el verso"
+    ],
+    [
+     "l'epíleg",
+     "el epílogo"
+    ],
+    [
+     "el manuscrit",
+     "el manuscrito"
+    ]
+   ]
+  },
+  {
+   "id": "w086",
+   "level": "C1",
+   "title": "Language and linguistics",
+   "words": [
+    [
+     "el mot",
+     "la palabra"
+    ],
+    [
+     "el refrany",
+     "el refrán"
+    ],
+    [
+     "la dita",
+     "el dicho"
+    ],
+    [
+     "la locució",
+     "la locución"
+    ],
+    [
+     "la síl·laba",
+     "la sílaba"
+    ],
+    [
+     "el diftong",
+     "el diptongo"
+    ],
+    [
+     "la dièresi",
+     "la diéresis"
+    ],
+    [
+     "el guionet",
+     "el guion (corto)"
+    ],
+    [
+     "l'apòstrof",
+     "el apóstrofo"
+    ],
+    [
+     "el nombre",
+     "el número (gramatical)"
+    ],
+    [
+     "la concordança",
+     "la concordancia"
+    ],
+    [
+     "el manlleu",
+     "el préstamo (lingüístico)"
+    ],
+    [
+     "el calc",
+     "el calco"
+    ],
+    [
+     "la pronúncia",
+     "la pronunciación"
+    ],
+    [
+     "l'accepció",
+     "la acepción"
+    ],
+    [
+     "el barbarisme",
+     "el barbarismo"
+    ],
+    [
+     "el sufix",
+     "el sufijo"
+    ],
+    [
+     "el prefix",
+     "el prefijo"
+    ],
+    [
+     "la grafia",
+     "la grafía"
+    ],
+    [
+     "la ela geminada",
+     "la ele geminada (l·l)"
+    ]
+   ]
+  },
+  {
+   "id": "w087",
+   "level": "C1",
+   "title": "Economy and finance",
+   "words": [
+    [
+     "la plusvàlua",
+     "la plusvalía"
+    ],
+    [
+     "la recaptació",
+     "la recaudación"
+    ],
+    [
+     "el blanqueig",
+     "el blanqueo"
+    ],
+    [
+     "la conjuntura",
+     "la coyuntura"
+    ],
+    [
+     "l'accionista",
+     "el accionista"
+    ],
+    [
+     "el passiu",
+     "el pasivo"
+    ],
+    [
+     "la cotització",
+     "la cotización"
+    ],
+    [
+     "l'erari",
+     "el erario"
+    ],
+    [
+     "l'amortització",
+     "la amortización"
+    ],
+    [
+     "la comptabilitat",
+     "la contabilidad"
+    ],
+    [
+     "el comptable",
+     "el contable"
+    ],
+    [
+     "l'exercici",
+     "el ejercicio (fiscal)"
+    ],
+    [
+     "la desacceleració",
+     "la desaceleración"
+    ],
+    [
+     "la solvència",
+     "la solvencia"
+    ],
+    [
+     "la morositat",
+     "la morosidad"
+    ],
+    [
+     "la devaluació",
+     "la devaluación"
+    ],
+    [
+     "la recessió",
+     "la recesión"
+    ],
+    [
+     "el sanejament",
+     "el saneamiento"
+    ],
+    [
+     "la desgravació",
+     "la desgravación"
+    ],
+    [
+     "el romanent",
+     "el remanente (superávit)"
+    ]
+   ]
+  },
+  {
+   "id": "w088",
+   "level": "C1",
+   "title": "Science and medicine",
+   "words": [
+    [
+     "la cremor",
+     "el ardor (de estómago)"
+    ],
+    [
+     "la bena",
+     "la venda"
+    ],
+    [
+     "la xeringa",
+     "la jeringuilla"
+    ],
+    [
+     "la recaiguda",
+     "la recaída"
+    ],
+    [
+     "la seqüela",
+     "la secuela"
+    ],
+    [
+     "la convalescència",
+     "la convalecencia"
+    ],
+    [
+     "el teixit",
+     "el tejido"
+    ],
+    [
+     "l'enzim",
+     "la enzima (masculino en catalán)"
+    ],
+    [
+     "el bacteri",
+     "la bacteria"
+    ],
+    [
+     "el fong",
+     "el hongo"
+    ],
+    [
+     "el llevat",
+     "la levadura"
+    ],
+    [
+     "l'anticòs",
+     "el anticuerpo"
+    ],
+    [
+     "la torçada",
+     "la torcedura"
+    ],
+    [
+     "la luxació",
+     "la luxación"
+    ],
+    [
+     "el comprimit",
+     "el comprimido"
+    ],
+    [
+     "la metàstasi",
+     "la metástasis"
+    ],
+    [
+     "el pronòstic",
+     "el pronóstico"
+    ],
+    [
+     "la pròtesi",
+     "la prótesis"
+    ],
+    [
+     "el marcapassos",
+     "el marcapasos"
+    ],
+    [
+     "el coàgul",
+     "el coágulo"
+    ]
+   ]
+  },
+  {
+   "id": "w089",
+   "level": "C1",
+   "title": "Media and communication",
+   "words": [
+    [
+     "el rotatiu",
+     "el rotativo"
+    ],
+    [
+     "l'articulista",
+     "el articulista"
+    ],
+    [
+     "l'oient",
+     "el oyente"
+    ],
+    [
+     "el diferit",
+     "el diferido"
+    ],
+    [
+     "el tiratge",
+     "la tirada"
+    ],
+    [
+     "la filtració",
+     "la filtración"
+    ],
+    [
+     "la falca",
+     "la cuña (publicitaria)"
+    ],
+    [
+     "el noticiari",
+     "el noticiario"
+    ],
+    [
+     "el fulletó",
+     "el folletín"
+    ],
+    [
+     "la gasetilla",
+     "la gacetilla"
+    ],
+    [
+     "l'hemeroteca",
+     "la hemeroteca"
+    ],
+    [
+     "l'audímetre",
+     "el audímetro"
+    ],
+    [
+     "la retransmissió",
+     "la retransmisión"
+    ],
+    [
+     "el redactor",
+     "el redactor"
+    ],
+    [
+     "el locutor",
+     "el locutor"
+    ],
+    [
+     "el plató",
+     "el plató"
+    ],
+    [
+     "la desinformació",
+     "la desinformación"
+    ],
+    [
+     "el sensacionalisme",
+     "el sensacionalismo"
+    ],
+    [
+     "la rectificació",
+     "la rectificación"
+    ],
+    [
+     "el patrocini",
+     "el patrocinio"
+    ]
+   ]
+  },
+  {
+   "id": "w090",
+   "level": "C1",
+   "title": "Urban life and architecture",
+   "words": [
+    [
+     "el xamfrà",
+     "el chaflán"
+    ],
+    [
+     "l'entresol",
+     "el entresuelo"
+    ],
+    [
+     "el ràfec",
+     "el alero"
+    ],
+    [
+     "la biga",
+     "la viga"
+    ],
+    [
+     "la bastida",
+     "el andamio"
+    ],
+    [
+     "el celobert",
+     "el patio de luces"
+    ],
+    [
+     "la llamborda",
+     "el adoquín"
+    ],
+    [
+     "el panot",
+     "la baldosa (de acera)"
+    ],
+    [
+     "l'embornal",
+     "el sumidero"
+    ],
+    [
+     "el sòcol",
+     "el zócalo"
+    ],
+    [
+     "el capitell",
+     "el capitel"
+    ],
+    [
+     "l'arcada",
+     "la arcada"
+    ],
+    [
+     "el porxo",
+     "el soportal"
+    ],
+    [
+     "el call",
+     "la judería"
+    ],
+    [
+     "el nucli antic",
+     "el casco antiguo"
+    ],
+    [
+     "el sobreàtic",
+     "el sobreático"
+    ],
+    [
+     "la passarel·la",
+     "la pasarela"
+    ],
+    [
+     "el passatge",
+     "el pasaje"
+    ],
+    [
+     "la mansarda",
+     "la buhardilla"
+    ],
+    [
+     "la marquesina",
+     "la marquesina"
+    ]
+   ]
+  },
+  {
+   "id": "w091",
+   "level": "C1",
+   "title": "Nature and landscape",
+   "words": [
+    [
+     "la cinglera",
+     "el risco (farallón)"
+    ],
+    [
+     "la balma",
+     "el abrigo rocoso"
+    ],
+    [
+     "l'avenc",
+     "la sima"
+    ],
+    [
+     "la carena",
+     "la cresta (de una sierra)"
+    ],
+    [
+     "la fullaraca",
+     "la hojarasca"
+    ],
+    [
+     "el sotabosc",
+     "el sotobosque"
+    ],
+    [
+     "la garriga",
+     "el matorral (monte bajo)"
+    ],
+    [
+     "la bardissa",
+     "el zarzal"
+    ],
+    [
+     "la gebrada",
+     "la escarcha"
+    ],
+    [
+     "la riera",
+     "la rambla (arroyo estacional)"
+    ],
+    [
+     "el gorg",
+     "la poza"
+    ],
+    [
+     "el saltant",
+     "el salto de agua"
+    ],
+    [
+     "el tossal",
+     "el cerro"
+    ],
+    [
+     "la tartera",
+     "el pedregal"
+    ],
+    [
+     "el plugim",
+     "la llovizna"
+    ],
+    [
+     "la tamborinada",
+     "la tormenta (de verano)"
+    ],
+    [
+     "el torb",
+     "la ventisca"
+    ],
+    [
+     "l'onatge",
+     "el oleaje"
+    ],
+    [
+     "la fageda",
+     "el hayedo"
+    ],
+    [
+     "l'alzinar",
+     "el encinar"
+    ]
+   ]
+  },
+  {
+   "id": "w092",
+   "level": "C1",
+   "title": "Body and appearance",
+   "words": [
+    [
+     "el clatell",
+     "la nuca"
+    ],
+    [
+     "l'aixella",
+     "la axila"
+    ],
+    [
+     "el melic",
+     "el ombligo"
+    ],
+    [
+     "el panxell",
+     "la pantorrilla"
+    ],
+    [
+     "la barbeta",
+     "la barbilla"
+    ],
+    [
+     "la geniva",
+     "la encía"
+    ],
+    [
+     "el queixal",
+     "la muela"
+    ],
+    [
+     "el fetge",
+     "el hígado"
+    ],
+    [
+     "el ronyó",
+     "el riñón"
+    ],
+    [
+     "el palmell",
+     "la palma (de la mano)"
+    ],
+    [
+     "geperut",
+     "jorobado"
+    ],
+    [
+     "rabassut",
+     "rechoncho"
+    ],
+    [
+     "esprimatxat",
+     "flacucho"
+    ],
+    [
+     "cepat",
+     "fornido"
+    ],
+    [
+     "pigat",
+     "pecoso"
+    ],
+    [
+     "la piga",
+     "el lunar"
+    ],
+    [
+     "ullerós",
+     "ojeroso"
+    ],
+    [
+     "la parpella",
+     "el párpado"
+    ],
+    [
+     "la natja",
+     "la nalga"
+    ],
+    [
+     "l'engonal",
+     "la ingle"
+    ]
+   ]
+  },
+  {
+   "id": "w093",
+   "level": "C1",
+   "title": "Household and domestic life",
+   "words": [
+    [
+     "el rebost",
+     "la despensa"
+    ],
+    [
+     "la calaixera",
+     "la cómoda"
+    ],
+    [
+     "el recollidor",
+     "el recogedor"
+    ],
+    [
+     "la baieta",
+     "la bayeta"
+    ],
+    [
+     "l'estenedor",
+     "el tendedero"
+    ],
+    [
+     "la flassada",
+     "la manta"
+    ],
+    [
+     "el forrellat",
+     "el cerrojo"
+    ],
+    [
+     "la perxa",
+     "la percha"
+    ],
+    [
+     "l'escorredora",
+     "el escurridor"
+    ],
+    [
+     "la ratlladora",
+     "el rallador"
+    ],
+    [
+     "el fregall",
+     "el estropajo"
+    ],
+    [
+     "el plomall",
+     "el plumero"
+    ],
+    [
+     "el cubell",
+     "el cubo (de basura)"
+    ],
+    [
+     "el clauer",
+     "el llavero"
+    ],
+    [
+     "el cobrellit",
+     "la colcha"
+    ],
+    [
+     "el balancí",
+     "la mecedora"
+    ],
+    [
+     "la lleixa",
+     "la repisa"
+    ],
+    [
+     "el porticó",
+     "la contraventana"
+    ],
+    [
+     "la batedora",
+     "la batidora"
+    ],
+    [
+     "la torradora",
+     "la tostadora"
+    ]
+   ]
+  },
+  {
+   "id": "w094",
+   "level": "C1",
+   "title": "Colloquial words",
+   "words": [
+    [
+     "el xicot",
+     "el chico (novio)"
+    ],
+    [
+     "el paio",
+     "el tío (tipo)"
+    ],
+    [
+     "la ganga",
+     "el chollo"
+    ],
+    [
+     "la bajanada",
+     "la tontería"
+    ],
+    [
+     "el pixapins",
+     "el urbanita (dominguero)"
+    ],
+    [
+     "la gentada",
+     "el gentío"
+    ],
+    [
+     "el desori",
+     "el desorden (caos)"
+    ],
+    [
+     "el sidral",
+     "el follón"
+    ],
+    [
+     "l'esbroncada",
+     "la bronca"
+    ],
+    [
+     "la clatellada",
+     "la colleja"
+    ],
+    [
+     "la plantofada",
+     "el bofetón"
+    ],
+    [
+     "la patacada",
+     "el porrazo"
+    ],
+    [
+     "el nyap",
+     "la chapuza"
+    ],
+    [
+     "tip",
+     "lleno (harto)"
+    ],
+    [
+     "sonat",
+     "chalado"
+    ],
+    [
+     "gasiu",
+     "tacaño (mezquino)"
+    ],
+    [
+     "eixelebrat",
+     "atolondrado"
+    ],
+    [
+     "la pallissa",
+     "la paliza"
+    ],
+    [
+     "la xerinola",
+     "la juerga"
+    ],
+    [
+     "grillat",
+     "chiflado"
+    ]
+   ]
+  },
+  {
+   "id": "w095",
+   "level": "C1",
+   "title": "Catalan culture and traditions",
+   "words": [
+    [
+     "l'enxaneta",
+     "el niño que corona el castell"
+    ],
+    [
+     "la pinya",
+     "la piña (base del castell)"
+    ],
+    [
+     "la gralla",
+     "la dulzaina (gralla)"
+    ],
+    [
+     "la sardana",
+     "la sardana"
+    ],
+    [
+     "la cobla",
+     "la cobla (orquesta de sardanas)"
+    ],
+    [
+     "el caganer",
+     "el caganer (figura del belén)"
+    ],
+    [
+     "la castanyada",
+     "la castañada"
+    ],
+    [
+     "el panellet",
+     "el panellet (dulce de Todos los Santos)"
+    ],
+    [
+     "la calçotada",
+     "la calçotada (comida de calçots)"
+    ],
+    [
+     "l'envelat",
+     "el entoldado (carpa de baile)"
+    ],
+    [
+     "la pubilla",
+     "la heredera (reina de las fiestas)"
+    ],
+    [
+     "el pregó",
+     "el pregón"
+    ],
+    [
+     "la barretina",
+     "el gorro catalán"
+    ],
+    [
+     "la senyera",
+     "la bandera catalana"
+    ],
+    [
+     "la colla castellera",
+     "la peña castellera"
+    ],
+    [
+     "el grallaire",
+     "el gaitero (de gralla)"
+    ],
+    [
+     "el bastoner",
+     "el danzante de bastones"
+    ],
+    [
+     "el tortell",
+     "el roscón"
+    ],
+    [
+     "l'havanera",
+     "la habanera"
+    ],
+    [
+     "l'espardenya",
+     "la alpargata"
+    ]
+   ]
+  },
+  {
+   "id": "w096",
+   "level": "C1",
+   "title": "Time, frequency and sequence",
+   "words": [
+    [
+     "antany",
+     "antaño"
+    ],
+    [
+     "la vigília",
+     "la víspera"
+    ],
+    [
+     "adés",
+     "hace un momento"
+    ],
+    [
+     "entretant",
+     "entretanto"
+    ],
+    [
+     "tothora",
+     "a todas horas"
+    ],
+    [
+     "de vegades",
+     "a veces"
+    ],
+    [
+     "sobtadament",
+     "súbitamente"
+    ],
+    [
+     "de sobte",
+     "de repente"
+    ],
+    [
+     "el lustre",
+     "el lustro"
+    ],
+    [
+     "el capvespre",
+     "el atardecer"
+    ],
+    [
+     "un cop",
+     "una vez (que)"
+    ],
+    [
+     "despús-ahir",
+     "anteayer (literario)"
+    ],
+    [
+     "despús-demà",
+     "pasado mañana (literario)"
+    ],
+    [
+     "acte seguit",
+     "acto seguido"
+    ],
+    [
+     "seguidament",
+     "a continuación"
+    ],
+    [
+     "d'immediat",
+     "de inmediato"
+    ],
+    [
+     "a deshora",
+     "a deshoras"
+    ],
+    [
+     "esporàdicament",
+     "esporádicamente"
+    ],
+    [
+     "ulteriorment",
+     "ulteriormente"
+    ],
+    [
+     "antigament",
+     "antiguamente"
+    ]
+   ]
+  },
+  {
+   "id": "w097",
+   "level": "C1",
+   "title": "Quantity and degree",
+   "words": [
+    [
+     "més aviat",
+     "más bien"
+    ],
+    [
+     "d'allò més",
+     "de lo más"
+    ],
+    [
+     "de debò",
+     "de verdad"
+    ],
+    [
+     "de valent",
+     "a lo grande (mucho)"
+    ],
+    [
+     "a dojo",
+     "a raudales"
+    ],
+    [
+     "a betzef",
+     "a montones"
+    ],
+    [
+     "a bastament",
+     "de sobra (con creces)"
+    ],
+    [
+     "de sobres",
+     "de sobra"
+    ],
+    [
+     "el grapat",
+     "el puñado"
+    ],
+    [
+     "el bocí",
+     "el trocito"
+    ],
+    [
+     "el polsim",
+     "la pizca (polvillo)"
+    ],
+    [
+     "el miler",
+     "el millar"
+    ],
+    [
+     "minso",
+     "exiguo (escaso)"
+    ],
+    [
+     "sobrer",
+     "sobrante"
+    ],
+    [
+     "a penes",
+     "apenas"
+    ],
+    [
+     "un xic",
+     "un poquito"
+    ],
+    [
+     "el parell",
+     "el par"
+    ],
+    [
+     "a balquena",
+     "en abundancia"
+    ],
+    [
+     "a desdir",
+     "a más no poder"
+    ],
+    [
+     "a manta",
+     "a mansalva"
+    ]
+   ]
+  },
+  {
+   "id": "w098",
+   "level": "C1",
+   "title": "Conflict, crime and security",
+   "words": [
+    [
+     "l'estrebada",
+     "el tirón (robo)"
+    ],
+    [
+     "el xantatge",
+     "el chantaje"
+    ],
+    [
+     "el sospitós",
+     "el sospechoso"
+    ],
+    [
+     "les manilles",
+     "las esposas"
+    ],
+    [
+     "l'escorcoll",
+     "el registro (cacheo)"
+    ],
+    [
+     "la batuda",
+     "la redada"
+    ],
+    [
+     "la brega",
+     "la riña"
+    ],
+    [
+     "la batussa",
+     "la pelea"
+    ],
+    [
+     "l'aldarull",
+     "el disturbio"
+    ],
+    [
+     "l'atemptat",
+     "el atentado"
+    ],
+    [
+     "l'empremta",
+     "la huella"
+    ],
+    [
+     "l'ostatge",
+     "el rehén"
+    ],
+    [
+     "la navalla",
+     "la navaja"
+    ],
+    [
+     "el camell",
+     "el camello (traficante)"
+    ],
+    [
+     "el saqueig",
+     "el saqueo"
+    ],
+    [
+     "l'indici",
+     "el indicio"
+    ],
+    [
+     "el desallotjament",
+     "el desalojo"
+    ],
+    [
+     "la malversació",
+     "la malversación"
+    ],
+    [
+     "l'extorsió",
+     "la extorsión"
+    ],
+    [
+     "el franctirador",
+     "el francotirador"
+    ]
+   ]
+  },
+  {
+   "id": "w099",
+   "level": "C1",
+   "title": "Work and everyday economy",
+   "words": [
+    [
+     "la liquidació",
+     "el finiquito"
+    ],
+    [
+     "la jubilació",
+     "la jubilación"
+    ],
+    [
+     "la pluriocupació",
+     "el pluriempleo"
+    ],
+    [
+     "les dietes",
+     "las dietas (viáticos)"
+    ],
+    [
+     "la plantilla",
+     "la plantilla (personal)"
+    ],
+    [
+     "la retenció",
+     "la retención (fiscal)"
+    ],
+    [
+     "el patró",
+     "el patrón (empresario)"
+    ],
+    [
+     "l'excedència",
+     "la excedencia"
+    ],
+    [
+     "el trienni",
+     "el trienio"
+    ],
+    [
+     "la prestació",
+     "la prestación (por desempleo)"
+    ],
+    [
+     "la prejubilació",
+     "la prejubilación"
+    ],
+    [
+     "la subcontractació",
+     "la subcontratación"
+    ],
+    [
+     "la precarietat",
+     "la precariedad"
+    ],
+    [
+     "el quilometratge",
+     "el kilometraje"
+    ],
+    [
+     "la prima",
+     "la prima (incentivo)"
+    ],
+    [
+     "l'antiguitat",
+     "la antigüedad"
+    ],
+    [
+     "la vida laboral",
+     "la vida laboral"
+    ],
+    [
+     "el sobresou",
+     "el sobresueldo"
+    ],
+    [
+     "la gratificació",
+     "la gratificación"
+    ],
+    [
+     "la paga extra",
+     "la paga extra"
+    ]
+   ]
+  },
+  {
+   "id": "w100",
+   "level": "C1",
+   "title": "Abstract nouns for argument",
+   "words": [
+    [
+     "el supòsit",
+     "el supuesto"
+    ],
+    [
+     "el fonament",
+     "el fundamento"
+    ],
+    [
+     "el rerefons",
+     "el trasfondo"
+    ],
+    [
+     "la disjuntiva",
+     "la disyuntiva"
+    ],
+    [
+     "la paradoxa",
+     "la paradoja"
+    ],
+    [
+     "el desencadenant",
+     "el desencadenante"
+    ],
+    [
+     "la validesa",
+     "la validez"
+    ],
+    [
+     "la fiabilitat",
+     "la fiabilidad"
+    ],
+    [
+     "la mancança",
+     "la carencia"
+    ],
+    [
+     "el desavantatge",
+     "la desventaja"
+    ],
+    [
+     "la contrapartida",
+     "la contrapartida"
+    ],
+    [
+     "el pressupòsit",
+     "el presupuesto (supuesto previo)"
+    ],
+    [
+     "la refutació",
+     "la refutación"
+    ],
+    [
+     "l'objecció",
+     "la objeción"
+    ],
+    [
+     "el contrasentit",
+     "el contrasentido"
+    ],
+    [
+     "el corol·lari",
+     "el corolario"
+    ],
+    [
+     "el sofisme",
+     "el sofisma"
+    ],
+    [
+     "la vaguetat",
+     "la vaguedad"
+    ],
+    [
+     "l'ambigüitat",
+     "la ambigüedad"
+    ],
+    [
+     "la conjectura",
+     "la conjetura"
+    ]
+   ]
+  }
+ ]
 }
