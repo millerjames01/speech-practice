@@ -560,6 +560,16 @@ details.sr-level[open] { padding-bottom: 28px; }
   .sr-overview-grid { font-size: 0.76rem; }
 }
 
+/* perfect runs and stars that open over time */
+.sr-card-stars { display: inline-flex; align-items: center; gap: 8px; }
+.sr-perfect {
+  padding: 1px 6px; border-radius: 999px; font-size: 0.66rem; font-weight: 600; letter-spacing: 0.02em;
+  color: var(--sr-accent); border: 1px solid color-mix(in srgb, var(--sr-accent) 45%, transparent);
+}
+.sr-perfect-note { display: flex; align-items: center; gap: 10px; margin: 20px 0 0; color: var(--sr-text); font-size: 0.9rem; animation: sr-enter 0.4s 0.2s var(--sr-ease) both; }
+.sr-star-rules li.locked { color: var(--sr-faint); }
+.sr-star-when { margin-left: auto; padding-left: 12px; color: var(--sr-faint); font-size: 0.78rem; font-variant-numeric: tabular-nums; }
+
 /* intro stars */
 .sr-star-panel { margin-top: 20px; display: grid; gap: 8px; }
 .sr-star-panel > .sr-stars { font-size: 1.3rem; }

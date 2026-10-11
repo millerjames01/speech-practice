@@ -52,7 +52,7 @@ function fromBase64Url(text: string): Uint8Array<ArrayBuffer> {
  * v1|<base: start of export day, epoch minutes>|<lessons>|<cards>|<xp>|<sprintBest>|<forms>
  * xp:     YYYYMMDD:points  (the last three fields are optional, so older codes still decode)
  * forms:  key:streak       (only forms with a streak)
- * lesson: id:bestSeconds:scorePercent:runs
+ * lesson: id:bestSeconds:scorePercent:runs[:firstDay]   (firstDay relative to base, usually negative)
  * card:   lessonId.index.step.dueDays.lapses.lastHours   (relative to base; due is always
  *         a midnight, last answer keeps hour precision so same-day merges order correctly)
  */
@@ -67,7 +67,7 @@ export async function encodeSync(
   const days = (t: number) => Math.round((t - base) / DAY);
   const hours = (t: number) => Math.floor((t - base) / HOUR);
   const ls = Object.entries(lessons)
-    .map(([id, r]) => `${id}:${Math.round(r.bestMs / 1000)}:${Math.round(r.bestScore * 100)}:${r.runs}`)
+    .map(([id, r]) => `${id}:${Math.round(r.bestMs / 1000)}:${Math.round(r.bestScore * 100)}:${r.runs}${r.firstAt !== undefined ? `:${Math.floor((r.firstAt - base) / DAY)}` : ''}`)
     .join(',');
   const cs = cards
     .map((c) => `${c.lessonId}.${c.index}.${c.step}.${days(c.due)}.${c.lapses}.${c.last ? hours(c.last) : ''}`)
@@ -107,9 +107,15 @@ export async function decodeSync(input: string): Promise<SyncPayload> {
 
   const lessons: Record<string, LessonRecord> = {};
   for (const part of ls ? ls.split(',') : []) {
-    const [id, sec, pct, runs] = part.split(':');
+    const [id, sec, pct, runs, first] = part.split(':');
     if (!id || [sec, pct, runs].some((n) => !Number.isFinite(Number(n)))) throw new Error('The sync code is damaged.');
-    lessons[id] = { bestMs: Number(sec) * 1000, bestScore: Number(pct) / 100, runs: Number(runs) };
+    if (first !== undefined && !Number.isFinite(Number(first))) throw new Error('The sync code is damaged.');
+    lessons[id] = {
+      bestMs: Number(sec) * 1000,
+      bestScore: Number(pct) / 100,
+      runs: Number(runs),
+      ...(first !== undefined ? { firstAt: at(first) } : {}),
+    };
   }
   const cards: SrsCard[] = [];
   for (const part of cs ? cs.split(',') : []) {
@@ -155,7 +161,13 @@ export function newerCard(a: SrsCard, b: SrsCard): SrsCard {
 
 export function mergeLessons(a: LessonRecord | undefined, b: LessonRecord): LessonRecord {
   if (!a) return b;
-  return { bestMs: Math.min(a.bestMs, b.bestMs), bestScore: Math.max(a.bestScore, b.bestScore), runs: Math.max(a.runs, b.runs) };
+  const firstAt = Math.min(a.firstAt ?? Infinity, b.firstAt ?? Infinity);
+  return {
+    bestMs: Math.min(a.bestMs, b.bestMs),
+    bestScore: Math.max(a.bestScore, b.bestScore),
+    runs: Math.max(a.runs, b.runs),
+    ...(Number.isFinite(firstAt) ? { firstAt } : {}),
+  };
 }
 
 /* ---------- short codes via dpaste.com ----------

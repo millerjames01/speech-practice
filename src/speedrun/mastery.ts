@@ -5,7 +5,7 @@
  */
 
 import { FORM_KNOWN, sprintPool, uniqueForms } from './sprint';
-import { isDue, type SrsCard } from './srs';
+import { DAY, INTERVALS, isDue, type SrsCard } from './srs';
 import { SPEEDRUN_LEVELS, type SpeedrunLesson, type SpeedrunLevel } from './types';
 import type { VocabPack } from './vocab';
 
@@ -41,6 +41,57 @@ export function lessonStars(lesson: SpeedrunLesson, finished: boolean, cards: Ca
   if (cs.every((c) => c!.step >= 2)) return 2;
   return 1;
 }
+
+/** Steps each star tier needs: ★ none (finishing), ★★ step 2, ★★★ step 4. */
+const STAR_STEPS: readonly number[] = [0, 2, 4];
+
+/** The fewest days the ladder takes to reach a step: 1 + 3 = 4 days for step 2, 25 for step 4. */
+export const daysToStep = (step: number): number => INTERVALS.slice(0, step).reduce((a, b) => a + b, 0);
+
+/** Minimal shape of a lesson record, so this module needs nothing from storage. */
+interface Finished {
+  firstAt?: number;
+}
+
+/**
+ * When the lesson was first learned. Records from before that date was kept
+ * estimate it from the cards: an item at step s was learned at least
+ * daysToStep(s) before its last answer, so the earliest such bound wins.
+ */
+export function learnedAt(lesson: SpeedrunLesson, record: Finished | undefined, cards: CardIndex, now: number): number {
+  if (record?.firstAt !== undefined) return record.firstAt;
+  let earliest = now;
+  for (const c of lessonCards(lesson, cards)) {
+    if (!c) continue;
+    const last = c.last ?? c.due - (INTERVALS[c.step] ?? 1) * DAY;
+    earliest = Math.min(earliest, last - daysToStep(c.step) * DAY);
+  }
+  return earliest;
+}
+
+/**
+ * Stars a lesson can hold right now. Finishing is always open; ★★ opens once
+ * enough days have passed for its items to reach a week's gap, ★★★ a month's.
+ * Never fewer than the stars already held.
+ */
+export function availableStars(lesson: SpeedrunLesson, record: Finished | undefined, cards: CardIndex, now: number): 1 | 2 | 3 {
+  if (!record) return 1;
+  const age = now - learnedAt(lesson, record, cards, now);
+  const open = STAR_STEPS.filter((step) => age >= daysToStep(step) * DAY).length as 1 | 2 | 3;
+  return Math.max(open, lessonStars(lesson, true, cards)) as 1 | 2 | 3;
+}
+
+/** Days until the next star tier opens, or null when all three are open. */
+export function nextStarOpensIn(lesson: SpeedrunLesson, record: Finished | undefined, cards: CardIndex, now: number): number | null {
+  if (!record) return null;
+  const available = availableStars(lesson, record, cards, now);
+  if (available >= 3) return null;
+  const opensAt = learnedAt(lesson, record, cards, now) + daysToStep(STAR_STEPS[available]!) * DAY;
+  return Math.max(1, Math.ceil((opensAt - now) / DAY));
+}
+
+/** A perfect run: every item right on the first try, at least once. */
+export const isPerfect = (record: { bestScore: number } | undefined): boolean => !!record && record.bestScore >= 1;
 
 export function lessonDue(lesson: SpeedrunLesson, cards: CardIndex, now: number): number {
   return lessonCards(lesson, cards).filter((c) => c && isDue(c, now)).length;

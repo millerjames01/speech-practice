@@ -69,6 +69,14 @@ describe('merging', () => {
     expect(newerCard(a, b)).toBe(b);
   });
 
+  it('carries when a lesson was first finished, keeping the earlier of two', async () => {
+    const firstAt = startOfDay(NOW) - 6 * DAY;
+    const back = await decodeSync(await encodeSync({ 'a2-01': { bestMs: 60_000, bestScore: 1, runs: 1, firstAt } }, [], NOW));
+    expect(back.lessons['a2-01']?.firstAt).toBe(firstAt);
+    expect(mergeLessons({ bestMs: 1, bestScore: 1, runs: 1, firstAt: 5 }, { bestMs: 1, bestScore: 1, runs: 1, firstAt: 3 }).firstAt).toBe(3);
+    expect(mergeLessons({ bestMs: 1, bestScore: 1, runs: 1 }, { bestMs: 1, bestScore: 1, runs: 1 })).not.toHaveProperty('firstAt');
+  });
+
   it('keeps the best of both lesson records', () => {
     expect(mergeLessons({ bestMs: 90_000, bestScore: 1, runs: 2 }, { bestMs: 70_000, bestScore: 0.8, runs: 5 })).toEqual({
       bestMs: 70_000,
@@ -115,7 +123,7 @@ describe('merging', () => {
     const sortCards = (cs: SrsCard[]) => [...cs].sort((x, y) => `${x.lessonId}#${x.index}`.localeCompare(`${y.lessonId}#${y.index}`));
     expect(aMerged.lessons).toEqual(bMerged.lessons);
     expect(sortCards(aMerged.cards)).toEqual(sortCards(bMerged.cards));
-    expect(bMerged.lessons['a2-01']).toEqual({ bestMs: 80_000, bestScore: 1, runs: 1 });
+    expect(bMerged.lessons['a2-01']).toMatchObject({ bestMs: 80_000, bestScore: 1, runs: 1 });
     expect(bMerged.cards.find((c) => c.lessonId === 'a2-01' && c.index === 1)).toMatchObject({ step: 0, lapses: 1 });
     expect(b.cards).toHaveLength(2);
   });
