@@ -570,6 +570,16 @@ details.sr-level[open] { padding-bottom: 28px; }
 .sr-star-rules li.locked { color: var(--sr-faint); }
 .sr-star-when { margin-left: auto; padding-left: 12px; color: var(--sr-faint); font-size: 0.78rem; font-variant-numeric: tabular-nums; }
 
+/* voice */
+.sr-voice-tip { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.sr-voice-tip .sr-btn { flex: none; }
+.sr-voice-pick { gap: 8px; }
+.sr-voice-pick:empty { display: none; }
+.sr-select {
+  max-width: 260px; height: 30px; padding: 0 8px; font: inherit; font-size: 0.82rem;
+  color: var(--sr-text); background: var(--sr-surface); border: 1px solid var(--sr-line-strong); border-radius: 7px;
+}
+
 /* intro stars */
 .sr-star-panel { margin-top: 20px; display: grid; gap: 8px; }
 .sr-star-panel > .sr-stars { font-size: 1.3rem; }

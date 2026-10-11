@@ -24,6 +24,10 @@ export interface Prefs {
   autoplay: boolean;
   /** Hear the Catalan and type it, instead of translating from Castellano. */
   dictation: boolean;
+  /** Chosen browser voice (voiceURI); empty picks the best Catalan voice available. */
+  voice: string;
+  /** The "get a better voice" tip was dismissed. */
+  voiceTipHidden: boolean;
 }
 
 interface Store {
@@ -50,7 +54,7 @@ interface LegacyMiss {
   count: number;
 }
 
-const empty = (): Store => ({ lessons: {}, cards: {}, prefs: { autoplay: true, dictation: false }, xp: {}, sprintBest: 0, forms: {}, version: STORE_VERSION });
+const empty = (): Store => ({ lessons: {}, cards: {}, prefs: { autoplay: true, dictation: false, voice: '', voiceTipHidden: false }, xp: {}, sprintBest: 0, forms: {}, version: STORE_VERSION });
 
 export const itemKey = (lessonId: string, index: number): string => `${lessonId}#${index}`;
 

@@ -7,6 +7,7 @@
 import curriculum from '../../curriculum.json';
 import { playLine, stopPlayback } from '../audio/player';
 import { hasElevenLabsKey } from '../keys';
+import { getPrefs } from './progress';
 
 export type SpeechSource = 'elevenlabs' | 'browser' | 'none';
 
@@ -22,14 +23,85 @@ export function lastSpeechError(): string | null {
   return lastElevenError;
 }
 
-function catalanVoice(): SpeechSynthesisVoice | null {
+/**
+ * How good a voice usually sounds. Browsers only lend out what the device has:
+ * Edge streams Microsoft's neural voices ("… Online (Natural)"), Apple devices
+ * ship a compact Catalan voice and offer Enhanced/Premium ones as downloads,
+ * and Android has Google's. 3 and up sounds natural; 1 is the robotic default.
+ */
+export function voiceQuality(v: Pick<SpeechSynthesisVoice, 'name' | 'voiceURI'>): number {
+  const id = `${v.name} ${v.voiceURI}`.toLowerCase();
+  if (/natural|neural/.test(id)) return 4;
+  if (/premium/.test(id)) return 3;
+  if (/enhanced|mejorad|millorad|améliorée/.test(id)) return 2.5;
+  if (/google/.test(id)) return 2;
+  return 1;
+}
+
+const isCatalan = (v: SpeechSynthesisVoice) => v.lang.toLowerCase().replace('_', '-').startsWith('ca');
+
+/** Catalan voices on this device, best first (ca-ES ahead of other variants at equal quality). */
+export function catalanVoices(): SpeechSynthesisVoice[] {
+  if (typeof speechSynthesis === 'undefined') return [];
+  const score = (v: SpeechSynthesisVoice) => voiceQuality(v) + (v.lang.toLowerCase().replace('_', '-') === 'ca-es' ? 0.1 : 0);
+  return speechSynthesis
+    .getVoices()
+    .filter(isCatalan)
+    .sort((a, b) => score(b) - score(a));
+}
+
+/** The voice in use: the one chosen in the picker if it is still there, otherwise the best. */
+export function catalanVoice(): SpeechSynthesisVoice | null {
+  const voices = catalanVoices();
+  const chosen = getPrefs().voice;
+  return voices.find((v) => v.voiceURI === chosen) ?? voices[0] ?? null;
+}
+
+export type VoicePlatform = 'ios' | 'mac' | 'windows' | 'android' | 'other';
+
+export function voicePlatform(): VoicePlatform {
+  if (typeof navigator === 'undefined') return 'other';
+  const ua = navigator.userAgent;
+  if (/iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) return 'ios';
+  if (/Macintosh|Mac OS X/.test(ua)) return 'mac';
+  if (/Windows/.test(ua)) return 'windows';
+  if (/Android/.test(ua)) return 'android';
+  return 'other';
+}
+
+/** True in Microsoft Edge, which has the natural Catalan voices on every desktop. */
+const isEdge = () => typeof navigator !== 'undefined' && /Edg\//.test(navigator.userAgent);
+
+/**
+ * How to get a natural-sounding Catalan voice on this device, or null when the
+ * one in use already is.
+ */
+export function betterVoiceTip(): string | null {
   if (typeof speechSynthesis === 'undefined') return null;
-  const voices = speechSynthesis.getVoices();
-  return (
-    voices.find((v) => v.lang.toLowerCase() === 'ca-es') ??
-    voices.find((v) => v.lang.toLowerCase().startsWith('ca')) ??
-    null
-  );
+  const voice = catalanVoice();
+  if (voice && voiceQuality(voice) >= 2.5) return null;
+  const edge = 'Microsoft Edge has natural Catalan voices built in (Joana, Enric): open this page in Edge for the best free audio.';
+  switch (voicePlatform()) {
+    case 'mac':
+      return (
+        'Your Mac is using its basic Catalan voice. For a much better one: System Settings → Accessibility → ' +
+        'Spoken Content → System voice → Manage Voices… → Catalan → download Montse (Enhanced or Premium), then ' +
+        `restart the browser. ${isEdge() ? '' : `Or: ${edge}`}`
+      );
+    case 'ios':
+      return (
+        'This iPhone or iPad is using its basic Catalan voice. For a much better one: Settings → Accessibility → ' +
+        'Spoken Content → Voices → Catalan → download Montse (Enhanced or Premium), then reopen the app.'
+      );
+    case 'windows':
+      return isEdge()
+        ? 'No natural Catalan voice found. Check that you are online: Edge streams its natural voices.'
+        : `This browser has ${voice ? 'only a basic' : 'no'} Catalan voice on Windows. ${edge}`;
+    case 'android':
+      return 'For a better voice: Settings → Text-to-speech → Speech services by Google → Install voice data → Català.';
+    default:
+      return isEdge() ? null : edge;
+  }
 }
 
 /** Voices load asynchronously in most browsers; resolve once they are in. */
@@ -49,9 +121,6 @@ export function speechSource(): SpeechSource {
   return 'none';
 }
 
-export function hasBrowserCatalanVoice(): boolean {
-  return catalanVoice() !== null;
-}
 
 /**
  * The utterance being spoken. Holding a reference matters: Chrome can garbage-

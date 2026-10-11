@@ -59,7 +59,9 @@ import { planLessonReview, planToday, type SrsCard } from './srs';
 import { planVocab, unlockedSets, vocab, vocabStats } from './vocab';
 import { decodeSync, downloadSync, encodeSync, formatShortCode, uploadSync } from './sync';
 import {
-  hasBrowserCatalanVoice,
+  betterVoiceTip,
+  catalanVoice,
+  catalanVoices,
   lastSpeechError,
   speak,
   speechSource,
@@ -248,13 +250,20 @@ function audioNotice(): HTMLElement | null {
   const err = lastSpeechError();
   if (src === 'elevenlabs' && !err) return null;
   if (err) return el('div', { class: 'sr-banner' }, `ElevenLabs failed; using the browser voice. ${err}`);
-  if (src === 'browser' && !hasBrowserCatalanVoice()) {
-    return el(
+  if (src === 'browser') {
+    const tip = betterVoiceTip();
+    if (!tip || getPrefs().voiceTipHidden) return null;
+    const banner = el(
       'div',
-      { class: 'sr-banner' },
-      'No Catalan voice in this browser, so audio may sound off. Add an ElevenLabs key in Settings ' +
-        'and a narrator voice id in curriculum.json, or install a ca-ES system voice.',
+      { class: 'sr-banner sr-voice-tip' },
+      el('span', {}, `${catalanVoice() ? '' : 'No Catalan voice in this browser, so audio may sound off. '}${tip}`),
     );
+    const hide = button('Hide', () => {
+      setPrefs({ ...getPrefs(), voiceTipHidden: true });
+      banner.remove();
+    }, 'sr-btn ghost small');
+    banner.append(hide);
+    return banner;
   }
   if (src === 'none') return el('div', { class: 'sr-banner' }, 'Audio is unavailable in this browser.');
   return null;
@@ -386,6 +395,24 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
   autoplay.addEventListener('change', () => setPrefs({ ...getPrefs(), autoplay: autoplay.checked }));
   const dictation = el('input', { type: 'checkbox', checked: prefs.dictation });
   dictation.addEventListener('change', () => setPrefs({ ...getPrefs(), dictation: dictation.checked }));
+  const voicePicker = el('label', { class: 'sr-toggle sr-voice-pick' });
+  const fillVoices = () => {
+    clear(voicePicker);
+    const voices = catalanVoices();
+    if (voices.length < 2 || speechSource() !== 'browser') return;
+    const select = el(
+      'select',
+      { class: 'sr-select' },
+      el('option', { value: '' }, `Best available (${voices[0]!.name})`),
+      ...voices.map((v) => el('option', { value: v.voiceURI, selected: v.voiceURI === getPrefs().voice }, v.name)),
+    );
+    select.setAttribute('aria-label', 'Catalan voice');
+    select.addEventListener('change', () => {
+      setPrefs({ ...getPrefs(), voice: select.value });
+      void speak('Bon dia! Com estàs?');
+    });
+    voicePicker.append(el('span', {}, 'Voice'), select);
+  };
 
   const openLesson = next
     ? iconButton(
@@ -445,8 +472,11 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
   const notice = audioNotice();
   if (notice) banners.append(notice);
   void voicesReady().then(() => {
-    // The browser voice list arrives late; drop the notice once it does.
-    if (notice && !audioNotice()) notice.remove();
+    // The browser voice list arrives late: refresh the notice and the voice picker once it does.
+    const fresh = audioNotice();
+    if (notice) notice.remove();
+    if (fresh) banners.append(fresh);
+    fillVoices();
   });
   page.append(banners);
 
@@ -593,6 +623,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
         { class: 'sr-toggles' },
         el('label', { class: 'sr-toggle' }, autoplay, el('span', {}, 'Auto-play the answer after each check')),
         el('label', { class: 'sr-toggle' }, dictation, el('span', {}, 'Dictation: hear the Catalan and write it')),
+        voicePicker,
               ),
       el(
         'div',

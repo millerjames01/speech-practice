@@ -46,11 +46,22 @@ Before practising, replace the `REPLACE_WITH_VOICE_ID` placeholders in
 - **Offline.** After the first visit everything works without a connection:
   lessons, checking, Today, progress, export. ElevenLabs needs a connection,
   except for lines already played, which are cached.
-- **A Catalan voice.** Audio uses the device's own speech voices, which also
-  work offline once downloaded. iPhone/iPad/Mac: Settings → Accessibility →
-  Spoken Content → Voices → Català (Montse or Jordi). Android: Settings →
-  Text-to-speech → Google → install Català. Windows: Settings → Time & language
-  → Speech → add Catalan.
+- **A Catalan voice.** Without ElevenLabs, audio uses the browser's voices,
+  which come from the device, so quality varies a lot. The app picks the best
+  Catalan voice it finds (Edge's natural voices, then Apple Premium/Enhanced,
+  then Google, then the compact default), offers a *Voice* picker at the bottom
+  of the map when there is more than one, and shows a tip for your platform
+  when only a basic voice is available.
+  - Mac (Chrome or Safari): System Settings → Accessibility → Spoken Content →
+    System voice → Manage Voices… → Catalan → Montse (Enhanced or Premium),
+    then quit and reopen the browser. Chrome has no Catalan voice of its own;
+    it uses these.
+  - iPhone/iPad: Settings → Accessibility → Spoken Content → Voices → Catalan →
+    Montse (Enhanced or Premium).
+  - Any desktop: Microsoft Edge streams natural Catalan voices (Joana, Enric)
+    for free, the best option short of ElevenLabs.
+  - Android: Settings → Text-to-speech → Speech services by Google → install
+    Català.
 - **Sync between phone and PC, no account.** *Sync devices* (bottom of the
   map) → *Get sync code* on one device shows a code like `AU4-DFN-HWN`; type it
   under *Receive* on the other. Progress merges — for each item the newest
