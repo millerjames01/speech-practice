@@ -15,6 +15,8 @@ export interface LessonRecord {
   /** Best first-try accuracy, 0-1. */
   bestScore: number;
   runs: number;
+  /** When the lesson was first finished; later star tiers open counting from here. */
+  firstAt?: number;
 }
 
 export interface Prefs {
@@ -87,13 +89,15 @@ export function allLessonRecords(): Record<string, LessonRecord> {
   return read().lessons;
 }
 
-export function recordLesson(id: string, ms: number, score: number): LessonRecord {
+export function recordLesson(id: string, ms: number, score: number, now = Date.now()): LessonRecord {
   const store = read();
   const prev = store.lessons[id];
   const next: LessonRecord = {
     bestMs: prev ? Math.min(prev.bestMs, ms) : ms,
     bestScore: prev ? Math.max(prev.bestScore, score) : score,
     runs: (prev?.runs ?? 0) + 1,
+    // Records from before firstAt existed keep going without one; their date is estimated from the cards.
+    ...(prev ? (prev.firstAt !== undefined ? { firstAt: prev.firstAt } : {}) : { firstAt: now }),
   };
   store.lessons[id] = next;
   write(store);
@@ -177,7 +181,7 @@ export function importProgress(text: string): { lessons: number; cards: number }
   if (!Object.values(xp).every(isNum)) throw new Error('The progress file has damaged XP records.');
   if (!Object.values(forms).every(isNum)) throw new Error('The progress file has damaged conjugation records.');
   for (const r of Object.values(lessons)) {
-    if (!isRecord(r) || !isNum(r.bestMs) || !isNum(r.bestScore) || !isNum(r.runs)) {
+    if (!isRecord(r) || !isNum(r.bestMs) || !isNum(r.bestScore) || !isNum(r.runs) || (r.firstAt !== undefined && !isNum(r.firstAt))) {
       throw new Error('The progress file has a damaged lesson record.');
     }
   }

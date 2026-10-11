@@ -106,7 +106,13 @@ doesn't either.
 all read off the review cards (`src/speedrun/mastery.ts`), so every mode feeds
 the same numbers:
 - ★ lesson finished · ★★ every item recalled after a week · ★★★ every item
-  held at a month. Stars fade when items slip.
+  held at a month. Stars fade when items slip. Counts only include stars that
+  are open yet: ★★ opens 4 days after first finishing a lesson and ★★★ after
+  25 (the fewest days the review ladder needs), so a new level reads "17/34",
+  not "17/102".
+- **Perfect runs**: a lesson run with every item right first time earns a
+  100% mark on its card and counts in the course overview; it is a badge, not
+  another progress bar.
 - **Level %** is the headline: how much of the level is held long-term (an
   item earns full credit at the month step).
 - **Side-track ratings** use the same A2–C1 scale, so they read against the

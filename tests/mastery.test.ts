@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { compareLevels, conjugationRating, courseRating, indexCards, itemCredit, lessonDue, lessonStars, levelProgress, toRating, vocabRating } from '../src/speedrun/mastery';
+import { availableStars, compareLevels, conjugationRating, courseRating, indexCards, isPerfect, nextStarOpensIn, itemCredit, lessonDue, lessonStars, levelProgress, toRating, vocabRating } from '../src/speedrun/mastery';
 import { DAY, interleave, planLessonReview, planToday, startOfDay, type SrsCard } from '../src/speedrun/srs';
 import { formKey, sprintPool, sprintRound, uniqueForms } from '../src/speedrun/sprint';
 import { loadSpeedrun } from '../src/speedrun/content';
@@ -171,5 +171,34 @@ describe('ratings', () => {
     const known = Object.fromEntries(pool.slice(0, pool.length - 5).map((c) => [c.key, 2]));
     const round = sprintRound(content.lessons.slice(0, 6), new Set(content.lessons.slice(0, 6).map((l) => l.id)), () => 0.4, known);
     expect(round.slice(0, 5).every((c) => !known[c.key])).toBe(true);
+  });
+});
+
+describe('stars open over time', () => {
+  const l = lesson('a2-01', 2);
+  const at = (days: number) => today - days * DAY;
+
+  it('offers one star until the ladder could reach a week, then two, then three', () => {
+    const cs = indexCards([card('a2-01', 0, 0), card('a2-01', 1, 0)]);
+    expect(availableStars(l, undefined, cs, NOW)).toBe(1); // not finished: finishing is open
+    expect(availableStars(l, { firstAt: at(1) }, cs, NOW)).toBe(1);
+    expect(nextStarOpensIn(l, { firstAt: at(1) }, cs, NOW)).toBe(3);
+    expect(availableStars(l, { firstAt: at(4) }, cs, NOW)).toBe(2);
+    expect(nextStarOpensIn(l, { firstAt: at(4) }, cs, NOW)).toBe(21);
+    expect(availableStars(l, { firstAt: at(25) }, cs, NOW)).toBe(3);
+    expect(nextStarOpensIn(l, { firstAt: at(25) }, cs, NOW)).toBeNull();
+  });
+
+  it('estimates the start for older records from the cards, and never shows fewer than held', () => {
+    // Step 2 means at least 4 days since learning, so two stars are open.
+    const cs = indexCards([{ ...card('a2-01', 0, 2), last: at(0) }, { ...card('a2-01', 1, 2), last: at(0) }]);
+    expect(availableStars(l, {}, cs, NOW)).toBe(2);
+    expect(availableStars(l, { firstAt: NOW }, indexCards([card('a2-01', 0, 4), card('a2-01', 1, 4)]), NOW)).toBe(3);
+  });
+
+  it('marks a perfect run from the best score', () => {
+    expect(isPerfect({ bestScore: 1 })).toBe(true);
+    expect(isPerfect({ bestScore: 0.92 })).toBe(false);
+    expect(isPerfect(undefined)).toBe(false);
   });
 });

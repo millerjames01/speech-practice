@@ -23,8 +23,11 @@ import {
   indexCards,
   isLessonCard,
   lessonDue,
+  availableStars,
+  isPerfect,
   lessonStars,
   levelProgress,
+  nextStarOpensIn,
   vocabRating,
   type Rating,
   type Stars,
@@ -269,12 +272,26 @@ function meter(fraction: number): HTMLElement {
 
 /* ---------- map ---------- */
 
-/** ★★☆ as three spans, so filled and empty stars can be styled. */
-export function starRow(n: Stars, label = true): HTMLElement {
-  const row = el('span', { class: 'sr-stars', title: label ? `${n} of 3 stars` : '' });
-  for (let i = 1; i <= 3; i += 1) row.append(el('span', { class: i <= n ? 'on' : '' }, '★'));
+/** ★★☆ as spans, one per star open so far, so filled and empty stars can be styled. */
+export function starRow(n: Stars, of: number = 3): HTMLElement {
+  const row = el('span', { class: 'sr-stars', title: `${n} of ${of} ${of === 1 ? 'star' : 'stars'} open so far` });
+  for (let i = 1; i <= of; i += 1) row.append(el('span', { class: i <= n ? 'on' : '' }, '★'));
   return row;
 }
+
+/** Held / open stars over a set of lessons: the denominator grows as tiers open with time. */
+function starTally(lessons: SpeedrunLesson[], records: Record<string, { firstAt?: number }>, index: Map<string, SrsCard>, now: number): { held: number; open: number } {
+  let held = 0;
+  let open = 0;
+  for (const l of lessons) {
+    held += lessonStars(l, !!records[l.id], index);
+    open += availableStars(l, records[l.id], index, now);
+  }
+  return { held, open };
+}
+
+/** A small mark for a lesson run with every item right first time. */
+const perfectMark = () => el('span', { class: 'sr-perfect', title: 'Perfect run: every item right on the first try' }, '100%');
 
 /** Due lesson items right now (the vocab builder keeps its own count). */
 function lessonDueCount(now = Date.now()): number {
@@ -359,8 +376,9 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
   const vstats = vocabStats(cards, now, vocab, activeLevel);
   const conj = conjugationRating(content.byLevel, allForms());
   const voc = vocabRating(index, vocab);
-  const levelStarsOf = (lv: SpeedrunLevel) => content.byLevel[lv].reduce((n, l) => n + lessonStars(l, !!records[l.id], index), 0);
-  const stars = SPEEDRUN_LEVELS.reduce((n, lv) => n + levelStarsOf(lv), 0);
+  const levelStarsOf = (lv: SpeedrunLevel) => starTally(content.byLevel[lv], records, index, now);
+  const stars = starTally(content.lessons, records, index, now);
+  const perfect = content.lessons.filter((l) => isPerfect(records[l.id])).length;
   const activePct = levelProgress(content.byLevel[activeLevel], index);
 
   const prefs = getPrefs();
@@ -411,7 +429,10 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
         { class: 'sr-hero-stats' },
         stat(xp.streak ? `${xp.streak}d` : '—', 'Streak'),
         stat(String(xp.today), 'XP today'),
-        stat(`${levelStarsOf(activeLevel)}/${content.byLevel[activeLevel].length * 3}`, `${activeLevel} stars`),
+        (() => {
+          const t = levelStarsOf(activeLevel);
+          return stat(`${t.held}/${t.open}`, `${activeLevel} stars`);
+        })(),
       ),
     ),
   );
@@ -462,7 +483,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
     const lessons = content.byLevel[level];
     if (lessons.length === 0) continue;
     const levelDone = lessons.filter((l) => records[l.id]).length;
-    const levelStars = lessons.reduce((n, l) => n + lessonStars(l, !!records[l.id], index), 0);
+    const levelStars = levelStarsOf(level);
     const levelDue = lessons.reduce((n, l) => n + lessonDue(l, index, now), 0);
     const pct = levelProgress(lessons, index);
     const info = LEVEL_INFO[level];
@@ -473,7 +494,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
         'summary',
         { class: 'sr-level-head' },
         el('span', { class: 'sr-level-tag' }, level),
-        el('div', { class: 'sr-level-text' }, el('h2', {}, info.name), el('p', {}, `${levelDone}/${lessons.length} lessons · ★ ${levelStars}/${lessons.length * 3}${levelDue ? ` · ${levelDue} due` : ''}`)),
+        el('div', { class: 'sr-level-text' }, el('h2', {}, info.name), el('p', {}, `${levelDone}/${lessons.length} lessons · ★ ${levelStars.held}/${levelStars.open}${levelDue ? ` · ${levelDue} due` : ''}`)),
         el('div', { class: 'sr-level-progress' }, el('span', {}, `${Math.round(pct * 100)}%`), meter(pct)),
       ),
       el('p', { class: 'sr-level-blurb' }, info.blurb),
@@ -494,7 +515,12 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
               ld ? el('span', { class: 'sr-due', title: `${ld} due for review` }, `${ld} due`) : null,
             ),
             el('span', { class: 'sr-card-title' }, lesson.title),
-            el('span', { class: 'sr-card-meta' }, rec ? starRow(n) : `${lesson.items.length} items`, rec ? el('span', {}, formatMs(rec.bestMs)) : null),
+            el(
+              'span',
+              { class: 'sr-card-meta' },
+              rec ? el('span', { class: 'sr-card-stars' }, starRow(n, availableStars(lesson, rec, index, now)), isPerfect(rec) ? perfectMark() : null) : `${lesson.items.length} items`,
+              rec ? el('span', {}, formatMs(rec.bestMs)) : null,
+            ),
           );
           // Staggers the entrance animation; capped so long levels don't drag.
           card.style.setProperty('--i', String(Math.min(i, 16)));
@@ -519,7 +545,8 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
         { class: 'sr-overview-stats' },
         stat(`${Math.round(course.overall * 100)}%`, 'Course held'),
         stat(`${done.length}/${content.lessons.length}`, 'Lessons'),
-        stat(`${stars}/${content.lessons.length * 3}`, 'Stars'),
+        stat(`${stars.held}/${stars.open}`, 'Stars'),
+        stat(`${perfect}/${done.length}`, 'Perfect runs'),
         stat(String(xp.total), 'XP'),
         stat(formatMs(totalMs), 'Run time'),
       ),
@@ -815,8 +842,11 @@ function renderIntro(root: HTMLElement, nav: SpeedrunNav, lesson: SpeedrunLesson
   const records = allLessonRecords();
   const finished = !!records[lesson.id];
   const index = indexCards(allCards());
+  const now = Date.now();
   const stars = lessonStars(lesson, finished, index);
-  const due = lessonDue(lesson, index, Date.now());
+  const open = availableStars(lesson, records[lesson.id], index, now);
+  const opensIn = nextStarOpensIn(lesson, records[lesson.id], index, now);
+  const due = lessonDue(lesson, index, now);
 
   const begin = () => runSession(root, nav, lessonEntries(lesson), { kind: 'lesson', lesson });
   const review = () => startLessonReview(root, nav, lesson);
@@ -833,13 +863,22 @@ function renderIntro(root: HTMLElement, nav: SpeedrunNav, lesson: SpeedrunLesson
     ? el(
         'div',
         { class: 'sr-star-panel' },
-        starRow(stars),
+        el('div', { class: 'sr-card-stars' }, starRow(stars, open), isPerfect(records[lesson.id]) ? perfectMark() : null),
         el(
           'ul',
           { class: 'sr-star-rules' },
-          ...STAR_RULES.map((rule, i) => el('li', { class: i < stars ? 'on' : '' }, el('span', { class: 'sr-star-mark' }, '★'), rule)),
+          ...STAR_RULES.map((rule, i) =>
+            el(
+              'li',
+              { class: i < stars ? 'on' : i < open ? '' : 'locked' },
+              el('span', { class: 'sr-star-mark' }, '★'),
+              rule,
+              // Only the next tier gets a countdown; the one after follows from it.
+              i === open && opensIn !== null ? el('span', { class: 'sr-star-when' }, `opens in ${opensIn} ${opensIn === 1 ? 'day' : 'days'}`) : null,
+            ),
+          ),
         ),
-        el('p', { class: 'sr-muted' }, 'Stars come from the review schedule, so they can fade when items slip. Today and lesson reviews win them back.'),
+        el('p', { class: 'sr-muted' }, 'Later stars open as the review gaps grow, and can fade when items slip. Today and lesson reviews win them back.'),
       )
     : null;
 
@@ -1193,15 +1232,18 @@ function runSession(
     const score = unique ? hits / unique : 0;
     clear(stage);
 
+    const wasPerfect = lesson ? isPerfect(allLessonRecords()[lesson.id]) : false;
     const rec = lesson ? recordLesson(lesson.id, ms, score) : null;
     const content = loadSpeedrun();
     const records = allLessonRecords();
+    const perfectRun = unique > 0 && score >= 1;
     const newBest = rec !== null && rec.runs > 1 && rec.bestMs === ms;
     const heavy = lessonDueCount() > HEAVY_DAY;
     const firstNew = content.lessons.find((l) => !records[l.id]);
 
     let nextBtn: HTMLButtonElement;
     let extra: (HTMLElement | null)[] = [];
+    let badge: HTMLElement | null = null;
     let eyebrow: string;
     let title: string;
     if (mode.kind === 'lesson') {
@@ -1211,7 +1253,8 @@ function runSession(
         : iconButton('Back to map', ICONS.back, backToMap, 'sr-btn primary');
       extra = [iconButton('Retry', ICONS.refresh, () => runSession(root, nav, lessonEntries(mode.lesson), mode), 'sr-btn')];
       eyebrow = `${mode.lesson.level} · ${mode.lesson.title}`;
-      title = newBest ? 'New best.' : 'Lesson complete.';
+      title = perfectRun ? (newBest ? 'Perfect run, new best.' : 'Perfect run.') : newBest ? 'New best.' : 'Lesson complete.';
+      if (perfectRun && !wasPerfect) badge = el('p', { class: 'sr-perfect-note' }, perfectMark(), 'First perfect run of this lesson. It shows on the map.');
     } else if (mode.kind === 'lessonReview') {
       const l = mode.lesson;
       nextBtn = iconButton('Back to the lesson', ICONS.back, () => renderIntro(root, nav, l), 'sr-btn primary');
@@ -1247,6 +1290,7 @@ function runSession(
           stat(`+${earned}`, 'XP'),
           stat(String(slips), 'Spelling slips'),
         ),
+        badge,
         ...(rec
           ? [el('p', { class: 'sr-muted' }, `Personal best ${formatMs(rec.bestMs)} · ${Math.round(rec.bestScore * 100)}% · ${rec.runs} ${rec.runs === 1 ? 'run' : 'runs'}`)]
           : []),
