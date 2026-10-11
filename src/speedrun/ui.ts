@@ -36,6 +36,7 @@ import {
   addXp,
   allCards,
   allForms,
+  allFormsSeen,
   allLessonRecords,
   allXp,
   exportProgress,
@@ -55,7 +56,7 @@ import {
   xpStats,
 } from './progress';
 import { buildMigrationPlan } from './migrate';
-import { SPRINT_SECONDS, conjugation, openTenses, sprintRound, type SprintCard } from './sprint';
+import { SPRINT_SECONDS, conjugation, openTenses, sprintQueue, type SprintCard } from './sprint';
 import { planLessonReview, planToday, type SrsCard } from './srs';
 import { planVocab, unlockedSets, vocab, vocabStats } from './vocab';
 import { decodeSync, downloadSync, encodeSync, formatShortCode, uploadSync } from './sync';
@@ -1346,7 +1347,10 @@ function renderSprint(root: HTMLElement, nav: SpeedrunNav): void {
   const main = courseLevel();
   const rating = conjugationRating(allForms());
   const finished = new Set(Object.keys(allLessonRecords()));
-  const round = sprintRound(finished, allForms());
+  const queue = sprintQueue(finished, allForms(), allFormsSeen(), Date.now(), { maxLevel: main });
+  const round = [...queue.missed, ...queue.review, ...queue.fresh, ...queue.resting];
+  const toReview = queue.missed.length + queue.review.length;
+  const nextNew = queue.fresh[0]?.context;
   const best = getSprintBest();
   const start = iconButton('Start sprint', ICONS.play, () => runSprint(root, nav, round), 'sr-btn primary');
   onKey((ev) => {
@@ -1366,15 +1370,18 @@ function renderSprint(root: HTMLElement, nav: SpeedrunNav): void {
           'p',
           { class: 'sr-lede' },
           `${SPRINT_SECONDS} seconds. Translate each Castellano form into Catalan; a right answer moves on at once, ` +
-            'a miss shows the form. Forms you missed come back first, then half-learned ones, then new ones.',
+            'a miss shows the form. Misses come back next round; forms you get right rest (a day, then 4, then 10) ' +
+            'before they return, so new forms come in order: the most common verbs first, tense by tense.',
         ),
       ),
       tenseList(finished),
+      verbList(main),
       el(
         'div',
         { class: 'sr-hero-stats' },
         stat(best ? String(best) : '—', 'Best'),
-        stat(String(round.length), 'Forms in play'),
+        stat(String(toReview), 'To review'),
+        stat(nextNew ?? '—', 'Next new'),
         stat(pctLabel(rating), 'Rating'),
       ),
       levelBars(rating, 'A form counts once you get it right twice in a row; a miss resets it.'),
@@ -1399,6 +1406,25 @@ function tenseList(finished: Set<string>): HTMLElement {
         open.has(t.id) ? null : el('span', { class: 'sr-muted' }, `opens with ${t.lesson.toUpperCase()}`),
       ),
     ),
+  );
+}
+
+/** The sprint's verbs by level: those at or below the course level are drilled. */
+function verbList(main: SpeedrunLevel): HTMLElement {
+  const top = SPEEDRUN_LEVELS.indexOf(main);
+  return el(
+    'div',
+    { class: 'sr-verb-levels' },
+    ...SPEEDRUN_LEVELS.map((lv, i) => {
+      const verbs = conjugation.verbs.filter((v) => v.level === lv).map((v) => v.ca);
+      return el(
+        'p',
+        { class: i <= top ? 'open' : '' },
+        el('span', { class: 'sr-level-tag' }, lv),
+        el('span', { lang: 'ca' }, verbs.join(', ')),
+        i <= top ? null : el('span', { class: 'sr-muted' }, `opens at ${lv}`),
+      );
+    }),
   );
 }
 

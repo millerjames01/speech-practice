@@ -102,7 +102,7 @@ PREFER = {('tenir', 'imper', 1): 'tingues'}
 
 problems = []
 verbs = []
-for ca, es in VERBS:
+for ca, es, vlevel in VERBS:
     C = catalan(ca); E = castellano(es)
     forms = {}
     for tid, csrc, esrc, style, lesson, level, label in TENSES:
@@ -129,7 +129,7 @@ for ca, es in VERBS:
             if style == 'que': pattern = '(que) ' + pattern
             cells.append([person, es_form, pattern])
         forms[tid] = cells
-    verbs.append({'ca': ca, 'es': es, 'forms': forms})
+    verbs.append({'ca': ca, 'es': es, 'level': vlevel, 'forms': forms})
 
 data = {
   'reviewed': False,

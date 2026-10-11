@@ -575,7 +575,13 @@ details.sr-level[open] { padding-bottom: 28px; }
 .sr-tense-list li { display: flex; align-items: center; gap: 10px; color: var(--sr-faint); }
 .sr-tense-list li.open { color: var(--sr-text); }
 .sr-tense-list .sr-level-tag { height: 22px; font-size: 0.68rem; margin: 0; padding: 0 6px; }
-.sr-tense-list .sr-muted { margin: 0 0 0 auto; font-size: 0.74rem; }
+.sr-tense-list .sr-muted { margin: 0 0 0 auto; font-size: 0.74rem; white-space: nowrap; }
+
+.sr-verb-levels { display: grid; gap: 6px; margin: 18px 0 0; font-size: 0.84rem; }
+.sr-verb-levels p { display: flex; align-items: baseline; gap: 10px; margin: 0; color: var(--sr-faint); }
+.sr-verb-levels p.open { color: var(--sr-text); }
+.sr-verb-levels .sr-level-tag { height: 22px; font-size: 0.68rem; margin: 0; padding: 0 6px; flex: none; }
+.sr-verb-levels .sr-muted { margin: 0 0 0 auto; font-size: 0.74rem; white-space: nowrap; }
 
 /* voice */
 .sr-voice-tip { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }

@@ -141,8 +141,13 @@ the same numbers:
 - The *conjugation sprint* is 60 seconds of translation: the Castellano form
   ("nosotros tendremos") to the Catalan one ("tindrem"), over 45 core verbs and
   12 tenses (`speedrun/conjugation/verbs.json`). Each tense opens with the lesson
-  that teaches it: present from the start, passat at A2-21, futur at A2-28,
-  subjunctive at B1-14, and so on. Forms missed last time come back first. The
+  that teaches it (present from the start, passat at A2-21, futur at A2-28,
+  subjunctive at B1-14, and so on) and each verb with its level: the 19 verbs
+  the A2 lessons teach, then 12 everyday verbs at B1, 8 spelling-shift verbs at
+  B2 (començar → comencés) and 6 irregular ones at C1. A form counts in the
+  rating at the higher of its verb's and its tense's level. Misses come back
+  next round; right answers rest 1, 4 and then 10 days; new forms come in
+  order, verb by verb. The
   Catalan forms come from the Softcatalà conjugator (Central variant; other
   standard variants are accepted) and the Castellano from conjugacion.es, via
   `scripts/build-conjugation.py`.

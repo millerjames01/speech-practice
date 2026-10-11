@@ -1,15 +1,15 @@
 /**
  * Conjugation sprint: a timed round of translation drills, Castellano form to
  * Catalan form ("nosotros tenemos" → "tenim"), over 45 core verbs. Each tense
- * opens when the lesson that teaches it is finished, so the sprint grows with
- * the course. The forms come from speedrun/conjugation/verbs.json, built by
+ * opens when the lesson that teaches it is finished and each verb when the
+ * course reaches its level, so the sprint grows with the course. The forms come from speedrun/conjugation/verbs.json, built by
  * scripts/build-conjugation.py from the Softcatalà conjugator.
  */
 
 import raw from '../../speedrun/conjugation/verbs.json';
 import { canonical } from './pattern';
 import { shuffle } from './srs';
-import type { SpeedrunLesson, SpeedrunLevel } from './types';
+import { SPEEDRUN_LEVELS, type SpeedrunLesson, type SpeedrunLevel } from './types';
 
 export interface ConjTense {
   id: string;
@@ -24,6 +24,8 @@ export interface ConjTense {
 interface ConjVerb {
   ca: string;
   es: string;
+  /** The course level at which the sprint starts drilling this verb. */
+  level: SpeedrunLevel;
   /** Per tense: [person 0-5, Castellano form, Catalan answer pattern]. */
   forms: Record<string, [number, string, string][]>;
 }
@@ -46,6 +48,10 @@ export interface SprintCard {
   /** Answer pattern: every standard variant is accepted. */
   pattern: string;
   tense: string;
+  verb: string;
+  /** The verb's own level; the sprint drills it from that course level on. */
+  verbLevel: SpeedrunLevel;
+  /** Where the form counts in the rating: the higher of its verb's and its tense's level. */
   level: SpeedrunLevel;
   /** Stable short id for progress and sync. */
   key: string;
@@ -70,6 +76,9 @@ function promptFor(tense: ConjTense, person: number, es: string): string {
   return `${who} ${es}`;
 }
 
+const rank = (l: SpeedrunLevel) => SPEEDRUN_LEVELS.indexOf(l);
+const higher = (a: SpeedrunLevel, b: SpeedrunLevel) => (rank(a) >= rank(b) ? a : b);
+
 let cached: SprintCard[] | null = null;
 
 /** Every form in the data, in data order. */
@@ -88,7 +97,9 @@ export function conjugationPool(data: ConjData = conjugation): SprintCard[] {
           answer: canonical(pattern),
           pattern,
           tense: tid,
-          level: tense.level,
+          verb: verb.ca,
+          verbLevel: verb.level,
+          level: higher(verb.level, tense.level),
           key: formKey(`${verb.ca}|${tid}`, String(person)),
         });
       }
@@ -106,27 +117,68 @@ export function openTenses(finished: Set<string>, data: ConjData = conjugation):
 /** Two right answers in a row: the form counts as known. */
 export const FORM_KNOWN = 2;
 
-/**
- * The cards for a round, from the open tenses: forms missed last time first,
- * then ones half-learned, then new ones, then known ones for upkeep; shuffled
- * within each group.
- */
+/** Minutes a form rests after its last answer, by streak: a miss can come straight back; right answers space out. */
+export const FORM_REST_MINUTES = [0, 24 * 60, 4 * 24 * 60, 10 * 24 * 60];
+
+export interface SprintQueue {
+  /** Missed last time: first, to fix them while fresh. */
+  missed: SprintCard[];
+  /** Right before and now due again, most overdue first. */
+  review: SprintCard[];
+  /** Never answered, in order: verb by verb (most common first), tense by tense, person by person. */
+  fresh: SprintCard[];
+  /** Answered recently and resting; only used if a fast round runs out of everything else. */
+  resting: SprintCard[];
+}
+
+/** Sorts the open forms by what they need, so a round never repeats what was just learned. */
+export function sprintQueue(
+  finished: Set<string>,
+  forms: Record<string, number>,
+  seen: Record<string, number>,
+  now: number,
+  {
+    maxLevel = 'C1',
+    random = Math.random,
+    data = conjugation,
+  }: { maxLevel?: SpeedrunLevel; random?: () => number; data?: ConjData } = {},
+): SprintQueue {
+  const open = openTenses(finished, data);
+  const minute = Math.floor(now / 60_000);
+  const q: SprintQueue = { missed: [], review: [], fresh: [], resting: [] };
+  const overdue = new Map<string, number>();
+  for (const c of conjugationPool(data)) {
+    if (!open.has(c.tense) || rank(c.verbLevel) > rank(maxLevel)) continue;
+    const n = forms[c.key];
+    if (n === undefined) {
+      q.fresh.push(c);
+      continue;
+    }
+    const rest = FORM_REST_MINUTES[Math.min(n, FORM_REST_MINUTES.length - 1)]!;
+    const since = seen[c.key] === undefined ? Infinity : minute - seen[c.key]!;
+    if (rest > 0 && since < rest) q.resting.push(c);
+    else if (n === 0) q.missed.push(c);
+    else {
+      overdue.set(c.key, since === Infinity ? Infinity : since / rest);
+      q.review.push(c);
+    }
+  }
+  q.missed = shuffle(q.missed, random);
+  q.review = shuffle(q.review, random).sort((a, b) => (overdue.get(b.key) ?? 0) - (overdue.get(a.key) ?? 0));
+  q.resting.sort((a, b) => (seen[a.key] ?? 0) - (seen[b.key] ?? 0));
+  return q;
+}
+
+/** The cards for a round, in the order they are asked. */
 export function sprintRound(
   finished: Set<string>,
   forms: Record<string, number>,
-  random = Math.random,
-  data: ConjData = conjugation,
+  seen: Record<string, number> = {},
+  now = Date.now(),
+  options: { maxLevel?: SpeedrunLevel; random?: () => number; data?: ConjData } = {},
 ): SprintCard[] {
-  const open = openTenses(finished, data);
-  const pool = shuffle(
-    conjugationPool(data).filter((c) => open.has(c.tense)),
-    random,
-  );
-  const rank = (c: SprintCard) => {
-    const n = forms[c.key];
-    return n === 0 ? 0 : n === 1 ? 1 : n === undefined ? 2 : 3;
-  };
-  return [0, 1, 2, 3].flatMap((r) => pool.filter((c) => rank(c) === r));
+  const q = sprintQueue(finished, forms, seen, now, options);
+  return [...q.missed, ...q.review, ...q.fresh, ...q.resting];
 }
 
 export const SPRINT_SECONDS = 60;
