@@ -15,20 +15,44 @@ import { checkAnswer, normalize, type CheckResult } from './check';
 import { loadSpeedrun } from './content';
 import { canonical, expand } from './pattern';
 import {
-  allLessonRecords,
+  STAR_RULES,
+  compareLevels,
+  itemCredit,
+  conjugationRating,
+  indexCards,
+  isLessonCard,
+  lessonDue,
+  lessonStars,
+  levelProgress,
+  vocabRating,
+  type Rating,
+  type Stars,
+} from './mastery';
+import {
+  addXp,
   allCards,
-  cardStats,
+  allForms,
+  allLessonRecords,
+  allXp,
   exportProgress,
   formatMs,
   getPrefs,
+  getSprintBest,
   importProgress,
   mergeProgress,
+  migrateProgress,
+  needsMigration,
   recordAnswer,
+  recordForms,
   recordLesson,
+  recordSprint,
   resetProgress,
   setPrefs,
+  xpStats,
 } from './progress';
-import { planToday, shuffle } from './srs';
+import { SPRINT_SECONDS, sprintPool, sprintRound, type SprintCard } from './sprint';
+import { planLessonReview, planToday, type SrsCard } from './srs';
+import { planVocab, unlockedSets, vocab, vocabStats } from './vocab';
 import { decodeSync, downloadSync, encodeSync, formatShortCode, uploadSync } from './sync';
 import {
   hasBrowserCatalanVoice,
@@ -244,25 +268,98 @@ function meter(fraction: number): HTMLElement {
 
 /* ---------- map ---------- */
 
+/** ★★☆ as three spans, so filled and empty stars can be styled. */
+export function starRow(n: Stars, label = true): HTMLElement {
+  const row = el('span', { class: 'sr-stars', title: label ? `${n} of 3 stars` : '' });
+  for (let i = 1; i <= 3; i += 1) row.append(el('span', { class: i <= n ? 'on' : '' }, '★'));
+  return row;
+}
+
+/** Due lesson items right now (the vocab builder keeps its own count). */
+function lessonDueCount(now = Date.now()): number {
+  return allCards().filter((c) => isLessonCard(c) && c.due <= now).length;
+}
+
+/** Above this many due items, Today skips the new lesson: reviews first. */
+const HEAVY_DAY = 30;
+
+/** The course level: where the next unfinished lesson sits. Vocab unlocks up to here. */
+function courseLevel(): SpeedrunLevel {
+  const records = allLessonRecords();
+  const next = loadSpeedrun().lessons.find((l) => !records[l.id]);
+  return next?.level ?? SPEEDRUN_LEVELS[SPEEDRUN_LEVELS.length - 1]!;
+}
+
+const pctLabel = (r: Rating) => `${r.level} · ${Math.round(r.pct * 100)}%`;
+
+/** A side track: its rating on the course scale, how it compares with the course, and a way in. */
+function ratingTile(title: string, rating: Rating, main: SpeedrunLevel, body: string, meta: string, go: () => void): HTMLElement {
+  const cmp = compareLevels(rating.level, main);
+  const tile = el(
+    'button',
+    { class: 'sr-quest', type: 'button' },
+    el(
+      'span',
+      { class: 'sr-quest-title' },
+      title,
+      el('span', { class: `sr-badge${cmp < 0 ? ' behind' : ''}`, title: 'Rating on the A2-C1 scale' }, pctLabel(rating)),
+    ),
+    meter(rating.pct),
+    el('span', { class: 'sr-quest-body' }, body),
+    el(
+      'span',
+      { class: 'sr-quest-meta' },
+      el('span', {}, meta),
+      el('span', {}, cmp < 0 ? `Behind your ${main}` : cmp > 0 ? `Ahead of your ${main}` : `At your level`),
+    ),
+  );
+  tile.addEventListener('click', go);
+  return tile;
+}
+
+/**
+ * One-time conversion of progress from before ratings: XP and streak are
+ * backfilled, and conjugation forms from lessons already held (★★ or more)
+ * are seeded. Returns a line for the map, or null when nothing changed.
+ */
+function migrateIfNeeded(): string | null {
+  if (!needsMigration()) return null;
+  const content = loadSpeedrun();
+  const records = allLessonRecords();
+  const index = indexCards(allCards());
+  const held = content.lessons.filter((l) => lessonStars(l, !!records[l.id], index) >= 2);
+  const { xp, forms } = migrateProgress(sprintPool(held).map((c) => c.key));
+  if (!xp && !forms) return null;
+  return `Progress converted to the new tracking: ${xp} XP backfilled from your answer history${forms ? `, ${forms} conjugation forms credited from lessons you already hold` : ''}. Stars and level percentages come straight from your reviews.`;
+}
+
 export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync?: string): void {
   resetView(root);
   if (incomingSync) queueMicrotask(() => void receiveSync(root, nav, incomingSync));
+  const migrated = migrateIfNeeded();
   const content = loadSpeedrun();
   const records = allLessonRecords();
+  const cards = allCards();
+  const index = indexCards(cards);
+  const now = Date.now();
   topbar(root, nav);
 
   const page = el('main', { class: 'sr-page' });
   root.append(page);
-
   for (const message of content.errors) page.append(errorBox(`Skipped an invalid lesson file — ${message}`));
 
   const done = content.lessons.filter((l) => records[l.id]);
   const totalMs = done.reduce((sum, l) => sum + (records[l.id]?.bestMs ?? 0), 0);
-  const avg = done.length
-    ? Math.round((done.reduce((s, l) => s + (records[l.id]?.bestScore ?? 0), 0) / done.length) * 100)
-    : 0;
   const next = content.lessons.find((l) => !records[l.id]);
-  const cards = cardStats();
+  const activeLevel: SpeedrunLevel = next?.level ?? SPEEDRUN_LEVELS[SPEEDRUN_LEVELS.length - 1]!;
+  const due = lessonDueCount(now);
+  const learned = cards.some(isLessonCard);
+  const xp = xpStats(now);
+  const vstats = vocabStats(cards, now, vocab, activeLevel);
+  const conj = conjugationRating(content.byLevel, allForms());
+  const voc = vocabRating(index, vocab);
+  const stars = content.lessons.reduce((n, l) => n + lessonStars(l, !!records[l.id], index), 0);
+  const activePct = levelProgress(content.byLevel[activeLevel], index);
 
   const prefs = getPrefs();
   const autoplay = el('input', { type: 'checkbox', checked: prefs.autoplay });
@@ -272,19 +369,14 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
 
   const openLesson = next
     ? iconButton(
-        `${cards.learned ? 'New lesson' : 'Start'} · ${next.id.toUpperCase()} ${next.title}`,
+        `${learned ? 'New lesson' : 'Start'} · ${next.id.toUpperCase()} ${next.title}`,
         ICONS.play,
         () => renderIntro(root, nav, next),
-        cards.learned ? 'sr-btn' : 'sr-btn primary',
+        learned ? 'sr-btn' : 'sr-btn primary',
       )
     : null;
-  const today = cards.learned
-    ? iconButton(
-        cards.due ? `Today · ${cards.due} due${next ? ' + new lesson' : ''}` : `Today · practice mix${next ? ' + new lesson' : ''}`,
-        ICONS.play,
-        () => startToday(root, nav),
-        'sr-btn primary',
-      )
+  const today = learned
+    ? iconButton(due ? `Today · ${due} due` : 'Today · practice mix', ICONS.play, () => startToday(root, nav), 'sr-btn primary')
     : null;
 
   page.append(
@@ -294,50 +386,38 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
       el(
         'div',
         { class: 'sr-hero-text' },
-        el('p', { class: 'sr-eyebrow' }, 'Castellano → Català'),
-        el('h1', { class: 'sr-title' }, 'From Castellano to C1, by the shortest route.'),
+        el('p', { class: 'sr-eyebrow' }, `Castellano → Català · ${activeLevel} · ${LEVEL_INFO[activeLevel].name}`),
         el(
-          'p',
-          { class: 'sr-lede' },
-          'Five-minute written drills on the verbs, pronouns and structures that carry most of real Catalan. ' +
-            'No topic lists.',
+          'h1',
+          { class: 'sr-title' },
+          learned ? `${Math.round(activePct * 100)}% of ${activeLevel} held long-term.` : 'From Castellano to C1, by the shortest route.',
         ),
-        el(
-          'div',
-          { class: 'sr-actions' },
-          today,
-          openLesson,
-          !next ? el('span', { class: 'sr-complete' }, 'All lessons done. Keep the reviews going.') : null,
-        ),
+        el('div', { class: 'sr-hero-meter' }, meter(activePct)),
+        el('div', { class: 'sr-actions' }, today, openLesson, !next ? el('span', { class: 'sr-complete' }, 'All lessons done. Keep the reviews going.') : null),
         el(
           'p',
           { class: 'sr-muted' },
-          cards.learned
-            ? 'Daily: press Today. It brings back what is due, mixes in older items, then hands you the next lesson.'
-            : 'Start with the first lesson. From then on, a daily Today session schedules your reviews.',
+          learned
+            ? due > HEAVY_DAY
+              ? `${due} items are due: clear them before new lessons. Today takes the weakest first.`
+              : 'Daily: Today first (weakest items, mixed across lessons), then a new lesson.'
+            : 'Five-minute drills on the verbs, pronouns and structures that carry most of real Catalan.',
         ),
       ),
       el(
         'div',
         { class: 'sr-hero-stats' },
-        stat(`${done.length}/${content.lessons.length}`, 'Lessons'),
-        stat(String(cards.due), 'Due today'),
-        stat(cards.learned ? `${cards.longTerm}/${cards.learned}` : '—', 'Long-term'),
-        stat(done.length ? `${avg}%` : '—', 'First try'),
+        stat(xp.streak ? `${xp.streak}d` : '—', 'Streak'),
+        stat(String(xp.today), 'XP today'),
+        stat(`${stars}/${content.lessons.length * 3}`, 'Stars'),
       ),
     ),
   );
 
   const banners = el('div', { class: 'sr-banners' });
+  if (migrated) banners.append(el('div', { class: 'sr-banner good' }, migrated));
   if (content.unreviewed.size > 0) {
-    banners.append(
-      el(
-        'div',
-        { class: 'sr-banner' },
-        `Content not yet reviewed by a Catalan speaker (${[...content.unreviewed].join(', ')}). ` +
-          'It follows the IEC norm for Central Catalan.',
-      ),
-    );
+    banners.append(el('div', { class: 'sr-banner' }, `Content not yet reviewed by a Catalan speaker (${[...content.unreviewed].join(', ')}). It follows the IEC norm for Central Catalan.`));
   }
   const notice = audioNotice();
   if (notice) banners.append(notice);
@@ -347,51 +427,81 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
   });
   page.append(banners);
 
+  /* Side tracks: conjugation and vocab, rated on the same A2-C1 scale as the course. */
+  page.append(
+    el(
+      'section',
+      { class: 'sr-quests' },
+      el('h2', { class: 'sr-section-label' }, 'Side tracks · rated against your level'),
+      el(
+        'div',
+        { class: 'sr-quest-grid' },
+        ratingTile(
+          'Conjugation sprint',
+          conj,
+          activeLevel,
+          `${SPRINT_SECONDS} seconds of forms from the tables you have learned.`,
+          getSprintBest() ? `Best ${getSprintBest()}` : 'No sprint yet',
+          () => renderSprint(root, nav),
+        ),
+        ratingTile(
+          'Vocab builder',
+          voc,
+          activeLevel,
+          `Frequent words the lessons skip. ${vstats.unlocked} of ${vstats.total} unlocked; more open with each level.`,
+          `${vstats.known} known${vstats.due ? ` · ${vstats.due} due` : ''}`,
+          () => renderVocab(root, nav),
+        ),
+      ),
+    ),
+  );
+
   for (const level of SPEEDRUN_LEVELS) {
     const lessons = content.byLevel[level];
     if (lessons.length === 0) continue;
     const levelDone = lessons.filter((l) => records[l.id]).length;
+    const levelStars = lessons.reduce((n, l) => n + lessonStars(l, !!records[l.id], index), 0);
+    const levelDue = lessons.reduce((n, l) => n + lessonDue(l, index, now), 0);
+    const pct = levelProgress(lessons, index);
     const info = LEVEL_INFO[level];
-    page.append(
+    const section = el(
+      'details',
+      { class: 'sr-level', open: level === activeLevel },
       el(
-        'section',
-        { class: 'sr-level' },
-        el(
-          'div',
-          { class: 'sr-level-head' },
-          el('span', { class: 'sr-level-tag' }, level),
-          el('div', { class: 'sr-level-text' }, el('h2', {}, info.name), el('p', {}, info.blurb)),
-          el('div', { class: 'sr-level-progress' }, el('span', {}, `${levelDone}/${lessons.length}`), meter(levelDone / lessons.length)),
-        ),
-        el(
-          'div',
-          { class: 'sr-grid' },
-          ...lessons.map((lesson, i) => {
-            const rec = records[lesson.id];
-            const card = el(
-              'button',
-              { class: `sr-card${rec ? ' cleared' : ''}${lesson === next ? ' next' : ''}`, type: 'button' },
-              el(
-                'span',
-                { class: 'sr-card-top' },
-                el('span', { class: 'sr-num' }, lesson.id.slice(3)),
-                rec ? el('span', { class: 'sr-tick' }, icon(ICONS.check, 14)) : null,
-              ),
-              el('span', { class: 'sr-card-title' }, lesson.title),
-              el(
-                'span',
-                { class: 'sr-card-meta' },
-                rec ? `${formatMs(rec.bestMs)} · ${Math.round(rec.bestScore * 100)}%` : `${lesson.items.length} items`,
-              ),
-            );
-            // Staggers the entrance animation; capped so long levels don't drag.
-            card.style.setProperty('--i', String(Math.min(i, 16)));
-            card.addEventListener('click', () => renderIntro(root, nav, lesson));
-            return card;
-          }),
-        ),
+        'summary',
+        { class: 'sr-level-head' },
+        el('span', { class: 'sr-level-tag' }, level),
+        el('div', { class: 'sr-level-text' }, el('h2', {}, info.name), el('p', {}, `${levelDone}/${lessons.length} lessons · ★ ${levelStars}/${lessons.length * 3}${levelDue ? ` · ${levelDue} due` : ''}`)),
+        el('div', { class: 'sr-level-progress' }, el('span', {}, `${Math.round(pct * 100)}%`), meter(pct)),
+      ),
+      el('p', { class: 'sr-level-blurb' }, info.blurb),
+      el(
+        'div',
+        { class: 'sr-grid' },
+        ...lessons.map((lesson, i) => {
+          const rec = records[lesson.id];
+          const n = lessonStars(lesson, !!rec, index);
+          const ld = rec ? lessonDue(lesson, index, now) : 0;
+          const card = el(
+            'button',
+            { class: `sr-card${rec ? ' cleared' : ''}${lesson === next ? ' next' : ''}`, type: 'button' },
+            el(
+              'span',
+              { class: 'sr-card-top' },
+              el('span', { class: 'sr-num' }, lesson.id.slice(3)),
+              ld ? el('span', { class: 'sr-due', title: `${ld} due for review` }, `${ld} due`) : null,
+            ),
+            el('span', { class: 'sr-card-title' }, lesson.title),
+            el('span', { class: 'sr-card-meta' }, rec ? starRow(n) : `${lesson.items.length} items`, rec ? el('span', {}, formatMs(rec.bestMs)) : null),
+          );
+          // Staggers the entrance animation; capped so long levels don't drag.
+          card.style.setProperty('--i', String(Math.min(i, 16)));
+          card.addEventListener('click', () => renderIntro(root, nav, lesson));
+          return card;
+        }),
       ),
     );
+    page.append(section);
   }
 
   page.append(
@@ -403,7 +513,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
         { class: 'sr-toggles' },
         el('label', { class: 'sr-toggle' }, autoplay, el('span', {}, 'Auto-play the answer after each check')),
         el('label', { class: 'sr-toggle' }, dictation, el('span', {}, 'Dictation: hear the Catalan and write it')),
-        el('span', { class: 'sr-muted' }, `Run time ${formatMs(totalMs)}`),
+        el('span', { class: 'sr-muted' }, `${xp.total} XP · run time ${formatMs(totalMs)}`),
       ),
       el(
         'div',
@@ -412,11 +522,11 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
         button('Export progress', () => downloadProgress(), 'sr-btn ghost small'),
         button('Import progress', () => pickProgressFile(root, nav, banners), 'sr-btn ghost small'),
         button('Reset progress', () => {
-        if (confirm('Clear all Speedrun progress, best times and the review deck?')) {
-          resetProgress();
-          renderSpeedrun(root, nav);
-        }
-      }, 'sr-btn ghost small'),
+          if (confirm('Clear all Speedrun progress, best times, XP and reviews?')) {
+            resetProgress();
+            renderSpeedrun(root, nav);
+          }
+        }, 'sr-btn ghost small'),
       ),
     ),
   );
@@ -435,8 +545,12 @@ function modal(...children: (Node | null)[]): { overlay: HTMLElement; close: () 
   return { overlay, close };
 }
 
+/** Everything a device carries to another: lessons, review cards, XP, sprint best and conjugation forms. */
+const currentSyncCode = () =>
+  encodeSync(allLessonRecords(), allCards(), Date.now(), { xp: allXp(), sprintBest: getSprintBest(), forms: allForms() });
+
 async function syncLink(): Promise<string> {
-  const code = await encodeSync(allLessonRecords(), allCards());
+  const code = await currentSyncCode();
   return `${location.origin}${location.pathname}#sync=${code}`;
 }
 
@@ -451,7 +565,7 @@ function openSyncPanel(root: HTMLElement, nav: SpeedrunNav): void {
     getCode.disabled = true;
     codeStatus.textContent = 'Uploading…';
     try {
-      const id = await uploadSync(await encodeSync(allLessonRecords(), allCards()));
+      const id = await uploadSync(await currentSyncCode());
       codeOut.textContent = formatShortCode(id);
       codeStatus.textContent = 'On your other device: Sync devices → Enter code. Valid for 24 hours.';
     } catch (err) {
@@ -646,11 +760,36 @@ function renderIntro(root: HTMLElement, nav: SpeedrunNav, lesson: SpeedrunLesson
   const toMap = () => renderSpeedrun(root, nav);
   topbar(root, nav, { label: `${lesson.level} · ${lesson.id.slice(3)}`, back: toMap });
 
-  const begin = () => runSession(root, nav, lessonEntries(lesson), lesson);
-  const start = iconButton('Start', ICONS.play, begin, 'sr-btn primary');
+  const records = allLessonRecords();
+  const finished = !!records[lesson.id];
+  const index = indexCards(allCards());
+  const stars = lessonStars(lesson, finished, index);
+  const due = lessonDue(lesson, index, Date.now());
+
+  const begin = () => runSession(root, nav, lessonEntries(lesson), { kind: 'lesson', lesson });
+  const review = () => startLessonReview(root, nav, lesson);
+  // A finished lesson is reviewed by default; the full run stays available for speed.
+  const start = finished
+    ? iconButton(due ? `Review this lesson · ${due} due` : 'Review this lesson', ICONS.refresh, review, due ? 'sr-btn primary' : 'sr-btn')
+    : iconButton('Start', ICONS.play, begin, 'sr-btn primary');
+  const fullRun = finished ? iconButton('Run full lesson', ICONS.play, begin, due ? 'sr-btn' : 'sr-btn primary') : null;
   onKey((ev) => {
     if (ev.key === 'Escape') toMap();
   });
+
+  const starPanel = finished
+    ? el(
+        'div',
+        { class: 'sr-star-panel' },
+        starRow(stars),
+        el(
+          'ul',
+          { class: 'sr-star-rules' },
+          ...STAR_RULES.map((rule, i) => el('li', { class: i < stars ? 'on' : '' }, el('span', { class: 'sr-star-mark' }, '★'), rule)),
+        ),
+        el('p', { class: 'sr-muted' }, 'Stars come from the review schedule, so they can fade when items slip. Today and lesson reviews win them back.'),
+      )
+    : null;
 
   root.append(
     el(
@@ -662,6 +801,7 @@ function renderIntro(root: HTMLElement, nav: SpeedrunNav, lesson: SpeedrunLesson
         el('p', { class: 'sr-eyebrow' }, `${lesson.level} · Lesson ${lesson.id.slice(3)} · ${lesson.items.length} items`),
         el('h1', { class: 'sr-title' }, lesson.title),
         el('p', { class: 'sr-lede' }, lesson.goal),
+        starPanel,
       ),
       rich(lesson.note),
       lesson.tables?.length
@@ -707,7 +847,8 @@ function renderIntro(root: HTMLElement, nav: SpeedrunNav, lesson: SpeedrunLesson
         'div',
         { class: 'sr-intro-foot' },
         start,
-        el('span', { class: 'sr-keys' }, kbd('Enter'), ' start', kbd('Esc'), ' map', ' · Catalan in tables plays on click'),
+        fullRun,
+        el('span', { class: 'sr-keys' }, kbd('Enter'), finished ? ' review' : ' start', kbd('Esc'), ' map', ' · Catalan in tables plays on click'),
       ),
     ),
   );
@@ -720,41 +861,94 @@ interface Entry {
   lessonId: string;
   index: number;
   item: SpeedrunItem;
+  /**
+   * False for items pulled in early to fill a session (not yet due). Their
+   * answer counts for practice and still catches a miss, but a hit does not
+   * push them further out: being shown early is not the spacing working.
+   */
+  due?: boolean;
 }
+
+type SessionMode =
+  | { kind: 'lesson'; lesson: SpeedrunLesson }
+  | { kind: 'today' }
+  | { kind: 'lessonReview'; lesson: SpeedrunLesson }
+  | { kind: 'vocab' };
 
 const lessonEntries = (lesson: SpeedrunLesson): Entry[] =>
   lesson.items.map((item, index) => ({ lessonId: lesson.id, index, item }));
 
+function planEntries(plan: { due: SrsCard[]; mix: SrsCard[] }, ordered: SrsCard[]): Entry[] {
+  const byId = new Map(loadSpeedrun().lessons.map((l) => [l.id, l]));
+  const dueKeys = new Set(plan.due.map((c) => `${c.lessonId}#${c.index}`));
+  const out: Entry[] = [];
+  for (const card of ordered) {
+    const item = byId.get(card.lessonId)?.items[card.index];
+    if (item) out.push({ lessonId: card.lessonId, index: card.index, item, due: dueKeys.has(`${card.lessonId}#${card.index}`) });
+  }
+  return out;
+}
+
 /**
- * Today's session: due reviews plus a few older items, shuffled together so
- * consecutive items come from different lessons. The next new lesson follows.
+ * Today: the weakest due items first (most overdue, most lapsed), interleaved
+ * so neighbours come from different lessons, plus a few early items for
+ * spacing practice. Vocab words keep their own queue in the vocab builder.
  */
 function startToday(root: HTMLElement, nav: SpeedrunNav): void {
-  const content = loadSpeedrun();
-  const byId = new Map(content.lessons.map((l) => [l.id, l]));
-  const plan = planToday(allCards(), Date.now());
-  const entries: Entry[] = [];
-  for (const card of shuffle([...plan.due, ...plan.mix])) {
-    const item = byId.get(card.lessonId)?.items[card.index];
-    if (item) entries.push({ lessonId: card.lessonId, index: card.index, item });
-  }
-  if (entries.length > 0) return runSession(root, nav, entries, null);
+  const plan = planToday(allCards().filter(isLessonCard), Date.now());
+  // Mix items go in between the due ones rather than all at the end.
+  const ordered = [...plan.due];
+  plan.mix.forEach((c, i) => ordered.splice(Math.min(ordered.length, (i + 1) * 4 + i), 0, c));
+  const entries = planEntries(plan, ordered);
+  if (entries.length > 0) return runSession(root, nav, entries, { kind: 'today' });
   const records = allLessonRecords();
-  const next = content.lessons.find((l) => !records[l.id]);
+  const next = loadSpeedrun().lessons.find((l) => !records[l.id]);
   if (next) renderIntro(root, nav, next);
   else renderSpeedrun(root, nav);
 }
 
+/** Review one lesson: everything of it that is due, topped up with its weakest items. */
+function startLessonReview(root: HTMLElement, nav: SpeedrunNav, lesson: SpeedrunLesson): void {
+  const plan = planLessonReview(allCards().filter((c) => c.lessonId === lesson.id), Date.now());
+  const entries = planEntries(plan, [...plan.due, ...plan.mix]);
+  if (entries.length === 0) return runSession(root, nav, lessonEntries(lesson), { kind: 'lesson', lesson });
+  runSession(root, nav, entries, { kind: 'lessonReview', lesson });
+}
+
+/** XP per answer: first try right, right after a miss, or a vocab word. Never touches level progress. */
+const XP = { first: 10, retry: 2, word: 5 } as const;
+
 const ACCENT_KEYS = ['à', 'è', 'é', 'í', 'ï', 'ò', 'ó', 'ú', 'ü', 'ç', 'l·l', '·'];
+
+/** Buttons that type the characters a Castellano keyboard lacks, at the cursor. */
+function accentBar(input: HTMLInputElement): HTMLElement {
+  return el(
+    'div',
+    { class: 'sr-accents' },
+    ...ACCENT_KEYS.map((ch) => {
+      const b = button(ch, () => {
+        const s = input.selectionStart ?? input.value.length;
+        const t = input.selectionEnd ?? s;
+        input.value = input.value.slice(0, s) + ch + input.value.slice(t);
+        input.focus();
+        input.setSelectionRange(s + ch.length, s + ch.length);
+      }, 'sr-key');
+      b.tabIndex = -1;
+      return b;
+    }),
+  );
+}
 
 function runSession(
   root: HTMLElement,
   nav: SpeedrunNav,
   entries: Entry[],
-  lesson: SpeedrunLesson | null,
+  mode: SessionMode,
 ): void {
   resetView(root);
   const backToMap = () => renderSpeedrun(root, nav);
+  const lesson = mode.kind === 'lesson' ? mode.lesson : null;
+  let earned = 0;
 
   const queue = [...entries];
   const firstTry = new Map<string, boolean>();
@@ -828,21 +1022,7 @@ function runSession(
     input.setAttribute('lang', 'ca');
     input.setAttribute('aria-label', 'Your Catalan translation');
 
-    const accentBar = el(
-      'div',
-      { class: 'sr-accents' },
-      ...ACCENT_KEYS.map((ch) => {
-        const b = button(ch, () => {
-          const s = input.selectionStart ?? input.value.length;
-          const t = input.selectionEnd ?? s;
-          input.value = input.value.slice(0, s) + ch + input.value.slice(t);
-          input.focus();
-          input.setSelectionRange(s + ch.length, s + ch.length);
-        }, 'sr-key');
-        b.tabIndex = -1;
-        return b;
-      }),
-    );
+    const accents = accentBar(input);
 
     const feedback = el('div', { class: 'sr-feedback', role: 'status' });
     const checkBtn = el('button', { class: 'sr-btn primary', type: 'submit' }, 'Check');
@@ -856,7 +1036,7 @@ function runSession(
         ? el('span', { class: 'sr-keys' }, kbd('Enter'), ' check', kbd('Alt'), kbd('L'), ' replay')
         : el('span', { class: 'sr-keys' }, kbd('Enter'), ' check', kbd('Esc'), ' map'),
     );
-    const form = el('form', { class: 'sr-form' }, input, accentBar, actions);
+    const form = el('form', { class: 'sr-form' }, input, accents, actions);
     let answered = false;
 
     form.addEventListener('submit', (ev) => {
@@ -865,7 +1045,12 @@ function runSession(
       resolve(checkAnswer(pattern, input.value));
     });
 
-    const source = lesson ? '' : ` · from ${entry.lessonId.toUpperCase()}`;
+    const source = mode.kind === 'today' ? ` · from ${entry.lessonId.toUpperCase()}` : '';
+    const label =
+      mode.kind === 'lesson' ? 'Translate into Catalan'
+      : mode.kind === 'today' ? 'Today'
+      : mode.kind === 'vocab' ? 'Vocab · translate the word'
+      : `Review · ${mode.lesson.title}`;
     const prompt = el('h1', { class: 'sr-prompt' }, es);
     let promptBlock: HTMLElement[];
     if (dictation) {
@@ -889,7 +1074,7 @@ function runSession(
       replay = (slow) => void speak(spoken, slow);
       void speak(spoken);
     } else {
-      promptBlock = [el('p', { class: 'sr-eyebrow' }, `${lesson ? 'Translate into Catalan' : 'Today'}${source}`), prompt];
+      promptBlock = [el('p', { class: 'sr-eyebrow' }, `${label}${source}`), prompt];
     }
 
     stage.append(
@@ -907,14 +1092,19 @@ function runSession(
     const resolve = (result: CheckResult | null) => {
       answered = true;
       input.disabled = true;
-      accentBar.remove();
+      accents.remove();
       actions.remove();
 
       const k = key(entry);
       const correct = result !== null && result.verdict !== 'wrong';
       if (!firstTry.has(k)) {
         firstTry.set(k, correct);
-        recordAnswer(entry.lessonId, entry.index, correct, lesson ? 'lesson' : 'review');
+        recordAnswer(entry.lessonId, entry.index, correct, mode.kind === 'lesson' || entry.due === false ? 'lesson' : 'review');
+        if (correct) earned += mode.kind === 'vocab' ? XP.word : XP.first;
+        if (correct) addXp(mode.kind === 'vocab' ? XP.word : XP.first);
+      } else if (correct) {
+        earned += XP.retry;
+        addXp(XP.retry);
       }
       if (result?.verdict === 'spelling') slips += 1;
 
@@ -954,44 +1144,345 @@ function runSession(
     const rec = lesson ? recordLesson(lesson.id, ms, score) : null;
     const content = loadSpeedrun();
     const records = allLessonRecords();
-    const nextLesson = lesson
-      ? content.lessons[content.lessons.indexOf(lesson) + 1]
-      : content.lessons.find((l) => !records[l.id]);
     const newBest = rec !== null && rec.runs > 1 && rec.bestMs === ms;
+    const heavy = lessonDueCount() > HEAVY_DAY;
+    const firstNew = content.lessons.find((l) => !records[l.id]);
 
-    const nextBtn = nextLesson
-      ? iconButton(`${lesson ? 'Next' : 'New lesson'} · ${nextLesson.title}`, ICONS.arrow, () => renderIntro(root, nav, nextLesson), 'sr-btn primary')
-      : iconButton('Back to map', ICONS.back, backToMap, 'sr-btn primary');
+    let nextBtn: HTMLButtonElement;
+    let extra: (HTMLElement | null)[] = [];
+    let eyebrow: string;
+    let title: string;
+    if (mode.kind === 'lesson') {
+      const after = content.lessons[content.lessons.indexOf(mode.lesson) + 1];
+      nextBtn = after
+        ? iconButton(`Next · ${after.title}`, ICONS.arrow, () => renderIntro(root, nav, after), 'sr-btn primary')
+        : iconButton('Back to map', ICONS.back, backToMap, 'sr-btn primary');
+      extra = [iconButton('Retry', ICONS.refresh, () => runSession(root, nav, lessonEntries(mode.lesson), mode), 'sr-btn')];
+      eyebrow = `${mode.lesson.level} · ${mode.lesson.title}`;
+      title = newBest ? 'New best.' : 'Lesson complete.';
+    } else if (mode.kind === 'lessonReview') {
+      const l = mode.lesson;
+      nextBtn = iconButton('Back to the lesson', ICONS.back, () => renderIntro(root, nav, l), 'sr-btn primary');
+      eyebrow = `Review · ${l.title}`;
+      title = 'Lesson reviewed.';
+    } else if (mode.kind === 'vocab') {
+      nextBtn = iconButton('Another round', ICONS.refresh, () => startVocab(root, nav), 'sr-btn primary');
+      extra = [button('Vocab builder', () => renderVocab(root, nav), 'sr-btn')];
+      eyebrow = 'Vocab builder';
+      title = 'Round done.';
+    } else {
+      // A heavy backlog means more reviews first; otherwise the next lesson.
+      nextBtn = heavy
+        ? iconButton(`Keep reviewing · ${lessonDueCount()} due`, ICONS.refresh, () => startToday(root, nav), 'sr-btn primary')
+        : firstNew
+          ? iconButton(`New lesson · ${firstNew.title}`, ICONS.arrow, () => renderIntro(root, nav, firstNew), 'sr-btn primary')
+          : iconButton('Back to map', ICONS.back, backToMap, 'sr-btn primary');
+      eyebrow = 'Today';
+      title = 'Reviews done.';
+    }
 
     stage.append(
       el(
         'section',
         { class: 'sr-summary' },
-        el('p', { class: 'sr-eyebrow' }, lesson ? `${lesson.level} · ${lesson.title}` : 'Today'),
-        el('h1', { class: 'sr-title' }, lesson ? (newBest ? 'New best.' : 'Lesson complete.') : 'Reviews done.'),
+        el('p', { class: 'sr-eyebrow' }, eyebrow),
+        el('h1', { class: 'sr-title' }, title),
         el(
           'div',
           { class: 'sr-hero-stats' },
           stat(formatMs(ms), 'Time'),
           stat(`${Math.round(score * 100)}%`, 'First try'),
+          stat(`+${earned}`, 'XP'),
           stat(String(slips), 'Spelling slips'),
         ),
         ...(rec
           ? [el('p', { class: 'sr-muted' }, `Personal best ${formatMs(rec.bestMs)} · ${Math.round(rec.bestScore * 100)}% · ${rec.runs} ${rec.runs === 1 ? 'run' : 'runs'}`)]
           : []),
-        el(
-          'div',
-          { class: 'sr-actions' },
-          nextBtn,
-          lesson ? iconButton('Retry', ICONS.refresh, () => runSession(root, nav, lessonEntries(lesson), lesson), 'sr-btn') : null,
-          nextLesson ? button('Map', backToMap, 'sr-btn ghost') : null,
-        ),
+        mode.kind === 'today' && heavy ? el('p', { class: 'sr-muted' }, 'Still a backlog: one more round before new material keeps the reviews from snowballing.') : null,
+        el('div', { class: 'sr-actions' }, nextBtn, ...extra, button('Map', backToMap, 'sr-btn ghost')),
       ),
     );
     nextBtn.focus();
   };
 
   showItem();
+}
+
+/* ---------- conjugation sprint ---------- */
+
+function renderSprint(root: HTMLElement, nav: SpeedrunNav): void {
+  resetView(root);
+  const toMap = () => renderSpeedrun(root, nav);
+  topbar(root, nav, { label: 'Conjugation sprint', back: toMap });
+  const content = loadSpeedrun();
+  const main = courseLevel();
+  const rating = conjugationRating(content.byLevel, allForms());
+  const finished = new Set(Object.keys(allLessonRecords()));
+  const round = sprintRound(content.lessons, finished, Math.random, allForms());
+  const best = getSprintBest();
+  const start = iconButton('Start sprint', ICONS.play, () => runSprint(root, nav, round), 'sr-btn primary');
+  onKey((ev) => {
+    if (ev.key === 'Escape') toMap();
+  });
+
+  root.append(
+    el(
+      'main',
+      { class: 'sr-page sr-intro' },
+      el(
+        'header',
+        { class: 'sr-intro-head' },
+        el('p', { class: 'sr-eyebrow' }, `Side track · rated ${pctLabel(rating)} · course at ${main}`),
+        el('h1', { class: 'sr-title' }, 'Conjugation sprint'),
+        el(
+          'p',
+          { class: 'sr-lede' },
+          `${SPRINT_SECONDS} seconds. Type each form; a right answer moves on at once, a miss shows the form. ` +
+            'Forms come from the tables of the lessons you have finished, the ones you don’t know yet first.',
+        ),
+      ),
+      el(
+        'div',
+        { class: 'sr-hero-stats' },
+        stat(best ? String(best) : '—', 'Best'),
+        stat(String(round.length), 'Forms in play'),
+        stat(pctLabel(rating), 'Rating'),
+      ),
+      levelBars(rating, 'A form counts once you get it right twice in a row; a miss resets it.'),
+      el('div', { class: 'sr-intro-foot' }, start, el('span', { class: 'sr-keys' }, kbd('Enter'), ' start', kbd('Esc'), ' map')),
+    ),
+  );
+  start.focus();
+}
+
+/** Per-level bars for a rating: the level being worked on, and the ones around it. */
+function levelBars(rating: Rating, caption: string): HTMLElement {
+  return el(
+    'section',
+    { class: 'sr-level-bars' },
+    ...SPEEDRUN_LEVELS.map((lv) =>
+      el(
+        'div',
+        { class: `sr-level-bar${lv === rating.level ? ' current' : ''}` },
+        el('span', { class: 'sr-level-tag' }, lv),
+        meter(rating.byLevel[lv]),
+        el('span', { class: 'sr-muted' }, `${Math.round(rating.byLevel[lv] * 100)}%`),
+      ),
+    ),
+    el('p', { class: 'sr-fineprint' }, caption),
+  );
+}
+
+function runSprint(root: HTMLElement, nav: SpeedrunNav, round: SprintCard[]): void {
+  resetView(root);
+  const toMap = () => renderSpeedrun(root, nav);
+  const before = conjugationRating(loadSpeedrun().byLevel, allForms());
+  const results: [SprintCard, boolean][] = [];
+  let i = 0;
+  let over = false;
+  const ends = Date.now() + SPRINT_SECONDS * 1000;
+
+  const fill = el('span', { class: 'sr-progress-fill' });
+  const clock = el('span', { class: 'sr-timer' }, `${SPRINT_SECONDS}s`);
+  const scoreEl = el('span', { class: 'sr-counter' }, '0');
+  const quit = el('button', { class: 'sr-icon-btn', type: 'button', title: 'Back to map (Esc)' }, icon(ICONS.close, 18));
+  quit.addEventListener('click', toMap);
+  root.append(el('header', { class: 'sr-drill-top' }, quit, el('span', { class: 'sr-progress' }, fill), scoreEl, clock));
+
+  const context = el('p', { class: 'sr-eyebrow' });
+  const prompt = el('h1', { class: 'sr-prompt sr-sprint-prompt' });
+  const input = el('input', { class: 'sr-input', type: 'text', autocomplete: 'off', spellcheck: false, placeholder: 'forma' });
+  input.setAttribute('autocapitalize', 'off');
+  input.setAttribute('lang', 'ca');
+  input.setAttribute('aria-label', 'The Catalan form');
+  const flash = el('p', { class: 'sr-sprint-flash', role: 'status' });
+  const form = el('form', { class: 'sr-form' }, input, accentBar(input));
+  const stage = el('main', { class: 'sr-drill' }, el('section', { class: 'sr-card-prompt sr-sprint' }, context, prompt, form, flash));
+  root.append(stage);
+
+  const show = () => {
+    const card = round[i % round.length]!;
+    context.textContent = card.context;
+    prompt.textContent = card.prompt;
+    input.value = '';
+    input.disabled = false;
+    input.focus();
+  };
+  let busy = false;
+  form.addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    if (over || busy || !input.value.trim()) return;
+    const card = round[i % round.length]!;
+    const correct = checkAnswer(card.pattern, input.value).verdict !== 'wrong';
+    results.push([card, correct]);
+    scoreEl.textContent = String(results.filter(([, ok]) => ok).length);
+    i += 1;
+    if (correct) {
+      flash.className = 'sr-sprint-flash is-pass';
+      flash.textContent = '✓';
+      show();
+      return;
+    }
+    busy = true;
+    input.disabled = true;
+    flash.className = 'sr-sprint-flash is-fail';
+    flash.textContent = card.answer;
+    setTimeout(() => {
+      busy = false;
+      if (!over) show();
+    }, 900);
+  });
+  onKey((ev) => {
+    if (ev.key === 'Escape') toMap();
+  });
+
+  const tick = setInterval(() => {
+    const left = Math.max(0, ends - Date.now());
+    clock.textContent = `${Math.ceil(left / 1000)}s`;
+    fill.style.width = `${(1 - left / (SPRINT_SECONDS * 1000)) * 100}%`;
+    if (left === 0) finish();
+  }, 100);
+  cleanups.push(() => clearInterval(tick));
+
+  const finish = () => {
+    if (over) return;
+    over = true;
+    clearInterval(tick);
+    const score = results.filter(([, ok]) => ok).length;
+    recordForms(results.map(([c, ok]) => [c.key, ok]));
+    const newBest = recordSprint(score);
+    addXp(score * 2);
+    const after = conjugationRating(loadSpeedrun().byLevel, allForms());
+    const misses = uniqueMisses(results);
+    clear(stage);
+    const again = iconButton('Again', ICONS.refresh, () => renderSprint(root, nav), 'sr-btn primary');
+    stage.append(
+      el(
+        'section',
+        { class: 'sr-summary' },
+        el('p', { class: 'sr-eyebrow' }, 'Conjugation sprint'),
+        el('h1', { class: 'sr-title' }, newBest ? 'New best.' : `${score} right.`),
+        el(
+          'div',
+          { class: 'sr-hero-stats' },
+          stat(String(score), 'Right'),
+          stat(String(results.length - score), 'Missed'),
+          stat(`+${score * 2}`, 'XP'),
+          stat(pctLabel(after), after.pct !== before.pct || after.level !== before.level ? `Rating (was ${pctLabel(before)})` : 'Rating'),
+        ),
+        misses.length
+          ? el(
+              'section',
+              { class: 'sr-misses' },
+              el('h2', { class: 'sr-section-label' }, 'Missed forms'),
+              el(
+                'table',
+                { class: 'sr-table' },
+                el(
+                  'tbody',
+                  {},
+                  ...misses.slice(0, 8).map((c) => el('tr', {}, el('th', {}, `${c.context} · ${c.prompt}`), catalanCell(c.answer))),
+                ),
+              ),
+            )
+          : null,
+        el('div', { class: 'sr-actions' }, again, button('Map', toMap, 'sr-btn ghost')),
+      ),
+    );
+    again.focus();
+  };
+
+  show();
+}
+
+function uniqueMisses(results: [SprintCard, boolean][]): SprintCard[] {
+  const seen = new Set<string>();
+  return results.filter(([c, ok]) => !ok && !seen.has(c.key) && seen.add(c.key)).map(([c]) => c);
+}
+
+/* ---------- vocab builder ---------- */
+
+function startVocab(root: HTMLElement, nav: SpeedrunNav): void {
+  const plan = planVocab(allCards(), Date.now(), { maxLevel: courseLevel() });
+  if (plan.length === 0) return renderVocab(root, nav);
+  runSession(root, nav, plan.map(({ lessonId, index, item, due }) => ({ lessonId, index, item, due })), { kind: 'vocab' });
+}
+
+function renderVocab(root: HTMLElement, nav: SpeedrunNav): void {
+  resetView(root);
+  const toMap = () => renderSpeedrun(root, nav);
+  topbar(root, nav, { label: 'Vocab builder', back: toMap });
+  const now = Date.now();
+  const cards = allCards();
+  const index = indexCards(cards);
+  const main = courseLevel();
+  const rating = vocabRating(index, vocab);
+  const stats = vocabStats(cards, now, vocab, main);
+  const plan = planVocab(cards, now, { maxLevel: main });
+  const dueN = plan.filter((e) => index.has(`${e.lessonId}#${e.index}`)).length;
+  const freshN = plan.length - dueN;
+  const open = new Set(unlockedSets(main).map((s) => s.id));
+
+  const practice = plan.length
+    ? iconButton(
+        `Practice · ${[dueN ? `${dueN} due` : '', freshN ? `${freshN} new` : ''].filter(Boolean).join(' + ')}`,
+        ICONS.play,
+        () => startVocab(root, nav),
+        'sr-btn primary',
+      )
+    : null;
+  onKey((ev) => {
+    if (ev.key === 'Escape') toMap();
+  });
+
+  root.append(
+    el(
+      'main',
+      { class: 'sr-page sr-intro' },
+      el(
+        'header',
+        { class: 'sr-intro-head' },
+        el('p', { class: 'sr-eyebrow' }, `Side track · rated ${pctLabel(rating)} · course at ${main}`),
+        el('h1', { class: 'sr-title' }, 'Vocab builder'),
+        el(
+          'p',
+          { class: 'sr-lede' },
+          'The most frequent words the lessons leave out, 120 per level. Each level’s words unlock when the course ' +
+            'reaches it, and they review on their own schedule so they never crowd Today.',
+        ),
+      ),
+      el(
+        'div',
+        { class: 'sr-hero-stats' },
+        stat(`${stats.known}`, 'Known'),
+        stat(String(stats.due), 'Due'),
+        stat(`${stats.unlocked}/${stats.total}`, 'Unlocked'),
+      ),
+      levelBars(rating, 'A word is fully held once it lasts a month, the same rule as lesson items.'),
+      el(
+        'div',
+        { class: 'sr-intro-foot' },
+        practice ?? el('span', { class: 'sr-muted' }, 'Nothing due and every unlocked word started. Finish lessons to unlock more.'),
+        el('span', { class: 'sr-keys' }, kbd('Enter'), ' practice', kbd('Esc'), ' map'),
+      ),
+      el(
+        'section',
+        { class: 'sr-vocab-sets' },
+        ...vocab.sets.map((set) => {
+          const locked = !open.has(set.id);
+          const credit = set.words.reduce((n, _, i) => n + itemCredit(index.get(`${set.id}#${i}`)), 0) / set.words.length;
+          return el(
+            'div',
+            { class: `sr-vocab-set${locked ? ' locked' : ''}` },
+            el('span', { class: 'sr-quest-title' }, set.title, el('span', { class: 'sr-badge' }, set.level)),
+            locked ? el('span', { class: 'sr-muted' }, `Unlocks at ${set.level}`) : meter(credit),
+            el('span', { class: 'sr-vocab-preview', lang: 'ca' }, locked ? '' : set.words.slice(0, 5).map(([ca]) => ca).join(' · ')),
+          );
+        }),
+      ),
+    ),
+  );
+  practice?.focus();
 }
 
 function verdictClass(result: CheckResult | null): string {
