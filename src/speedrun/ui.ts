@@ -1347,7 +1347,7 @@ function renderSprint(root: HTMLElement, nav: SpeedrunNav): void {
   const main = courseLevel();
   const rating = conjugationRating(allForms());
   const finished = new Set(Object.keys(allLessonRecords()));
-  const queue = sprintQueue(finished, allForms(), allFormsSeen(), Date.now());
+  const queue = sprintQueue(finished, allForms(), allFormsSeen(), Date.now(), { maxLevel: main });
   const round = [...queue.missed, ...queue.review, ...queue.fresh, ...queue.resting];
   const toReview = queue.missed.length + queue.review.length;
   const nextNew = queue.fresh[0]?.context;
@@ -1375,6 +1375,7 @@ function renderSprint(root: HTMLElement, nav: SpeedrunNav): void {
         ),
       ),
       tenseList(finished),
+      verbList(main),
       el(
         'div',
         { class: 'sr-hero-stats' },
@@ -1405,6 +1406,25 @@ function tenseList(finished: Set<string>): HTMLElement {
         open.has(t.id) ? null : el('span', { class: 'sr-muted' }, `opens with ${t.lesson.toUpperCase()}`),
       ),
     ),
+  );
+}
+
+/** The sprint's verbs by level: those at or below the course level are drilled. */
+function verbList(main: SpeedrunLevel): HTMLElement {
+  const top = SPEEDRUN_LEVELS.indexOf(main);
+  return el(
+    'div',
+    { class: 'sr-verb-levels' },
+    ...SPEEDRUN_LEVELS.map((lv, i) => {
+      const verbs = conjugation.verbs.filter((v) => v.level === lv).map((v) => v.ca);
+      return el(
+        'p',
+        { class: i <= top ? 'open' : '' },
+        el('span', { class: 'sr-level-tag' }, lv),
+        el('span', { lang: 'ca' }, verbs.join(', ')),
+        i <= top ? null : el('span', { class: 'sr-muted' }, `opens at ${lv}`),
+      );
+    }),
   );
 }
 

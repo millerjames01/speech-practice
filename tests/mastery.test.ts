@@ -139,6 +139,16 @@ describe('conjugation sprint', () => {
     expect(round).toHaveLength(45 * 6);
   });
 
+  it('drills verbs from their level on, and counts each form at the higher of verb and tense', () => {
+    const a2 = sprintRound(new Set(), {}, {}, NOW, { maxLevel: 'A2' });
+    expect(new Set(a2.map((c) => c.verb)).size).toBe(19);
+    expect(conjugation.verbs.filter((v) => v.level === 'A2')).toHaveLength(19);
+    expect(pool.filter((c) => c.level === 'A2')).toHaveLength(19 * 32);
+    expect(find('donar · present', 'yo doy')?.level).toBe('B1');
+    expect(find('tenir · condicional', 'yo tendría')?.level).toBe('B1');
+    expect(find('caure · present', 'yo caigo')?.level).toBe('C1');
+  });
+
   it('serves new forms in order: verb by verb, tense by tense, person by person', () => {
     const round = sprintRound(new Set(['a2-21']), {}, {}, NOW);
     expect(round.slice(0, 7).map((c) => c.prompt)).toEqual(['yo soy', 'tú eres', 'él es', 'nosotros somos', 'vosotros sois', 'ellos son', 'yo fui']);
