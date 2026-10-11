@@ -56,7 +56,7 @@ import {
   xpStats,
 } from './progress';
 import { buildMigrationPlan } from './migrate';
-import { SPRINT_SECONDS, conjugation, openTenses, sprintQueue, type SprintCard } from './sprint';
+import { SPRINT_SECONDS, conjugation, openTenses, roundFrom, sprintQueue, workingVerbs, type SprintCard } from './sprint';
 import { planLessonReview, planToday, type SrsCard } from './srs';
 import { planVocab, unlockedSets, vocab, vocabStats } from './vocab';
 import { decodeSync, downloadSync, encodeSync, formatShortCode, uploadSync } from './sync';
@@ -1348,9 +1348,9 @@ function renderSprint(root: HTMLElement, nav: SpeedrunNav): void {
   const rating = conjugationRating(allForms());
   const finished = new Set(Object.keys(allLessonRecords()));
   const queue = sprintQueue(finished, allForms(), allFormsSeen(), Date.now(), { maxLevel: main });
-  const round = [...queue.missed, ...queue.review, ...queue.fresh, ...queue.resting];
+  const round = roundFrom(queue);
   const toReview = queue.missed.length + queue.review.length;
-  const nextNew = queue.fresh[0]?.context;
+  const working = workingVerbs(queue);
   const best = getSprintBest();
   const start = iconButton('Start sprint', ICONS.play, () => runSprint(root, nav, round), 'sr-btn primary');
   onKey((ev) => {
@@ -1371,8 +1371,10 @@ function renderSprint(root: HTMLElement, nav: SpeedrunNav): void {
           { class: 'sr-lede' },
           `${SPRINT_SECONDS} seconds. Translate each Castellano form into Catalan; a right answer moves on at once, ` +
             'a miss shows the form. Misses come back next round; forms you get right rest (a day, then 4, then 10) ' +
-            'before they return, so new forms come in order: the most common verbs first, tense by tense.',
+            'before they return. New forms mix a handful of verbs across every open tense; when you have seen all of a verb, ' +
+            'the next most common one joins.',
         ),
+        working.length ? el('p', { class: 'sr-working' }, 'New forms now from ', el('strong', { lang: 'ca' }, working.join(', ')), '.') : null,
       ),
       tenseList(finished),
       verbList(main),
@@ -1381,7 +1383,6 @@ function renderSprint(root: HTMLElement, nav: SpeedrunNav): void {
         { class: 'sr-hero-stats' },
         stat(best ? String(best) : '—', 'Best'),
         stat(String(toReview), 'To review'),
-        stat(nextNew ?? '—', 'Next new'),
         stat(pctLabel(rating), 'Rating'),
       ),
       levelBars(rating, 'A form counts once you get it right twice in a row; a miss resets it.'),

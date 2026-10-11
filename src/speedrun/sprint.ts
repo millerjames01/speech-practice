@@ -125,7 +125,12 @@ export interface SprintQueue {
   missed: SprintCard[];
   /** Right before and now due again, most overdue first. */
   review: SprintCard[];
-  /** Never answered, in order: verb by verb (most common first), tense by tense, person by person. */
+  /**
+   * Never answered: drawn from a working set of the most common verbs not yet
+   * fully seen, shuffled across tenses and persons, never the same verb twice
+   * running. A verb leaves the set once all its open forms are seen, and the
+   * next most common one joins.
+   */
   fresh: SprintCard[];
   /** Answered recently and resting; only used if a fast round runs out of everything else. */
   resting: SprintCard[];
@@ -163,10 +168,62 @@ export function sprintQueue(
       q.review.push(c);
     }
   }
-  q.missed = shuffle(q.missed, random);
+  q.missed = spreadVerbs(shuffle(q.missed, random));
   q.review = shuffle(q.review, random).sort((a, b) => (overdue.get(b.key) ?? 0) - (overdue.get(a.key) ?? 0));
+  q.fresh = workingSet(q.fresh, random);
   q.resting.sort((a, b) => (seen[a.key] ?? 0) - (seen[b.key] ?? 0));
   return q;
+}
+
+/** Verbs drawn from at once for new forms. */
+export const WORKING_VERBS = 5;
+
+/**
+ * Orders new forms: each pick takes a random verb from the first
+ * WORKING_VERBS (data order is most common first), never the one just used,
+ * and a random form of it; when a verb runs out, the next verb takes its seat.
+ */
+function workingSet(fresh: SprintCard[], random: () => number): SprintCard[] {
+  const byVerb = new Map<string, SprintCard[]>();
+  for (const c of fresh) byVerb.set(c.verb, [...(byVerb.get(c.verb) ?? []), c]);
+  const waiting = [...byVerb.values()];
+  const seats = waiting.splice(0, WORKING_VERBS).map((cards) => shuffle(cards, random));
+  const out: SprintCard[] = [];
+  while (seats.length > 0) {
+    const last = out.at(-1)?.verb;
+    const choices = seats.map((_, i) => i).filter((i) => seats.length === 1 || seats[i]![0]!.verb !== last);
+    const turn = choices[Math.floor(random() * choices.length)]!;
+    out.push(seats[turn]!.pop()!);
+    if (seats[turn]!.length === 0) {
+      const next = waiting.shift();
+      if (next) seats[turn] = shuffle(next, random);
+      else seats.splice(turn, 1);
+    }
+  }
+  return out;
+}
+
+/** Reorders cards so the same verb never comes twice running when it can be avoided. */
+function spreadVerbs(cards: SprintCard[]): SprintCard[] {
+  const out: SprintCard[] = [];
+  const rest = [...cards];
+  while (rest.length > 0) {
+    const i = rest.findIndex((c) => c.verb !== out.at(-1)?.verb);
+    out.push(...rest.splice(i === -1 ? 0 : i, 1));
+  }
+  return out;
+}
+
+/** Due reviews go between new forms (about one in three) rather than in a block. */
+function interleave(review: SprintCard[], fresh: SprintCard[]): SprintCard[] {
+  const out: SprintCard[] = [];
+  let r = 0;
+  let f = 0;
+  while (r < review.length || f < fresh.length) {
+    const reviewTurn = f >= fresh.length || (r < review.length && out.length % 3 === 2);
+    out.push(reviewTurn ? review[r++]! : fresh[f++]!);
+  }
+  return out;
 }
 
 /** The cards for a round, in the order they are asked. */
@@ -177,8 +234,18 @@ export function sprintRound(
   now = Date.now(),
   options: { maxLevel?: SpeedrunLevel; random?: () => number; data?: ConjData } = {},
 ): SprintCard[] {
-  const q = sprintQueue(finished, forms, seen, now, options);
-  return [...q.missed, ...q.review, ...q.fresh, ...q.resting];
+  return roundFrom(sprintQueue(finished, forms, seen, now, options));
+}
+
+/** A queue in asking order: misses, then reviews mixed into new forms, then (if ever reached) resting ones. */
+export function roundFrom(q: SprintQueue): SprintCard[] {
+  return [...q.missed, ...spreadVerbs(interleave(q.review, q.fresh)), ...q.resting];
+}
+
+/** The verbs new forms are coming from right now. */
+export function workingVerbs(q: SprintQueue, data: ConjData = conjugation): string[] {
+  const now = new Set(q.fresh.slice(0, 40).map((c) => c.verb));
+  return data.verbs.map((v) => v.ca).filter((v) => now.has(v)).slice(0, WORKING_VERBS);
 }
 
 export const SPRINT_SECONDS = 60;
