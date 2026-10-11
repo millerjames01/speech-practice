@@ -117,3 +117,29 @@ export function vocabStats(
     unlocked: unlockedSets(maxLevel, pack).reduce((n, s) => n + s.words.length, 0),
   };
 }
+
+/**
+ * One set, all of it: due words first (weakest first), then new words, then
+ * the rest. Words not yet due are marked so, and a right answer does not push
+ * them further out.
+ */
+export function planVocabSet(cards: SrsCard[], now: number, setId: string, pack = vocab): VocabEntry[] {
+  const set = pack.sets.find((s) => s.id === setId);
+  if (!set) return [];
+  const byIndex = new Map(cards.filter((c) => c.lessonId === setId).map((c) => [c.index, c]));
+  const entries = set.words.map((w, i) => ({ i, w, card: byIndex.get(i) }));
+  const due = entries.filter((e) => e.card && isDue(e.card, now)).sort((a, b) => priority(b.card!, now) - priority(a.card!, now));
+  const fresh = entries.filter((e) => !e.card);
+  const early = entries.filter((e) => e.card && !isDue(e.card, now));
+  return [...due, ...fresh, ...early].map((e) => ({
+    lessonId: setId,
+    index: e.i,
+    item: vocabItem(e.w),
+    due: !e.card || isDue(e.card, now),
+  }));
+}
+
+/** Due words in one set right now. */
+export function setDue(cards: SrsCard[], now: number, setId: string): number {
+  return cards.filter((c) => c.lessonId === setId && isDue(c, now)).length;
+}
