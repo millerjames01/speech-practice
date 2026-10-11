@@ -46,11 +46,22 @@ Before practising, replace the `REPLACE_WITH_VOICE_ID` placeholders in
 - **Offline.** After the first visit everything works without a connection:
   lessons, checking, Today, progress, export. ElevenLabs needs a connection,
   except for lines already played, which are cached.
-- **A Catalan voice.** Audio uses the device's own speech voices, which also
-  work offline once downloaded. iPhone/iPad/Mac: Settings → Accessibility →
-  Spoken Content → Voices → Català (Montse or Jordi). Android: Settings →
-  Text-to-speech → Google → install Català. Windows: Settings → Time & language
-  → Speech → add Catalan.
+- **A Catalan voice.** Without ElevenLabs, audio uses the browser's voices,
+  which come from the device, so quality varies a lot. The app picks the best
+  Catalan voice it finds (Edge's natural voices, then Apple Premium/Enhanced,
+  then Google, then the compact default), offers a *Voice* picker at the bottom
+  of the map when there is more than one, and shows a tip for your platform
+  when only a basic voice is available.
+  - Mac (Chrome or Safari): System Settings → Accessibility → Spoken Content →
+    System voice → Manage Voices… → Catalan → Montse (Enhanced or Premium),
+    then quit and reopen the browser. Chrome has no Catalan voice of its own;
+    it uses these.
+  - iPhone/iPad: Settings → Accessibility → Spoken Content → Voices → Catalan →
+    Montse (Enhanced or Premium).
+  - Any desktop: Microsoft Edge streams natural Catalan voices (Joana, Enric)
+    for free, the best option short of ElevenLabs.
+  - Android: Settings → Text-to-speech → Speech services by Google → install
+    Català.
 - **Sync between phone and PC, no account.** *Sync devices* (bottom of the
   map) → *Get sync code* on one device shows a code like `AU4-DFN-HWN`; type it
   under *Receive* on the other. Progress merges — for each item the newest
@@ -116,7 +127,7 @@ the same numbers:
 - **Level %** is the headline: how much of the level is held long-term (an
   item earns full credit at the month step).
 - **Side-track ratings** use the same A2–C1 scale, so they read against the
-  course: *Conjugation* (forms from each level's tables, credited after two
+  course: *Conjugation* (every form of each level's tenses, credited after two
   right answers in a row in the sprint) and *Vocab* (each level's words,
   credited like lesson items). A rating sits at the first level not yet 80%
   held; the map says whether a track is at or behind your course level.
@@ -126,16 +137,28 @@ the same numbers:
 - **XP** (10 per first-try answer, 2 per retry, 5 per vocab word, 2 per sprint
   form) feeds a daily streak and never moves a level %.
 
-**Side tracks.** The *conjugation sprint* is 60 seconds of forms pulled from
-the tables of the lessons you have finished, unknown forms first. The *vocab
-builder* holds 480 frequent words the lessons skip (`speedrun/vocab/words.json`,
-120 per level); each level's words unlock when the course reaches that level,
-and they review on their own schedule, separate from Today.
+**Side tracks.**
+- The *conjugation sprint* is 60 seconds of translation: the Castellano form
+  ("nosotros tendremos") to the Catalan one ("tindrem"), over 45 core verbs and
+  12 tenses (`speedrun/conjugation/verbs.json`). Each tense opens with the lesson
+  that teaches it: present from the start, passat at A2-21, futur at A2-28,
+  subjunctive at B1-14, and so on. Forms missed last time come back first. The
+  Catalan forms come from the Softcatalà conjugator (Central variant; other
+  standard variants are accepted) and the Castellano from conjugacion.es, via
+  `scripts/build-conjugation.py`.
+- The *vocab builder* holds 2,000 words (`speedrun/vocab/words.json`) in topic
+  sets that follow the certificate exams: 400 at A2, 500 at B1 and B2, 600 at
+  C1. No verbs (the sprint has them) and no transparent cognates (the cognate
+  rules give those away): different roots, false friends, gender flips. Each
+  level's sets unlock when the course reaches that level, and they review on
+  their own schedule, separate from Today.
 
 **Older progress** converts once, on first open: lessons and cards carry over
 unchanged (stars and percentages come straight from them), XP and streak are
-backfilled from when each item was last answered, and conjugation forms from
-lessons already at ★★ are credited with one right answer.
+backfilled from when each item was last answered, conjugation progress moves
+onto the translation sprint's forms (matched by answer; forms from lessons
+already at ★★ start with one right answer), and vocab reviews move to the same
+word in the topic list when it is still there.
 
 Suggested routine, about 25 minutes a day: press Today, do the new lesson it
 offers, then a sprint or a vocab round if you have five minutes more. Skip the new lesson on days when more than 30 items are

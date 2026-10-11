@@ -54,12 +54,15 @@ import {
   setPrefs,
   xpStats,
 } from './progress';
-import { SPRINT_SECONDS, sprintPool, sprintRound, type SprintCard } from './sprint';
+import { buildMigrationPlan } from './migrate';
+import { SPRINT_SECONDS, conjugation, openTenses, sprintRound, type SprintCard } from './sprint';
 import { planLessonReview, planToday, type SrsCard } from './srs';
 import { planVocab, unlockedSets, vocab, vocabStats } from './vocab';
 import { decodeSync, downloadSync, encodeSync, formatShortCode, uploadSync } from './sync';
 import {
-  hasBrowserCatalanVoice,
+  betterVoiceTip,
+  catalanVoice,
+  catalanVoices,
   lastSpeechError,
   speak,
   speechSource,
@@ -248,13 +251,20 @@ function audioNotice(): HTMLElement | null {
   const err = lastSpeechError();
   if (src === 'elevenlabs' && !err) return null;
   if (err) return el('div', { class: 'sr-banner' }, `ElevenLabs failed; using the browser voice. ${err}`);
-  if (src === 'browser' && !hasBrowserCatalanVoice()) {
-    return el(
+  if (src === 'browser') {
+    const tip = betterVoiceTip();
+    if (!tip || getPrefs().voiceTipHidden) return null;
+    const banner = el(
       'div',
-      { class: 'sr-banner' },
-      'No Catalan voice in this browser, so audio may sound off. Add an ElevenLabs key in Settings ' +
-        'and a narrator voice id in curriculum.json, or install a ca-ES system voice.',
+      { class: 'sr-banner sr-voice-tip' },
+      el('span', {}, `${catalanVoice() ? '' : 'No Catalan voice in this browser, so audio may sound off. '}${tip}`),
     );
+    const hide = button('Hide', () => {
+      setPrefs({ ...getPrefs(), voiceTipHidden: true });
+      banner.remove();
+    }, 'sr-btn ghost small');
+    banner.append(hide);
+    return banner;
   }
   if (src === 'none') return el('div', { class: 'sr-banner' }, 'Audio is unavailable in this browser.');
   return null;
@@ -342,13 +352,14 @@ function ratingTile(title: string, rating: Rating, main: SpeedrunLevel, body: st
  */
 function migrateIfNeeded(): string | null {
   if (!needsMigration()) return null;
-  const content = loadSpeedrun();
-  const records = allLessonRecords();
-  const index = indexCards(allCards());
-  const held = content.lessons.filter((l) => lessonStars(l, !!records[l.id], index) >= 2);
-  const { xp, forms } = migrateProgress(sprintPool(held).map((c) => c.key));
-  if (!xp && !forms) return null;
-  return `Progress converted to the new tracking: ${xp} XP backfilled from your answer history${forms ? `, ${forms} conjugation forms credited from lessons you already hold` : ''}. Stars and level percentages come straight from your reviews.`;
+  const { xp, forms, words } = migrateProgress(buildMigrationPlan(loadSpeedrun().lessons, allLessonRecords(), allCards()));
+  const parts = [
+    xp ? `${xp} XP backfilled from your answer history` : '',
+    forms ? `${forms} conjugation ${forms === 1 ? 'form' : 'forms'} carried into the new translation sprint` : '',
+    words ? `${words} vocab ${words === 1 ? 'word' : 'words'} kept in the new topic list` : '',
+  ].filter(Boolean);
+  if (parts.length === 0) return null;
+  return `Progress converted: ${parts.join(', ')}. Stars and level percentages come straight from your reviews.`;
 }
 
 export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync?: string): void {
@@ -374,7 +385,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
   const learned = cards.some(isLessonCard);
   const xp = xpStats(now);
   const vstats = vocabStats(cards, now, vocab, activeLevel);
-  const conj = conjugationRating(content.byLevel, allForms());
+  const conj = conjugationRating(allForms());
   const voc = vocabRating(index, vocab);
   const levelStarsOf = (lv: SpeedrunLevel) => starTally(content.byLevel[lv], records, index, now);
   const stars = starTally(content.lessons, records, index, now);
@@ -386,6 +397,24 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
   autoplay.addEventListener('change', () => setPrefs({ ...getPrefs(), autoplay: autoplay.checked }));
   const dictation = el('input', { type: 'checkbox', checked: prefs.dictation });
   dictation.addEventListener('change', () => setPrefs({ ...getPrefs(), dictation: dictation.checked }));
+  const voicePicker = el('label', { class: 'sr-toggle sr-voice-pick' });
+  const fillVoices = () => {
+    clear(voicePicker);
+    const voices = catalanVoices();
+    if (voices.length < 2 || speechSource() !== 'browser') return;
+    const select = el(
+      'select',
+      { class: 'sr-select' },
+      el('option', { value: '' }, `Best available (${voices[0]!.name})`),
+      ...voices.map((v) => el('option', { value: v.voiceURI, selected: v.voiceURI === getPrefs().voice }, v.name)),
+    );
+    select.setAttribute('aria-label', 'Catalan voice');
+    select.addEventListener('change', () => {
+      setPrefs({ ...getPrefs(), voice: select.value });
+      void speak('Bon dia! Com estàs?');
+    });
+    voicePicker.append(el('span', {}, 'Voice'), select);
+  };
 
   const openLesson = next
     ? iconButton(
@@ -445,8 +474,11 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
   const notice = audioNotice();
   if (notice) banners.append(notice);
   void voicesReady().then(() => {
-    // The browser voice list arrives late; drop the notice once it does.
-    if (notice && !audioNotice()) notice.remove();
+    // The browser voice list arrives late: refresh the notice and the voice picker once it does.
+    const fresh = audioNotice();
+    if (notice) notice.remove();
+    if (fresh) banners.append(fresh);
+    fillVoices();
   });
   page.append(banners);
 
@@ -463,7 +495,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
           'Conjugation sprint',
           conj,
           activeLevel,
-          `${SPRINT_SECONDS} seconds of forms from the tables you have learned.`,
+          `${SPRINT_SECONDS} seconds translating verb forms: 45 core verbs, each tense opening with its lesson.`,
           getSprintBest() ? `Best ${getSprintBest()}` : 'No sprint yet',
           () => renderSprint(root, nav),
         ),
@@ -471,7 +503,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
           'Vocab builder',
           voc,
           activeLevel,
-          `Frequent words the lessons skip. ${vstats.unlocked} of ${vstats.total} unlocked; more open with each level.`,
+          `Exam-topic words the lessons skip. ${vstats.unlocked} of ${vstats.total} unlocked; more open with each level.`,
           `${vstats.known} known${vstats.due ? ` · ${vstats.due} due` : ''}`,
           () => renderVocab(root, nav),
         ),
@@ -593,6 +625,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
         { class: 'sr-toggles' },
         el('label', { class: 'sr-toggle' }, autoplay, el('span', {}, 'Auto-play the answer after each check')),
         el('label', { class: 'sr-toggle' }, dictation, el('span', {}, 'Dictation: hear the Catalan and write it')),
+        voicePicker,
               ),
       el(
         'div',
@@ -1310,11 +1343,10 @@ function renderSprint(root: HTMLElement, nav: SpeedrunNav): void {
   resetView(root);
   const toMap = () => renderSpeedrun(root, nav);
   topbar(root, nav, { label: 'Conjugation sprint', back: toMap });
-  const content = loadSpeedrun();
   const main = courseLevel();
-  const rating = conjugationRating(content.byLevel, allForms());
+  const rating = conjugationRating(allForms());
   const finished = new Set(Object.keys(allLessonRecords()));
-  const round = sprintRound(content.lessons, finished, Math.random, allForms());
+  const round = sprintRound(finished, allForms());
   const best = getSprintBest();
   const start = iconButton('Start sprint', ICONS.play, () => runSprint(root, nav, round), 'sr-btn primary');
   onKey((ev) => {
@@ -1333,10 +1365,11 @@ function renderSprint(root: HTMLElement, nav: SpeedrunNav): void {
         el(
           'p',
           { class: 'sr-lede' },
-          `${SPRINT_SECONDS} seconds. Type each form; a right answer moves on at once, a miss shows the form. ` +
-            'Forms come from the tables of the lessons you have finished, the ones you don’t know yet first.',
+          `${SPRINT_SECONDS} seconds. Translate each Castellano form into Catalan; a right answer moves on at once, ` +
+            'a miss shows the form. Forms you missed come back first, then half-learned ones, then new ones.',
         ),
       ),
+      tenseList(finished),
       el(
         'div',
         { class: 'sr-hero-stats' },
@@ -1349,6 +1382,24 @@ function renderSprint(root: HTMLElement, nav: SpeedrunNav): void {
     ),
   );
   start.focus();
+}
+
+/** The sprint's tenses: open ones, and the lesson that opens each of the rest. */
+function tenseList(finished: Set<string>): HTMLElement {
+  const open = openTenses(finished);
+  return el(
+    'ul',
+    { class: 'sr-tense-list' },
+    ...conjugation.tenses.map((t) =>
+      el(
+        'li',
+        { class: open.has(t.id) ? 'open' : '' },
+        el('span', { class: 'sr-level-tag' }, t.level),
+        el('span', {}, t.label),
+        open.has(t.id) ? null : el('span', { class: 'sr-muted' }, `opens with ${t.lesson.toUpperCase()}`),
+      ),
+    ),
+  );
 }
 
 /** Per-level bars for a rating: the level being worked on, and the ones around it. */
@@ -1372,7 +1423,7 @@ function levelBars(rating: Rating, caption: string): HTMLElement {
 function runSprint(root: HTMLElement, nav: SpeedrunNav, round: SprintCard[]): void {
   resetView(root);
   const toMap = () => renderSpeedrun(root, nav);
-  const before = conjugationRating(loadSpeedrun().byLevel, allForms());
+  const before = conjugationRating(allForms());
   const results: [SprintCard, boolean][] = [];
   let i = 0;
   let over = false;
@@ -1387,7 +1438,7 @@ function runSprint(root: HTMLElement, nav: SpeedrunNav, round: SprintCard[]): vo
 
   const context = el('p', { class: 'sr-eyebrow' });
   const prompt = el('h1', { class: 'sr-prompt sr-sprint-prompt' });
-  const input = el('input', { class: 'sr-input', type: 'text', autocomplete: 'off', spellcheck: false, placeholder: 'forma' });
+  const input = el('input', { class: 'sr-input', type: 'text', autocomplete: 'off', spellcheck: false, placeholder: 'en català' });
   input.setAttribute('autocapitalize', 'off');
   input.setAttribute('lang', 'ca');
   input.setAttribute('aria-label', 'The Catalan form');
@@ -1448,7 +1499,7 @@ function runSprint(root: HTMLElement, nav: SpeedrunNav, round: SprintCard[]): vo
     recordForms(results.map(([c, ok]) => [c.key, ok]));
     const newBest = recordSprint(score);
     addXp(score * 2);
-    const after = conjugationRating(loadSpeedrun().byLevel, allForms());
+    const after = conjugationRating(allForms());
     const misses = uniqueMisses(results);
     clear(stage);
     const again = iconButton('Again', ICONS.refresh, () => renderSprint(root, nav), 'sr-btn primary');
@@ -1543,8 +1594,9 @@ function renderVocab(root: HTMLElement, nav: SpeedrunNav): void {
         el(
           'p',
           { class: 'sr-lede' },
-          'The most frequent words the lessons leave out, 120 per level. Each level’s words unlock when the course ' +
-            'reaches it, and they review on their own schedule so they never crowd Today.',
+          `${stats.total} words for the certificate exams’ topics, the ones a Castellano speaker can’t guess: different ` +
+            'roots, false friends, gender flips. No verbs: those live in the conjugation sprint. Each level’s sets ' +
+            'unlock when the course reaches it, and they review on their own schedule so they never crowd Today.',
         ),
       ),
       el(

@@ -4,7 +4,7 @@
  * so every practice mode feeds one source of truth.
  */
 
-import { FORM_KNOWN, sprintPool, uniqueForms } from './sprint';
+import { FORM_KNOWN, conjugationPool, type SprintCard } from './sprint';
 import { DAY, INTERVALS, isDue, type SrsCard } from './srs';
 import { SPEEDRUN_LEVELS, type SpeedrunLesson, type SpeedrunLevel } from './types';
 import type { VocabPack } from './vocab';
@@ -135,16 +135,16 @@ const perLevelList = <T>(f: (level: SpeedrunLevel) => T): Record<SpeedrunLevel, 
   Object.fromEntries(SPEEDRUN_LEVELS.map((l) => [l, f(l)])) as Record<SpeedrunLevel, T>;
 const perLevel = (f: (level: SpeedrunLevel) => number) => perLevelList(f);
 
-/** Conjugation: the forms in each level's tables, a form fully credited after two right answers in a row. */
-export function conjugationRating(byLevel: Record<SpeedrunLevel, SpeedrunLesson[]>, forms: Record<string, number>): Rating {
-  const pools = perLevelList((level) => uniqueForms(sprintPool(byLevel[level])));
+/** Conjugation: each level's tenses across all verbs, a form fully credited after two right answers in a row. */
+export function conjugationRating(forms: Record<string, number>, pool: SprintCard[] = conjugationPool()): Rating {
+  const byLevel = perLevelList((level) => pool.filter((c) => c.level === level));
   return toRating(
     perLevel((level) => {
-      const pool = pools[level];
-      if (pool.length === 0) return 0;
-      return pool.reduce((n, c) => n + Math.min(1, (forms[c.key] ?? 0) / FORM_KNOWN), 0) / pool.length;
+      const cards = byLevel[level];
+      if (cards.length === 0) return 0;
+      return cards.reduce((n, c) => n + Math.min(1, (forms[c.key] ?? 0) / FORM_KNOWN), 0) / cards.length;
     }),
-    perLevel((level) => pools[level].length),
+    perLevel((level) => byLevel[level].length),
   );
 }
 

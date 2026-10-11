@@ -26,7 +26,12 @@ describe('answer patterns', () => {
   });
 
   it('supports nesting', () => {
-    expect(expand('[a (b)|c] d')).toEqual(['A d', 'A b d', 'C d']);
+    expect(expand('[a (b)|c] d.')).toEqual(['A d.', 'A b d.', 'C d.']);
+  });
+
+  it('capitalises sentences, not single words or forms', () => {
+    expect(expand('(el) dimecres vaig.')[0]).toBe('Dimecres vaig.');
+    expect(expand('[el cos|cos]')).toEqual(['el cos', 'cos']);
   });
 
   it('rejects unbalanced patterns', () => {

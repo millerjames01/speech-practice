@@ -24,6 +24,10 @@ export interface Prefs {
   autoplay: boolean;
   /** Hear the Catalan and type it, instead of translating from Castellano. */
   dictation: boolean;
+  /** Chosen browser voice (voiceURI); empty picks the best Catalan voice available. */
+  voice: string;
+  /** The "get a better voice" tip was dismissed. */
+  voiceTipHidden: boolean;
 }
 
 interface Store {
@@ -40,8 +44,8 @@ interface Store {
   version: number;
 }
 
-/** 2: XP, streak and conjugation forms. */
-export const STORE_VERSION = 2;
+/** 2: XP, streak and conjugation forms. 3: translation sprint keys and the topic vocab pack. */
+export const STORE_VERSION = 3;
 
 /** The pre-SRS "missed items" list, migrated into due cards on read. */
 interface LegacyMiss {
@@ -50,7 +54,7 @@ interface LegacyMiss {
   count: number;
 }
 
-const empty = (): Store => ({ lessons: {}, cards: {}, prefs: { autoplay: true, dictation: false }, xp: {}, sprintBest: 0, forms: {}, version: STORE_VERSION });
+const empty = (): Store => ({ lessons: {}, cards: {}, prefs: { autoplay: true, dictation: false, voice: '', voiceTipHidden: false }, xp: {}, sprintBest: 0, forms: {}, version: STORE_VERSION });
 
 export const itemKey = (lessonId: string, index: number): string => `${lessonId}#${index}`;
 
@@ -286,16 +290,28 @@ export function needsMigration(): boolean {
 /** XP a backfilled answer is worth: the same as a first-try lesson answer. */
 const BACKFILL_XP = 10;
 
+/** What the content layer supplies for a migration; storage knows nothing of lessons or packs. */
+export interface MigrationPlan {
+  /** Current conjugation keys to credit with one right answer (forms from lessons already held). */
+  seedForms: string[];
+  /** Rewrites conjugation progress onto the current form keys. */
+  mapForms: (old: Record<string, number>) => Record<string, number>;
+  /** Moves a card onto the current content, or drops it (null) when its item no longer exists. */
+  mapCard: (card: SrsCard) => SrsCard | null;
+}
+
 /**
- * Converts older progress, once. Lessons and cards need nothing (stars and
- * percentages are read off them); what is new gets a fair starting point:
- * - XP and streak are backfilled from when each item was last answered
+ * Converts older progress, once. Lessons and lesson cards need nothing
+ * (stars and percentages are read off them); the rest gets a fair start:
+ * - v1: XP and streak are backfilled from when each item was last answered
  *   (estimated from its schedule for cards older than the "last" field);
- * - conjugation forms from lessons already held are seeded at one right
- *   answer, so a single sprint hit confirms them.
- * Never lowers anything, so running it on merged or imported data is safe.
+ * - v1-2: conjugation progress moves onto the current forms, and forms from
+ *   lessons already held are credited with one right answer;
+ * - v1-2: vocab cards move to the same word in the current pack, or go.
+ * Never lowers a lesson or conjugation record, so running it on merged or
+ * imported data is safe.
  */
-export function migrateProgress(formSeeds: string[], now = Date.now()): { xp: number; forms: number } {
+export function migrateProgress(plan: MigrationPlan, now = Date.now()): { xp: number; forms: number; words: number } {
   const store = read();
   let xp = 0;
   if (Object.keys(store.xp).length === 0) {
@@ -307,15 +323,24 @@ export function migrateProgress(formSeeds: string[], now = Date.now()): { xp: nu
       xp += BACKFILL_XP;
     }
   }
-  let forms = 0;
-  for (const k of formSeeds) {
-    if ((store.forms[k] ?? 0) >= 1) continue;
-    store.forms[k] = 1;
-    forms += 1;
+  const forms = plan.mapForms(store.forms);
+  for (const k of plan.seedForms) forms[k] = Math.max(forms[k] ?? 0, 1);
+  store.forms = forms;
+
+  const cards: Record<string, SrsCard> = {};
+  let words = 0;
+  for (const c of Object.values(store.cards)) {
+    const moved = plan.mapCard(c);
+    if (!moved) continue;
+    const k = itemKey(moved.lessonId, moved.index);
+    const existing = cards[k];
+    cards[k] = existing ? newerCard(existing, moved) : moved;
+    if (moved !== c) words += 1;
   }
+  store.cards = cards;
   store.version = STORE_VERSION;
   write(store);
-  return { xp, forms };
+  return { xp, forms: Object.values(forms).filter((n) => n > 0).length, words };
 }
 
 /** Conjugation forms answered in sprints: key → consecutive right answers. */

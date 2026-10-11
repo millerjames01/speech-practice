@@ -22,7 +22,7 @@ export interface VocabPack {
   sets: VocabSet[];
 }
 
-export const isVocabCard = (c: SrsCard): boolean => /^v\d{2}$/.test(c.lessonId);
+export const isVocabCard = (c: SrsCard): boolean => /^w\d{3}$/.test(c.lessonId);
 
 export function parseVocab(input: unknown): VocabPack {
   const fail = (m: string): never => {
@@ -32,7 +32,7 @@ export function parseVocab(input: unknown): VocabPack {
   if (!data || typeof data.reviewed !== 'boolean' || !Array.isArray(data.sets)) fail('bad file');
   const seen = new Set<string>();
   for (const set of data!.sets!) {
-    if (!/^v\d{2}$/.test(set.id) || typeof set.title !== 'string' || !Array.isArray(set.words)) fail(`bad set ${set.id}`);
+    if (!/^w\d{3}$/.test(set.id) || typeof set.title !== 'string' || !Array.isArray(set.words)) fail(`bad set ${set.id}`);
     if (!SPEEDRUN_LEVELS.includes(set.level)) fail(`bad level in ${set.id}`);
     for (const w of set.words) {
       if (!Array.isArray(w) || w.length !== 2 || !w[0]?.trim() || !w[1]?.trim()) fail(`bad word in ${set.id}`);
