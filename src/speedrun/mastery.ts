@@ -67,35 +67,52 @@ export interface Rating {
   /** Progress within that level, 0-1. */
   pct: number;
   byLevel: Record<SpeedrunLevel, number>;
+  /** The whole track across every level, weighted by size, 0-1. */
+  overall: number;
 }
 
-export function toRating(byLevel: Record<SpeedrunLevel, number>): Rating {
-  for (const level of SPEEDRUN_LEVELS) if (byLevel[level] < RATING_PASS) return { level, pct: byLevel[level], byLevel };
+export function toRating(byLevel: Record<SpeedrunLevel, number>, weights?: Record<SpeedrunLevel, number>): Rating {
+  const w = (l: SpeedrunLevel) => weights?.[l] ?? 1;
+  const total = SPEEDRUN_LEVELS.reduce((n, l) => n + w(l), 0);
+  const overall = total ? SPEEDRUN_LEVELS.reduce((n, l) => n + byLevel[l] * w(l), 0) / total : 0;
+  for (const level of SPEEDRUN_LEVELS) if (byLevel[level] < RATING_PASS) return { level, pct: byLevel[level], byLevel, overall };
   const top = SPEEDRUN_LEVELS[SPEEDRUN_LEVELS.length - 1]!;
-  return { level: top, pct: byLevel[top], byLevel };
+  return { level: top, pct: byLevel[top], byLevel, overall };
 }
 
-const perLevel = (f: (level: SpeedrunLevel) => number) =>
-  Object.fromEntries(SPEEDRUN_LEVELS.map((l) => [l, f(l)])) as Record<SpeedrunLevel, number>;
+const perLevelList = <T>(f: (level: SpeedrunLevel) => T): Record<SpeedrunLevel, T> =>
+  Object.fromEntries(SPEEDRUN_LEVELS.map((l) => [l, f(l)])) as Record<SpeedrunLevel, T>;
+const perLevel = (f: (level: SpeedrunLevel) => number) => perLevelList(f);
 
 /** Conjugation: the forms in each level's tables, a form fully credited after two right answers in a row. */
 export function conjugationRating(byLevel: Record<SpeedrunLevel, SpeedrunLesson[]>, forms: Record<string, number>): Rating {
+  const pools = perLevelList((level) => uniqueForms(sprintPool(byLevel[level])));
   return toRating(
     perLevel((level) => {
-      const pool = uniqueForms(sprintPool(byLevel[level]));
+      const pool = pools[level];
       if (pool.length === 0) return 0;
       return pool.reduce((n, c) => n + Math.min(1, (forms[c.key] ?? 0) / FORM_KNOWN), 0) / pool.length;
     }),
+    perLevel((level) => pools[level].length),
   );
 }
 
 /** Vocab: each level's words, credited the same way as lesson items. */
 export function vocabRating(cards: CardIndex, pack: VocabPack): Rating {
+  const words = perLevelList((level) =>
+    pack.sets.filter((s) => s.level === level).flatMap((s) => s.words.map((_, i) => cards.get(`${s.id}#${i}`))),
+  );
   return toRating(
-    perLevel((level) => {
-      const words = pack.sets.filter((s) => s.level === level).flatMap((s) => s.words.map((_, i) => cards.get(`${s.id}#${i}`)));
-      return words.length ? words.reduce((n, c) => n + itemCredit(c), 0) / words.length : 0;
-    }),
+    perLevel((level) => (words[level].length ? words[level].reduce((n, c) => n + itemCredit(c), 0) / words[level].length : 0)),
+    perLevel((level) => words[level].length),
+  );
+}
+
+/** The course itself as a rating: each level's held share, weighted by its item count. */
+export function courseRating(byLevel: Record<SpeedrunLevel, SpeedrunLesson[]>, cards: CardIndex): Rating {
+  return toRating(
+    perLevel((level) => levelProgress(byLevel[level], cards)),
+    perLevel((level) => byLevel[level].reduce((n, l) => n + l.items.length, 0)),
   );
 }
 

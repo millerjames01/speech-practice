@@ -542,6 +542,24 @@ details.sr-level[open] { padding-bottom: 28px; }
 .sr-badge.behind { color: var(--sr-slip); border-color: color-mix(in srgb, var(--sr-slip) 45%, transparent); }
 .sr-banner.good { color: var(--sr-text); border-color: color-mix(in srgb, var(--sr-pass) 45%, var(--sr-line)); }
 
+/* course overview */
+.sr-overview { margin-top: 40px; }
+.sr-overview-stats { display: flex; flex-wrap: wrap; gap: 20px 28px; margin: 14px 0 20px; }
+.sr-overview-grid { width: 100%; border-collapse: collapse; font-size: 0.82rem; font-variant-numeric: tabular-nums; }
+.sr-overview-grid th, .sr-overview-grid td { padding: 10px 8px; border-bottom: 1px solid var(--sr-line); text-align: left; font-weight: 500; }
+.sr-overview-grid thead th { color: var(--sr-muted); font-size: 0.74rem; letter-spacing: 0.06em; }
+.sr-overview-grid tbody th { color: var(--sr-text); white-space: nowrap; }
+.sr-overview-grid td { color: var(--sr-muted); }
+.sr-overview-grid td span { display: block; margin-bottom: 5px; }
+.sr-overview-grid .sr-meter { width: 100%; max-width: 120px; }
+.sr-overview-grid .current { color: var(--sr-text); background: color-mix(in srgb, var(--sr-accent) 7%, transparent); }
+.sr-overview-grid thead th.current { color: var(--sr-accent); }
+.sr-overview-grid td.all { color: var(--sr-text); }
+@media (max-width: 720px) {
+  .sr-overview-grid th, .sr-overview-grid td { padding: 8px 4px; }
+  .sr-overview-grid { font-size: 0.76rem; }
+}
+
 /* intro stars */
 .sr-star-panel { margin-top: 20px; display: grid; gap: 8px; }
 .sr-star-panel > .sr-stars { font-size: 1.3rem; }

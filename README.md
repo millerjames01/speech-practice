@@ -114,6 +114,9 @@ the same numbers:
   right answers in a row in the sprint) and *Vocab* (each level's words,
   credited like lesson items). A rating sits at the first level not yet 80%
   held; the map says whether a track is at or behind your course level.
+- **Course overview** (bottom of the map): the hero stays on your current
+  level, and this section shows the whole course: lessons, conjugation and
+  vocab held per level and overall, plus lessons done, stars, XP and run time.
 - **XP** (10 per first-try answer, 2 per retry, 5 per vocab word, 2 per sprint
   form) feeds a daily streak and never moves a level %.
 

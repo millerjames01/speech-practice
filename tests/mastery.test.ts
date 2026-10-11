@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { compareLevels, conjugationRating, indexCards, itemCredit, lessonDue, lessonStars, levelProgress, toRating, vocabRating } from '../src/speedrun/mastery';
+import { compareLevels, conjugationRating, courseRating, indexCards, itemCredit, lessonDue, lessonStars, levelProgress, toRating, vocabRating } from '../src/speedrun/mastery';
 import { DAY, interleave, planLessonReview, planToday, startOfDay, type SrsCard } from '../src/speedrun/srs';
 import { formKey, sprintPool, sprintRound, uniqueForms } from '../src/speedrun/sprint';
 import { loadSpeedrun } from '../src/speedrun/content';
@@ -144,6 +144,15 @@ describe('ratings', () => {
     const all = conjugationRating(content.byLevel, Object.fromEntries(a2.map((c) => [c.key, 2])));
     expect(all.byLevel.A2).toBe(1);
     expect(all.level).toBe('B1');
+  });
+
+  it('weights the whole-course figure by each level\'s size', () => {
+    expect(toRating({ A2: 1, B1: 0, B2: 0, C1: 0 }, { A2: 1, B1: 3, B2: 0, C1: 0 }).overall).toBeCloseTo(0.25);
+    const a2 = content.byLevel.A2.flatMap((l) => l.items.map((_, i) => card(l.id, i, 4)));
+    const course = courseRating(content.byLevel, indexCards(a2));
+    const items = (lv: 'A2' | 'B1' | 'B2' | 'C1') => content.byLevel[lv].reduce((n, l) => n + l.items.length, 0);
+    expect(course).toMatchObject({ level: 'B1', pct: 0 });
+    expect(course.overall).toBeCloseTo(items('A2') / (items('A2') + items('B1') + items('B2') + items('C1')));
   });
 
   it('rates vocab per level with the lesson credit rule', () => {

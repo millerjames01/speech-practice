@@ -19,6 +19,7 @@ import {
   compareLevels,
   itemCredit,
   conjugationRating,
+  courseRating,
   indexCards,
   isLessonCard,
   lessonDue,
@@ -358,7 +359,8 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
   const vstats = vocabStats(cards, now, vocab, activeLevel);
   const conj = conjugationRating(content.byLevel, allForms());
   const voc = vocabRating(index, vocab);
-  const stars = content.lessons.reduce((n, l) => n + lessonStars(l, !!records[l.id], index), 0);
+  const levelStarsOf = (lv: SpeedrunLevel) => content.byLevel[lv].reduce((n, l) => n + lessonStars(l, !!records[l.id], index), 0);
+  const stars = SPEEDRUN_LEVELS.reduce((n, lv) => n + levelStarsOf(lv), 0);
   const activePct = levelProgress(content.byLevel[activeLevel], index);
 
   const prefs = getPrefs();
@@ -409,7 +411,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
         { class: 'sr-hero-stats' },
         stat(xp.streak ? `${xp.streak}d` : '—', 'Streak'),
         stat(String(xp.today), 'XP today'),
-        stat(`${stars}/${content.lessons.length * 3}`, 'Stars'),
+        stat(`${levelStarsOf(activeLevel)}/${content.byLevel[activeLevel].length * 3}`, `${activeLevel} stars`),
       ),
     ),
   );
@@ -504,6 +506,57 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
     page.append(section);
   }
 
+  /* The whole course at a glance; the hero above stays on the current level. */
+  const course = courseRating(content.byLevel, index);
+  const rows: [string, Rating][] = [['Lessons', course], ['Conjugation', conj], ['Vocab', voc]];
+  page.append(
+    el(
+      'section',
+      { class: 'sr-overview' },
+      el('h2', { class: 'sr-section-label' }, 'Course overview'),
+      el(
+        'div',
+        { class: 'sr-overview-stats' },
+        stat(`${Math.round(course.overall * 100)}%`, 'Course held'),
+        stat(`${done.length}/${content.lessons.length}`, 'Lessons'),
+        stat(`${stars}/${content.lessons.length * 3}`, 'Stars'),
+        stat(String(xp.total), 'XP'),
+        stat(formatMs(totalMs), 'Run time'),
+      ),
+      el(
+        'table',
+        { class: 'sr-overview-grid' },
+        el(
+          'thead',
+          {},
+          el(
+            'tr',
+            {},
+            el('th', {}, ''),
+            ...SPEEDRUN_LEVELS.map((lv) => el('th', { class: lv === activeLevel ? 'current' : '' }, lv)),
+            el('th', {}, 'All'),
+          ),
+        ),
+        el(
+          'tbody',
+          {},
+          ...rows.map(([label, r]) =>
+            el(
+              'tr',
+              {},
+              el('th', {}, label),
+              ...SPEEDRUN_LEVELS.map((lv) =>
+                el('td', { class: lv === activeLevel ? 'current' : '' }, el('span', {}, `${Math.round(r.byLevel[lv] * 100)}%`), meter(r.byLevel[lv])),
+              ),
+              el('td', { class: 'all' }, el('span', {}, `${Math.round(r.overall * 100)}%`), meter(r.overall)),
+            ),
+          ),
+        ),
+      ),
+      el('p', { class: 'sr-fineprint' }, 'Share of each level held long-term. A track rates at the first level below 80%.'),
+    ),
+  );
+
   page.append(
     el(
       'footer',
@@ -513,8 +566,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
         { class: 'sr-toggles' },
         el('label', { class: 'sr-toggle' }, autoplay, el('span', {}, 'Auto-play the answer after each check')),
         el('label', { class: 'sr-toggle' }, dictation, el('span', {}, 'Dictation: hear the Catalan and write it')),
-        el('span', { class: 'sr-muted' }, `${xp.total} XP · run time ${formatMs(totalMs)}`),
-      ),
+              ),
       el(
         'div',
         { class: 'sr-footer-actions' },
