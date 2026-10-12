@@ -61,7 +61,7 @@ import {
 } from './progress';
 import { VoiceStream, bestProgress, canListen, markHeard, voiceState, type VoiceProgress } from './listen';
 import { buildMigrationPlan } from './migrate';
-import { SPRINT_SECONDS, conjugation, openTenses, roundFrom, sprintQueue, workingVerbs, type SprintCard } from './sprint';
+import { SPRINT_SECONDS, conjugation, roundFrom, sprintQueue, tenseStats, workingVerbs, type SprintCard } from './sprint';
 import { planLessonReview, planToday, type SrsCard } from './srs';
 import { planVocab, planVocabSet, setDue, unlockedSets, vocab, vocabStats } from './vocab';
 import { decodeSync, downloadSync, encodeSync, formatShortCode, uploadSync } from './sync';
@@ -1258,6 +1258,8 @@ function runSession(
   // Shortcuts: Esc leaves; L / S replay the audio; M speaks the answer in
   // voice mode. While typing in the box they need Alt, so they never eat a letter.
   let replay: ((slow: boolean) => void) | null = null;
+  /** After an answer: what Enter does when focus is not on a control. */
+  let advance: (() => void) | null = null;
   let mic: (() => void) | null = null;
   // Voice answers: one recognition for the whole session (VoiceStream). Each item
   // points these handlers at itself and resets the attempt, so the mic stays on
@@ -1280,6 +1282,16 @@ function runSession(
   cleanups.push(endItem);
   onKey((ev) => {
     if (ev.key === 'Escape') return backToMap();
+    // Enter moves on from the feedback wherever focus ended up (Safari and some
+    // Mac setups don't keep focus on the Continue button).
+    if (ev.key === 'Enter' && advance && !ev.repeat) {
+      const t = ev.target;
+      const control = (t instanceof HTMLInputElement && !t.disabled) || t instanceof HTMLButtonElement || t instanceof HTMLTextAreaElement;
+      if (!control) {
+        ev.preventDefault();
+        return advance();
+      }
+    }
     if (ev.metaKey || ev.ctrlKey) return;
     if (ev.code !== 'KeyL' && ev.code !== 'KeyS' && ev.code !== 'KeyM') return;
     const active = document.activeElement;
@@ -1303,6 +1315,7 @@ function runSession(
 
   const showItem = () => {
     updateBar();
+    advance = null;
     replay = null;
     mic = null;
     endItem();
@@ -1676,8 +1689,10 @@ function runSession(
         ),
       );
       next.focus();
+      advance = () => next.click();
       // A miss (or "Show answer"): type the answer out before moving on.
       if (!correct && getPrefs().copyMisses) {
+        advance = () => copy.focus();
         next.hidden = true;
         const copy = el('input', { class: 'sr-input', type: 'text', autocomplete: 'off', spellcheck: false, placeholder: 'Type the answer to continue' });
         noSuggestions(copy);
@@ -1798,11 +1813,10 @@ function renderSprint(root: HTMLElement, nav: SpeedrunNav): void {
   const rating = conjugationRating(allForms());
   const finished = new Set(Object.keys(allLessonRecords()));
   const queue = sprintQueue(finished, allForms(), allFormsSeen(), Date.now(), { maxLevel: main });
-  const round = roundFrom(queue);
   const toReview = queue.missed.length + queue.review.length;
   const working = workingVerbs(queue);
   const best = getSprintBest();
-  const start = iconButton('Start sprint', ICONS.play, () => runSprint(root, nav, round), 'sr-btn primary');
+  const start = iconButton(`Mix · every open tense, verbs to ${main}`, ICONS.play, () => runSprint(root, nav), 'sr-btn primary');
   onKey((ev) => {
     if (ev.key === 'Escape') toMap();
   });
@@ -1821,13 +1835,10 @@ function renderSprint(root: HTMLElement, nav: SpeedrunNav): void {
           { class: 'sr-lede' },
           `${SPRINT_SECONDS} seconds. Translate each Castellano form into Catalan; a right answer moves on at once, ` +
             'a miss shows the form. Misses come back next round; forms you get right rest (a day, then 4, then 10) ' +
-            'before they return. New forms mix a handful of verbs across every open tense; when you have seen all of a verb, ' +
-            'the next most common one joins.',
+            'before they return. Mix draws from every open tense; pick a tense below to drill just that one.',
         ),
         working.length ? el('p', { class: 'sr-working' }, 'New forms now from ', el('strong', { lang: 'ca' }, working.join(', ')), '.') : null,
       ),
-      tenseList(finished),
-      verbList(main),
       el(
         'div',
         { class: 'sr-hero-stats' },
@@ -1835,28 +1846,39 @@ function renderSprint(root: HTMLElement, nav: SpeedrunNav): void {
         stat(String(toReview), 'To review'),
         stat(pctLabel(rating), 'Rating'),
       ),
+      el('div', { class: 'sr-intro-foot' }, start, el('span', { class: 'sr-keys' }, kbd('Enter'), ' mix', kbd('Esc'), ' map')),
+      tenseTiles(root, nav, finished, main),
       levelBars(rating, 'A form counts once you get it right twice in a row; a miss resets it.'),
-      el('div', { class: 'sr-intro-foot' }, start, el('span', { class: 'sr-keys' }, kbd('Enter'), ' start', kbd('Esc'), ' map')),
+      verbList(main),
     ),
   );
   start.focus();
 }
 
-/** The sprint's tenses: open ones, and the lesson that opens each of the rest. */
-function tenseList(finished: Set<string>): HTMLElement {
-  const open = openTenses(finished);
+/** One tile per tense: its progress over the verbs drilled at this level; open tenses start a sprint of just that tense. */
+function tenseTiles(root: HTMLElement, nav: SpeedrunNav, finished: Set<string>, main: SpeedrunLevel): HTMLElement {
+  const stats = tenseStats(finished, allForms(), allFormsSeen(), Date.now(), main);
   return el(
-    'ul',
-    { class: 'sr-tense-list' },
-    ...conjugation.tenses.map((t) =>
-      el(
-        'li',
-        { class: open.has(t.id) ? 'open' : '' },
-        el('span', { class: 'sr-level-tag' }, t.level),
-        el('span', {}, t.label),
-        open.has(t.id) ? null : el('span', { class: 'sr-muted' }, `opens with ${t.lesson.toUpperCase()}`),
-      ),
-    ),
+    'section',
+    { class: 'sr-vocab-sets sr-tense-tiles' },
+    ...stats.map(({ tense, open, total, seen, pct, due }) => {
+      const tile = el(
+        open ? 'button' : 'div',
+        { class: `sr-vocab-set${open ? '' : ' locked'}`, ...(open ? { type: 'button', title: `Sprint: ${tense.label} only` } : {}) },
+        el(
+          'span',
+          { class: 'sr-quest-title' },
+          el('span', { lang: 'ca' }, tense.label),
+          el('span', { class: 'sr-vocab-set-tags' }, due ? el('span', { class: 'sr-due' }, `${due} due`) : null, el('span', { class: 'sr-badge' }, tense.level)),
+        ),
+        open
+          ? el('span', { class: 'sr-set-stages' }, meter(pct), el('span', { class: 'sr-muted' }, `${Math.round(pct * 100)}%`))
+          : el('span', { class: 'sr-muted' }, `Opens with ${tense.lesson.toUpperCase()}`),
+        el('span', { class: 'sr-vocab-preview' }, open ? `${seen}/${total} forms seen` : ''),
+      );
+      if (open) tile.addEventListener('click', () => runSprint(root, nav, tense.id));
+      return tile;
+    }),
   );
 }
 
@@ -1916,7 +1938,12 @@ function stageBars(of: (lv: SpeedrunLevel) => Stages, current: SpeedrunLevel, ca
   );
 }
 
-function runSprint(root: HTMLElement, nav: SpeedrunNav, round: SprintCard[]): void {
+/** A sprint over every open tense, or one tense when given. */
+function runSprint(root: HTMLElement, nav: SpeedrunNav, tense?: string): void {
+  const finished = new Set(Object.keys(allLessonRecords()));
+  const round = roundFrom(sprintQueue(finished, allForms(), allFormsSeen(), Date.now(), { maxLevel: courseLevel(), tense }));
+  const tenseLabel = tense ? conjugation.tenses.find((t) => t.id === tense)?.label : undefined;
+  if (round.length === 0) return renderSprint(root, nav);
   resetView(root);
   const toMap = () => renderSpeedrun(root, nav);
   const before = conjugationRating(allForms());
@@ -1992,17 +2019,18 @@ function runSprint(root: HTMLElement, nav: SpeedrunNav, round: SprintCard[]): vo
     clearInterval(tick);
     const score = results.filter(([, ok]) => ok).length;
     recordForms(results.map(([c, ok]) => [c.key, ok]));
-    const newBest = recordSprint(score);
+    const newBest = tense ? false : recordSprint(score); // the best is for the mix
     addXp(score * 2);
     const after = conjugationRating(allForms());
     const misses = uniqueMisses(results);
     clear(stage);
-    const again = iconButton('Again', ICONS.refresh, () => renderSprint(root, nav), 'sr-btn primary');
+    const again = iconButton(tenseLabel ? `Again · ${tenseLabel}` : 'Again', ICONS.refresh, () => runSprint(root, nav, tense), 'sr-btn primary');
+    const sprintPage = button('All tenses', () => renderSprint(root, nav), 'sr-btn');
     stage.append(
       el(
         'section',
         { class: 'sr-summary' },
-        el('p', { class: 'sr-eyebrow' }, 'Conjugation sprint'),
+        el('p', { class: 'sr-eyebrow' }, tenseLabel ? `Conjugation sprint · ${tenseLabel}` : 'Conjugation sprint · mix'),
         el('h1', { class: 'sr-title' }, newBest ? 'New best.' : `${score} right.`),
         el(
           'div',
@@ -2028,7 +2056,7 @@ function runSprint(root: HTMLElement, nav: SpeedrunNav, round: SprintCard[]): vo
               ),
             )
           : null,
-        el('div', { class: 'sr-actions' }, again, button('Map', toMap, 'sr-btn ghost')),
+        el('div', { class: 'sr-actions' }, again, sprintPage, button('Map', toMap, 'sr-btn ghost')),
       ),
     );
     again.focus();

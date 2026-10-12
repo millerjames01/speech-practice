@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { availableStars, compareLevels, conjugationRating, courseRating, indexCards, isPerfect, nextStarOpensIn, itemCredit, lessonDue, lessonStages, lessonStars, levelProgress, levelStages, stageProgress, toRating, vocabRating } from '../src/speedrun/mastery';
 import { DAY, interleave, planLessonReview, planToday, startOfDay, type SrsCard } from '../src/speedrun/srs';
-import { conjugation, conjugationPool, formKey, openTenses, sprintQueue, sprintRound } from '../src/speedrun/sprint';
+import { conjugation, conjugationPool, formKey, openTenses, sprintQueue, sprintRound, tenseStats } from '../src/speedrun/sprint';
 import { loadSpeedrun } from '../src/speedrun/content';
 import { isVocabCard, planVocab, planVocabSet, setDue, unlockedSets, vocab, vocabPattern, vocabStats } from '../src/speedrun/vocab';
 import { checkAnswer } from '../src/speedrun/check';
@@ -357,5 +357,32 @@ describe('Today fillers do not repeat', () => {
     const after = p.allCards()[0]!;
     expect(after).toMatchObject({ step: before.step, due: before.due, practiced: NOW });
     expect(planToday(p.allCards(), NOW + 3_600_000).mix).toEqual([]);
+  });
+});
+
+describe('conjugation by tense', () => {
+  const finished = new Set(['a2-21', 'a2-23']);
+
+  it('drills one tense when asked, and every open tense in the mix', () => {
+    const one = sprintRound(finished, {}, {}, NOW, { maxLevel: 'A2', tense: 'perfet' });
+    expect(one.length).toBeGreaterThan(0);
+    expect(new Set(one.map((c) => c.tense))).toEqual(new Set(['perfet']));
+    const mix = sprintRound(finished, {}, {}, NOW, { maxLevel: 'A2' });
+    expect(new Set(mix.map((c) => c.tense))).toEqual(openTenses(finished));
+    expect(sprintRound(finished, {}, {}, NOW, { maxLevel: 'A2', tense: 'futur' })).toEqual([]); // not open yet
+  });
+
+  it('reports each tense over the verbs drilled at the course level', () => {
+    const pres = conjugationPool().filter((c) => c.tense === 'pres' && c.verbLevel === 'A2');
+    const forms = Object.fromEntries(pres.slice(0, 6).map((c, i) => [c.key, i < 3 ? 2 : 0]));
+    const seen = Object.fromEntries(pres.slice(0, 6).map((c) => [c.key, Math.floor(NOW / 60_000)]));
+    const stats = tenseStats(finished, forms, seen, NOW, 'A2');
+    const p = stats.find((s) => s.tense.id === 'pres')!;
+    expect(p.open).toBe(true);
+    expect(p.total).toBe(pres.length);
+    expect(p.seen).toBe(6);
+    expect(p.pct).toBeCloseTo(3 / pres.length);
+    expect(p.due).toBe(3); // the three misses; the right ones rest
+    expect(stats.find((s) => s.tense.id === 'futur')!.open).toBe(false);
   });
 });
