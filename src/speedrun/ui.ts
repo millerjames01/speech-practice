@@ -15,29 +15,23 @@ import { checkAnswer, normalize, type CheckResult } from './check';
 import { loadSpeedrun } from './content';
 import { canonical, expand } from './pattern';
 import {
-  STAR_RULES,
-  compareLevels,
-  conjugationRating,
-  courseRating,
+  FORM_GRADE_RULES,
+  GRADES,
+  GRADE_INFO,
+  formsRating,
   indexCards,
   isLessonCard,
-  lessonDue,
-  availableStars,
   isPerfect,
-  lessonStars,
-  STAGES,
-  FORM_STAGE_RULES,
-  STAGE_NAMES,
-  STAGE_RULES,
-  formStages,
-  lessonStages,
-  levelStages,
-  vocabStages,
-  type Stages,
-  nextStarOpensIn,
-  vocabRating,
+  lessonDue,
+  met,
+  structuresRating,
+  tallyForms,
+  tallyLessons,
+  tallySets,
+  wordsRating,
+  type Grade,
   type Rating,
-  type Stars,
+  type Tally,
 } from './mastery';
 import {
   addXp,
@@ -64,7 +58,7 @@ import {
 } from './progress';
 import { VoiceStream, bestProgress, canListen, markHeard, voiceState, type VoiceProgress } from './listen';
 import { buildMigrationPlan } from './migrate';
-import { SPRINT_SECONDS, conjugation, conjugationPool, openTenses, roundFrom, sprintQueue, tenseStats, workingVerbs, type SprintCard } from './sprint';
+import { SPRINT_SECONDS, conjugation, conjugationPool, openTenses, roundFrom, sprintQueue, workingVerbs, type SprintCard } from './sprint';
 import { planLessonReview, planToday, type SrsCard } from './srs';
 import { planVocab, planVocabSet, setDue, unlockedSets, vocab, vocabStats } from './vocab';
 import { decodeSync, downloadSync, encodeSync, formatShortCode, uploadSync } from './sync';
@@ -314,74 +308,136 @@ function stat(value: string, label: string): HTMLElement {
 }
 
 /**
- * Five stage pills: filled as items reach each stage, locked (dashed) until
- * enough days have passed for that stage to be reachable.
+ * The graded bar: hardened, settling, new and fading, strongest on the left,
+ * then the space not yet met. Every lesson, set, tense and level uses it.
  */
-function pills(s: Stages, size: 'small' | 'large' | '' = '', rules: readonly string[] = STAGE_RULES): HTMLElement {
-  const firstLocked = s.open.indexOf(false);
-  const row = el('span', { class: `sr-pills${size ? ` ${size}` : ''}` });
-  row.setAttribute('role', 'img');
-  row.setAttribute('aria-label', `${s.open.filter(Boolean).length} of ${STAGES} stages open, ${Math.round(s.pct * 100)}% done`);
-  for (let k = 0; k < STAGES; k++) {
-    const fill = s.fill[k]!;
-    const locked = !s.open[k];
-    const note = locked
-      ? k === firstLocked && s.nextIn !== null
-        ? `opens in ${days(s.nextIn)}`
-        : 'locked'
-      : `${Math.round(fill * 100)}%`;
-    const pill = el('span', {
-      class: `sr-pill${locked ? ' locked' : ''}${fill >= 1 ? ' done' : ''}`,
-      title: `${rules[k]} · ${note}`,
+function gradedBar(t: Tally, size: 'thin' | 'tall' | '' = '', rules: Record<Grade, string> = GRADE_RULES): HTMLElement {
+  const bar = el('span', { class: `sr-graded${size ? ` ${size}` : ''}` });
+  const parts = GRADES.filter((g) => t[g] > 0).map((g) => `${t[g]} ${GRADE_INFO[g].label.toLowerCase()}`);
+  bar.setAttribute('role', 'img');
+  bar.setAttribute('aria-label', `${parts.length ? parts.join(', ') : 'none met'} of ${t.total}`);
+  if (t.total === 0) return bar;
+  for (const g of GRADES) {
+    if (!t[g]) continue;
+    const seg = el('span', { class: `sr-grade ${g}`, title: `${GRADE_INFO[g].label}: ${t[g]} · ${rules[g]}` });
+    seg.style.width = `${(t[g] / t.total) * 100}%`;
+    bar.append(seg);
+  }
+  return bar;
+}
+
+const GRADE_RULES = Object.fromEntries(GRADES.map((g) => [g, GRADE_INFO[g].rule])) as Record<Grade, string>;
+
+/** The key under a big bar, each grade with its rule on hover. */
+function gradeLegend(rules: Record<Grade, string> = GRADE_RULES): HTMLElement {
+  return el(
+    'p',
+    { class: 'sr-grade-legend' },
+    ...GRADES.map((g) => el('span', { title: rules[g] }, el('i', { class: `sr-grade ${g}` }), GRADE_INFO[g].label)),
+    el('span', { title: 'Not started yet' }, el('i', { class: 'sr-grade none' }), 'Not met'),
+  );
+}
+
+/** Counts per grade, in bar order. */
+function gradeCounts(t: Tally, rules: Record<Grade, string> = GRADE_RULES): HTMLElement {
+  return el(
+    'div',
+    { class: 'sr-grade-counts' },
+    ...GRADES.map((g) => el('div', { title: rules[g] }, el('b', {}, String(t[g])), el('span', {}, GRADE_INFO[g].label))),
+    el('div', { title: 'Not started yet' }, el('b', {}, String(t.total - met(t))), el('span', {}, 'Not met')),
+  );
+}
+
+const pct = (x: number) => `${Math.round(x * 100)}%`;
+
+/* ---------- level picker ----------
+ * Every page shows one level at a time. The choice is shared across the map,
+ * the vocab builder and the sprint, and starts at the course level.
+ */
+
+let pickedLevel: SpeedrunLevel | null = null;
+
+const shownLevel = (main: SpeedrunLevel): SpeedrunLevel => pickedLevel ?? main;
+
+function levelPicker(main: SpeedrunLevel, onPick: () => void): HTMLElement {
+  const shown = shownLevel(main);
+  const row = el('div', { class: 'sr-level-picker', role: 'tablist', 'aria-label': 'Level' } as never);
+  for (const lv of SPEEDRUN_LEVELS) {
+    const b = el(
+      'button',
+      { class: `sr-level-pick${lv === shown ? ' on' : ''}${lv === main ? ' course' : ''}`, type: 'button', title: lv === main ? `${lv} · your course level` : `${lv} · ${LEVEL_INFO[lv].name}` },
+      lv,
+    );
+    b.setAttribute('role', 'tab');
+    b.setAttribute('aria-selected', String(lv === shown));
+    b.addEventListener('click', () => {
+      pickedLevel = lv;
+      onPick();
     });
-    if (!locked && fill > 0 && fill < 1) {
-      const bar = el('span', { class: 'sr-pill-fill' });
-      bar.style.width = `${Math.round(fill * 100)}%`;
-      pill.append(bar);
-    }
-    row.append(pill);
+    row.append(b);
   }
   return row;
 }
 
-/**
- * The big version: each pill named for its memory stage, with how much of it
- * is done, or when it opens.
+/* ---------- strands ----------
+ * Three levels, one per kind of knowledge: Structures (lessons), Words (vocab)
+ * and Forms (conjugation). Each tile shows that strand's own level and how the
+ * level being viewed is going in it; the lowest strand is outlined.
  */
-function stageLadder(s: Stages, rules: readonly string[] = STAGE_RULES): HTMLElement {
-  const row = pills(s, 'large', rules);
-  const firstLocked = s.open.indexOf(false);
-  const labels = el(
-    'span',
-    { class: 'sr-stage-labels' },
-    ...STAGE_NAMES.map((name, k) =>
-      el(
-        'span',
-        { class: `sr-stage-label${s.open[k] ? '' : ' locked'}`, title: rules[k] },
-        el('strong', {}, name),
-        el(
-          'span',
-          {},
-          s.open[k] ? `${Math.round(s.fill[k]! * 100)}%` : k === firstLocked && s.nextIn !== null ? `in ${days(s.nextIn)}` : 'later',
-        ),
-      ),
-    ),
+
+interface Strand {
+  name: 'Structures' | 'Words' | 'Forms';
+  rating: Rating;
+  /** The strand's material at the level being viewed. */
+  tally: Tally;
+  rules: Record<Grade, string>;
+  go?: () => void;
+}
+
+function strands(level: SpeedrunLevel, now: number, go: { words: () => void; forms: () => void }): Strand[] {
+  const content = loadSpeedrun();
+  const index = indexCards(allCards());
+  const forms = allForms();
+  const seen = allFormsSeen();
+  return [
+    { name: 'Structures', rating: structuresRating(content.byLevel, index, now), tally: tallyLessons(content.byLevel[level], index, now), rules: GRADE_RULES },
+    { name: 'Words', rating: wordsRating(index, vocab, now), tally: tallySets(vocab.sets.filter((s) => s.level === level), index, now), rules: GRADE_RULES, go: go.words },
+    {
+      name: 'Forms',
+      rating: formsRating(forms, seen, now),
+      tally: tallyForms(conjugationPool().filter((c) => c.level === level), forms, seen, now),
+      rules: FORM_GRADE_RULES,
+      go: go.forms,
+    },
+  ];
+}
+
+/** The lowest strand: it sets the learner's level. */
+function weakest(list: Strand[]): Strand {
+  const rank = (st: Strand) => SPEEDRUN_LEVELS.indexOf(st.rating.level) + st.rating.pct;
+  return list.reduce((a, b) => (rank(b) < rank(a) ? b : a));
+}
+
+const STRAND_SOURCE = { Structures: 'Lessons', Words: 'Vocab builder', Forms: 'Conjugation sprint' } as const;
+
+function strandTiles(list: Strand[], level: SpeedrunLevel, current?: Strand['name']): HTMLElement {
+  const low = weakest(list);
+  return el(
+    'section',
+    { class: 'sr-strands' },
+    ...list.map((st) => {
+      const tile = el(
+        st.go && st.name !== current ? 'button' : 'div',
+        { class: `sr-strand${st === low ? ' low' : ''}${st.name === current ? ' current' : ''}`, ...(st.go && st.name !== current ? { type: 'button', title: `Open the ${STRAND_SOURCE[st.name].toLowerCase()}` } : {}) },
+        el('span', { class: 'sr-strand-name' }, st.name),
+        el('span', { class: 'sr-strand-level', title: `Your ${st.name.toLowerCase()} level: ${pct(st.rating.pct)} of the way through ${st.rating.level}` }, st.rating.level, el('small', {}, pct(st.rating.pct))),
+        gradedBar(st.tally, 'thin', st.rules),
+        el('span', { class: 'sr-strand-meta' }, `${level} · ${met(st.tally)}/${st.tally.total} · ${STRAND_SOURCE[st.name]}`),
+      );
+      if (st.go && st.name !== current) tile.addEventListener('click', st.go);
+      return tile;
+    }),
   );
-  return el('span', { class: 'sr-ladder' }, row, labels);
-}
-
-const days = (n: number) => `${n} day${n === 1 ? '' : 's'}`;
-
-/** "2 of 5 stages open · next in 3 days". */
-function stageNote(s: Stages): string {
-  const open = s.open.filter(Boolean).length;
-  return `${open} of ${STAGES} stages open${open < STAGES && s.nextIn !== null ? ` · next in ${days(s.nextIn)}` : ''}`;
-}
-
-function meter(fraction: number): HTMLElement {
-  const fill = el('span', { class: 'sr-meter-fill' });
-  fill.style.width = `${Math.round(Math.max(0, Math.min(1, fraction)) * 100)}%`;
-  return el('span', { class: 'sr-meter' }, fill);
 }
 
 /* ---------- practice preferences ----------
@@ -483,24 +539,6 @@ function practiceSettings(): HTMLElement {
 
 /* ---------- map ---------- */
 
-/** ★★☆ as spans, one per star open so far, so filled and empty stars can be styled. */
-export function starRow(n: Stars, of: number = 3): HTMLElement {
-  const row = el('span', { class: 'sr-stars', title: `${n} of ${of} ${of === 1 ? 'star' : 'stars'} open so far` });
-  for (let i = 1; i <= of; i += 1) row.append(el('span', { class: i <= n ? 'on' : '' }, '★'));
-  return row;
-}
-
-/** Held / open stars over a set of lessons: the denominator grows as tiers open with time. */
-function starTally(lessons: SpeedrunLesson[], records: Record<string, { firstAt?: number }>, index: Map<string, SrsCard>, now: number): { held: number; open: number } {
-  let held = 0;
-  let open = 0;
-  for (const l of lessons) {
-    held += lessonStars(l, !!records[l.id], index);
-    open += availableStars(l, records[l.id], index, now);
-  }
-  return { held, open };
-}
-
 /** A small mark for a lesson run with every item right first time. */
 const perfectMark = () => el('span', { class: 'sr-perfect', title: 'Perfect run: every item right on the first try' }, '100%');
 
@@ -520,55 +558,6 @@ function courseLevel(): SpeedrunLevel {
 }
 
 const pctLabel = (r: Rating) => `${r.level} · ${Math.round(r.pct * 100)}%`;
-
-/** A side track: its rating on the course scale, how it compares with the course, and a way in. */
-/** Conjugation stages at one level: open tenses only, verbs up to the course level, each tense on its own clock. */
-function conjStagesAt(level: SpeedrunLevel, main: SpeedrunLevel, now = Date.now()): Stages {
-  const open = openTenses(new Set(Object.keys(allLessonRecords())));
-  const top = SPEEDRUN_LEVELS.indexOf(main);
-  const byTense = new Map<string, SprintCard[]>();
-  for (const c of conjugationPool()) {
-    if (c.level !== level || !open.has(c.tense) || SPEEDRUN_LEVELS.indexOf(c.verbLevel) > top) continue;
-    byTense.set(c.tense, [...(byTense.get(c.tense) ?? []), c]);
-  }
-  return formStages([...byTense.values()], allForms(), allFormsSeen(), now);
-}
-
-const vocabStagesAt = (level: SpeedrunLevel, index: Map<string, SrsCard>, now = Date.now()): Stages =>
-  vocabStages(vocab.sets.filter((s) => s.level === level), index, now);
-
-function ratingTile(
-  title: string,
-  rating: Rating,
-  main: SpeedrunLevel,
-  stages: Stages,
-  rules: readonly string[],
-  body: string,
-  meta: string,
-  go: () => void,
-): HTMLElement {
-  const cmp = compareLevels(rating.level, main);
-  const tile = el(
-    'button',
-    { class: 'sr-quest', type: 'button' },
-    el(
-      'span',
-      { class: 'sr-quest-title' },
-      title,
-      el('span', { class: `sr-badge${cmp < 0 ? ' behind' : ''}`, title: 'Rating on the A2-C1 scale' }, pctLabel(rating)),
-    ),
-    el('span', { class: 'sr-set-stages' }, pills(stages, '', rules), el('span', { class: 'sr-muted' }, `${main} · ${Math.round(stages.pct * 100)}%`)),
-    el('span', { class: 'sr-quest-body' }, body),
-    el(
-      'span',
-      { class: 'sr-quest-meta' },
-      el('span', {}, meta),
-      el('span', {}, cmp < 0 ? `Behind your ${main}` : cmp > 0 ? `Ahead of your ${main}` : `At your level`),
-    ),
-  );
-  tile.addEventListener('click', go);
-  return tile;
-}
 
 /**
  * One-time conversion of progress from before ratings: XP and streak are
@@ -606,16 +595,16 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
   const totalMs = done.reduce((sum, l) => sum + (records[l.id]?.bestMs ?? 0), 0);
   const next = content.lessons.find((l) => !records[l.id]);
   const activeLevel: SpeedrunLevel = next?.level ?? SPEEDRUN_LEVELS[SPEEDRUN_LEVELS.length - 1]!;
+  const level = shownLevel(activeLevel);
   const due = lessonDueCount(now);
   const learned = cards.some(isLessonCard);
   const xp = xpStats(now);
-  const vstats = vocabStats(cards, now, vocab, activeLevel);
-  const conj = conjugationRating(allForms());
-  const voc = vocabRating(index, vocab);
-  const levelStarsOf = (lv: SpeedrunLevel) => starTally(content.byLevel[lv], records, index, now);
-  const stars = starTally(content.lessons, records, index, now);
   const perfect = content.lessons.filter((l) => isPerfect(records[l.id])).length;
-  const activeStages = levelStages(content.byLevel[activeLevel], records, index, now);
+  const strandList = strands(level, now, { words: () => renderVocab(root, nav), forms: () => renderSprint(root, nav) });
+  const low = weakest(strandList);
+  const lessons = content.byLevel[level];
+  const lessonTally = tallyLessons(lessons, index, now);
+  const info = LEVEL_INFO[level];
 
   const voicePicker = voicePickerControl();
 
@@ -638,13 +627,12 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
       el(
         'div',
         { class: 'sr-hero-text' },
-        el('p', { class: 'sr-eyebrow' }, `Castellano → Català · ${activeLevel} · ${LEVEL_INFO[activeLevel].name}`),
+        el('p', { class: 'sr-eyebrow' }, `Castellano → Català · course at ${activeLevel}`),
         el(
           'h1',
           { class: 'sr-title' },
-          learned ? `${Math.round(activeStages.pct * 100)}% of ${activeLevel} so far.` : 'From Castellano to C1, by the shortest route.',
+          learned ? `You’re ${low.rating.level}. ${low.name} ${low.name === 'Structures' ? 'set the pace' : 'are the gap'}.` : 'From Castellano to C1, by the shortest route.',
         ),
-        el('div', { class: 'sr-hero-meter' }, stageLadder(activeStages), learned ? el('span', { class: 'sr-muted' }, stageNote(activeStages)) : null),
         el('div', { class: 'sr-actions' }, today, openLesson, !next ? el('span', { class: 'sr-complete' }, 'All lessons done. Keep the reviews going.') : null),
         el(
           'p',
@@ -656,16 +644,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
             : 'Five-minute drills on the verbs, pronouns and structures that carry most of real Catalan.',
         ),
       ),
-      el(
-        'div',
-        { class: 'sr-hero-stats' },
-        stat(xp.streak ? `${xp.streak}d` : '—', 'Streak'),
-        stat(String(xp.today), 'XP today'),
-        (() => {
-          const t = levelStarsOf(activeLevel);
-          return stat(`${t.held}/${t.open}`, `${activeLevel} stars`);
-        })(),
-      ),
+      el('div', { class: 'sr-hero-stats' }, stat(xp.streak ? `${xp.streak}d` : '—', 'Streak'), stat(String(xp.today), 'XP today'), stat(String(xp.total), 'XP')),
     ),
   );
 
@@ -685,64 +664,39 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
   });
   page.append(banners);
 
-  /* Side tracks: conjugation and vocab, rated on the same A2-C1 scale as the course. */
+  /* One level at a time: the picker, the three strands at that level, then its lessons. */
+  const levelDue = lessons.reduce((n, l) => n + lessonDue(l, index, now), 0);
+  const levelDone = lessons.filter((l) => records[l.id]).length;
   page.append(
     el(
       'section',
-      { class: 'sr-quests' },
-      el('h2', { class: 'sr-section-label' }, 'Side tracks · rated against your level'),
+      { class: 'sr-level-view' },
+      levelPicker(activeLevel, () => renderSpeedrun(root, nav)),
+      strandTiles(strandList, level),
       el(
         'div',
-        { class: 'sr-quest-grid' },
-        ratingTile(
-          'Conjugation sprint',
-          conj,
-          activeLevel,
-          conjStagesAt(activeLevel, activeLevel, now),
-          FORM_STAGE_RULES,
-          `${SPRINT_SECONDS} seconds translating verb forms: 45 core verbs, each tense opening with its lesson.`,
-          getSprintBest() ? `Best ${getSprintBest()}` : 'No sprint yet',
-          () => renderSprint(root, nav),
+        { class: 'sr-level-summary' },
+        el(
+          'div',
+          { class: 'sr-level-head' },
+          el('span', { class: 'sr-level-tag' }, level),
+          el(
+            'div',
+            { class: 'sr-level-text' },
+            el('h2', {}, info.name),
+            el('p', {}, `${levelDone}/${lessons.length} lessons · ${met(lessonTally)}/${lessonTally.total} phrases${levelDue ? ` · ${levelDue} due` : ''}`),
+          ),
         ),
-        ratingTile(
-          'Vocab builder',
-          voc,
-          activeLevel,
-          vocabStagesAt(activeLevel, index, now),
-          STAGE_RULES,
-          `Exam-topic words the lessons skip. ${vstats.unlocked} of ${vstats.total} unlocked; more open with each level.`,
-          `${vstats.known} known${vstats.due ? ` · ${vstats.due} due` : ''}`,
-          () => renderVocab(root, nav),
-        ),
+        el('p', { class: 'sr-level-blurb' }, info.blurb),
+        gradedBar(lessonTally, 'tall'),
+        gradeLegend(),
+        gradeCounts(lessonTally),
       ),
-    ),
-  );
-
-  for (const level of SPEEDRUN_LEVELS) {
-    const lessons = content.byLevel[level];
-    if (lessons.length === 0) continue;
-    const levelDone = lessons.filter((l) => records[l.id]).length;
-    const levelStars = levelStarsOf(level);
-    const levelDue = lessons.reduce((n, l) => n + lessonDue(l, index, now), 0);
-    const stages = levelStages(lessons, records, index, now);
-    const info = LEVEL_INFO[level];
-    const section = el(
-      'details',
-      { class: 'sr-level', open: level === activeLevel },
-      el(
-        'summary',
-        { class: 'sr-level-head' },
-        el('span', { class: 'sr-level-tag' }, level),
-        el('div', { class: 'sr-level-text' }, el('h2', {}, info.name), el('p', {}, `${levelDone}/${lessons.length} lessons · ★ ${levelStars.held}/${levelStars.open}${levelDue ? ` · ${levelDue} due` : ''}`)),
-        el('div', { class: 'sr-level-progress' }, el('span', {}, `${Math.round(stages.pct * 100)}%`), pills(stages)),
-      ),
-      el('p', { class: 'sr-level-blurb' }, info.blurb),
       el(
         'div',
         { class: 'sr-grid' },
         ...lessons.map((lesson, i) => {
           const rec = records[lesson.id];
-          const n = lessonStars(lesson, !!rec, index);
           const ld = rec ? lessonDue(lesson, index, now) : 0;
           const card = el(
             'button',
@@ -754,11 +708,11 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
               ld ? el('span', { class: 'sr-due', title: `${ld} due for review` }, `${ld} due`) : null,
             ),
             el('span', { class: 'sr-card-title' }, lesson.title),
-            rec ? pills(lessonStages(lesson, rec, index, now), 'small') : null,
+            rec ? gradedBar(tallyLessons([lesson], index, now), 'thin') : null,
             el(
               'span',
               { class: 'sr-card-meta' },
-              rec ? el('span', { class: 'sr-card-stars' }, starRow(n, availableStars(lesson, rec, index, now)), isPerfect(rec) ? perfectMark() : null) : `${lesson.items.length} items`,
+              rec ? el('span', { class: 'sr-card-marks' }, isPerfect(rec) ? perfectMark() : null) : `${lesson.items.length} items`,
               rec ? el('span', {}, formatMs(rec.bestMs)) : null,
             ),
           );
@@ -768,13 +722,10 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
           return card;
         }),
       ),
-    );
-    page.append(section);
-  }
+    ),
+  );
 
-  /* The whole course at a glance; the hero above stays on the current level. */
-  const course = courseRating(content.byLevel, index);
-  const rows: [string, Rating][] = [['Lessons', course], ['Conjugation', conj], ['Vocab', voc]];
+  /* The whole course at a glance: each strand at each level. */
   page.append(
     el(
       'section',
@@ -783,9 +734,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
       el(
         'div',
         { class: 'sr-overview-stats' },
-        stat(`${Math.round(course.overall * 100)}%`, 'Course held'),
         stat(`${done.length}/${content.lessons.length}`, 'Lessons'),
-        stat(`${stars.held}/${stars.open}`, 'Stars'),
         stat(`${perfect}/${done.length}`, 'Perfect runs'),
         stat(String(xp.total), 'XP'),
         stat(formatMs(totalMs), 'Run time'),
@@ -796,31 +745,25 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
         el(
           'thead',
           {},
-          el(
-            'tr',
-            {},
-            el('th', {}, ''),
-            ...SPEEDRUN_LEVELS.map((lv) => el('th', { class: lv === activeLevel ? 'current' : '' }, lv)),
-            el('th', {}, 'All'),
-          ),
+          el('tr', {}, el('th', {}, ''), ...SPEEDRUN_LEVELS.map((lv) => el('th', { class: lv === level ? 'current' : '' }, lv))),
         ),
         el(
           'tbody',
           {},
-          ...rows.map(([label, r]) =>
+          ...(['Structures', 'Words', 'Forms'] as const).map((name) =>
             el(
               'tr',
               {},
-              el('th', {}, label),
-              ...SPEEDRUN_LEVELS.map((lv) =>
-                el('td', { class: lv === activeLevel ? 'current' : '' }, el('span', {}, `${Math.round(r.byLevel[lv] * 100)}%`), meter(r.byLevel[lv])),
-              ),
-              el('td', { class: 'all' }, el('span', {}, `${Math.round(r.overall * 100)}%`), meter(r.overall)),
+              el('th', {}, name),
+              ...SPEEDRUN_LEVELS.map((lv) => {
+                const st = strands(lv, now, { words: () => {}, forms: () => {} }).find((x) => x.name === name)!;
+                return el('td', { class: lv === level ? 'current' : '' }, el('span', {}, `${met(st.tally)}/${st.tally.total}`), gradedBar(st.tally, 'thin', st.rules));
+              }),
             ),
           ),
         ),
       ),
-      el('p', { class: 'sr-fineprint' }, 'Share of each level held long-term. A track rates at the first level below 80%.'),
+      el('p', { class: 'sr-fineprint' }, 'Each strand rates at the first level where less than 80% is held. Your level is the lowest of the three.'),
     ),
   );
 
@@ -1083,9 +1026,7 @@ function renderIntro(root: HTMLElement, nav: SpeedrunNav, lesson: SpeedrunLesson
   const finished = !!records[lesson.id];
   const index = indexCards(allCards());
   const now = Date.now();
-  const stars = lessonStars(lesson, finished, index);
-  const open = availableStars(lesson, records[lesson.id], index, now);
-  const opensIn = nextStarOpensIn(lesson, records[lesson.id], index, now);
+  const tally = tallyLessons([lesson], index, now);
   const due = lessonDue(lesson, index, now);
 
   const begin = () => runSession(root, nav, lessonEntries(lesson), { kind: 'lesson', lesson });
@@ -1103,22 +1044,11 @@ function renderIntro(root: HTMLElement, nav: SpeedrunNav, lesson: SpeedrunLesson
     ? el(
         'div',
         { class: 'sr-star-panel' },
-        el('div', { class: 'sr-card-stars' }, starRow(stars, open), isPerfect(records[lesson.id]) ? perfectMark() : null),
-        el(
-          'ul',
-          { class: 'sr-star-rules' },
-          ...STAR_RULES.map((rule, i) =>
-            el(
-              'li',
-              { class: i < stars ? 'on' : i < open ? '' : 'locked' },
-              el('span', { class: 'sr-star-mark' }, '★'),
-              rule,
-              // Only the next tier gets a countdown; the one after follows from it.
-              i === open && opensIn !== null ? el('span', { class: 'sr-star-when' }, `opens in ${opensIn} ${opensIn === 1 ? 'day' : 'days'}`) : null,
-            ),
-          ),
-        ),
-        el('p', { class: 'sr-muted' }, 'Later stars open as the review gaps grow, and can fade when items slip. Today and lesson reviews win them back.'),
+        gradedBar(tally, 'tall'),
+        gradeLegend(),
+        gradeCounts(tally),
+        isPerfect(records[lesson.id]) ? el('p', { class: 'sr-muted' }, perfectMark(), ' Perfect run: every item right on the first try.') : null,
+        el('p', { class: 'sr-muted' }, 'Items harden as the review gaps grow, and fade when they come due. Today and lesson reviews bring them back.'),
       )
     : null;
 
@@ -1867,12 +1797,15 @@ function renderSprint(root: HTMLElement, nav: SpeedrunNav): void {
   const toMap = () => renderSpeedrun(root, nav);
   topbar(root, nav, { label: 'Conjugation sprint', back: toMap });
   const main = courseLevel();
-  const rating = conjugationRating(allForms());
+  const level = shownLevel(main);
+  const now = Date.now();
   const finished = new Set(Object.keys(allLessonRecords()));
-  const queue = sprintQueue(finished, allForms(), allFormsSeen(), Date.now(), { maxLevel: main });
+  const queue = sprintQueue(finished, allForms(), allFormsSeen(), now, { maxLevel: main });
   const toReview = queue.missed.length + queue.review.length;
   const working = workingVerbs(queue);
   const best = getSprintBest();
+  const strandList = strands(level, now, { words: () => renderVocab(root, nav), forms: () => renderSprint(root, nav) });
+  const forms = strandList.find((st) => st.name === 'Forms')!;
   const start = iconButton(`Mix · every open tense, verbs to ${main}`, ICONS.play, () => runSprint(root, nav), 'sr-btn primary');
   onKey((ev) => {
     if (ev.key === 'Escape') toMap();
@@ -1885,7 +1818,7 @@ function renderSprint(root: HTMLElement, nav: SpeedrunNav): void {
       el(
         'header',
         { class: 'sr-intro-head' },
-        el('p', { class: 'sr-eyebrow' }, `Side track · rated ${pctLabel(rating)} · course at ${main}`),
+        el('p', { class: 'sr-eyebrow' }, `Forms · ${pctLabel(forms.rating)} · course at ${main}`),
         el('h1', { class: 'sr-title' }, 'Conjugation sprint'),
         el(
           'p',
@@ -1896,96 +1829,83 @@ function renderSprint(root: HTMLElement, nav: SpeedrunNav): void {
         ),
         working.length ? el('p', { class: 'sr-working' }, 'New forms now from ', el('strong', { lang: 'ca' }, working.join(', ')), '.') : null,
       ),
-      el(
-        'div',
-        { class: 'sr-hero-stats' },
-        stat(best ? String(best) : '—', 'Best'),
-        stat(String(toReview), 'To review'),
-        stat(pctLabel(rating), 'Rating'),
-      ),
-      el('div', { class: 'sr-hero-meter' }, el('p', { class: 'sr-section-label' }, `${main} forms`), stageLadder(conjStagesAt(main, main), FORM_STAGE_RULES)),
+      el('div', { class: 'sr-hero-stats' }, stat(best ? String(best) : '—', 'Best'), stat(String(toReview), 'To review'), stat(pctLabel(forms.rating), 'Forms level')),
       el('div', { class: 'sr-intro-foot' }, start, el('span', { class: 'sr-keys' }, kbd('Enter'), ' mix', kbd('Esc'), ' map')),
-      tenseTiles(root, nav, finished, main),
-      stageBars(
-        (lv) => conjStagesAt(lv, main),
-        rating.level,
-        'Each form climbs five stages: answered, right once, then right again after a day, 4 days and 10 days. ' +
-          'Right answers before a form has rested don’t move it up. A stage opens once enough days have passed to reach it, ' +
-          'and the percentage counts open stages only.',
-        FORM_STAGE_RULES,
+      el(
+        'section',
+        { class: 'sr-level-view' },
+        levelPicker(main, () => renderSprint(root, nav)),
+        strandTiles(strandList, level, 'Forms'),
+        el(
+          'div',
+          { class: 'sr-level-summary' },
+          el('p', { class: 'sr-section-label' }, `${level} forms · ${met(forms.tally)}/${forms.tally.total}`),
+          gradedBar(forms.tally, 'tall', FORM_GRADE_RULES),
+          gradeLegend(FORM_GRADE_RULES),
+          gradeCounts(forms.tally, FORM_GRADE_RULES),
+          el('p', { class: 'sr-fineprint' }, 'A form’s level is the higher of its verb’s and its tense’s. Right answers before a form has rested don’t move it up.'),
+        ),
+        tenseTiles(root, nav, finished, main, level, now),
+        verbList(main, level),
       ),
-      verbList(main),
     ),
   );
   start.focus();
 }
 
-/** One tile per tense: its progress over the verbs drilled at this level; open tenses start a sprint of just that tense. */
-function tenseTiles(root: HTMLElement, nav: SpeedrunNav, finished: Set<string>, main: SpeedrunLevel): HTMLElement {
-  const stats = tenseStats(finished, allForms(), allFormsSeen(), Date.now(), main);
-  const pool = conjugationPool().filter((c) => SPEEDRUN_LEVELS.indexOf(c.verbLevel) <= SPEEDRUN_LEVELS.indexOf(main));
+/**
+ * The tenses with forms at the level being viewed, each with its graded bar.
+ * An open tense starts a sprint of just that tense.
+ */
+function tenseTiles(root: HTMLElement, nav: SpeedrunNav, finished: Set<string>, main: SpeedrunLevel, level: SpeedrunLevel, now: number): HTMLElement {
+  const open = openTenses(finished);
+  const forms = allForms();
+  const seen = allFormsSeen();
+  const atLevel = conjugationPool().filter((c) => c.level === level);
+  const reachable = SPEEDRUN_LEVELS.indexOf(level) <= SPEEDRUN_LEVELS.indexOf(main);
   return el(
     'section',
     { class: 'sr-vocab-sets sr-tense-tiles' },
-    ...stats.map(({ tense, open, total, seen, due }) => {
-      const tile = el(
-        open ? 'button' : 'div',
-        { class: `sr-vocab-set${open ? '' : ' locked'}`, ...(open ? { type: 'button', title: `Sprint: ${tense.label} only` } : {}) },
-        el(
-          'span',
-          { class: 'sr-quest-title' },
-          el('span', { lang: 'ca' }, tense.label),
-          el('span', { class: 'sr-vocab-set-tags' }, due ? el('span', { class: 'sr-due' }, `${due} due`) : null, el('span', { class: 'sr-badge' }, tense.level)),
-        ),
-        open
-          ? (() => {
-              const st = formStages([pool.filter((c) => c.tense === tense.id)], allForms(), allFormsSeen(), Date.now());
-              return el('span', { class: 'sr-set-stages' }, pills(st, '', FORM_STAGE_RULES), el('span', { class: 'sr-muted' }, `${Math.round(st.pct * 100)}%`));
-            })()
-          : el('span', { class: 'sr-muted' }, `Opens with ${tense.lesson.toUpperCase()}`),
-        el('span', { class: 'sr-vocab-preview' }, open ? `${seen}/${total} forms seen` : ''),
-      );
-      if (open) tile.addEventListener('click', () => runSprint(root, nav, tense.id));
-      return tile;
-    }),
+    ...conjugation.tenses
+      .filter((t) => atLevel.some((c) => c.tense === t.id))
+      .map((tense) => {
+        const tally = tallyForms(atLevel.filter((c) => c.tense === tense.id), forms, seen, now);
+        const live = open.has(tense.id) && reachable;
+        const fromHigherVerbs = SPEEDRUN_LEVELS.indexOf(tense.level) < SPEEDRUN_LEVELS.indexOf(level);
+        const tile = el(
+          live ? 'button' : 'div',
+          { class: `sr-vocab-set${live ? '' : ' locked'}`, ...(live ? { type: 'button', title: `Sprint: ${tense.label} only` } : {}) },
+          el(
+            'span',
+            { class: 'sr-quest-title' },
+            el('span', { lang: 'ca' }, tense.label),
+            el('span', { class: 'sr-vocab-set-tags' }, tally.fading ? el('span', { class: 'sr-due' }, `${tally.fading} due`) : null, el('span', { class: 'sr-badge' }, tense.level)),
+          ),
+          live
+            ? gradedBar(tally, 'thin', FORM_GRADE_RULES)
+            : el('span', { class: 'sr-muted' }, open.has(tense.id) ? `Opens at ${level}` : `Opens with ${tense.lesson.toUpperCase()}`),
+          el('span', { class: 'sr-vocab-preview' }, `${met(tally)}/${tally.total} forms${fromHigherVerbs ? ` · ${level} verbs` : ''}`),
+        );
+        if (live) tile.addEventListener('click', () => runSprint(root, nav, tense.id));
+        return tile;
+      }),
   );
 }
 
-/** The sprint's verbs by level: those at or below the course level are drilled. */
-function verbList(main: SpeedrunLevel): HTMLElement {
-  const top = SPEEDRUN_LEVELS.indexOf(main);
+/** The verbs that join at the level being viewed. */
+function verbList(main: SpeedrunLevel, level: SpeedrunLevel): HTMLElement {
+  const verbs = conjugation.verbs.filter((v) => v.level === level).map((v) => v.ca);
+  const open = SPEEDRUN_LEVELS.indexOf(level) <= SPEEDRUN_LEVELS.indexOf(main);
   return el(
     'div',
     { class: 'sr-verb-levels' },
-    ...SPEEDRUN_LEVELS.map((lv, i) => {
-      const verbs = conjugation.verbs.filter((v) => v.level === lv).map((v) => v.ca);
-      return el(
-        'p',
-        { class: i <= top ? 'open' : '' },
-        el('span', { class: 'sr-level-tag' }, lv),
-        el('span', { lang: 'ca' }, verbs.join(', ')),
-        i <= top ? null : el('span', { class: 'sr-muted' }, `opens at ${lv}`),
-      );
-    }),
-  );
-}
-
-/** Per-level stage pills, with the percentage of what is open. */
-function stageBars(of: (lv: SpeedrunLevel) => Stages, current: SpeedrunLevel, caption: string, rules: readonly string[] = STAGE_RULES): HTMLElement {
-  return el(
-    'section',
-    { class: 'sr-level-bars' },
-    ...SPEEDRUN_LEVELS.map((lv) => {
-      const s = of(lv);
-      return el(
-        'div',
-        { class: `sr-level-bar${lv === current ? ' current' : ''}` },
-        el('span', { class: 'sr-level-tag' }, lv),
-        pills(s, '', rules),
-        el('span', { class: 'sr-muted' }, `${Math.round(s.pct * 100)}%`),
-      );
-    }),
-    el('p', { class: 'sr-fineprint' }, caption),
+    el(
+      'p',
+      { class: open ? 'open' : '' },
+      el('span', { class: 'sr-level-tag' }, level),
+      el('span', { lang: 'ca' }, verbs.join(', ')),
+      open ? null : el('span', { class: 'sr-muted' }, `opens at ${level}`),
+    ),
   );
 }
 
@@ -1997,7 +1917,7 @@ function runSprint(root: HTMLElement, nav: SpeedrunNav, tense?: string): void {
   if (round.length === 0) return renderSprint(root, nav);
   resetView(root);
   const toMap = () => renderSpeedrun(root, nav);
-  const before = conjugationRating(allForms());
+  const before = formsRating(allForms(), allFormsSeen(), Date.now());
   const results: [SprintCard, boolean][] = [];
   let i = 0;
   let over = false;
@@ -2072,7 +1992,7 @@ function runSprint(root: HTMLElement, nav: SpeedrunNav, tense?: string): void {
     recordForms(results.map(([c, ok]) => [c.key, ok]));
     const newBest = tense ? false : recordSprint(score); // the best is for the mix
     addXp(score * 2);
-    const after = conjugationRating(allForms());
+    const after = formsRating(allForms(), allFormsSeen(), Date.now());
     const misses = uniqueMisses(results);
     clear(stage);
     const again = iconButton(tenseLabel ? `Again · ${tenseLabel}` : 'Again', ICONS.refresh, () => runSprint(root, nav, tense), 'sr-btn primary');
@@ -2144,8 +2064,10 @@ function renderVocab(root: HTMLElement, nav: SpeedrunNav): void {
   const cards = allCards();
   const index = indexCards(cards);
   const main = courseLevel();
-  const rating = vocabRating(index, vocab);
+  const level = shownLevel(main);
   const stats = vocabStats(cards, now, vocab, main);
+  const strandList = strands(level, now, { words: () => renderVocab(root, nav), forms: () => renderSprint(root, nav) });
+  const words = strandList.find((st) => st.name === 'Words')!;
   const plan = planVocab(cards, now, { maxLevel: main });
   const dueN = plan.filter((e) => index.has(`${e.lessonId}#${e.index}`)).length;
   const freshN = plan.length - dueN;
@@ -2170,7 +2092,7 @@ function renderVocab(root: HTMLElement, nav: SpeedrunNav): void {
       el(
         'header',
         { class: 'sr-intro-head' },
-        el('p', { class: 'sr-eyebrow' }, `Side track · rated ${pctLabel(rating)} · course at ${main}`),
+        el('p', { class: 'sr-eyebrow' }, `Words · ${pctLabel(words.rating)} · course at ${main}`),
         el('h1', { class: 'sr-title' }, 'Vocab builder'),
         el(
           'p',
@@ -2187,13 +2109,6 @@ function renderVocab(root: HTMLElement, nav: SpeedrunNav): void {
         stat(String(stats.due), 'Due'),
         stat(`${stats.unlocked}/${stats.total}`, 'Unlocked'),
       ),
-      el('div', { class: 'sr-hero-meter' }, el('p', { class: 'sr-section-label' }, `${main} words`), stageLadder(vocabStagesAt(main, index, now))),
-      stageBars(
-        (lv) => vocabStagesAt(lv, index, now),
-        rating.level,
-        'Each word climbs five stages: learned, then recalled after a day, 3 days, a week and two weeks. A stage opens once ' +
-          'enough days have passed to reach it, and the percentage counts open stages only.',
-      ),
       el(
         'div',
         { class: 'sr-intro-foot' },
@@ -2202,10 +2117,24 @@ function renderVocab(root: HTMLElement, nav: SpeedrunNav): void {
       ),
       el(
         'section',
+        { class: 'sr-level-view' },
+        levelPicker(main, () => renderVocab(root, nav)),
+        strandTiles(strandList, level, 'Words'),
+        el(
+          'div',
+          { class: 'sr-level-summary' },
+          el('p', { class: 'sr-section-label' }, `${level} words · ${met(words.tally)}/${words.tally.total}`),
+          gradedBar(words.tally, 'tall'),
+          gradeLegend(),
+          gradeCounts(words.tally),
+        ),
+      ),
+      el(
+        'section',
         { class: 'sr-vocab-sets' },
-        ...vocab.sets.map((set) => {
+        ...vocab.sets.filter((set) => set.level === level).map((set) => {
           const locked = !open.has(set.id);
-          const stages = vocabStages([set], index, now);
+          const tally = tallySets([set], index, now);
           const due = setDue(cards, now, set.id);
           const tile = el(
             locked ? 'div' : 'button',
@@ -2218,7 +2147,7 @@ function renderVocab(root: HTMLElement, nav: SpeedrunNav): void {
             ),
             locked
               ? el('span', { class: 'sr-muted' }, `Unlocks at ${set.level}`)
-              : el('span', { class: 'sr-set-stages' }, pills(stages), el('span', { class: 'sr-muted' }, `${Math.round(stages.pct * 100)}%`)),
+              : gradedBar(tally, 'thin'),
             el('span', { class: 'sr-vocab-preview', lang: 'ca' }, locked ? '' : set.words.slice(0, 5).map(([ca]) => ca).join(' · ')),
           );
           if (!locked) tile.addEventListener('click', () => startVocabSet(root, nav, set.id));

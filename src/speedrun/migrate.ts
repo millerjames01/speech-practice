@@ -6,7 +6,7 @@
  */
 
 import legacyVocab from '../../speedrun/vocab/legacy-v1.json';
-import { indexCards, lessonStars } from './mastery';
+import { indexCards } from './mastery';
 import { expand } from './pattern';
 import type { LessonRecord, MigrationPlan } from './progress';
 import { conjugationPool, legacyTablePool, type SprintCard } from './sprint';
@@ -47,7 +47,10 @@ export function buildMigrationPlan(
   const keysFor = (answer: string) => cellForms(answer).flatMap((a) => byAnswer.get(norm(a)) ?? []);
 
   const index = indexCards(cards);
-  const held = new Set(lessons.filter((l) => lessonStars(l, !!records[l.id], index) >= 2).map((l) => l.id));
+  // Lessons held a week or more (every item at step 2+) seed their forms.
+  const held = new Set(
+    lessons.filter((l) => !!records[l.id] && l.items.every((_, i) => (index.get(`${l.id}#${i}`)?.step ?? -1) >= 2)).map((l) => l.id),
+  );
   const seedForms = [
     ...new Set(legacyTablePool(lessons.filter((l) => held.has(l.id))).flatMap((c) => keysFor(c.answer))),
   ];
