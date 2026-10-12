@@ -136,6 +136,15 @@ export interface SprintQueue {
   resting: SprintCard[];
 }
 
+export interface SprintOptions {
+  /** Verbs above this level are left out. */
+  maxLevel?: SpeedrunLevel;
+  random?: () => number;
+  data?: ConjData;
+  /** One tense only; omitted, every open tense mixes. */
+  tense?: string;
+}
+
 /** Sorts the open forms by what they need, so a round never repeats what was just learned. */
 export function sprintQueue(
   finished: Set<string>,
@@ -146,14 +155,15 @@ export function sprintQueue(
     maxLevel = 'C1',
     random = Math.random,
     data = conjugation,
-  }: { maxLevel?: SpeedrunLevel; random?: () => number; data?: ConjData } = {},
+    tense,
+  }: SprintOptions = {},
 ): SprintQueue {
   const open = openTenses(finished, data);
   const minute = Math.floor(now / 60_000);
   const q: SprintQueue = { missed: [], review: [], fresh: [], resting: [] };
   const overdue = new Map<string, number>();
   for (const c of conjugationPool(data)) {
-    if (!open.has(c.tense) || rank(c.verbLevel) > rank(maxLevel)) continue;
+    if (!open.has(c.tense) || rank(c.verbLevel) > rank(maxLevel) || (tense && c.tense !== tense)) continue;
     const n = forms[c.key];
     if (n === undefined) {
       q.fresh.push(c);
@@ -232,7 +242,7 @@ export function sprintRound(
   forms: Record<string, number>,
   seen: Record<string, number> = {},
   now = Date.now(),
-  options: { maxLevel?: SpeedrunLevel; random?: () => number; data?: ConjData } = {},
+  options: SprintOptions = {},
 ): SprintCard[] {
   return roundFrom(sprintQueue(finished, forms, seen, now, options));
 }
@@ -249,6 +259,45 @@ export function workingVerbs(q: SprintQueue, data: ConjData = conjugation): stri
 }
 
 export const SPRINT_SECONDS = 60;
+
+export interface TenseStats {
+  tense: ConjTense;
+  open: boolean;
+  /** Forms of verbs up to the course level. */
+  total: number;
+  /** Answered at least once. */
+  seen: number;
+  /** Known share, 0-1: each form credited up to FORM_KNOWN right in a row. */
+  pct: number;
+  /** Missed or due again now. */
+  due: number;
+}
+
+/** Each tense's progress over the verbs drilled at this course level. */
+export function tenseStats(
+  finished: Set<string>,
+  forms: Record<string, number>,
+  seen: Record<string, number>,
+  now: number,
+  maxLevel: SpeedrunLevel = 'C1',
+  data: ConjData = conjugation,
+): TenseStats[] {
+  const open = openTenses(finished, data);
+  const pool = conjugationPool(data).filter((c) => rank(c.verbLevel) <= rank(maxLevel));
+  return data.tenses.map((t) => {
+    const cards = pool.filter((c) => c.tense === t.id);
+    const isOpen = open.has(t.id);
+    const q = isOpen ? sprintQueue(finished, forms, seen, now, { maxLevel, data, tense: t.id, random: () => 0 }) : null;
+    return {
+      tense: t,
+      open: isOpen,
+      total: cards.length,
+      seen: cards.filter((c) => forms[c.key] !== undefined).length,
+      pct: cards.length ? cards.reduce((n, c) => n + Math.min(1, (forms[c.key] ?? 0) / FORM_KNOWN), 0) / cards.length : 0,
+      due: q ? q.missed.length + q.review.length : 0,
+    };
+  });
+}
 
 /* ---------- legacy ----------
  * The first sprint drilled cells of the lessons' reference tables. Its form

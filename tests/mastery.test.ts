@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { availableStars, compareLevels, conjugationRating, courseRating, indexCards, isPerfect, nextStarOpensIn, itemCredit, lessonDue, lessonStars, levelProgress, toRating, vocabRating } from '../src/speedrun/mastery';
+import { availableStars, compareLevels, conjugationRating, courseRating, indexCards, isPerfect, nextStarOpensIn, itemCredit, lessonDue, lessonStages, lessonStars, levelProgress, levelStages, stageProgress, toRating, vocabRating } from '../src/speedrun/mastery';
 import { DAY, interleave, planLessonReview, planToday, startOfDay, type SrsCard } from '../src/speedrun/srs';
-import { conjugation, conjugationPool, formKey, openTenses, sprintQueue, sprintRound } from '../src/speedrun/sprint';
+import { conjugation, conjugationPool, formKey, openTenses, sprintQueue, sprintRound, tenseStats } from '../src/speedrun/sprint';
 import { loadSpeedrun } from '../src/speedrun/content';
 import { isVocabCard, planVocab, planVocabSet, setDue, unlockedSets, vocab, vocabPattern, vocabStats } from '../src/speedrun/vocab';
 import { checkAnswer } from '../src/speedrun/check';
@@ -13,6 +13,48 @@ const lesson = (id: string, n: number): SpeedrunLesson =>
   ({ id, level: 'A2', title: id, goal: '', note: '', items: Array.from({ length: n }, (_, i) => [`es${i}`, `ca${i}`]) }) as SpeedrunLesson;
 const card = (lessonId: string, index: number, step: number, due = today + 5 * DAY, lapses = 0): SrsCard => ({
   lessonId, index, step, due, lapses,
+});
+
+describe('stage pills', () => {
+  const l = lesson('a2-01', 4);
+  const at = (step: number, last: number) => ({ ...card('a2-01', 0, step), last });
+
+  it('opens only the first stage for a lesson just finished, so one run reads 100%', () => {
+    const cs = [0, 1, 2, 3].map((i) => card('a2-01', i, 0, NOW + DAY));
+    const s = lessonStages(l, { firstAt: NOW }, indexCards(cs), NOW);
+    expect(s.open).toEqual([true, false, false, false, false]);
+    expect(s.fill).toEqual([1, 0, 0, 0, 0]);
+    expect(s.pct).toBe(1);
+    expect(s.nextIn).toBe(1);
+  });
+
+  it('opens stages by age, like the stars, and counts only those', () => {
+    const cs = [0, 1, 2, 3].map((i) => card('a2-01', i, i < 2 ? 1 : 0));
+    const s = lessonStages(l, { firstAt: NOW - 2 * DAY }, indexCards(cs), NOW);
+    expect(s.open).toEqual([true, true, false, false, false]);
+    expect(s.pct).toBeCloseTo((4 + 2) / 8);
+    expect(s.nextIn).toBe(2); // stage 3 needs 1 + 3 days
+  });
+
+  it('never locks a stage already reached', () => {
+    const s = stageProgress([{ items: [at(3, NOW)], since: NOW }], NOW);
+    expect(s.open.filter(Boolean).length).toBe(4);
+  });
+
+  it('keeps each lesson on its own clock across a level, unstarted lessons only at stage 1', () => {
+    const old = [0, 1, 2, 3].map((i) => card('a2-01', i, 4));
+    const s = levelStages([l, lesson('a2-02', 4)], { 'a2-01': { firstAt: NOW - 40 * DAY } }, indexCards(old), NOW);
+    expect(s.open).toEqual([true, true, true, true, true]);
+    expect(s.fill[0]).toBe(0.5);
+    expect(s.pct).toBeCloseTo(20 / 24); // 4 items x 5 stages held, of 20 + 4 open
+  });
+
+  it('starts empty with the first stage open', () => {
+    const s = stageProgress([{ items: [undefined, undefined] }], NOW);
+    expect(s.open[0]).toBe(true);
+    expect(s.pct).toBe(0);
+    expect(s.nextIn).toBeNull();
+  });
 });
 
 describe('stars and level progress', () => {
@@ -315,5 +357,32 @@ describe('Today fillers do not repeat', () => {
     const after = p.allCards()[0]!;
     expect(after).toMatchObject({ step: before.step, due: before.due, practiced: NOW });
     expect(planToday(p.allCards(), NOW + 3_600_000).mix).toEqual([]);
+  });
+});
+
+describe('conjugation by tense', () => {
+  const finished = new Set(['a2-21', 'a2-23']);
+
+  it('drills one tense when asked, and every open tense in the mix', () => {
+    const one = sprintRound(finished, {}, {}, NOW, { maxLevel: 'A2', tense: 'perfet' });
+    expect(one.length).toBeGreaterThan(0);
+    expect(new Set(one.map((c) => c.tense))).toEqual(new Set(['perfet']));
+    const mix = sprintRound(finished, {}, {}, NOW, { maxLevel: 'A2' });
+    expect(new Set(mix.map((c) => c.tense))).toEqual(openTenses(finished));
+    expect(sprintRound(finished, {}, {}, NOW, { maxLevel: 'A2', tense: 'futur' })).toEqual([]); // not open yet
+  });
+
+  it('reports each tense over the verbs drilled at the course level', () => {
+    const pres = conjugationPool().filter((c) => c.tense === 'pres' && c.verbLevel === 'A2');
+    const forms = Object.fromEntries(pres.slice(0, 6).map((c, i) => [c.key, i < 3 ? 2 : 0]));
+    const seen = Object.fromEntries(pres.slice(0, 6).map((c) => [c.key, Math.floor(NOW / 60_000)]));
+    const stats = tenseStats(finished, forms, seen, NOW, 'A2');
+    const p = stats.find((s) => s.tense.id === 'pres')!;
+    expect(p.open).toBe(true);
+    expect(p.total).toBe(pres.length);
+    expect(p.seen).toBe(6);
+    expect(p.pct).toBeCloseTo(3 / pres.length);
+    expect(p.due).toBe(3); // the three misses; the right ones rest
+    expect(stats.find((s) => s.tense.id === 'futur')!.open).toBe(false);
   });
 });
