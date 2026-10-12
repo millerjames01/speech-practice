@@ -146,7 +146,9 @@ export function recordAnswer(
   const card = store.cards[k];
   if (!card) store.cards[k] = enroll(lessonId, index, correct, now);
   else if (context === 'review' || !correct) store.cards[k] = review(card, correct, now);
-  else return;
+  // Right, but early (a lesson re-run, or a filler in Today): the schedule stays,
+  // and the card rests from filler picks for a while.
+  else store.cards[k] = { ...card, practiced: now };
   write(store);
 }
 

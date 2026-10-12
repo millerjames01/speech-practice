@@ -284,3 +284,36 @@ describe('vocab by set', () => {
     expect(planVocabSet(cs, NOW, 'nope')).toEqual([]);
   });
 });
+
+describe('Today fillers do not repeat', () => {
+  it('rests a filler answered right, and picks the least recently practised first', () => {
+    const hour = 3_600_000;
+    const cs = [
+      { ...card('a2-01', 0, 0), practiced: NOW - hour }, // just practised: resting
+      { ...card('a2-01', 1, 0), practiced: NOW - 25 * hour }, // rested enough
+      { ...card('a2-01', 2, 0), last: NOW - 2 * DAY },
+      card('a2-01', 3, 2),
+    ];
+    // Card 2 was last seen two days ago, card 1 practised 25 h ago: oldest first; card 0 rests.
+    expect(planToday(cs, NOW, { mix: 2, random: () => 0.5 }).mix.map((c) => c.index)).toEqual([2, 1]);
+    expect(planToday(cs, NOW, { mix: 6 }).mix.map((c) => c.index)).not.toContain(0);
+    expect(planLessonReview(cs, NOW, 8).mix.map((c) => c.index)).not.toContain(0);
+  });
+
+  it('records an early right answer as practice without moving the schedule', async () => {
+    const store = new Map<string, string>();
+    (globalThis as { localStorage?: unknown }).localStorage = {
+      getItem: (k: string) => store.get(k) ?? null,
+      setItem: (k: string, v: string) => void store.set(k, v),
+      removeItem: (k: string) => void store.delete(k),
+    };
+    const p = await import('../src/speedrun/progress');
+    p.resetProgress();
+    p.recordAnswer('a2-01', 0, true, 'lesson', NOW - DAY);
+    const before = p.allCards()[0]!;
+    p.recordAnswer('a2-01', 0, true, 'lesson', NOW);
+    const after = p.allCards()[0]!;
+    expect(after).toMatchObject({ step: before.step, due: before.due, practiced: NOW });
+    expect(planToday(p.allCards(), NOW + 3_600_000).mix).toEqual([]);
+  });
+});
