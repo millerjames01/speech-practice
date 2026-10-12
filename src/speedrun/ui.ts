@@ -99,6 +99,9 @@ const LEVEL_INFO: Record<SpeedrunLevel, { name: string; blurb: string }> = {
 
 const REQUEUE_GAP = 3;
 
+/** Pause before the mic starts by itself on a new phrase, when auto-start is on. */
+const AUTO_LISTEN_MS = 1000;
+
 /** Seconds before moving on after a perfect answer, when auto-advance is on. */
 const AUTO_ADVANCE_SECONDS = 3;
 
@@ -405,6 +408,8 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
   dictation.addEventListener('change', () => setPrefs({ ...getPrefs(), dictation: dictation.checked }));
   const autoAdvance = el('input', { type: 'checkbox', checked: prefs.autoAdvance });
   autoAdvance.addEventListener('change', () => setPrefs({ ...getPrefs(), autoAdvance: autoAdvance.checked }));
+  const autoListen = el('input', { type: 'checkbox', checked: prefs.autoListen });
+  autoListen.addEventListener('change', () => setPrefs({ ...getPrefs(), autoListen: autoListen.checked }));
   const voiceAnswers = el('input', { type: 'checkbox', checked: prefs.voiceAnswers });
   voiceAnswers.addEventListener('change', () => setPrefs({ ...getPrefs(), voiceAnswers: voiceAnswers.checked }));
   const voicePicker = el('label', { class: 'sr-toggle sr-voice-pick' });
@@ -636,6 +641,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
         el('label', { class: 'sr-toggle' }, autoplay, el('span', {}, 'Auto-play the answer after each check')),
         el('label', { class: 'sr-toggle' }, dictation, el('span', {}, 'Dictation: hear the Catalan and write it')),
         canListen() ? el('label', { class: 'sr-toggle' }, voiceAnswers, el('span', {}, 'Voice: say the answer instead of typing')) : null,
+        canListen() ? el('label', { class: 'sr-toggle' }, autoListen, el('span', {}, 'Start the mic by itself on each new phrase')) : null,
         el('label', { class: 'sr-toggle' }, autoAdvance, el('span', {}, `Auto-advance after a perfect answer (${AUTO_ADVANCE_SECONDS} s)`)),
         voicePicker,
               ),
@@ -1200,7 +1206,18 @@ function runSession(
     const micLabel = el('span', { class: 'sr-mic-label' }, 'Tap to speak');
     const typeBox = el('div', { class: 'sr-type-box' }, input, accents);
     const typeToggle = voice ? button('Type instead', () => openTyping(), 'sr-btn ghost') : null;
+    /** Auto-start (a setting) is armed until it fires, the mic is tapped, or typing takes over. */
+    let autoArmed = false;
+    let introAudio: Promise<void> = Promise.resolve();
     const openTyping = () => {
+      if (autoArmed || listening) micLabel.textContent = 'Tap to speak';
+      autoArmed = false;
+      if (listening) {
+        // Choosing to type stops the mic.
+        cancelListening();
+        micBtn?.classList.remove('is-listening', 'is-processing');
+        if (micBtn) micBtn.disabled = false;
+      }
       typeBox.hidden = false;
       checkBtn.hidden = false;
       typeToggle?.remove();
@@ -1259,6 +1276,7 @@ function runSession(
       };
       micBtn.addEventListener('click', () => mic?.());
       mic = () => {
+        autoArmed = false;
         if (answered) return;
         if (listening) {
           // Tapping while listening means "done": keep what was said.
@@ -1356,7 +1374,7 @@ function runSession(
         prompt,
       ];
       replay = (slow) => void speak(spoken, slow);
-      void speak(spoken);
+      introAudio = speak(spoken);
     } else {
       promptBlock = [el('p', { class: 'sr-eyebrow' }, `${label}${source}`), prompt];
     }
@@ -1374,6 +1392,18 @@ function runSession(
       feedback,
     );
     stage.classList.toggle('has-dock', voice);
+    // Auto-start: the mic turns on by itself a moment after a new phrase appears
+    // (after the Catalan audio, in dictation, so it doesn't hear the app).
+    if (voice && getPrefs().autoListen) {
+      autoArmed = true;
+      micLabel.textContent = 'Starting…';
+      void introAudio.then(() => {
+        const timer = setTimeout(() => {
+          if (autoArmed && !answered && !listening) mic?.();
+        }, AUTO_LISTEN_MS);
+        itemCleanups.push(() => clearTimeout(timer));
+      });
+    }
     input.focus();
 
     const resolve = (result: CheckResult | null) => {
