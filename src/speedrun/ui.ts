@@ -55,7 +55,7 @@ import {
   setPrefs,
   xpStats,
 } from './progress';
-import { bestHearing, canListen, listen, type Listening } from './listen';
+import { bestHearing, canListen, listen, markHeard, type Listening } from './listen';
 import { buildMigrationPlan } from './migrate';
 import { SPRINT_SECONDS, conjugation, openTenses, roundFrom, sprintQueue, workingVerbs, type SprintCard } from './sprint';
 import { planLessonReview, planToday, type SrsCard } from './srs';
@@ -1175,36 +1175,68 @@ function runSession(
     const feedback = el('div', { class: 'sr-feedback', role: 'status' });
     const checkBtn = el('button', { class: 'sr-btn primary', type: 'submit' }, 'Check');
     const giveUp = button('Show answer', () => resolve(null), 'sr-btn ghost');
-    // Voice mode: tap Speak and say the answer; it stops on a pause, or tap again
-    // (or Check) when done. Any of the recogniser's guesses that is right counts.
+    // Voice mode: a big mic button leads; the text box waits behind "Type instead".
+    // Tap and say it; it stops on a pause, or tap again when done. What is heard
+    // shows word by word against the answer: green match, yellow near miss, grey no match.
     const heardLine = el('p', { class: 'sr-heard', role: 'status' });
-    const micBtn = voice ? iconButton('Speak', ICONS.mic, () => mic?.(), 'sr-btn primary sr-mic') : null;
-    if (voice) checkBtn.className = 'sr-btn';
+    const heardWords = el('p', { class: 'sr-heard-words', lang: 'ca' });
+    heardWords.setAttribute('aria-live', 'polite');
+    const micBtn = voice ? el('button', { class: 'sr-mic-big', type: 'button', title: 'Speak (Alt+M)' }, icon(ICONS.mic, 36)) : null;
+    micBtn?.setAttribute('aria-label', 'Speak');
+    const micLabel = el('span', { class: 'sr-mic-label' }, 'Tap to speak');
+    const typeBox = el('div', { class: 'sr-type-box' }, input, accents);
+    const typeToggle = voice ? button('Type instead', () => openTyping(), 'sr-btn ghost') : null;
+    const openTyping = () => {
+      typeBox.hidden = false;
+      checkBtn.hidden = false;
+      typeToggle?.remove();
+      input.focus();
+    };
+    if (voice) {
+      typeBox.hidden = true;
+      checkBtn.hidden = true;
+    }
     const actions = el(
       'div',
       { class: 'sr-drill-actions' },
-      micBtn,
       checkBtn,
       giveUp,
+      typeToggle,
       voice
-        ? el('span', { class: 'sr-keys' }, kbd('Alt'), kbd('M'), ' speak', kbd('Enter'), ' check')
+        ? el('span', { class: 'sr-keys' }, kbd('Alt'), kbd('M'), ' speak', kbd('Esc'), ' map')
         : dictation
           ? el('span', { class: 'sr-keys' }, kbd('Enter'), ' check', kbd('Alt'), kbd('L'), ' replay')
           : el('span', { class: 'sr-keys' }, kbd('Enter'), ' check', kbd('Esc'), ' map'),
     );
-    const form = el('form', { class: 'sr-form' }, input, accents, actions, heardLine);
+    const voicePanel = micBtn ? el('div', { class: 'sr-voice' }, micBtn, micLabel, heardWords, heardLine) : null;
+    const form = el('form', { class: 'sr-form' }, voicePanel, typeBox, actions);
     let answered = false;
 
     if (voice && micBtn) {
-      const label = micBtn.querySelector('span')!;
+      let misses = 0;
       const setMic = (state: 'idle' | 'listening' | 'processing') => {
         micBtn.classList.toggle('is-listening', state === 'listening');
         micBtn.classList.toggle('is-processing', state === 'processing');
         micBtn.disabled = state === 'processing';
-        label.textContent = state === 'listening' ? 'Done' : state === 'processing' ? 'Checking…' : 'Speak';
+        micLabel.textContent = state === 'listening' ? 'Listening… tap when done' : state === 'processing' ? 'Checking…' : misses ? 'Tap to try again' : 'Tap to speak';
       };
       const idle = () => setMic('idle');
-      heardLine.textContent = 'Tap Speak and say it in Catalan.';
+      const showHeard = (text: string) => {
+        clear(heardWords);
+        markHeard(pattern, text).forEach(({ word, mark }, i) => {
+          if (i > 0) heardWords.append(' ');
+          heardWords.append(el('span', { class: `sr-hw-${mark}` }, word));
+        });
+      };
+      const missed = (message: string) => {
+        misses += 1;
+        idle();
+        if (misses >= 3 && typeBox.hidden) {
+          openTyping();
+          heardLine.textContent = 'Having trouble? Type it instead, or keep trying.';
+        } else heardLine.textContent = message;
+      };
+      micBtn.addEventListener('click', () => mic?.());
       mic = () => {
         if (answered) return;
         if (listening) {
@@ -1215,34 +1247,33 @@ function runSession(
         stopSpeaking();
         const mine = listen({
           onInterim: (text) => {
-            if (listening === mine) heardLine.textContent = `Hearing: “${text}”`;
+            if (listening === mine) showHeard(text);
           },
           onProcessing: () => {
             if (listening === mine) setMic('processing');
           },
         });
         listening = mine;
+        clear(heardWords);
+        heardLine.textContent = '';
         setMic('listening');
-        heardLine.textContent = 'Listening… say it, then pause (or tap Done).';
         void mine.result
           .then((heard) => {
             if (listening !== mine || answered) return;
             listening = null;
-            setMic('idle');
             const best = bestHearing(pattern, heard);
-            if (!best) {
-              heardLine.textContent = 'Didn’t catch anything. Tap Speak to try again, or type it.';
-              return;
-            }
+            if (!best) return missed('Didn’t catch anything. Tap to try again.');
+            showHeard(best.text);
             input.value = best.text;
             if (best.result.verdict !== 'wrong') return resolve(best.result);
-            heardLine.textContent = `Heard “${best.text}”. Not quite: Speak again, fix it and press Check, or Show answer.`;
+            missed('Not quite. Tap to try again, or Show answer.');
           })
           .catch((err: unknown) => {
             if (listening !== mine) return;
             listening = null;
-            setMic('idle');
+            idle();
             heardLine.textContent = err instanceof Error ? err.message : String(err);
+            openTyping();
           });
       };
       // Typing takes over from listening.
@@ -1250,7 +1281,6 @@ function runSession(
         if (!listening) return;
         cancelListening();
         idle();
-        heardLine.textContent = '';
       });
     }
 
@@ -1259,7 +1289,7 @@ function runSession(
       if (answered) return;
       if (listening) return mic?.(); // Check while listening means "done"
       if (!input.value.trim()) {
-        if (voice) heardLine.textContent = 'Nothing to check yet: tap Speak and say it, or type it.';
+        if (voice) heardLine.textContent = 'Nothing to check yet: tap the mic and say it, or type it.';
         return;
       }
       resolve(checkAnswer(pattern, input.value));
@@ -1313,7 +1343,7 @@ function runSession(
       answered = true;
       mic = null;
       cancelListening();
-      heardLine.remove();
+      voicePanel?.remove();
       input.disabled = true;
       accents.remove();
       actions.remove();

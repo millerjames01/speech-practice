@@ -92,3 +92,12 @@ describe('listening on real phones', () => {
     await expect(l.result).rejects.toThrow(/Microphone access is blocked/);
   });
 });
+
+describe('colouring what was heard', () => {
+  it('marks matches green, near misses yellow and the rest grey', async () => {
+    const { markHeard } = await import('../src/speedrun/listen');
+    expect(markHeard('Sóc de Barcelona.', 'soc de girona').map((w) => w.mark)).toEqual(['ok', 'ok', 'miss']);
+    expect(markHeard('Està cansat.', 'esta cansat').map((w) => w.mark)).toEqual(['spelling', 'ok']);
+    expect(markHeard('[No he estat mai|Mai (no) he estat] a Londres.', 'mai he estat a londres').every((w) => w.mark === 'ok')).toBe(true);
+  });
+});

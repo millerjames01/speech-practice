@@ -4,7 +4,7 @@
  * uses Apple's. Nothing is recorded or stored by the app.
  */
 
-import { checkAnswer, type CheckResult } from './check';
+import { checkAnswer, fold, normalize, type CheckResult } from './check';
 
 /** The slice of the Web Speech API the app uses (not in every TypeScript DOM lib). */
 interface RecognitionResult extends ArrayLike<{ transcript: string }> {
@@ -181,4 +181,23 @@ export function bestHearing(pattern: string, heard: string[]): { text: string; r
     if (!best || RANK[result.verdict] < RANK[best.result.verdict]) best = { text, result };
   }
   return best;
+}
+
+export type HeardMark = 'ok' | 'spelling' | 'miss';
+
+/**
+ * Colours what was heard against the closest accepted answer, word by word:
+ * a match, a spelling-level miss (accents, ç, l·l), or a word not in the answer.
+ */
+export function markHeard(pattern: string, text: string): { word: string; mark: HeardMark }[] {
+  const target = normalize(checkAnswer(pattern, text).target);
+  const exact = new Set(target);
+  const loose = new Set(target.map(fold));
+  return text
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((word) => {
+      const n = normalize(word)[0] ?? '';
+      return { word, mark: exact.has(n) ? 'ok' : loose.has(fold(n)) ? 'spelling' : 'miss' };
+    });
 }
