@@ -188,9 +188,12 @@ in it); words the recogniser spells differently but that sound the same in
 Central Catalan (nadar/nedar, veus/beus, comte/compte) count. As soon as the
 whole answer is heard right it turns green and is accepted, no tap needed.
 
-**Listening options** (under Voice; on by default). Nothing is decided while
-you speak: every word restarts the clock, and the recogniser is restarted
-through its own short pauses so a sentence is never cut off. After a silence
+**Listening options** (under Voice; on by default). The mic stays on: one
+continuous recognition runs for the whole session, through pauses and from
+phrase to phrase (each new phrase just starts a fresh attempt), and it ignores
+what it hears while the app itself is speaking. It pauses only when you tap it
+off, choose to type, or say nothing for a minute. Nothing is decided while you
+speak: every word restarts the clock. After a silence
 whose length depends on where the attempt stands, the app decides: right,
 0.6 s then accept; right so far but unfinished (thinking), 3 s; a wrong word,
 1.5 s, then *Try again*, the words clear and it listens again without a tap

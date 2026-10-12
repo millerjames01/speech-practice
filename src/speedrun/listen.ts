@@ -239,6 +239,145 @@ export function respell(pattern: string, heard: string): string {
     .join(' ');
 }
 
+/* ---------- continuous listening ---------- */
+
+const words = (s: string) => normalize(s).join(' ');
+
+/**
+ * Adds a final result to what was already heard. Android repeats itself in
+ * continuous mode: a final result may hold the whole utterance so far, or
+ * repeat the last one. Either way the longer reading wins instead of doubling.
+ */
+export function mergeHeard(sofar: string, next: string): string {
+  const a = words(sofar);
+  const b = words(next);
+  if (!a) return next.trim();
+  if (!b) return sofar;
+  if (b.startsWith(a)) return next.trim();
+  if (a.endsWith(b)) return sofar;
+  return `${sofar.trim()} ${next.trim()}`;
+}
+
+export interface StreamEvents {
+  /** Everything heard since the last reset: the recogniser's readings, best first. */
+  onText: (candidates: string[]) => void;
+  onState?: (on: boolean) => void;
+  onError?: (err: Error) => void;
+}
+
+/**
+ * One recognition that stays open across pauses and across items, so the mic
+ * doesn't switch off and on with every phrase. reset() starts a new attempt
+ * without restarting anything. Browsers still end a continuous recognition
+ * after a long silence (Android after several seconds); it is restarted at once,
+ * keeping what was heard.
+ */
+export class VoiceStream {
+  private rec: Recognition | null = null;
+  private on = false;
+  /** Index in the current recognition's results where the current attempt starts. */
+  private base = 0;
+  private seen = 0;
+  /** Final text of the current attempt from before a restart. */
+  private carried = '';
+  private finals = '';
+  private restarts: number[] = [];
+
+  constructor(private readonly events: StreamEvents, private readonly lang = 'ca-ES') {}
+
+  get active(): boolean {
+    return this.on;
+  }
+
+  start(): void {
+    if (this.on) return;
+    this.on = true;
+    this.carried = '';
+    this.finals = '';
+    this.restarts = [];
+    this.spawn();
+    this.events.onState?.(true);
+  }
+
+  stop(): void {
+    if (!this.on && !this.rec) return;
+    this.on = false;
+    const rec = this.rec;
+    this.rec = null;
+    try {
+      rec?.abort();
+    } catch {
+      // already ended
+    }
+    this.events.onState?.(false);
+  }
+
+  /** Starts a new attempt: what was heard so far is set aside. */
+  reset(): void {
+    this.base = this.seen;
+    this.carried = '';
+    this.finals = '';
+  }
+
+  private spawn(): void {
+    const Ctor = ctor();
+    if (!Ctor) return this.fail(new Error('Speech recognition isn’t available in this browser.'));
+    const rec = new Ctor();
+    rec.lang = this.lang;
+    rec.continuous = true;
+    rec.interimResults = true;
+    rec.maxAlternatives = 5;
+    this.base = 0;
+    this.seen = 0;
+    this.finals = this.carried;
+    rec.onresult = (ev) => {
+      if (rec !== this.rec) return;
+      this.seen = ev.results.length;
+      let acc = this.carried;
+      let candidates: string[] = [];
+      for (let i = this.base; i < ev.results.length; i += 1) {
+        const res = ev.results[i];
+        if (!res) continue;
+        const alts = Array.from({ length: res.length }, (_, k) => res[k]?.transcript.trim() ?? '').filter(Boolean);
+        if (!alts.length) continue;
+        const before = acc;
+        // Each reading as a continuation, then on its own: the speaker may have
+        // started the sentence again ("ella és professora… ella és metgessa").
+        candidates = [...alts.map((a) => mergeHeard(before, a)), ...(before ? alts : [])];
+        if (res.isFinal) acc = mergeHeard(acc, alts[0]!);
+      }
+      this.finals = acc;
+      if (candidates.length) this.events.onText([...new Set(candidates)]);
+    };
+    rec.onspeechend = null;
+    rec.onerror = (ev) => {
+      if (rec !== this.rec) return;
+      if (ev.error === 'no-speech' || ev.error === 'aborted') return; // onend restarts
+      this.fail(new Error(ERRORS[ev.error] ?? `Speech recognition failed (${ev.error}).`));
+    };
+    rec.onend = () => {
+      if (rec !== this.rec || !this.on) return;
+      // The browser closed it (a long silence, a time limit): reopen, keeping the words.
+      const now = Date.now();
+      this.restarts = [...this.restarts.filter((t) => now - t < 5000), now];
+      if (this.restarts.length > 6) return this.fail(new Error('Speech recognition keeps stopping. Tap the mic to try again.'));
+      this.carried = this.finals;
+      this.spawn();
+    };
+    this.rec = rec;
+    try {
+      rec.start();
+    } catch (err) {
+      this.fail(err instanceof Error ? err : new Error(String(err)));
+    }
+  }
+
+  private fail(err: Error): void {
+    this.stop();
+    this.events.onError?.(err);
+  }
+}
+
 const RANK = { exact: 0, spelling: 1, wrong: 2 } as const;
 
 /**

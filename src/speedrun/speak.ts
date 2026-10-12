@@ -178,7 +178,23 @@ export function stopSpeaking(): void {
   if (typeof speechSynthesis !== 'undefined' && (speechSynthesis.speaking || speechSynthesis.pending)) cancelEngine();
 }
 
+/** Lines being spoken right now; voice answers ignore the mic meanwhile (it would hear the app). */
+let speaking = 0;
+
+export function isSpeaking(): boolean {
+  return speaking > 0;
+}
+
 export async function speak(text: string, slow = false): Promise<void> {
+  speaking += 1;
+  try {
+    await speakLine(text, slow);
+  } finally {
+    speaking = Math.max(0, speaking - 1);
+  }
+}
+
+async function speakLine(text: string, slow: boolean): Promise<void> {
   // Only stop recorded audio here; browserSpeak cancels the speech engine itself, with the
   // settle delay that keeps the new line from being clipped.
   stopPlayback();

@@ -198,3 +198,96 @@ describe('starting the sentence again', () => {
     expect(voiceState(bestProgress('(Ells) són els meus amics.', '', ['els són els meus amics'])!)).toBe('right');
   });
 });
+
+describe('continuous listening', () => {
+  type R = { transcript: string };
+  type Res = R[] & { isFinal: boolean };
+  const res = (isFinal: boolean, ...alts: string[]): Res => Object.assign(alts.map((transcript) => ({ transcript })), { isFinal });
+  class FakeRec {
+    static all: FakeRec[] = [];
+    results: Res[] = [];
+    started = 0;
+    aborted = false;
+    onresult?: (ev: unknown) => void;
+    onend?: () => void;
+    onerror?: (ev: { error: string }) => void;
+    constructor() {
+      FakeRec.all.push(this);
+    }
+    start() {
+      this.started += 1;
+    }
+    stop() {}
+    abort() {
+      this.aborted = true;
+    }
+    push(r: Res) {
+      this.results.push(r);
+      this.onresult?.({ resultIndex: this.results.length - 1, results: this.results });
+    }
+    update(r: Res) {
+      this.results[this.results.length - 1] = r;
+      this.onresult?.({ resultIndex: this.results.length - 1, results: this.results });
+    }
+  }
+  const setup = async () => {
+    FakeRec.all = [];
+    (globalThis as { window?: unknown }).window = { SpeechRecognition: FakeRec };
+    const { VoiceStream } = await import('../src/speedrun/listen');
+    const heard: string[][] = [];
+    const errors: string[] = [];
+    const stream = new VoiceStream({ onText: (c) => heard.push(c), onError: (e) => errors.push(e.message) });
+    return { stream, heard, errors, last: () => FakeRec.all.at(-1)! };
+  };
+
+  it('stays one recognition across pauses and items; reset starts a new attempt', async () => {
+    const { stream, heard, last } = await setup();
+    stream.start();
+    const rec = last();
+    rec.push(res(false, 'soc'));
+    rec.update(res(true, 'soc de barcelona', 'sol de barcelona'));
+    expect(heard.at(-1)).toEqual(['soc de barcelona', 'sol de barcelona']);
+    stream.reset(); // next item: nothing restarts
+    rec.push(res(false, "d'on"));
+    expect(heard.at(-1)).toEqual(["d'on"]);
+    rec.update(res(true, "d'on ets"));
+    rec.push(res(false, 'i tu'));
+    expect(heard.at(-1)).toEqual(["d'on ets i tu", 'i tu']);
+    expect(FakeRec.all).toHaveLength(1);
+    expect(rec.started).toBe(1);
+  });
+
+  it('does not double Android’s repeated finals', async () => {
+    const { mergeHeard } = await import('../src/speedrun/listen');
+    expect(mergeHeard('som', 'som estudiants')).toBe('som estudiants');
+    expect(mergeHeard('som estudiants', 'som estudiants')).toBe('som estudiants');
+    expect(mergeHeard('som', 'estudiants')).toBe('som estudiants');
+    const { stream, heard, last } = await setup();
+    stream.start();
+    const rec = last();
+    rec.push(res(true, 'tinc'));
+    rec.push(res(true, 'tinc por'));
+    expect(heard.at(-1)).toEqual(['tinc por']);
+  });
+
+  it('reopens when the browser closes it, keeping the words; gives up if it keeps closing', async () => {
+    const { stream, heard, errors, last } = await setup();
+    stream.start();
+    last().push(res(true, 'ella és'));
+    last().onend!();
+    expect(FakeRec.all).toHaveLength(2);
+    last().push(res(false, 'metgessa'));
+    expect(heard.at(-1)).toEqual(['ella és metgessa', 'metgessa']);
+    for (let i = 0; i < 8; i += 1) last().onend?.();
+    expect(errors.at(-1)).toMatch(/keeps stopping/);
+    expect(stream.active).toBe(false);
+  });
+
+  it('stops for good on a blocked mic', async () => {
+    const { stream, errors, last } = await setup();
+    stream.start();
+    last().onerror!({ error: 'not-allowed' });
+    expect(stream.active).toBe(false);
+    expect(errors[0]).toMatch(/blocked/);
+  });
+});
