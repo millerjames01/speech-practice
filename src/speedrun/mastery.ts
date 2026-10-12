@@ -60,13 +60,127 @@ interface Finished {
  */
 export function learnedAt(lesson: SpeedrunLesson, record: Finished | undefined, cards: CardIndex, now: number): number {
   if (record?.firstAt !== undefined) return record.firstAt;
-  let earliest = now;
-  for (const c of lessonCards(lesson, cards)) {
+  return startedAt(lessonCards(lesson, cards), now) ?? now;
+}
+
+/** The earliest any of these items could have been learned, or null when none has been. */
+export function startedAt(items: (SrsCard | undefined)[], now: number): number | null {
+  let earliest: number | null = null;
+  for (const c of items) {
     if (!c) continue;
     const last = c.last ?? c.due - (INTERVALS[c.step] ?? 1) * DAY;
-    earliest = Math.min(earliest, last - daysToStep(c.step) * DAY);
+    earliest = Math.min(earliest ?? now, last - daysToStep(c.step) * DAY);
   }
   return earliest;
+}
+
+/* ---------- stages ----------
+ * Five pills per lesson, vocab set or level, one per review step: seen, then
+ * recalled after a day, 3 days, a week and two weeks. Like the stars, a stage
+ * opens only once enough days have passed since the material was first
+ * learned for it to be reachable, and the percentage counts open stages only,
+ * so nothing shows as missing that could not have been done yet.
+ */
+
+export const STAGES = 5;
+
+export const STAGE_RULES = [
+  'Learned',
+  'Recalled after a day',
+  'Recalled after 3 days',
+  'Recalled after a week',
+  'Recalled after two weeks',
+] as const;
+
+/** Items that started together: a lesson or a vocab set. `since` overrides the estimate from the cards. */
+export interface StageGroup {
+  items: (SrsCard | undefined)[];
+  since?: number;
+}
+
+export interface Stages {
+  /** Per stage, the share of items that have reached it. */
+  fill: number[];
+  /** Per stage, whether any group has it open. */
+  open: boolean[];
+  /** Days until the next stage opens somewhere, or null. */
+  nextIn: number | null;
+  /** Filled share of the open stages, 0-1. */
+  pct: number;
+}
+
+/** Stages open for one group: the first always, the rest by age, and never fewer than already reached. */
+function openStages(g: StageGroup, now: number): { open: number; since: number | null } {
+  const since = g.since ?? startedAt(g.items, now);
+  const reached = g.items.reduce((m, c) => (c ? Math.max(m, Math.min(STAGES, c.step + 1)) : m), 0);
+  if (since === null) return { open: Math.max(1, reached), since };
+  let open = 1;
+  while (open < STAGES && now - since >= daysToStep(open) * DAY) open++;
+  return { open: Math.max(open, reached), since };
+}
+
+export function stageProgress(groups: StageGroup[], now: number): Stages {
+  const counts = new Array<number>(STAGES).fill(0);
+  const open = new Array<boolean>(STAGES).fill(false);
+  let total = 0;
+  let held = 0;
+  let possible = 0;
+  let nextAt: number | null = null;
+  for (const g of groups) {
+    const n = g.items.length;
+    if (n === 0) continue;
+    total += n;
+    const o = openStages(g, now);
+    possible += o.open * n;
+    for (let k = 0; k < STAGES; k++) {
+      if (k < o.open) open[k] = true;
+      const at = g.items.filter((c) => c && c.step >= k).length;
+      counts[k]! += at;
+      if (k < o.open) held += at;
+    }
+    if (o.since !== null && o.open < STAGES) {
+      const at = o.since + daysToStep(o.open) * DAY;
+      nextAt = nextAt === null ? at : Math.min(nextAt, at);
+    }
+  }
+  if (total === 0) open[0] = true;
+  return {
+    fill: counts.map((c) => (total ? c / total : 0)),
+    open,
+    nextIn: nextAt === null ? null : Math.max(1, Math.ceil((nextAt - now) / DAY)),
+    pct: possible ? held / possible : 0,
+  };
+}
+
+/** A lesson's stages, timed from when it was first finished. */
+export function lessonStages(lesson: SpeedrunLesson, record: Finished | undefined, cards: CardIndex, now: number): Stages {
+  return stageProgress([lessonGroup(lesson, record, cards, now)], now);
+}
+
+export function lessonGroup(lesson: SpeedrunLesson, record: Finished | undefined, cards: CardIndex, now: number): StageGroup {
+  const items = lessonCards(lesson, cards);
+  return record ? { items, since: learnedAt(lesson, record, cards, now) } : { items };
+}
+
+/** A level's stages: each lesson keeps its own clock. */
+export function levelStages(
+  lessons: SpeedrunLesson[],
+  records: Record<string, Finished | undefined>,
+  cards: CardIndex,
+  now: number,
+): Stages {
+  return stageProgress(
+    lessons.map((l) => lessonGroup(l, records[l.id], cards, now)),
+    now,
+  );
+}
+
+/** Vocab sets' stages, each set on its own clock. */
+export function vocabStages(sets: VocabPack['sets'], cards: CardIndex, now: number): Stages {
+  return stageProgress(
+    sets.map((s) => ({ items: s.words.map((_, i) => cards.get(`${s.id}#${i}`)) })),
+    now,
+  );
 }
 
 /**

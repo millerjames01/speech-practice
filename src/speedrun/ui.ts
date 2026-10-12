@@ -17,7 +17,6 @@ import { canonical, expand } from './pattern';
 import {
   STAR_RULES,
   compareLevels,
-  itemCredit,
   conjugationRating,
   courseRating,
   indexCards,
@@ -26,7 +25,12 @@ import {
   availableStars,
   isPerfect,
   lessonStars,
-  levelProgress,
+  STAGES,
+  STAGE_RULES,
+  lessonStages,
+  levelStages,
+  vocabStages,
+  type Stages,
   nextStarOpensIn,
   vocabRating,
   type Rating,
@@ -291,8 +295,58 @@ function audioNotice(): HTMLElement | null {
   return null;
 }
 
+/**
+ * Answer boxes: no autocorrect and no inline word predictions. On a Mac,
+ * Enter accepts a suggested word instead of submitting the form.
+ */
+function noSuggestions(input: HTMLInputElement): void {
+  input.setAttribute('autocapitalize', 'off');
+  input.setAttribute('autocorrect', 'off');
+  input.setAttribute('writingsuggestions', 'false');
+  input.setAttribute('lang', 'ca');
+}
+
 function stat(value: string, label: string): HTMLElement {
   return el('div', { class: 'sr-stat' }, el('span', { class: 'sr-stat-value' }, value), el('span', { class: 'sr-stat-label' }, label));
+}
+
+/**
+ * Five stage pills: filled as items reach each stage, locked (dashed) until
+ * enough days have passed for that stage to be reachable.
+ */
+function pills(s: Stages, size: 'small' | 'large' | '' = ''): HTMLElement {
+  const firstLocked = s.open.indexOf(false);
+  const row = el('span', { class: `sr-pills${size ? ` ${size}` : ''}` });
+  row.setAttribute('role', 'img');
+  row.setAttribute('aria-label', `${s.open.filter(Boolean).length} of ${STAGES} stages open, ${Math.round(s.pct * 100)}% done`);
+  for (let k = 0; k < STAGES; k++) {
+    const fill = s.fill[k]!;
+    const locked = !s.open[k];
+    const note = locked
+      ? k === firstLocked && s.nextIn !== null
+        ? `opens in ${days(s.nextIn)}`
+        : 'locked'
+      : `${Math.round(fill * 100)}%`;
+    const pill = el('span', {
+      class: `sr-pill${locked ? ' locked' : ''}${fill >= 1 ? ' done' : ''}`,
+      title: `${STAGE_RULES[k]} · ${note}`,
+    });
+    if (!locked && fill > 0 && fill < 1) {
+      const bar = el('span', { class: 'sr-pill-fill' });
+      bar.style.width = `${Math.round(fill * 100)}%`;
+      pill.append(bar);
+    }
+    row.append(pill);
+  }
+  return row;
+}
+
+const days = (n: number) => `${n} day${n === 1 ? '' : 's'}`;
+
+/** "2 of 5 stages open · next in 3 days". */
+function stageNote(s: Stages): string {
+  const open = s.open.filter(Boolean).length;
+  return `${open} of ${STAGES} stages open${open < STAGES && s.nextIn !== null ? ` · next in ${days(s.nextIn)}` : ''}`;
 }
 
 function meter(fraction: number): HTMLElement {
@@ -314,7 +368,8 @@ type PrefSwitch =
   | 'holdOpen'
   | 'waitForRest'
   | 'autoRetry'
-  | 'autoAdvance';
+  | 'autoAdvance'
+  | 'copyMisses';
 
 /** The voice options, nested under Voice and greyed out while it is off. */
 const VOICE_OPTIONS: [PrefSwitch, string][] = [
@@ -357,6 +412,7 @@ function practiceToggles(): HTMLElement[] {
     toggle('dictation', 'Dictation: hear the Catalan and write it'),
     ...(canListen() ? voiceGroup() : []),
     toggle('autoAdvance', `Auto-advance after a perfect answer (${AUTO_ADVANCE_SECONDS} s)`),
+    toggle('copyMisses', 'After a miss, type the answer out to move on'),
   ];
 }
 
@@ -506,7 +562,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
   const levelStarsOf = (lv: SpeedrunLevel) => starTally(content.byLevel[lv], records, index, now);
   const stars = starTally(content.lessons, records, index, now);
   const perfect = content.lessons.filter((l) => isPerfect(records[l.id])).length;
-  const activePct = levelProgress(content.byLevel[activeLevel], index);
+  const activeStages = levelStages(content.byLevel[activeLevel], records, index, now);
 
   const voicePicker = voicePickerControl();
 
@@ -533,9 +589,9 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
         el(
           'h1',
           { class: 'sr-title' },
-          learned ? `${Math.round(activePct * 100)}% of ${activeLevel} held long-term.` : 'From Castellano to C1, by the shortest route.',
+          learned ? `${Math.round(activeStages.pct * 100)}% of ${activeLevel} so far.` : 'From Castellano to C1, by the shortest route.',
         ),
-        el('div', { class: 'sr-hero-meter' }, meter(activePct)),
+        el('div', { class: 'sr-hero-meter' }, pills(activeStages, 'large'), learned ? el('span', { class: 'sr-muted' }, stageNote(activeStages)) : null),
         el('div', { class: 'sr-actions' }, today, openLesson, !next ? el('span', { class: 'sr-complete' }, 'All lessons done. Keep the reviews going.') : null),
         el(
           'p',
@@ -611,7 +667,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
     const levelDone = lessons.filter((l) => records[l.id]).length;
     const levelStars = levelStarsOf(level);
     const levelDue = lessons.reduce((n, l) => n + lessonDue(l, index, now), 0);
-    const pct = levelProgress(lessons, index);
+    const stages = levelStages(lessons, records, index, now);
     const info = LEVEL_INFO[level];
     const section = el(
       'details',
@@ -621,7 +677,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
         { class: 'sr-level-head' },
         el('span', { class: 'sr-level-tag' }, level),
         el('div', { class: 'sr-level-text' }, el('h2', {}, info.name), el('p', {}, `${levelDone}/${lessons.length} lessons · ★ ${levelStars.held}/${levelStars.open}${levelDue ? ` · ${levelDue} due` : ''}`)),
-        el('div', { class: 'sr-level-progress' }, el('span', {}, `${Math.round(pct * 100)}%`), meter(pct)),
+        el('div', { class: 'sr-level-progress' }, el('span', {}, `${Math.round(stages.pct * 100)}%`), pills(stages)),
       ),
       el('p', { class: 'sr-level-blurb' }, info.blurb),
       el(
@@ -641,6 +697,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
               ld ? el('span', { class: 'sr-due', title: `${ld} due for review` }, `${ld} due`) : null,
             ),
             el('span', { class: 'sr-card-title' }, lesson.title),
+            rec ? pills(lessonStages(lesson, rec, index, now), 'small') : null,
             el(
               'span',
               { class: 'sr-card-meta' },
@@ -1264,8 +1321,7 @@ function runSession(
       spellcheck: false,
       placeholder: 'Escriu-ho en català',
     });
-    input.setAttribute('autocapitalize', 'off');
-    input.setAttribute('lang', 'ca');
+    noSuggestions(input);
     input.setAttribute('aria-label', 'Your Catalan translation');
 
     const accents = accentBar(input);
@@ -1620,6 +1676,29 @@ function runSession(
         ),
       );
       next.focus();
+      // A miss (or "Show answer"): type the answer out before moving on.
+      if (!correct && getPrefs().copyMisses) {
+        next.hidden = true;
+        const copy = el('input', { class: 'sr-input', type: 'text', autocomplete: 'off', spellcheck: false, placeholder: 'Type the answer to continue' });
+        noSuggestions(copy);
+        copy.setAttribute('aria-label', 'Type the answer to continue');
+        const note = el('p', { class: 'sr-copy-note', role: 'status' });
+        const copyForm = el(
+          'form',
+          { class: 'sr-form sr-copy' },
+          el('div', { class: 'sr-type-box' }, copy, accentBar(copy)),
+          el('div', { class: 'sr-drill-actions' }, el('button', { class: 'sr-btn primary', type: 'submit' }, 'Continue'), note),
+        );
+        copyForm.addEventListener('submit', (ev) => {
+          ev.preventDefault();
+          if (!copy.value.trim()) return;
+          if (checkAnswer(pattern, copy.value).verdict !== 'wrong') return showItem();
+          note.textContent = 'Not quite: copy it from above.';
+          copy.select();
+        });
+        feedback.querySelector('.sr-drill-actions')!.before(copyForm);
+        copy.focus();
+      }
       // In dictation the learner has just heard it; replay only when they missed it.
       if (getPrefs().autoplay && (!dictation || result?.verdict !== 'exact')) void speak(answer);
     };
@@ -1818,6 +1897,25 @@ function levelBars(rating: Rating, caption: string): HTMLElement {
   );
 }
 
+/** Per-level stage pills, with the percentage of what is open. */
+function stageBars(of: (lv: SpeedrunLevel) => Stages, current: SpeedrunLevel, caption: string): HTMLElement {
+  return el(
+    'section',
+    { class: 'sr-level-bars' },
+    ...SPEEDRUN_LEVELS.map((lv) => {
+      const s = of(lv);
+      return el(
+        'div',
+        { class: `sr-level-bar${lv === current ? ' current' : ''}` },
+        el('span', { class: 'sr-level-tag' }, lv),
+        pills(s),
+        el('span', { class: 'sr-muted' }, `${Math.round(s.pct * 100)}%`),
+      );
+    }),
+    el('p', { class: 'sr-fineprint' }, caption),
+  );
+}
+
 function runSprint(root: HTMLElement, nav: SpeedrunNav, round: SprintCard[]): void {
   resetView(root);
   const toMap = () => renderSpeedrun(root, nav);
@@ -1837,8 +1935,7 @@ function runSprint(root: HTMLElement, nav: SpeedrunNav, round: SprintCard[]): vo
   const context = el('p', { class: 'sr-eyebrow' });
   const prompt = el('h1', { class: 'sr-prompt sr-sprint-prompt' });
   const input = el('input', { class: 'sr-input', type: 'text', autocomplete: 'off', spellcheck: false, placeholder: 'en català' });
-  input.setAttribute('autocapitalize', 'off');
-  input.setAttribute('lang', 'ca');
+  noSuggestions(input);
   input.setAttribute('aria-label', 'The Catalan form');
   const flash = el('p', { class: 'sr-sprint-flash', role: 'status' });
   const form = el('form', { class: 'sr-form' }, input, accentBar(input));
@@ -2011,7 +2108,12 @@ function renderVocab(root: HTMLElement, nav: SpeedrunNav): void {
         stat(String(stats.due), 'Due'),
         stat(`${stats.unlocked}/${stats.total}`, 'Unlocked'),
       ),
-      levelBars(rating, 'A word is fully held once it lasts a month, the same rule as lesson items.'),
+      stageBars(
+        (lv) => vocabStages(vocab.sets.filter((s) => s.level === lv), index, now),
+        rating.level,
+        'Each word climbs five stages: learned, then recalled after a day, 3 days, a week and two weeks. A stage opens once ' +
+          'enough days have passed to reach it, and the percentage counts open stages only.',
+      ),
       el(
         'div',
         { class: 'sr-intro-foot' },
@@ -2023,7 +2125,7 @@ function renderVocab(root: HTMLElement, nav: SpeedrunNav): void {
         { class: 'sr-vocab-sets' },
         ...vocab.sets.map((set) => {
           const locked = !open.has(set.id);
-          const credit = set.words.reduce((n, _, i) => n + itemCredit(index.get(`${set.id}#${i}`)), 0) / set.words.length;
+          const stages = vocabStages([set], index, now);
           const due = setDue(cards, now, set.id);
           const tile = el(
             locked ? 'div' : 'button',
@@ -2034,7 +2136,9 @@ function renderVocab(root: HTMLElement, nav: SpeedrunNav): void {
               set.title,
               el('span', { class: 'sr-vocab-set-tags' }, due ? el('span', { class: 'sr-due' }, `${due} due`) : null, el('span', { class: 'sr-badge' }, set.level)),
             ),
-            locked ? el('span', { class: 'sr-muted' }, `Unlocks at ${set.level}`) : meter(credit),
+            locked
+              ? el('span', { class: 'sr-muted' }, `Unlocks at ${set.level}`)
+              : el('span', { class: 'sr-set-stages' }, pills(stages), el('span', { class: 'sr-muted' }, `${Math.round(stages.pct * 100)}%`)),
             el('span', { class: 'sr-vocab-preview', lang: 'ca' }, locked ? '' : set.words.slice(0, 5).map(([ca]) => ca).join(' · ')),
           );
           if (!locked) tile.addEventListener('click', () => startVocabSet(root, nav, set.id));

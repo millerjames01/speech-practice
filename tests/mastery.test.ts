@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { availableStars, compareLevels, conjugationRating, courseRating, indexCards, isPerfect, nextStarOpensIn, itemCredit, lessonDue, lessonStars, levelProgress, toRating, vocabRating } from '../src/speedrun/mastery';
+import { availableStars, compareLevels, conjugationRating, courseRating, indexCards, isPerfect, nextStarOpensIn, itemCredit, lessonDue, lessonStages, lessonStars, levelProgress, levelStages, stageProgress, toRating, vocabRating } from '../src/speedrun/mastery';
 import { DAY, interleave, planLessonReview, planToday, startOfDay, type SrsCard } from '../src/speedrun/srs';
 import { conjugation, conjugationPool, formKey, openTenses, sprintQueue, sprintRound } from '../src/speedrun/sprint';
 import { loadSpeedrun } from '../src/speedrun/content';
@@ -13,6 +13,48 @@ const lesson = (id: string, n: number): SpeedrunLesson =>
   ({ id, level: 'A2', title: id, goal: '', note: '', items: Array.from({ length: n }, (_, i) => [`es${i}`, `ca${i}`]) }) as SpeedrunLesson;
 const card = (lessonId: string, index: number, step: number, due = today + 5 * DAY, lapses = 0): SrsCard => ({
   lessonId, index, step, due, lapses,
+});
+
+describe('stage pills', () => {
+  const l = lesson('a2-01', 4);
+  const at = (step: number, last: number) => ({ ...card('a2-01', 0, step), last });
+
+  it('opens only the first stage for a lesson just finished, so one run reads 100%', () => {
+    const cs = [0, 1, 2, 3].map((i) => card('a2-01', i, 0, NOW + DAY));
+    const s = lessonStages(l, { firstAt: NOW }, indexCards(cs), NOW);
+    expect(s.open).toEqual([true, false, false, false, false]);
+    expect(s.fill).toEqual([1, 0, 0, 0, 0]);
+    expect(s.pct).toBe(1);
+    expect(s.nextIn).toBe(1);
+  });
+
+  it('opens stages by age, like the stars, and counts only those', () => {
+    const cs = [0, 1, 2, 3].map((i) => card('a2-01', i, i < 2 ? 1 : 0));
+    const s = lessonStages(l, { firstAt: NOW - 2 * DAY }, indexCards(cs), NOW);
+    expect(s.open).toEqual([true, true, false, false, false]);
+    expect(s.pct).toBeCloseTo((4 + 2) / 8);
+    expect(s.nextIn).toBe(2); // stage 3 needs 1 + 3 days
+  });
+
+  it('never locks a stage already reached', () => {
+    const s = stageProgress([{ items: [at(3, NOW)], since: NOW }], NOW);
+    expect(s.open.filter(Boolean).length).toBe(4);
+  });
+
+  it('keeps each lesson on its own clock across a level, unstarted lessons only at stage 1', () => {
+    const old = [0, 1, 2, 3].map((i) => card('a2-01', i, 4));
+    const s = levelStages([l, lesson('a2-02', 4)], { 'a2-01': { firstAt: NOW - 40 * DAY } }, indexCards(old), NOW);
+    expect(s.open).toEqual([true, true, true, true, true]);
+    expect(s.fill[0]).toBe(0.5);
+    expect(s.pct).toBeCloseTo(20 / 24); // 4 items x 5 stages held, of 20 + 4 open
+  });
+
+  it('starts empty with the first stage open', () => {
+    const s = stageProgress([{ items: [undefined, undefined] }], NOW);
+    expect(s.open[0]).toBe(true);
+    expect(s.pct).toBe(0);
+    expect(s.nextIn).toBeNull();
+  });
 });
 
 describe('stars and level progress', () => {

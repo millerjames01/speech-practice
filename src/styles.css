@@ -358,6 +358,19 @@ kbd {
 .sr-level-progress { display: flex; align-items: center; gap: 10px; color: var(--sr-muted); font-size: 0.8rem; font-variant-numeric: tabular-nums; padding-top: 6px; }
 .sr-meter { display: inline-block; width: 96px; height: 4px; border-radius: 4px; background: var(--sr-line); overflow: hidden; }
 .sr-meter-fill { display: block; height: 100%; background: var(--sr-pass); border-radius: 4px; }
+.sr-pills { display: inline-flex; gap: 3px; width: 96px; vertical-align: middle; }
+.sr-pill { position: relative; flex: 1; height: 6px; border-radius: 6px; background: var(--sr-line); overflow: hidden; }
+.sr-pill.done { background: var(--sr-pass); }
+.sr-pill.locked { background: transparent; box-shadow: inset 0 0 0 1px var(--sr-line-strong); opacity: 0.55; }
+.sr-pill-fill { position: absolute; inset: 0 auto 0 0; background: var(--sr-pass); opacity: 0.75; }
+.sr-pills.small { width: 70px; gap: 2px; }
+.sr-pills.small .sr-pill { height: 4px; }
+.sr-pills.large { width: min(360px, 100%); gap: 5px; }
+.sr-pills.large .sr-pill { height: 8px; }
+.sr-hero-meter { display: flex; flex-direction: column; gap: 6px; }
+.sr-hero-meter .sr-muted { font-size: 0.8rem; }
+.sr-set-stages { display: flex; align-items: center; gap: 8px; font-size: 0.76rem; font-variant-numeric: tabular-nums; }
+.sr-level-bar .sr-pills { width: 100%; }
 
 .sr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
 .sr-card {
@@ -763,3 +776,6 @@ body[data-mode="speedrun"] .sr-modal {
 .sr-details summary { cursor: pointer; color: var(--sr-muted); font-size: 0.88rem; }
 .sr-details summary:hover { color: var(--sr-text); }
 .sr-fineprint { margin: 20px 0 0; color: var(--sr-faint); font-size: 0.76rem; }
+
+.sr-copy { margin-top: 14px; }
+.sr-copy-note { margin: 0; color: var(--sr-fail); font-size: 0.86rem; }
