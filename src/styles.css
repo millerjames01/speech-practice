@@ -619,9 +619,12 @@ body[data-mode="speedrun"] [hidden] { display: none !important; }
 }
 .sr-hw-wait { color: var(--sr-faint); }
 .sr-heard-words:empty { display: none; }
-.sr-hw-ok { color: var(--sr-pass); }
-.sr-hw-spelling { color: var(--sr-slip); text-decoration: underline dotted 2px; text-underline-offset: 5px; }
-.sr-hw-miss { color: var(--sr-faint); }
+.sr-heard-words span { text-decoration-line: underline; text-decoration-thickness: 3px; text-underline-offset: 7px; text-decoration-skip-ink: none; }
+.sr-hw-ok { text-decoration-color: var(--sr-pass); }
+.sr-hw-spelling { text-decoration-color: var(--sr-slip); }
+.sr-hw-miss { text-decoration-color: var(--sr-line-strong); }
+.sr-hw-wait { text-decoration: none !important; }
+.sr-heard-words.is-perfect { color: var(--sr-pass); transition: color 0.2s; }
 
 .sr-type-box[hidden] { display: none; }
 .sr-heard { margin: 10px 0 0; min-height: 1.3em; color: var(--sr-muted); font-size: 0.86rem; }

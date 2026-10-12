@@ -182,7 +182,14 @@ lesson reviews and vocab. Tap Speak (or Alt+M) and say it: the words show as
 they are heard, and it stops on a pause, or tap Done (or Check). The
 recogniser's guesses are all checked and any right one counts. Phones that
 never end a recognition by themselves settle within a few seconds of Done,
-using what was heard. If none is right, the box shows what was heard so you can try again,
+using what was heard. What is heard shows under the prompt with each word
+underlined against the answer (green match, yellow one sound off, grey not
+in it); words the recogniser spells differently but that sound the same in
+Central Catalan (nadar/nedar, veus/beus, comte/compte) count. As soon as the
+whole answer is heard right it turns green and is accepted, no tap needed.
+
+**Auto-advance.** A toggle on the map: after a perfect answer, Continue counts
+down 3 seconds and moves on by itself (replaying the audio stops it). If none is right, the box shows what was heard so you can try again,
 correct it, or show the answer. Typing takes over at any time. Recognition is
 done by the browser's speech service; the app stores nothing.
 
