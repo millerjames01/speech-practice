@@ -55,7 +55,7 @@ import {
   setPrefs,
   xpStats,
 } from './progress';
-import { bestProgress, canListen, listen, markHeard, voiceState, type Listening, type VoiceProgress } from './listen';
+import { VoiceStream, bestProgress, canListen, markHeard, voiceState, type VoiceProgress } from './listen';
 import { buildMigrationPlan } from './migrate';
 import { SPRINT_SECONDS, conjugation, openTenses, roundFrom, sprintQueue, workingVerbs, type SprintCard } from './sprint';
 import { planLessonReview, planToday, type SrsCard } from './srs';
@@ -65,6 +65,7 @@ import {
   betterVoiceTip,
   catalanVoice,
   catalanVoices,
+  isSpeaking,
   lastSpeechError,
   speak,
   speechSource,
@@ -100,16 +101,15 @@ const LEVEL_INFO: Record<SpeedrunLevel, { name: string; blurb: string }> = {
 
 const REQUEUE_GAP = 3;
 
-/** Listening loop (voice answers): how long to keep the mic open with nothing said yet. */
-const HOLD_OPEN_MS = 10_000;
+/** Voice answers: with nothing said, the mic pauses after this long (battery), or the short one. */
+const VOICE_IDLE_MS = 60_000;
+const VOICE_SHORT_IDLE_MS = 8000;
 /** Silence before deciding, by where the attempt stands: right, right so far (thinking), wrong. */
 const ACCEPT_PAUSE_MS = 600;
 const THINKING_PAUSE_MS = 3000;
 const RESET_PAUSE_MS = 1500;
 /** How long a wrong try stays on screen before it clears for the next. */
 const RETRY_SHOW_MS = 900;
-/** One item listens at most this long before waiting for a tap (battery). */
-const VOICE_ATTEMPT_CAP_MS = 60_000;
 
 /** Pause before the mic starts by itself on a new phrase, when auto-start is on. */
 const AUTO_LISTEN_MS = 1000;
@@ -1202,14 +1202,18 @@ function runSession(
   // voice mode. While typing in the box they need Alt, so they never eat a letter.
   let replay: ((slow: boolean) => void) | null = null;
   let mic: (() => void) | null = null;
-  let listening: Listening | null = null;
-  /** Cancels any listening (leaving the item, typing): its result is dropped. */
-  const cancelListening = () => {
-    const l = listening;
-    listening = null;
-    l?.abort();
-  };
-  cleanups.push(cancelListening);
+  // Voice answers: one recognition for the whole session (VoiceStream). Each item
+  // points these handlers at itself and resets the attempt, so the mic stays on
+  // from phrase to phrase instead of switching off and on.
+  const voiceHandlers: { text?: (candidates: string[]) => void; state?: (on: boolean) => void; error?: (err: Error) => void } = {};
+  const stream = canListen()
+    ? new VoiceStream({
+        onText: (c) => voiceHandlers.text?.(c),
+        onState: (on) => voiceHandlers.state?.(on),
+        onError: (err) => voiceHandlers.error?.(err),
+      })
+    : null;
+  cleanups.push(() => stream?.stop());
   /** Things one item puts outside the stage (the mic dock), undone when the item ends. */
   let itemCleanups: (() => void)[] = [];
   const endItem = () => {
@@ -1244,7 +1248,6 @@ function runSession(
     updateBar();
     replay = null;
     mic = null;
-    cancelListening();
     endItem();
     const entry = queue[0];
     if (!entry) return finish();
@@ -1285,15 +1288,11 @@ function runSession(
     /** Auto-start (a setting) is armed until it fires, the mic is tapped, or typing takes over. */
     let autoArmed = false;
     let introAudio: Promise<void> = Promise.resolve();
-    const openTyping = () => {
-      if (autoArmed || listening) micLabel.textContent = 'Tap to speak';
+    /** Opens the text box; choosing to type stops the mic, unless keepMic (after three misses). */
+    const openTyping = (keepMic = false) => {
+      if (autoArmed) micLabel.textContent = 'Tap to speak';
       autoArmed = false;
-      if (listening) {
-        // Choosing to type stops the mic.
-        cancelListening();
-        micBtn?.classList.remove('is-listening', 'is-processing');
-        if (micBtn) micBtn.disabled = false;
-      }
+      if (!keepMic && stream?.active) stream.stop();
       typeBox.hidden = false;
       checkBtn.hidden = false;
       typeToggle?.remove();
@@ -1326,35 +1325,35 @@ function runSession(
     const form = el('form', { class: 'sr-form' }, typeBox, actions);
     let answered = false;
 
-    if (voice && micBtn) {
-      // One attempt is a loop of short recognitions (each ends at a pause). The
-      // listening settings decide what a pause means: keep waiting if nothing was
-      // said yet, wait for the rest if it is right so far, clear and listen again
-      // after a wrong try. Tapping the mic while listening means "done".
+    if (voice && micBtn && stream) {
+      // The mic stays on (one recognition for the session). Nothing is decided
+      // while the learner speaks: every word restarts the clock, and the decision
+      // comes after a silence whose length depends on where the attempt stands.
       const prefs = getPrefs();
       let misses = 0;
-      let carried = '';
-      let attemptStart = 0;
-      let holdStart = 0;
-      let done = false;
-      let restTimer: ReturnType<typeof setTimeout> | undefined;
+      let current: VoiceProgress | null = null;
+      let decideTimer: ReturnType<typeof setTimeout> | undefined;
       let retryTimer: ReturnType<typeof setTimeout> | undefined;
+      let idleTimer: ReturnType<typeof setTimeout> | undefined;
+      /** The app spoke while the mic was on: what it heard is set aside once it stops. */
+      let heardTheApp = false;
       itemCleanups.push(() => {
-        clearTimeout(restTimer);
+        clearTimeout(decideTimer);
         clearTimeout(retryTimer);
+        clearTimeout(idleTimer);
+        voiceHandlers.text = undefined;
+        voiceHandlers.state = undefined;
+        voiceHandlers.error = undefined;
       });
-      const setMic = (state: 'idle' | 'listening' | 'processing') => {
-        micBtn.classList.toggle('is-listening', state === 'listening');
-        micBtn.classList.toggle('is-processing', state === 'processing');
-        micBtn.disabled = state === 'processing';
-        micLabel.textContent = state === 'listening' ? 'Listening… tap when done' : state === 'processing' ? 'Checking…' : misses ? 'Tap to try again' : 'Tap to speak';
+      const showMic = (on: boolean) => {
+        micBtn.classList.toggle('is-listening', on);
+        micLabel.textContent = on ? (current ? 'Listening… tap when done' : 'Listening…') : misses ? 'Tap to try again' : 'Tap to speak';
       };
-      const idle = () => setMic('idle');
       const showHeard = (text: string) => {
         clear(heardWords);
         heardWords.classList.remove('is-perfect');
         if (!text) {
-          heardWords.append(el('span', { class: 'sr-hw-wait' }, '…'));
+          if (stream.active) heardWords.append(el('span', { class: 'sr-hw-wait' }, '…'));
           return;
         }
         markHeard(pattern, text).forEach(({ word, mark }, i) => {
@@ -1362,158 +1361,126 @@ function runSession(
           heardWords.append(el('span', { class: `sr-hw-${mark}` }, word));
         });
       };
+      /** Nothing said for a long while: pause the mic (battery); a tap resumes it. */
+      const armIdle = () => {
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+          if (answered || current || !stream.active) return;
+          stream.stop();
+          showHeard('');
+          heardLine.textContent = 'Mic paused. Tap to speak.';
+        }, prefs.holdOpen ? VOICE_IDLE_MS : VOICE_SHORT_IDLE_MS);
+      };
       const accept = (text: string, result: CheckResult) => {
-        clearTimeout(restTimer);
+        clearTimeout(decideTimer);
+        current = null;
         showHeard(text);
         if (result.verdict === 'exact') heardWords.classList.add('is-perfect');
         input.value = text;
         resolve(result);
       };
-      const stopWith = (message: string) => {
-        idle();
-        heardLine.textContent = message;
-      };
-      const countMiss = () => {
+      /** A finished attempt that is not right. */
+      const missed = (text: string) => {
+        clearTimeout(decideTimer);
+        current = null;
         misses += 1;
         if (misses >= 3 && typeBox.hidden) {
-          openTyping();
+          openTyping(true);
           heardLine.textContent = 'Having trouble? Type it instead, or keep trying.';
-          return true;
         }
-        return false;
-      };
-      /** A finished attempt that is not right. */
-      const missedAttempt = (text: string) => {
-        carried = '';
-        current = null;
-        const typing = countMiss();
-        if (prefs.autoRetry && !done && Date.now() - attemptStart < VOICE_ATTEMPT_CAP_MS && !typing) {
-          // Clear and listen again, mic still on.
+        if (prefs.autoRetry && stream.active) {
+          // Clear and listen again; the mic never went off.
           showHeard(text);
           retryNote.textContent = 'Try again';
+          stream.reset();
           retryTimer = setTimeout(() => {
-            if (answered) return;
-            showHeard('');
-            holdStart = Date.now();
-            if (!listening) segment();
+            if (!answered && !current) showHeard('');
           }, RETRY_SHOW_MS);
+          showMic(true);
+          armIdle();
           return;
         }
-        cancelListening();
+        stream.stop();
         showHeard(text);
         input.value = text;
-        stopWith('Not quite. Tap to try again, or Show answer.');
+        if (!heardLine.textContent) heardLine.textContent = 'Not quite. Tap to try again, or Show answer.';
       };
-
-      /**
-       * Nothing is decided while the speaker talks: every word restarts the
-       * clock, and the decision comes after a silence whose length depends on
-       * where the attempt stands. Right: a beat, then accept. Right so far but
-       * unfinished (thinking): a long wait. A wrong word: a short wait, then
-       * clear and listen again.
-       */
-      let current: VoiceProgress | null = null;
-      const decideAfterSilence = (p: VoiceProgress) => {
-        clearTimeout(restTimer);
+      const decide = (p: VoiceProgress) => {
+        clearTimeout(decideTimer);
         current = p;
         const state = voiceState(p);
         const wait = state === 'right' ? ACCEPT_PAUSE_MS : state === 'onTrack' && prefs.waitForRest ? THINKING_PAUSE_MS : RESET_PAUSE_MS;
-        restTimer = setTimeout(() => {
+        decideTimer = setTimeout(() => {
           if (answered || current !== p) return;
-          const l = listening;
-          listening = null;
-          l?.abort();
           if (state === 'right') accept(p.text, p.result);
-          else missedAttempt(p.text);
+          else missed(p.text);
         }, wait);
       };
-
-      /** One recognition, until the recogniser's own pause; listening resumes while the attempt is open. */
-      const segment = () => {
-        if (answered) return;
-        const mine = listen({
-          onInterim: (text) => {
-            if (listening !== mine) return;
-            retryNote.textContent = '';
-            const p = bestProgress(pattern, carried, [text]);
-            if (!p) return;
-            showHeard(p.text);
-            decideAfterSilence(p);
-          },
-          onProcessing: () => {
-            if (listening === mine && done) setMic('processing');
-          },
-        });
-        listening = mine;
-        setMic('listening');
-        void mine.result
-          .then((heard) => {
-            if (listening !== mine || answered) return;
-            listening = null;
-            const p = bestProgress(pattern, carried, heard);
-            if (done) {
-              // "Done" tapped: decide now.
-              clearTimeout(restTimer);
-              const final = p ?? current;
-              if (!final) return stopWith('Didn’t catch anything. Tap to try again.');
-              if (final.result.verdict !== 'wrong') return accept(final.text, final.result);
-              return missedAttempt(final.text);
-            }
-            if (p) {
-              carried = p.text;
-              showHeard(p.text);
-              decideAfterSilence(p);
-              return segment(); // keep listening through the pause; the timer decides
-            }
-            if (current) return segment(); // silence after speech: the timer is already counting
-            // Nothing said yet: keep the mic open a while (a setting).
-            if (prefs.holdOpen && Date.now() - holdStart < HOLD_OPEN_MS) return segment();
-            stopWith('Didn’t catch anything. Tap to try again.');
-          })
-          .catch((err: unknown) => {
-            if (listening !== mine) return;
-            listening = null;
-            clearTimeout(restTimer);
-            idle();
-            heardLine.textContent = err instanceof Error ? err.message : String(err);
-            openTyping();
-          });
+      voiceHandlers.state = showMic;
+      voiceHandlers.error = (err) => {
+        showMic(false);
+        heardLine.textContent = err.message;
+        openTyping();
       };
+      voiceHandlers.text = (candidates) => {
+        if (answered) return;
+        if (isSpeaking()) {
+          heardTheApp = true; // the mic hears the app reading Catalan; not an answer
+          return;
+        }
+        if (heardTheApp) {
+          heardTheApp = false;
+          stream.reset();
+          return;
+        }
+        clearTimeout(retryTimer);
+        retryNote.textContent = '';
+        heardLine.textContent = '';
+        const p = bestProgress(pattern, '', candidates);
+        if (!p) return;
+        showHeard(p.text);
+        decide(p);
+        showMic(true);
+        armIdle();
+      };
+      // A new phrase: same recognition, fresh attempt.
+      stream.reset();
+      showMic(stream.active);
+      showHeard('');
+      if (stream.active) armIdle();
       micBtn.addEventListener('click', () => mic?.());
       mic = () => {
         autoArmed = false;
         if (answered) return;
-        if (listening) {
-          // Tapping while listening means "done": keep what was said, no more waiting.
-          done = true;
-          setMic('processing');
-          return listening.stop();
+        if (!stream.active) {
+          stopSpeaking();
+          heardLine.textContent = '';
+          stream.start();
+          stream.reset();
+          showHeard('');
+          armIdle();
+          return;
         }
-        stopSpeaking();
-        clearTimeout(retryTimer);
-        clearTimeout(restTimer);
-        carried = '';
-        current = null;
-        done = false;
-        attemptStart = Date.now();
-        holdStart = attemptStart;
-        heardLine.textContent = '';
-        retryNote.textContent = '';
+        if (current) {
+          // "Done": decide now.
+          const p = current;
+          if (p.result.verdict !== 'wrong') accept(p.text, p.result);
+          else missed(p.text);
+          return;
+        }
+        stream.stop(); // nothing said: a tap turns the mic off
         showHeard('');
-        segment();
       };
-      // Typing takes over from listening.
+      // Typing takes over from the mic.
       input.addEventListener('input', () => {
-        if (!listening) return;
-        cancelListening();
-        idle();
+        if (stream.active) stream.stop();
       });
     }
 
     form.addEventListener('submit', (ev) => {
       ev.preventDefault();
       if (answered) return;
-      if (listening) return mic?.(); // Check while listening means "done"
+      if (stream?.active && voice) return mic?.(); // Check while listening means "done"
       if (!input.value.trim()) {
         if (voice) heardLine.textContent = 'Nothing to check yet: tap the mic and say it, or type it.';
         return;
@@ -1573,7 +1540,7 @@ function runSession(
       micLabel.textContent = 'Starting…';
       void introAudio.then(() => {
         const timer = setTimeout(() => {
-          if (autoArmed && !answered && !listening) mic?.();
+          if (autoArmed && !answered && !stream?.active) mic?.();
         }, AUTO_LISTEN_MS);
         itemCleanups.push(() => clearTimeout(timer));
       });
@@ -1583,7 +1550,6 @@ function runSession(
     const resolve = (result: CheckResult | null) => {
       answered = true;
       mic = null;
-      cancelListening();
       endItem();
       heardLine.remove();
       stage.classList.remove('has-dock');
@@ -1662,6 +1628,7 @@ function runSession(
   const finish = () => {
     clearInterval(tick);
     replay = null;
+    stream?.stop(); // the session is over: mic off
     const ms = Date.now() - started;
     const hits = [...firstTry.values()].filter(Boolean).length;
     const score = unique ? hits / unique : 0;

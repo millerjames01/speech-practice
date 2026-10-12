@@ -24,6 +24,23 @@ export interface SrsCard {
   lapses: number;
   /** Epoch ms of the last answer; lets two devices' progress merge newest-first. */
   last?: number;
+  /**
+   * Epoch ms of the last right answer given early (as a filler item, before the
+   * card was due). It doesn't move the schedule, but it rests the card from
+   * being picked as a filler again for a while. Kept on this device only.
+   */
+  practiced?: number;
+}
+
+/** How long a card answered right as an early filler stays out of the filler picks. */
+export const FILLER_REST_MS = 20 * 3_600_000;
+
+/** Fillers: not-due cards, weakest first, the least recently practised first, none practised in the last FILLER_REST_MS. */
+function fillers(cards: SrsCard[], now: number): SrsCard[] {
+  const seenAt = (c: SrsCard) => Math.max(c.practiced ?? 0, c.last ?? 0);
+  return cards
+    .filter((c) => !isDue(c, now) && !(c.practiced !== undefined && now - c.practiced < FILLER_REST_MS))
+    .sort((a, b) => a.step - b.step || seenAt(a) - seenAt(b));
 }
 
 export function startOfDay(t: number): number {
@@ -93,7 +110,8 @@ export function planToday(
 ): TodayPlan {
   const dueAll = cards.filter((c) => isDue(c, now)).sort((a, b) => priority(b, now) - priority(a, now));
   const due = interleave(dueAll.slice(0, maxDue));
-  const rest = shuffle(cards.filter((c) => !isDue(c, now)), random).sort((a, b) => a.step - b.step);
+  // Shuffled first, so cards with equal step and history come in varying order.
+  const rest = fillers(shuffle(cards, random), now);
   return { due, mix: rest.slice(0, mix), overflow: dueAll.length - due.length };
 }
 
@@ -103,9 +121,10 @@ export function planToday(
  */
 export function planLessonReview(cards: SrsCard[], now: number, size = 8): TodayPlan {
   const due = cards.filter((c) => isDue(c, now)).sort((a, b) => priority(b, now) - priority(a, now));
-  const weakest = cards
-    .filter((c) => !isDue(c, now))
-    .sort((a, b) => a.step - b.step || b.lapses - a.lapses || a.due - b.due);
+  const weakest = fillers(
+    [...cards].sort((a, b) => b.lapses - a.lapses || a.due - b.due),
+    now,
+  );
   return { due, mix: weakest.slice(0, Math.max(0, size - due.length)), overflow: 0 };
 }
 
