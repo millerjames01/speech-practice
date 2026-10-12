@@ -55,7 +55,7 @@ import {
   setPrefs,
   xpStats,
 } from './progress';
-import { bestProgress, canListen, listen, markHeard, voiceProgress, type Listening } from './listen';
+import { bestProgress, canListen, listen, markHeard, voiceState, type Listening, type VoiceProgress } from './listen';
 import { buildMigrationPlan } from './migrate';
 import { SPRINT_SECONDS, conjugation, openTenses, roundFrom, sprintQueue, workingVerbs, type SprintCard } from './sprint';
 import { planLessonReview, planToday, type SrsCard } from './srs';
@@ -102,8 +102,10 @@ const REQUEUE_GAP = 3;
 
 /** Listening loop (voice answers): how long to keep the mic open with nothing said yet. */
 const HOLD_OPEN_MS = 10_000;
-/** After a pause in an answer that is right so far, how long to wait for the rest. */
-const WAIT_FOR_REST_MS = 3000;
+/** Silence before deciding, by where the attempt stands: right, right so far (thinking), wrong. */
+const ACCEPT_PAUSE_MS = 600;
+const THINKING_PAUSE_MS = 3000;
+const RESET_PAUSE_MS = 1500;
 /** How long a wrong try stays on screen before it clears for the next. */
 const RETRY_SHOW_MS = 900;
 /** One item listens at most this long before waiting for a tap (battery). */
@@ -1383,6 +1385,7 @@ function runSession(
       /** A finished attempt that is not right. */
       const missedAttempt = (text: string) => {
         carried = '';
+        current = null;
         const typing = countMiss();
         if (prefs.autoRetry && !done && Date.now() - attemptStart < VOICE_ATTEMPT_CAP_MS && !typing) {
           // Clear and listen again, mic still on.
@@ -1392,34 +1395,50 @@ function runSession(
             if (answered) return;
             showHeard('');
             holdStart = Date.now();
-            segment();
+            if (!listening) segment();
           }, RETRY_SHOW_MS);
           return;
         }
+        cancelListening();
         showHeard(text);
         input.value = text;
         stopWith('Not quite. Tap to try again, or Show answer.');
       };
-      /** One recognition, until the next pause. */
+
+      /**
+       * Nothing is decided while the speaker talks: every word restarts the
+       * clock, and the decision comes after a silence whose length depends on
+       * where the attempt stands. Right: a beat, then accept. Right so far but
+       * unfinished (thinking): a long wait. A wrong word: a short wait, then
+       * clear and listen again.
+       */
+      let current: VoiceProgress | null = null;
+      const decideAfterSilence = (p: VoiceProgress) => {
+        clearTimeout(restTimer);
+        current = p;
+        const state = voiceState(p);
+        const wait = state === 'right' ? ACCEPT_PAUSE_MS : state === 'onTrack' && prefs.waitForRest ? THINKING_PAUSE_MS : RESET_PAUSE_MS;
+        restTimer = setTimeout(() => {
+          if (answered || current !== p) return;
+          const l = listening;
+          listening = null;
+          l?.abort();
+          if (state === 'right') accept(p.text, p.result);
+          else missedAttempt(p.text);
+        }, wait);
+      };
+
+      /** One recognition, until the recogniser's own pause; listening resumes while the attempt is open. */
       const segment = () => {
         if (answered) return;
-        const continuing = carried !== '';
-        let spoke = false;
         const mine = listen({
           onInterim: (text) => {
             if (listening !== mine) return;
-            spoke = true;
-            clearTimeout(restTimer);
             retryNote.textContent = '';
-            const sofar = `${carried} ${text}`.trim();
-            showHeard(sofar);
-            const p = voiceProgress(pattern, sofar);
-            // The whole answer heard right: no need to wait for the pause.
-            if (p.result.verdict === 'exact') {
-              listening = null;
-              mine.abort();
-              accept(p.text, p.result);
-            }
+            const p = bestProgress(pattern, carried, [text]);
+            if (!p) return;
+            showHeard(p.text);
+            decideAfterSilence(p);
           },
           onProcessing: () => {
             if (listening === mine && done) setMic('processing');
@@ -1427,38 +1446,34 @@ function runSession(
         });
         listening = mine;
         setMic('listening');
-        // Right so far, then silence: give the rest a moment, then take what was said.
-        if (continuing) {
-          restTimer = setTimeout(() => {
-            if (listening !== mine || spoke) return;
-            listening = null;
-            mine.abort();
-            missedAttempt(carried);
-          }, WAIT_FOR_REST_MS);
-        }
         void mine.result
           .then((heard) => {
             if (listening !== mine || answered) return;
             listening = null;
-            clearTimeout(restTimer);
             const p = bestProgress(pattern, carried, heard);
-            if (!p || !heard.length) {
-              if (carried) return missedAttempt(carried); // stopped partway
-              // Nothing said yet: keep the mic open a while (a setting).
-              if (prefs.holdOpen && !done && Date.now() - holdStart < HOLD_OPEN_MS) return segment();
-              return stopWith('Didn’t catch anything. Tap to try again.');
+            if (done) {
+              // "Done" tapped: decide now.
+              clearTimeout(restTimer);
+              const final = p ?? current;
+              if (!final) return stopWith('Didn’t catch anything. Tap to try again.');
+              if (final.result.verdict !== 'wrong') return accept(final.text, final.result);
+              return missedAttempt(final.text);
             }
-            if (p.result.verdict !== 'wrong') return accept(p.text, p.result);
-            if (p.onTrack && prefs.waitForRest && !done) {
+            if (p) {
               carried = p.text;
-              showHeard(carried);
-              return segment();
+              showHeard(p.text);
+              decideAfterSilence(p);
+              return segment(); // keep listening through the pause; the timer decides
             }
-            missedAttempt(p.text);
+            if (current) return segment(); // silence after speech: the timer is already counting
+            // Nothing said yet: keep the mic open a while (a setting).
+            if (prefs.holdOpen && Date.now() - holdStart < HOLD_OPEN_MS) return segment();
+            stopWith('Didn’t catch anything. Tap to try again.');
           })
           .catch((err: unknown) => {
             if (listening !== mine) return;
             listening = null;
+            clearTimeout(restTimer);
             idle();
             heardLine.textContent = err instanceof Error ? err.message : String(err);
             openTyping();
@@ -1476,7 +1491,9 @@ function runSession(
         }
         stopSpeaking();
         clearTimeout(retryTimer);
+        clearTimeout(restTimer);
         carried = '';
+        current = null;
         done = false;
         attemptStart = Date.now();
         holdStart = attemptStart;

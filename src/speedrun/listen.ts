@@ -218,14 +218,23 @@ export function respell(pattern: string, heard: string): string {
     })
     .join(' ');
   const bySound = new Map<string, string>();
-  for (const w of [...SUBJECT_PRONOUNS, ...target]) bySound.set(soundFold(w), w);
+  for (const w of target) bySound.set(soundFold(w), w);
+  const pronouns = new Map(SUBJECT_PRONOUNS.map((w) => [soundFold(w), w]));
   const exact = new Set(target);
   return text
     .split(/\s+/)
     .filter(Boolean)
-    .map((word) => {
+    .map((word, i) => {
       const n = normalize(word)[0] ?? word;
-      return exact.has(n) ? word : bySound.get(soundFold(n)) ?? word;
+      const sound = soundFold(n);
+      // An answer may open with an optional subject pronoun: "ells" (or "els",
+      // as the recogniser may write it) there is the pronoun, not the article.
+      if (i === 0 && target[0] !== n) {
+        const pronoun = pronouns.get(sound);
+        if (pronoun && !target.includes(pronoun)) return pronoun;
+      }
+      if (exact.has(n)) return word;
+      return bySound.get(sound) ?? pronouns.get(sound) ?? word;
     })
     .join(' ');
 }
@@ -310,13 +319,25 @@ export function voiceProgress(pattern: string, heard: string): VoiceProgress {
   return { text, result, marks, onTrack };
 }
 
-/** The best reading among the recogniser's guesses, each continuing what was already heard. */
+export type VoiceState = 'right' | 'onTrack' | 'off';
+
+/** Right (accept), on track (right so far: the speaker may be thinking), or off (a wrong word). */
+export const voiceState = (p: VoiceProgress): VoiceState => (p.result.verdict !== 'wrong' ? 'right' : p.onTrack ? 'onTrack' : 'off');
+
+/**
+ * The best reading among the recogniser's guesses: each as a continuation of
+ * what was already heard, or as a fresh start (the speaker began the sentence
+ * again: "som professors… som estudiants"). Ties go to the continuation.
+ */
 export function bestProgress(pattern: string, carried: string, heard: string[]): VoiceProgress | null {
   const rank = (p: VoiceProgress) => (p.result.verdict === 'exact' ? 0 : p.result.verdict === 'spelling' ? 1 : p.onTrack ? 2 : 3);
   let best: VoiceProgress | null = null;
   for (const h of heard) {
-    const p = voiceProgress(pattern, `${carried} ${h}`.trim());
-    if (!best || rank(p) < rank(best)) best = p;
+    const readings = carried ? [`${carried} ${h}`, h] : [h];
+    for (const r of readings) {
+      const p = voiceProgress(pattern, r.trim());
+      if (!best || rank(p) < rank(best)) best = p;
+    }
   }
   return best;
 }
