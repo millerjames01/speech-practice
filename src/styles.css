@@ -591,6 +591,14 @@ details.sr-level[open] { padding-bottom: 28px; }
 .sr-settings-practice h3, .modal h3 { margin: 14px 0 10px; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--sr-muted); }
 .sr-settings-toggles { display: grid; gap: 10px; }
 
+/* grouped practice switches */
+.sr-toggle-group { display: grid; gap: 8px; }
+.sr-toggle-subs { display: grid; gap: 8px; padding-left: 26px; border-left: 2px solid var(--sr-line); margin-left: 7px; }
+.sr-toggle-subs .sr-toggle { font-size: 0.92em; }
+.sr-toggle.is-disabled { opacity: 0.45; }
+.sr-retry { margin: 10px 0 -6px; min-height: 1.2em; color: var(--sr-muted); font-style: italic; font-size: 0.95rem; }
+.sr-retry:empty { min-height: 0; margin: 0; }
+
 /* voice answers */
 body[data-mode="speedrun"] [hidden] { display: none !important; }
 .sr-voice-dock {

@@ -188,6 +188,11 @@ in it); words the recogniser spells differently but that sound the same in
 Central Catalan (nadar/nedar, veus/beus, comte/compte) count. As soon as the
 whole answer is heard right it turns green and is accepted, no tap needed.
 
+**Listening options** (under Voice; on by default): keep the mic open up to
+10 s until you speak; after a pause in an answer that is right so far, wait up
+to 3 s for the rest; after a wrong try, show *Try again*, clear the words and
+listen again without a tap (about a minute per item, then it waits for a tap).
+
 **Auto-start.** With voice answers on, a second toggle starts the mic by
 itself one second after each new phrase appears (after the Catalan audio, in
 dictation). Tapping the mic starts it at once; Type instead cancels it.
