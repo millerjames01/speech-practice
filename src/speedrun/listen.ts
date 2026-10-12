@@ -5,6 +5,7 @@
  */
 
 import { checkAnswer, fold, normalize, type CheckResult } from './check';
+import { numberToken } from './numbers';
 
 /** The slice of the Web Speech API the app uses (not in every TypeScript DOM lib). */
 interface RecognitionResult extends ArrayLike<{ transcript: string }> {
@@ -174,7 +175,8 @@ export function listen(events: ListenEvents = {}, lang = 'ca-ES'): Listening {
  * between spellings of the same sound, never between different words.
  */
 export function soundFold(word: string): string {
-  return fold(word.toLowerCase())
+  // ñ is Catalan ny (cuñada / cunyada); do it before accents are stripped.
+  return fold(word.toLowerCase().replace(/ñ/g, 'ny'))
     .replace(/'/g, '')
     .replace(/h/g, '')
     .replace(/v/g, 'b')
@@ -202,8 +204,19 @@ const SUBJECT_PRONOUNS = ['jo', 'tu', 'ell', 'ella', 'nosaltres', 'vosaltres', '
  * the same as one in the closest accepted answer ("saps nadar" → "saps
  * nedar", "què veus" → "què beus"). Words that sound different stay as heard.
  */
-export function respell(pattern: string, text: string): string {
-  const target = normalize(checkAnswer(pattern, text).target);
+export function respell(pattern: string, heard: string): string {
+  const target = normalize(checkAnswer(pattern, heard).target);
+  const targetSet = new Set(target);
+  // Digits become words, in whichever form the answer uses ("a les 11:00" → "a les onze").
+  const text = heard
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((token) => {
+      const spellings = numberToken(token.replace(/[.,!?;]+$/, ''));
+      if (!spellings) return token;
+      return spellings.find((w) => w.split(/\s+/).every((part) => targetSet.has(part))) ?? spellings[0]!;
+    })
+    .join(' ');
   const bySound = new Map<string, string>();
   for (const w of [...SUBJECT_PRONOUNS, ...target]) bySound.set(soundFold(w), w);
   const exact = new Set(target);
