@@ -7,7 +7,12 @@ import { config } from '../config';
 import { getSettings, isRemembering, setSettings, type LlmProvider } from '../keys';
 import { button, el } from './dom';
 
-export function openSettings(onSaved: () => void): void {
+/**
+ * `extra` adds a section of settings that save themselves (the speedrun's
+ * practice switches); with it, closing the dialog any way also runs onSaved,
+ * so the page behind reflects them.
+ */
+export function openSettings(onSaved: () => void, extra?: HTMLElement): void {
   const current = getSettings();
 
   const elevenInput = el('input', {
@@ -53,7 +58,10 @@ export function openSettings(onSaved: () => void): void {
   const proxyBox = el('input', { type: 'checkbox', checked: current.useProxy });
 
   const overlay = el('div', { class: 'overlay' });
-  const close = () => overlay.remove();
+  const close = () => {
+    overlay.remove();
+    if (extra) onSaved();
+  };
 
   const save = () => {
     setSettings(
@@ -67,7 +75,7 @@ export function openSettings(onSaved: () => void): void {
       },
       rememberBox.checked,
     );
-    close();
+    overlay.remove();
     onSaved();
   };
 
@@ -85,6 +93,8 @@ export function openSettings(onSaved: () => void): void {
       'div',
       { class: 'modal' },
       el('h2', {}, 'Settings'),
+      extra ?? null,
+      extra ? el('h3', {}, 'Keys') : null,
       el(
         'p',
         { class: 'hint' },

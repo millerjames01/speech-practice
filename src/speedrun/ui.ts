@@ -75,7 +75,8 @@ import { SPEEDRUN_LEVELS, type SpeedrunItem, type SpeedrunLesson, type SpeedrunL
 
 export interface SpeedrunNav {
   onExit: () => void;
-  onSettings: (back: () => void) => void;
+  /** Opens Settings; `extra` is the speedrun's Practice section, `back` runs when it closes. */
+  onSettings: (back: () => void, extra?: HTMLElement) => void;
 }
 
 const LEVEL_INFO: Record<SpeedrunLevel, { name: string; blurb: string }> = {
@@ -98,6 +99,9 @@ const LEVEL_INFO: Record<SpeedrunLevel, { name: string; blurb: string }> = {
 };
 
 const REQUEUE_GAP = 3;
+
+/** Pause before the mic starts by itself on a new phrase, when auto-start is on. */
+const AUTO_LISTEN_MS = 1000;
 
 /** Seconds before moving on after a perfect answer, when auto-advance is on. */
 const AUTO_ADVANCE_SECONDS = 3;
@@ -246,7 +250,7 @@ function topbar(root: HTMLElement, nav: SpeedrunNav, crumb?: { label: string; ba
         crumb
           ? iconButton('Map', ICONS.back, crumb.back, 'sr-btn ghost')
           : button('Conversation', nav.onExit, 'sr-btn ghost'),
-        button('Settings', () => nav.onSettings(() => renderSpeedrun(root, nav)), 'sr-btn ghost'),
+        button('Settings', () => nav.onSettings(() => renderSpeedrun(root, nav), practiceSettings()), 'sr-btn ghost'),
       ),
     ),
   );
@@ -284,6 +288,66 @@ function meter(fraction: number): HTMLElement {
   const fill = el('span', { class: 'sr-meter-fill' });
   fill.style.width = `${Math.round(Math.max(0, Math.min(1, fraction)) * 100)}%`;
   return el('span', { class: 'sr-meter' }, fill);
+}
+
+/* ---------- practice preferences ----------
+ * The same switches show at the bottom of the map and in Settings; each
+ * change is saved at once.
+ */
+
+type PrefSwitch = 'autoplay' | 'dictation' | 'voiceAnswers' | 'autoListen' | 'autoAdvance';
+
+function practiceToggles(): HTMLElement[] {
+  const prefs = getPrefs();
+  const toggle = (key: PrefSwitch, label: string) => {
+    const box = el('input', { type: 'checkbox', checked: prefs[key] });
+    box.addEventListener('change', () => setPrefs({ ...getPrefs(), [key]: box.checked }));
+    return el('label', { class: 'sr-toggle' }, box, el('span', {}, label));
+  };
+  return [
+    toggle('autoplay', 'Auto-play the answer after each check'),
+    toggle('dictation', 'Dictation: hear the Catalan and write it'),
+    ...(canListen()
+      ? [toggle('voiceAnswers', 'Voice: say the answer instead of typing'), toggle('autoListen', 'Start the mic by itself on each new phrase')]
+      : []),
+    toggle('autoAdvance', `Auto-advance after a perfect answer (${AUTO_ADVANCE_SECONDS} s)`),
+  ];
+}
+
+/** The Catalan voice picker; empty until the device lists more than one Catalan voice. */
+function voicePickerControl(): { el: HTMLElement; refresh: () => void } {
+  const box = el('label', { class: 'sr-toggle sr-voice-pick' });
+  const refresh = () => {
+    clear(box);
+    const voices = catalanVoices();
+    if (voices.length < 2 || speechSource() !== 'browser') return;
+    const select = el(
+      'select',
+      { class: 'sr-select' },
+      el('option', { value: '' }, `Best available (${voices[0]!.name})`),
+      ...voices.map((v) => el('option', { value: v.voiceURI, selected: v.voiceURI === getPrefs().voice }, v.name)),
+    );
+    select.setAttribute('aria-label', 'Catalan voice');
+    select.addEventListener('change', () => {
+      setPrefs({ ...getPrefs(), voice: select.value });
+      void speak('Bon dia! Com estàs?');
+    });
+    box.append(el('span', {}, 'Voice'), select);
+  };
+  refresh();
+  return { el: box, refresh };
+}
+
+/** The Practice section of the Settings dialog. */
+function practiceSettings(): HTMLElement {
+  const picker = voicePickerControl();
+  void voicesReady().then(picker.refresh);
+  return el(
+    'section',
+    { class: 'sr-settings-practice' },
+    el('h3', {}, 'Practice'),
+    el('div', { class: 'sr-settings-toggles' }, ...practiceToggles(), picker.el),
+  );
 }
 
 /* ---------- map ---------- */
@@ -398,33 +462,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
   const perfect = content.lessons.filter((l) => isPerfect(records[l.id])).length;
   const activePct = levelProgress(content.byLevel[activeLevel], index);
 
-  const prefs = getPrefs();
-  const autoplay = el('input', { type: 'checkbox', checked: prefs.autoplay });
-  autoplay.addEventListener('change', () => setPrefs({ ...getPrefs(), autoplay: autoplay.checked }));
-  const dictation = el('input', { type: 'checkbox', checked: prefs.dictation });
-  dictation.addEventListener('change', () => setPrefs({ ...getPrefs(), dictation: dictation.checked }));
-  const autoAdvance = el('input', { type: 'checkbox', checked: prefs.autoAdvance });
-  autoAdvance.addEventListener('change', () => setPrefs({ ...getPrefs(), autoAdvance: autoAdvance.checked }));
-  const voiceAnswers = el('input', { type: 'checkbox', checked: prefs.voiceAnswers });
-  voiceAnswers.addEventListener('change', () => setPrefs({ ...getPrefs(), voiceAnswers: voiceAnswers.checked }));
-  const voicePicker = el('label', { class: 'sr-toggle sr-voice-pick' });
-  const fillVoices = () => {
-    clear(voicePicker);
-    const voices = catalanVoices();
-    if (voices.length < 2 || speechSource() !== 'browser') return;
-    const select = el(
-      'select',
-      { class: 'sr-select' },
-      el('option', { value: '' }, `Best available (${voices[0]!.name})`),
-      ...voices.map((v) => el('option', { value: v.voiceURI, selected: v.voiceURI === getPrefs().voice }, v.name)),
-    );
-    select.setAttribute('aria-label', 'Catalan voice');
-    select.addEventListener('change', () => {
-      setPrefs({ ...getPrefs(), voice: select.value });
-      void speak('Bon dia! Com estàs?');
-    });
-    voicePicker.append(el('span', {}, 'Voice'), select);
-  };
+  const voicePicker = voicePickerControl();
 
   const openLesson = next
     ? iconButton(
@@ -488,7 +526,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
     const fresh = audioNotice();
     if (notice) notice.remove();
     if (fresh) banners.append(fresh);
-    fillVoices();
+    voicePicker.refresh();
   });
   page.append(banners);
 
@@ -633,11 +671,8 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
       el(
         'div',
         { class: 'sr-toggles' },
-        el('label', { class: 'sr-toggle' }, autoplay, el('span', {}, 'Auto-play the answer after each check')),
-        el('label', { class: 'sr-toggle' }, dictation, el('span', {}, 'Dictation: hear the Catalan and write it')),
-        canListen() ? el('label', { class: 'sr-toggle' }, voiceAnswers, el('span', {}, 'Voice: say the answer instead of typing')) : null,
-        el('label', { class: 'sr-toggle' }, autoAdvance, el('span', {}, `Auto-advance after a perfect answer (${AUTO_ADVANCE_SECONDS} s)`)),
-        voicePicker,
+        ...practiceToggles(),
+        voicePicker.el,
               ),
       el(
         'div',
@@ -1200,7 +1235,18 @@ function runSession(
     const micLabel = el('span', { class: 'sr-mic-label' }, 'Tap to speak');
     const typeBox = el('div', { class: 'sr-type-box' }, input, accents);
     const typeToggle = voice ? button('Type instead', () => openTyping(), 'sr-btn ghost') : null;
+    /** Auto-start (a setting) is armed until it fires, the mic is tapped, or typing takes over. */
+    let autoArmed = false;
+    let introAudio: Promise<void> = Promise.resolve();
     const openTyping = () => {
+      if (autoArmed || listening) micLabel.textContent = 'Tap to speak';
+      autoArmed = false;
+      if (listening) {
+        // Choosing to type stops the mic.
+        cancelListening();
+        micBtn?.classList.remove('is-listening', 'is-processing');
+        if (micBtn) micBtn.disabled = false;
+      }
       typeBox.hidden = false;
       checkBtn.hidden = false;
       typeToggle?.remove();
@@ -1259,6 +1305,7 @@ function runSession(
       };
       micBtn.addEventListener('click', () => mic?.());
       mic = () => {
+        autoArmed = false;
         if (answered) return;
         if (listening) {
           // Tapping while listening means "done": keep what was said.
@@ -1356,7 +1403,7 @@ function runSession(
         prompt,
       ];
       replay = (slow) => void speak(spoken, slow);
-      void speak(spoken);
+      introAudio = speak(spoken);
     } else {
       promptBlock = [el('p', { class: 'sr-eyebrow' }, `${label}${source}`), prompt];
     }
@@ -1374,6 +1421,18 @@ function runSession(
       feedback,
     );
     stage.classList.toggle('has-dock', voice);
+    // Auto-start: the mic turns on by itself a moment after a new phrase appears
+    // (after the Catalan audio, in dictation, so it doesn't hear the app).
+    if (voice && getPrefs().autoListen) {
+      autoArmed = true;
+      micLabel.textContent = 'Starting…';
+      void introAudio.then(() => {
+        const timer = setTimeout(() => {
+          if (autoArmed && !answered && !listening) mic?.();
+        }, AUTO_LISTEN_MS);
+        itemCleanups.push(() => clearTimeout(timer));
+      });
+    }
     input.focus();
 
     const resolve = (result: CheckResult | null) => {

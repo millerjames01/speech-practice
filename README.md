@@ -188,6 +188,11 @@ in it); words the recogniser spells differently but that sound the same in
 Central Catalan (nadar/nedar, veus/beus, comte/compte) count. As soon as the
 whole answer is heard right it turns green and is accepted, no tap needed.
 
+**Auto-start.** With voice answers on, a second toggle starts the mic by
+itself one second after each new phrase appears (after the Catalan audio, in
+dictation). Tapping the mic starts it at once; Type instead cancels it.
+Together with auto-advance, practice runs hands-free.
+
 **Auto-advance.** A toggle on the map: after a perfect answer, Continue counts
 down 3 seconds and moves on by itself (replaying the audio stops it). If none is right, the box shows what was heard so you can try again,
 correct it, or show the answer. Typing takes over at any time. Recognition is

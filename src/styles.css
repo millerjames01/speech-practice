@@ -586,6 +586,11 @@ details.sr-level[open] { padding-bottom: 28px; }
 .sr-working { margin: 14px 0 0; color: var(--sr-muted); font-size: 0.92rem; }
 .sr-working strong { color: var(--sr-text); font-weight: 600; }
 
+/* settings: practice section */
+.sr-settings-practice { margin: 8px 0 18px; padding-bottom: 14px; border-bottom: 1px solid var(--sr-line); }
+.sr-settings-practice h3, .modal h3 { margin: 14px 0 10px; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--sr-muted); }
+.sr-settings-toggles { display: grid; gap: 10px; }
+
 /* voice answers */
 body[data-mode="speedrun"] [hidden] { display: none !important; }
 .sr-voice-dock {
@@ -723,6 +728,8 @@ body[data-mode="speedrun"] {
   }
 }
 .sr-footer-actions { display: flex; flex-wrap: wrap; gap: 4px; }
+/* Dialogs sit above the sticky header and the mic dock. */
+body[data-mode="speedrun"] .overlay { z-index: 20; }
 body[data-mode="speedrun"] .sr-overlay { background: color-mix(in srgb, var(--sr-bg) 70%, transparent); backdrop-filter: blur(6px); z-index: 20; }
 body[data-mode="speedrun"] .sr-modal {
   background: var(--sr-surface); color: var(--sr-text); border: 1px solid var(--sr-line);
