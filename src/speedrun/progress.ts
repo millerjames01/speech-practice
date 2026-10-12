@@ -28,6 +28,12 @@ export interface Prefs {
   voiceAnswers: boolean;
   /** In voice mode, start listening by itself a moment after each new phrase. */
   autoListen: boolean;
+  /** Voice: with nothing said yet, keep the mic open past the first pause. */
+  holdOpen: boolean;
+  /** Voice: after a pause in an answer that is right so far, wait for the rest. */
+  waitForRest: boolean;
+  /** Voice: after a wrong try, clear and listen again without a tap. */
+  autoRetry: boolean;
   /** After a perfect answer, move on by itself after a short countdown. */
   autoAdvance: boolean;
   /** Chosen browser voice (voiceURI); empty picks the best Catalan voice available. */
@@ -66,7 +72,7 @@ interface LegacyMiss {
   count: number;
 }
 
-const empty = (): Store => ({ lessons: {}, cards: {}, prefs: { autoplay: true, dictation: false, voiceAnswers: false, autoListen: false, autoAdvance: false, voice: '', voiceTipHidden: false }, xp: {}, sprintBest: 0, forms: {}, formsSeen: {}, version: STORE_VERSION });
+const empty = (): Store => ({ lessons: {}, cards: {}, prefs: { autoplay: true, dictation: false, voiceAnswers: false, autoListen: false, holdOpen: true, waitForRest: true, autoRetry: true, autoAdvance: false, voice: '', voiceTipHidden: false }, xp: {}, sprintBest: 0, forms: {}, formsSeen: {}, version: STORE_VERSION });
 
 export const itemKey = (lessonId: string, index: number): string => `${lessonId}#${index}`;
 

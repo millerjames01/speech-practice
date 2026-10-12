@@ -163,3 +163,24 @@ describe('numbers and Spanish spellings from the recogniser', () => {
     expect(markHeard('[la cunyada|cunyada]', 'la cuñada')).toEqual([{ word: 'la', mark: 'ok' }, { word: 'cunyada', mark: 'ok' }]);
   });
 });
+
+describe('where a spoken attempt stands', () => {
+  const pattern = '[Anem a dormir|Ens n\'anem a dormir|Ens fiquem al llit] a les onze.';
+  it('is on track while every word so far is right and more is to come', async () => {
+    const { voiceProgress } = await import('../src/speedrun/listen');
+    expect(voiceProgress(pattern, 'anem a dormir').onTrack).toBe(true);
+    expect(voiceProgress(pattern, 'anem a dormir a les 11').result.verdict).toBe('exact');
+    expect(voiceProgress(pattern, 'anem a beure').onTrack).toBe(false);
+    expect(voiceProgress(pattern, 'anem a dormir a les dotze').onTrack).toBe(false);
+    expect(voiceProgress(pattern, '').onTrack).toBe(false);
+    expect(voiceProgress('(Ella) és metgessa.', 'ella és').onTrack).toBe(true);
+    expect(voiceProgress('(Ella) és metgessa.', 'és').onTrack).toBe(true);
+  });
+
+  it('continues what was already heard with the best guess', async () => {
+    const { bestProgress } = await import('../src/speedrun/listen');
+    expect(bestProgress(pattern, 'anem a dormir', ['a les 12', 'a les onze'])?.result.verdict).toBe('exact');
+    expect(bestProgress(pattern, '', ['anem a', 'hem a'])?.onTrack).toBe(true);
+    expect(bestProgress(pattern, '', [])).toBeNull();
+  });
+});

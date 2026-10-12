@@ -287,3 +287,36 @@ export function markHeard(pattern: string, heard: string): { word: string; mark:
       return { word, mark: close ? ('spelling' as const) : ('miss' as const) };
     });
 }
+
+export interface VoiceProgress {
+  /** The attempt as respelled, and its check against the answer. */
+  text: string;
+  result: CheckResult;
+  marks: { word: string; mark: HeardMark }[];
+  /** Every word so far is right, and the answer has more to come: worth waiting for. */
+  onTrack: boolean;
+}
+
+/** Where a spoken attempt stands: right, on track (right so far, unfinished), or off. */
+export function voiceProgress(pattern: string, heard: string): VoiceProgress {
+  const text = respell(pattern, heard);
+  const result = checkAnswer(pattern, text);
+  const marks = markHeard(pattern, heard);
+  const target = normalize(result.target);
+  // A leading subject pronoun the answer leaves optional ("ella és…") doesn't count toward its length.
+  const first = normalize(marks[0]?.word ?? '')[0];
+  const counted = first && SUBJECT_PRONOUNS.includes(first) && target[0] !== first ? marks.length - 1 : marks.length;
+  const onTrack = result.verdict === 'wrong' && counted > 0 && counted < target.length && marks.every((m) => m.mark === 'ok');
+  return { text, result, marks, onTrack };
+}
+
+/** The best reading among the recogniser's guesses, each continuing what was already heard. */
+export function bestProgress(pattern: string, carried: string, heard: string[]): VoiceProgress | null {
+  const rank = (p: VoiceProgress) => (p.result.verdict === 'exact' ? 0 : p.result.verdict === 'spelling' ? 1 : p.onTrack ? 2 : 3);
+  let best: VoiceProgress | null = null;
+  for (const h of heard) {
+    const p = voiceProgress(pattern, `${carried} ${h}`.trim());
+    if (!best || rank(p) < rank(best)) best = p;
+  }
+  return best;
+}

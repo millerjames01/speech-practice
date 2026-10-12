@@ -55,7 +55,7 @@ import {
   setPrefs,
   xpStats,
 } from './progress';
-import { bestHearing, canListen, listen, markHeard, type Listening } from './listen';
+import { bestProgress, canListen, listen, markHeard, voiceProgress, type Listening } from './listen';
 import { buildMigrationPlan } from './migrate';
 import { SPRINT_SECONDS, conjugation, openTenses, roundFrom, sprintQueue, workingVerbs, type SprintCard } from './sprint';
 import { planLessonReview, planToday, type SrsCard } from './srs';
@@ -99,6 +99,15 @@ const LEVEL_INFO: Record<SpeedrunLevel, { name: string; blurb: string }> = {
 };
 
 const REQUEUE_GAP = 3;
+
+/** Listening loop (voice answers): how long to keep the mic open with nothing said yet. */
+const HOLD_OPEN_MS = 10_000;
+/** After a pause in an answer that is right so far, how long to wait for the rest. */
+const WAIT_FOR_REST_MS = 3000;
+/** How long a wrong try stays on screen before it clears for the next. */
+const RETRY_SHOW_MS = 900;
+/** One item listens at most this long before waiting for a tap (battery). */
+const VOICE_ATTEMPT_CAP_MS = 60_000;
 
 /** Pause before the mic starts by itself on a new phrase, when auto-start is on. */
 const AUTO_LISTEN_MS = 1000;
@@ -295,21 +304,56 @@ function meter(fraction: number): HTMLElement {
  * change is saved at once.
  */
 
-type PrefSwitch = 'autoplay' | 'dictation' | 'voiceAnswers' | 'autoListen' | 'autoAdvance';
+type PrefSwitch =
+  | 'autoplay'
+  | 'dictation'
+  | 'voiceAnswers'
+  | 'autoListen'
+  | 'holdOpen'
+  | 'waitForRest'
+  | 'autoRetry'
+  | 'autoAdvance';
+
+/** The voice options, nested under Voice and greyed out while it is off. */
+const VOICE_OPTIONS: [PrefSwitch, string][] = [
+  ['autoListen', 'Start the mic by itself on each new phrase'],
+  ['holdOpen', 'Keep listening until you speak'],
+  ['waitForRest', 'Wait while the phrase is right so far'],
+  ['autoRetry', 'After a wrong try, clear and listen again'],
+];
 
 function practiceToggles(): HTMLElement[] {
   const prefs = getPrefs();
-  const toggle = (key: PrefSwitch, label: string) => {
+  const toggle = (key: PrefSwitch, label: string, onChange?: (on: boolean) => void) => {
     const box = el('input', { type: 'checkbox', checked: prefs[key] });
-    box.addEventListener('change', () => setPrefs({ ...getPrefs(), [key]: box.checked }));
+    box.addEventListener('change', () => {
+      setPrefs({ ...getPrefs(), [key]: box.checked });
+      onChange?.(box.checked);
+    });
     return el('label', { class: 'sr-toggle' }, box, el('span', {}, label));
+  };
+  const voiceGroup = (): HTMLElement[] => {
+    const subs = VOICE_OPTIONS.map(([key, label]) => toggle(key, label));
+    const setEnabled = (on: boolean) => {
+      for (const sub of subs) {
+        sub.classList.toggle('is-disabled', !on);
+        sub.querySelector('input')!.disabled = !on;
+      }
+    };
+    setEnabled(prefs.voiceAnswers);
+    return [
+      el(
+        'div',
+        { class: 'sr-toggle-group' },
+        toggle('voiceAnswers', 'Voice: say the answer instead of typing', setEnabled),
+        el('div', { class: 'sr-toggle-subs' }, ...subs),
+      ),
+    ];
   };
   return [
     toggle('autoplay', 'Auto-play the answer after each check'),
     toggle('dictation', 'Dictation: hear the Catalan and write it'),
-    ...(canListen()
-      ? [toggle('voiceAnswers', 'Voice: say the answer instead of typing'), toggle('autoListen', 'Start the mic by itself on each new phrase')]
-      : []),
+    ...(canListen() ? voiceGroup() : []),
     toggle('autoAdvance', `Auto-advance after a perfect answer (${AUTO_ADVANCE_SECONDS} s)`),
   ];
 }
@@ -1228,6 +1272,7 @@ function runSession(
     // Tap and say it; it stops on a pause, or tap again when done. What is heard
     // shows word by word against the answer: green match, yellow near miss, grey no match.
     const heardLine = el('p', { class: 'sr-heard', role: 'status' });
+    const retryNote = el('p', { class: 'sr-retry', role: 'status' });
     const heardWords = el('p', { class: 'sr-heard-words', lang: 'ca' });
     heardWords.setAttribute('aria-live', 'polite');
     const micBtn = voice ? el('button', { class: 'sr-mic-big', type: 'button', title: 'Speak (Alt+M)' }, icon(ICONS.mic, 36)) : null;
@@ -1280,7 +1325,22 @@ function runSession(
     let answered = false;
 
     if (voice && micBtn) {
+      // One attempt is a loop of short recognitions (each ends at a pause). The
+      // listening settings decide what a pause means: keep waiting if nothing was
+      // said yet, wait for the rest if it is right so far, clear and listen again
+      // after a wrong try. Tapping the mic while listening means "done".
+      const prefs = getPrefs();
       let misses = 0;
+      let carried = '';
+      let attemptStart = 0;
+      let holdStart = 0;
+      let done = false;
+      let restTimer: ReturnType<typeof setTimeout> | undefined;
+      let retryTimer: ReturnType<typeof setTimeout> | undefined;
+      itemCleanups.push(() => {
+        clearTimeout(restTimer);
+        clearTimeout(retryTimer);
+      });
       const setMic = (state: 'idle' | 'listening' | 'processing') => {
         micBtn.classList.toggle('is-listening', state === 'listening');
         micBtn.classList.toggle('is-processing', state === 'processing');
@@ -1290,64 +1350,111 @@ function runSession(
       const idle = () => setMic('idle');
       const showHeard = (text: string) => {
         clear(heardWords);
+        heardWords.classList.remove('is-perfect');
+        if (!text) {
+          heardWords.append(el('span', { class: 'sr-hw-wait' }, '…'));
+          return;
+        }
         markHeard(pattern, text).forEach(({ word, mark }, i) => {
           if (i > 0) heardWords.append(' ');
           heardWords.append(el('span', { class: `sr-hw-${mark}` }, word));
         });
       };
-      const missed = (message: string) => {
-        misses += 1;
+      const accept = (text: string, result: CheckResult) => {
+        clearTimeout(restTimer);
+        showHeard(text);
+        if (result.verdict === 'exact') heardWords.classList.add('is-perfect');
+        input.value = text;
+        resolve(result);
+      };
+      const stopWith = (message: string) => {
         idle();
+        heardLine.textContent = message;
+      };
+      const countMiss = () => {
+        misses += 1;
         if (misses >= 3 && typeBox.hidden) {
           openTyping();
           heardLine.textContent = 'Having trouble? Type it instead, or keep trying.';
-        } else heardLine.textContent = message;
-      };
-      micBtn.addEventListener('click', () => mic?.());
-      mic = () => {
-        autoArmed = false;
-        if (answered) return;
-        if (listening) {
-          // Tapping while listening means "done": keep what was said.
-          setMic('processing');
-          return listening.stop();
+          return true;
         }
-        stopSpeaking();
+        return false;
+      };
+      /** A finished attempt that is not right. */
+      const missedAttempt = (text: string) => {
+        carried = '';
+        const typing = countMiss();
+        if (prefs.autoRetry && !done && Date.now() - attemptStart < VOICE_ATTEMPT_CAP_MS && !typing) {
+          // Clear and listen again, mic still on.
+          showHeard(text);
+          retryNote.textContent = 'Try again';
+          retryTimer = setTimeout(() => {
+            if (answered) return;
+            showHeard('');
+            holdStart = Date.now();
+            segment();
+          }, RETRY_SHOW_MS);
+          return;
+        }
+        showHeard(text);
+        input.value = text;
+        stopWith('Not quite. Tap to try again, or Show answer.');
+      };
+      /** One recognition, until the next pause. */
+      const segment = () => {
+        if (answered) return;
+        const continuing = carried !== '';
+        let spoke = false;
         const mine = listen({
           onInterim: (text) => {
             if (listening !== mine) return;
-            showHeard(text);
+            spoke = true;
+            clearTimeout(restTimer);
+            retryNote.textContent = '';
+            const sofar = `${carried} ${text}`.trim();
+            showHeard(sofar);
+            const p = voiceProgress(pattern, sofar);
             // The whole answer heard right: no need to wait for the pause.
-            const best = bestHearing(pattern, [text]);
-            if (best?.result.verdict === 'exact') {
+            if (p.result.verdict === 'exact') {
               listening = null;
               mine.abort();
-              showHeard(best.text);
-              heardWords.classList.add('is-perfect');
-              input.value = best.text;
-              resolve(best.result);
+              accept(p.text, p.result);
             }
           },
           onProcessing: () => {
-            if (listening === mine) setMic('processing');
+            if (listening === mine && done) setMic('processing');
           },
         });
         listening = mine;
-        clear(heardWords);
-        heardWords.append(el('span', { class: 'sr-hw-wait' }, '…'));
-        heardLine.textContent = '';
         setMic('listening');
+        // Right so far, then silence: give the rest a moment, then take what was said.
+        if (continuing) {
+          restTimer = setTimeout(() => {
+            if (listening !== mine || spoke) return;
+            listening = null;
+            mine.abort();
+            missedAttempt(carried);
+          }, WAIT_FOR_REST_MS);
+        }
         void mine.result
           .then((heard) => {
             if (listening !== mine || answered) return;
             listening = null;
-            const best = bestHearing(pattern, heard);
-            if (!best) return missed('Didn’t catch anything. Tap to try again.');
-            showHeard(best.text);
-            input.value = best.text;
-            if (best.result.verdict === 'exact') heardWords.classList.add('is-perfect');
-            if (best.result.verdict !== 'wrong') return resolve(best.result);
-            missed('Not quite. Tap to try again, or Show answer.');
+            clearTimeout(restTimer);
+            const p = bestProgress(pattern, carried, heard);
+            if (!p || !heard.length) {
+              if (carried) return missedAttempt(carried); // stopped partway
+              // Nothing said yet: keep the mic open a while (a setting).
+              if (prefs.holdOpen && !done && Date.now() - holdStart < HOLD_OPEN_MS) return segment();
+              return stopWith('Didn’t catch anything. Tap to try again.');
+            }
+            if (p.result.verdict !== 'wrong') return accept(p.text, p.result);
+            if (p.onTrack && prefs.waitForRest && !done) {
+              carried = p.text;
+              showHeard(carried);
+              return segment();
+            }
+            missedAttempt(p.text);
           })
           .catch((err: unknown) => {
             if (listening !== mine) return;
@@ -1356,6 +1463,27 @@ function runSession(
             heardLine.textContent = err instanceof Error ? err.message : String(err);
             openTyping();
           });
+      };
+      micBtn.addEventListener('click', () => mic?.());
+      mic = () => {
+        autoArmed = false;
+        if (answered) return;
+        if (listening) {
+          // Tapping while listening means "done": keep what was said, no more waiting.
+          done = true;
+          setMic('processing');
+          return listening.stop();
+        }
+        stopSpeaking();
+        clearTimeout(retryTimer);
+        carried = '';
+        done = false;
+        attemptStart = Date.now();
+        holdStart = attemptStart;
+        heardLine.textContent = '';
+        retryNote.textContent = '';
+        showHeard('');
+        segment();
       };
       // Typing takes over from listening.
       input.addEventListener('input', () => {
@@ -1415,7 +1543,7 @@ function runSession(
         ...promptBlock,
         ...(hint && !dictation ? [el('p', { class: 'sr-hint' }, hint)] : []),
         // What is heard sits right under the prompt, in the same type, coloured as it comes.
-        ...(voice ? [heardWords, heardLine] : []),
+        ...(voice ? [retryNote, heardWords, heardLine] : []),
         form,
       ),
       feedback,
