@@ -1116,11 +1116,13 @@ function runSession(
   let replay: ((slow: boolean) => void) | null = null;
   let mic: (() => void) | null = null;
   let listening: Listening | null = null;
-  const stopListening = () => {
-    listening?.stop();
+  /** Cancels any listening (leaving the item, typing): its result is dropped. */
+  const cancelListening = () => {
+    const l = listening;
     listening = null;
+    l?.abort();
   };
-  cleanups.push(stopListening);
+  cleanups.push(cancelListening);
   onKey((ev) => {
     if (ev.key === 'Escape') return backToMap();
     if (ev.metaKey || ev.ctrlKey) return;
@@ -1148,7 +1150,7 @@ function runSession(
     updateBar();
     replay = null;
     mic = null;
-    stopListening();
+    cancelListening();
     const entry = queue[0];
     if (!entry) return finish();
     const [es, pattern, hint] = entry.item;
@@ -1173,9 +1175,11 @@ function runSession(
     const feedback = el('div', { class: 'sr-feedback', role: 'status' });
     const checkBtn = el('button', { class: 'sr-btn primary', type: 'submit' }, 'Check');
     const giveUp = button('Show answer', () => resolve(null), 'sr-btn ghost');
-    // Voice mode: say the answer; any of the recogniser's guesses that is right counts.
+    // Voice mode: tap Speak and say the answer; it stops on a pause, or tap again
+    // (or Check) when done. Any of the recogniser's guesses that is right counts.
     const heardLine = el('p', { class: 'sr-heard', role: 'status' });
-    const micBtn = voice ? iconButton('Speak', ICONS.mic, () => mic?.(), 'sr-btn sr-mic') : null;
+    const micBtn = voice ? iconButton('Speak', ICONS.mic, () => mic?.(), 'sr-btn primary sr-mic') : null;
+    if (voice) checkBtn.className = 'sr-btn';
     const actions = el(
       'div',
       { class: 'sr-drill-actions' },
@@ -1193,51 +1197,71 @@ function runSession(
 
     if (voice && micBtn) {
       const label = micBtn.querySelector('span')!;
-      const idle = () => {
-        micBtn.classList.remove('is-listening');
-        label.textContent = 'Speak';
+      const setMic = (state: 'idle' | 'listening' | 'processing') => {
+        micBtn.classList.toggle('is-listening', state === 'listening');
+        micBtn.classList.toggle('is-processing', state === 'processing');
+        micBtn.disabled = state === 'processing';
+        label.textContent = state === 'listening' ? 'Done' : state === 'processing' ? 'Checking…' : 'Speak';
       };
+      const idle = () => setMic('idle');
+      heardLine.textContent = 'Tap Speak and say it in Catalan.';
       mic = () => {
         if (answered) return;
-        if (listening) return stopListening();
+        if (listening) {
+          // Tapping while listening means "done": keep what was said.
+          setMic('processing');
+          return listening.stop();
+        }
         stopSpeaking();
-        const mine = listen();
+        const mine = listen({
+          onInterim: (text) => {
+            if (listening === mine) heardLine.textContent = `Hearing: “${text}”`;
+          },
+          onProcessing: () => {
+            if (listening === mine) setMic('processing');
+          },
+        });
         listening = mine;
-        micBtn.classList.add('is-listening');
-        label.textContent = 'Listening…';
-        heardLine.textContent = '';
+        setMic('listening');
+        heardLine.textContent = 'Listening… say it, then pause (or tap Done).';
         void mine.result
           .then((heard) => {
             if (listening !== mine || answered) return;
             listening = null;
-            idle();
+            setMic('idle');
             const best = bestHearing(pattern, heard);
             if (!best) {
-              heardLine.textContent = 'Didn’t catch that. Tap Speak to try again, or type it.';
+              heardLine.textContent = 'Didn’t catch anything. Tap Speak to try again, or type it.';
               return;
             }
             input.value = best.text;
             if (best.result.verdict !== 'wrong') return resolve(best.result);
-            heardLine.textContent = `Heard “${best.text}”. Try again, fix it and press Check, or Show answer.`;
-            input.focus();
+            heardLine.textContent = `Heard “${best.text}”. Not quite: Speak again, fix it and press Check, or Show answer.`;
           })
           .catch((err: unknown) => {
-            if (listening === mine) listening = null;
-            idle();
+            if (listening !== mine) return;
+            listening = null;
+            setMic('idle');
             heardLine.textContent = err instanceof Error ? err.message : String(err);
           });
       };
       // Typing takes over from listening.
       input.addEventListener('input', () => {
         if (!listening) return;
-        stopListening();
+        cancelListening();
         idle();
+        heardLine.textContent = '';
       });
     }
 
     form.addEventListener('submit', (ev) => {
       ev.preventDefault();
-      if (answered || !input.value.trim()) return;
+      if (answered) return;
+      if (listening) return mic?.(); // Check while listening means "done"
+      if (!input.value.trim()) {
+        if (voice) heardLine.textContent = 'Nothing to check yet: tap Speak and say it, or type it.';
+        return;
+      }
       resolve(checkAnswer(pattern, input.value));
     });
 
@@ -1284,12 +1308,11 @@ function runSession(
       feedback,
     );
     input.focus();
-    if (voice && !dictation) setTimeout(() => mic?.(), 250);
 
     const resolve = (result: CheckResult | null) => {
       answered = true;
       mic = null;
-      stopListening();
+      cancelListening();
       heardLine.remove();
       input.disabled = true;
       accents.remove();

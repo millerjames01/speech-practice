@@ -589,7 +589,8 @@ details.sr-level[open] { padding-bottom: 28px; }
 /* voice answers */
 .sr-heard { margin: 10px 0 0; min-height: 1.3em; color: var(--sr-muted); font-size: 0.86rem; }
 .sr-heard:empty { display: none; }
-.sr-mic.is-listening { border-color: var(--sr-fail); color: var(--sr-fail); }
+.sr-btn.sr-mic.is-listening, .sr-btn.sr-mic.is-listening:hover { background: var(--sr-fail); border-color: var(--sr-fail); color: #fff; }
+.sr-mic.is-processing { opacity: 0.75; }
 .sr-mic.is-listening svg { animation: sr-pulse 1.1s ease-in-out infinite; }
 @keyframes sr-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 @media (prefers-reduced-motion: reduce) { .sr-mic.is-listening svg { animation: none; } }
