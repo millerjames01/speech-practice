@@ -184,3 +184,17 @@ describe('where a spoken attempt stands', () => {
     expect(bestProgress(pattern, '', [])).toBeNull();
   });
 });
+
+describe('starting the sentence again', () => {
+  it('reads a fresh start when it beats the continuation', async () => {
+    const { bestProgress, voiceState } = await import('../src/speedrun/listen');
+    const p = bestProgress('Som estudiants.', 'som professors', ['som estudiants']);
+    expect(p?.result.verdict).toBe('exact');
+    expect(voiceState(bestProgress('Som estudiants.', 'som professors', ['som'])!)).toBe('onTrack');
+    expect(voiceState(bestProgress('Som estudiants.', '', ['som professors'])!)).toBe('off');
+    expect(voiceState(bestProgress('Saps nedar?', 'saps', ['nadar'])!)).toBe('right');
+    // "ells" opening the answer is the pronoun, not the article it sounds like.
+    expect(voiceState(bestProgress('(Ells) són els meus amics.', '', ['ells són els meus amics'])!)).toBe('right');
+    expect(voiceState(bestProgress('(Ells) són els meus amics.', '', ['els són els meus amics'])!)).toBe('right');
+  });
+});
