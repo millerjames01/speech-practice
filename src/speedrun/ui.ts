@@ -26,7 +26,10 @@ import {
   isPerfect,
   lessonStars,
   STAGES,
+  FORM_STAGE_RULES,
+  STAGE_NAMES,
   STAGE_RULES,
+  formStages,
   lessonStages,
   levelStages,
   vocabStages,
@@ -61,7 +64,7 @@ import {
 } from './progress';
 import { VoiceStream, bestProgress, canListen, markHeard, voiceState, type VoiceProgress } from './listen';
 import { buildMigrationPlan } from './migrate';
-import { SPRINT_SECONDS, conjugation, roundFrom, sprintQueue, tenseStats, workingVerbs, type SprintCard } from './sprint';
+import { SPRINT_SECONDS, conjugation, conjugationPool, openTenses, roundFrom, sprintQueue, tenseStats, workingVerbs, type SprintCard } from './sprint';
 import { planLessonReview, planToday, type SrsCard } from './srs';
 import { planVocab, planVocabSet, setDue, unlockedSets, vocab, vocabStats } from './vocab';
 import { decodeSync, downloadSync, encodeSync, formatShortCode, uploadSync } from './sync';
@@ -314,7 +317,7 @@ function stat(value: string, label: string): HTMLElement {
  * Five stage pills: filled as items reach each stage, locked (dashed) until
  * enough days have passed for that stage to be reachable.
  */
-function pills(s: Stages, size: 'small' | 'large' | '' = ''): HTMLElement {
+function pills(s: Stages, size: 'small' | 'large' | '' = '', rules: readonly string[] = STAGE_RULES): HTMLElement {
   const firstLocked = s.open.indexOf(false);
   const row = el('span', { class: `sr-pills${size ? ` ${size}` : ''}` });
   row.setAttribute('role', 'img');
@@ -329,7 +332,7 @@ function pills(s: Stages, size: 'small' | 'large' | '' = ''): HTMLElement {
       : `${Math.round(fill * 100)}%`;
     const pill = el('span', {
       class: `sr-pill${locked ? ' locked' : ''}${fill >= 1 ? ' done' : ''}`,
-      title: `${STAGE_RULES[k]} · ${note}`,
+      title: `${rules[k]} · ${note}`,
     });
     if (!locked && fill > 0 && fill < 1) {
       const bar = el('span', { class: 'sr-pill-fill' });
@@ -339,6 +342,32 @@ function pills(s: Stages, size: 'small' | 'large' | '' = ''): HTMLElement {
     row.append(pill);
   }
   return row;
+}
+
+/**
+ * The big version: each pill named for its memory stage, with how much of it
+ * is done, or when it opens.
+ */
+function stageLadder(s: Stages, rules: readonly string[] = STAGE_RULES): HTMLElement {
+  const row = pills(s, 'large', rules);
+  const firstLocked = s.open.indexOf(false);
+  const labels = el(
+    'span',
+    { class: 'sr-stage-labels' },
+    ...STAGE_NAMES.map((name, k) =>
+      el(
+        'span',
+        { class: `sr-stage-label${s.open[k] ? '' : ' locked'}`, title: rules[k] },
+        el('strong', {}, name),
+        el(
+          'span',
+          {},
+          s.open[k] ? `${Math.round(s.fill[k]! * 100)}%` : k === firstLocked && s.nextIn !== null ? `in ${days(s.nextIn)}` : 'later',
+        ),
+      ),
+    ),
+  );
+  return el('span', { class: 'sr-ladder' }, row, labels);
 }
 
 const days = (n: number) => `${n} day${n === 1 ? '' : 's'}`;
@@ -493,7 +522,31 @@ function courseLevel(): SpeedrunLevel {
 const pctLabel = (r: Rating) => `${r.level} · ${Math.round(r.pct * 100)}%`;
 
 /** A side track: its rating on the course scale, how it compares with the course, and a way in. */
-function ratingTile(title: string, rating: Rating, main: SpeedrunLevel, body: string, meta: string, go: () => void): HTMLElement {
+/** Conjugation stages at one level: open tenses only, verbs up to the course level, each tense on its own clock. */
+function conjStagesAt(level: SpeedrunLevel, main: SpeedrunLevel, now = Date.now()): Stages {
+  const open = openTenses(new Set(Object.keys(allLessonRecords())));
+  const top = SPEEDRUN_LEVELS.indexOf(main);
+  const byTense = new Map<string, SprintCard[]>();
+  for (const c of conjugationPool()) {
+    if (c.level !== level || !open.has(c.tense) || SPEEDRUN_LEVELS.indexOf(c.verbLevel) > top) continue;
+    byTense.set(c.tense, [...(byTense.get(c.tense) ?? []), c]);
+  }
+  return formStages([...byTense.values()], allForms(), allFormsSeen(), now);
+}
+
+const vocabStagesAt = (level: SpeedrunLevel, index: Map<string, SrsCard>, now = Date.now()): Stages =>
+  vocabStages(vocab.sets.filter((s) => s.level === level), index, now);
+
+function ratingTile(
+  title: string,
+  rating: Rating,
+  main: SpeedrunLevel,
+  stages: Stages,
+  rules: readonly string[],
+  body: string,
+  meta: string,
+  go: () => void,
+): HTMLElement {
   const cmp = compareLevels(rating.level, main);
   const tile = el(
     'button',
@@ -504,7 +557,7 @@ function ratingTile(title: string, rating: Rating, main: SpeedrunLevel, body: st
       title,
       el('span', { class: `sr-badge${cmp < 0 ? ' behind' : ''}`, title: 'Rating on the A2-C1 scale' }, pctLabel(rating)),
     ),
-    meter(rating.pct),
+    el('span', { class: 'sr-set-stages' }, pills(stages, '', rules), el('span', { class: 'sr-muted' }, `${main} · ${Math.round(stages.pct * 100)}%`)),
     el('span', { class: 'sr-quest-body' }, body),
     el(
       'span',
@@ -591,7 +644,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
           { class: 'sr-title' },
           learned ? `${Math.round(activeStages.pct * 100)}% of ${activeLevel} so far.` : 'From Castellano to C1, by the shortest route.',
         ),
-        el('div', { class: 'sr-hero-meter' }, pills(activeStages, 'large'), learned ? el('span', { class: 'sr-muted' }, stageNote(activeStages)) : null),
+        el('div', { class: 'sr-hero-meter' }, stageLadder(activeStages), learned ? el('span', { class: 'sr-muted' }, stageNote(activeStages)) : null),
         el('div', { class: 'sr-actions' }, today, openLesson, !next ? el('span', { class: 'sr-complete' }, 'All lessons done. Keep the reviews going.') : null),
         el(
           'p',
@@ -645,6 +698,8 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
           'Conjugation sprint',
           conj,
           activeLevel,
+          conjStagesAt(activeLevel, activeLevel, now),
+          FORM_STAGE_RULES,
           `${SPRINT_SECONDS} seconds translating verb forms: 45 core verbs, each tense opening with its lesson.`,
           getSprintBest() ? `Best ${getSprintBest()}` : 'No sprint yet',
           () => renderSprint(root, nav),
@@ -653,6 +708,8 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
           'Vocab builder',
           voc,
           activeLevel,
+          vocabStagesAt(activeLevel, index, now),
+          STAGE_RULES,
           `Exam-topic words the lessons skip. ${vstats.unlocked} of ${vstats.total} unlocked; more open with each level.`,
           `${vstats.known} known${vstats.due ? ` · ${vstats.due} due` : ''}`,
           () => renderVocab(root, nav),
@@ -1846,9 +1903,17 @@ function renderSprint(root: HTMLElement, nav: SpeedrunNav): void {
         stat(String(toReview), 'To review'),
         stat(pctLabel(rating), 'Rating'),
       ),
+      el('div', { class: 'sr-hero-meter' }, el('p', { class: 'sr-section-label' }, `${main} forms`), stageLadder(conjStagesAt(main, main), FORM_STAGE_RULES)),
       el('div', { class: 'sr-intro-foot' }, start, el('span', { class: 'sr-keys' }, kbd('Enter'), ' mix', kbd('Esc'), ' map')),
       tenseTiles(root, nav, finished, main),
-      levelBars(rating, 'A form counts once you get it right twice in a row; a miss resets it.'),
+      stageBars(
+        (lv) => conjStagesAt(lv, main),
+        rating.level,
+        'Each form climbs five stages: answered, right once, then right again after a day, 4 days and 10 days. ' +
+          'Right answers before a form has rested don’t move it up. A stage opens once enough days have passed to reach it, ' +
+          'and the percentage counts open stages only.',
+        FORM_STAGE_RULES,
+      ),
       verbList(main),
     ),
   );
@@ -1858,10 +1923,11 @@ function renderSprint(root: HTMLElement, nav: SpeedrunNav): void {
 /** One tile per tense: its progress over the verbs drilled at this level; open tenses start a sprint of just that tense. */
 function tenseTiles(root: HTMLElement, nav: SpeedrunNav, finished: Set<string>, main: SpeedrunLevel): HTMLElement {
   const stats = tenseStats(finished, allForms(), allFormsSeen(), Date.now(), main);
+  const pool = conjugationPool().filter((c) => SPEEDRUN_LEVELS.indexOf(c.verbLevel) <= SPEEDRUN_LEVELS.indexOf(main));
   return el(
     'section',
     { class: 'sr-vocab-sets sr-tense-tiles' },
-    ...stats.map(({ tense, open, total, seen, pct, due }) => {
+    ...stats.map(({ tense, open, total, seen, due }) => {
       const tile = el(
         open ? 'button' : 'div',
         { class: `sr-vocab-set${open ? '' : ' locked'}`, ...(open ? { type: 'button', title: `Sprint: ${tense.label} only` } : {}) },
@@ -1872,7 +1938,10 @@ function tenseTiles(root: HTMLElement, nav: SpeedrunNav, finished: Set<string>, 
           el('span', { class: 'sr-vocab-set-tags' }, due ? el('span', { class: 'sr-due' }, `${due} due`) : null, el('span', { class: 'sr-badge' }, tense.level)),
         ),
         open
-          ? el('span', { class: 'sr-set-stages' }, meter(pct), el('span', { class: 'sr-muted' }, `${Math.round(pct * 100)}%`))
+          ? (() => {
+              const st = formStages([pool.filter((c) => c.tense === tense.id)], allForms(), allFormsSeen(), Date.now());
+              return el('span', { class: 'sr-set-stages' }, pills(st, '', FORM_STAGE_RULES), el('span', { class: 'sr-muted' }, `${Math.round(st.pct * 100)}%`));
+            })()
           : el('span', { class: 'sr-muted' }, `Opens with ${tense.lesson.toUpperCase()}`),
         el('span', { class: 'sr-vocab-preview' }, open ? `${seen}/${total} forms seen` : ''),
       );
@@ -1901,26 +1970,8 @@ function verbList(main: SpeedrunLevel): HTMLElement {
   );
 }
 
-/** Per-level bars for a rating: the level being worked on, and the ones around it. */
-function levelBars(rating: Rating, caption: string): HTMLElement {
-  return el(
-    'section',
-    { class: 'sr-level-bars' },
-    ...SPEEDRUN_LEVELS.map((lv) =>
-      el(
-        'div',
-        { class: `sr-level-bar${lv === rating.level ? ' current' : ''}` },
-        el('span', { class: 'sr-level-tag' }, lv),
-        meter(rating.byLevel[lv]),
-        el('span', { class: 'sr-muted' }, `${Math.round(rating.byLevel[lv] * 100)}%`),
-      ),
-    ),
-    el('p', { class: 'sr-fineprint' }, caption),
-  );
-}
-
 /** Per-level stage pills, with the percentage of what is open. */
-function stageBars(of: (lv: SpeedrunLevel) => Stages, current: SpeedrunLevel, caption: string): HTMLElement {
+function stageBars(of: (lv: SpeedrunLevel) => Stages, current: SpeedrunLevel, caption: string, rules: readonly string[] = STAGE_RULES): HTMLElement {
   return el(
     'section',
     { class: 'sr-level-bars' },
@@ -1930,7 +1981,7 @@ function stageBars(of: (lv: SpeedrunLevel) => Stages, current: SpeedrunLevel, ca
         'div',
         { class: `sr-level-bar${lv === current ? ' current' : ''}` },
         el('span', { class: 'sr-level-tag' }, lv),
-        pills(s),
+        pills(s, '', rules),
         el('span', { class: 'sr-muted' }, `${Math.round(s.pct * 100)}%`),
       );
     }),
@@ -2136,8 +2187,9 @@ function renderVocab(root: HTMLElement, nav: SpeedrunNav): void {
         stat(String(stats.due), 'Due'),
         stat(`${stats.unlocked}/${stats.total}`, 'Unlocked'),
       ),
+      el('div', { class: 'sr-hero-meter' }, el('p', { class: 'sr-section-label' }, `${main} words`), stageLadder(vocabStagesAt(main, index, now))),
       stageBars(
-        (lv) => vocabStages(vocab.sets.filter((s) => s.level === lv), index, now),
+        (lv) => vocabStagesAt(lv, index, now),
         rating.level,
         'Each word climbs five stages: learned, then recalled after a day, 3 days, a week and two weeks. A stage opens once ' +
           'enough days have passed to reach it, and the percentage counts open stages only.',

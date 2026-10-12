@@ -75,14 +75,17 @@ export function startedAt(items: (SrsCard | undefined)[], now: number): number |
 }
 
 /* ---------- stages ----------
- * Five pills per lesson, vocab set or level, one per review step: seen, then
- * recalled after a day, 3 days, a week and two weeks. Like the stars, a stage
- * opens only once enough days have passed since the material was first
- * learned for it to be reachable, and the percentage counts open stages only,
- * so nothing shows as missing that could not have been done yet.
+ * Five pills per lesson, vocab set, tense or level, one per memory stage.
+ * Like the stars, a stage opens only once enough days have passed since the
+ * material was first learned for it to be reachable, and the percentage
+ * counts open stages only, so nothing shows as missing that could not have
+ * been done yet.
  */
 
 export const STAGES = 5;
+
+/** What each stage is called, for lessons and vocab and for conjugation forms. */
+export const STAGE_NAMES = ['Learned', 'Recalled', 'Settling', 'Sticking', 'Long-term'] as const;
 
 export const STAGE_RULES = [
   'Learned',
@@ -92,10 +95,27 @@ export const STAGE_RULES = [
   'Recalled after two weeks',
 ] as const;
 
+export const FORM_STAGE_RULES = [
+  'Answered once',
+  'Right once',
+  'Right again after a day',
+  'Right again after 4 days',
+  'Right again after 10 days',
+] as const;
+
+/** Fewest days from first answer to each form stage: 0, 0, 1, 1 + 4, 1 + 4 + 10. */
+const FORM_STAGE_DAYS = [0, 0, 1, 5, 15] as const;
+
 /** Items that started together: a lesson or a vocab set. `since` overrides the estimate from the cards. */
 export interface StageGroup {
   items: (SrsCard | undefined)[];
   since?: number;
+}
+
+/** The common shape: each item's highest stage reached (0-4, or undefined for not started) and the group's start. */
+interface StageCore {
+  reached: (number | undefined)[];
+  since: number | null;
 }
 
 export interface Stages {
@@ -109,17 +129,9 @@ export interface Stages {
   pct: number;
 }
 
-/** Stages open for one group: the first always, the rest by age, and never fewer than already reached. */
-function openStages(g: StageGroup, now: number): { open: number; since: number | null } {
-  const since = g.since ?? startedAt(g.items, now);
-  const reached = g.items.reduce((m, c) => (c ? Math.max(m, Math.min(STAGES, c.step + 1)) : m), 0);
-  if (since === null) return { open: Math.max(1, reached), since };
-  let open = 1;
-  while (open < STAGES && now - since >= daysToStep(open) * DAY) open++;
-  return { open: Math.max(open, reached), since };
-}
+const SRS_STAGE_DAYS = Array.from({ length: STAGES }, (_, k) => daysToStep(k));
 
-export function stageProgress(groups: StageGroup[], now: number): Stages {
+function stagesOf(groups: StageCore[], now: number, days: readonly number[]): Stages {
   const counts = new Array<number>(STAGES).fill(0);
   const open = new Array<boolean>(STAGES).fill(false);
   let total = 0;
@@ -127,19 +139,23 @@ export function stageProgress(groups: StageGroup[], now: number): Stages {
   let possible = 0;
   let nextAt: number | null = null;
   for (const g of groups) {
-    const n = g.items.length;
+    const n = g.reached.length;
     if (n === 0) continue;
     total += n;
-    const o = openStages(g, now);
-    possible += o.open * n;
+    // The first stage is always open; the rest by age, and never fewer than already reached.
+    const top = g.reached.reduce<number>((m, r) => (r === undefined ? m : Math.max(m, r + 1)), 0);
+    let o = 1;
+    if (g.since !== null) while (o < STAGES && now - g.since >= days[o]! * DAY) o++;
+    o = Math.max(o, top);
+    possible += o * n;
     for (let k = 0; k < STAGES; k++) {
-      if (k < o.open) open[k] = true;
-      const at = g.items.filter((c) => c && c.step >= k).length;
+      if (k < o) open[k] = true;
+      const at = g.reached.filter((r) => r !== undefined && r >= k).length;
       counts[k]! += at;
-      if (k < o.open) held += at;
+      if (k < o) held += at;
     }
-    if (o.since !== null && o.open < STAGES) {
-      const at = o.since + daysToStep(o.open) * DAY;
+    if (g.since !== null && o < STAGES) {
+      const at = g.since + days[o]! * DAY;
       nextAt = nextAt === null ? at : Math.min(nextAt, at);
     }
   }
@@ -150,6 +166,35 @@ export function stageProgress(groups: StageGroup[], now: number): Stages {
     nextIn: nextAt === null ? null : Math.max(1, Math.ceil((nextAt - now) / DAY)),
     pct: possible ? held / possible : 0,
   };
+}
+
+export function stageProgress(groups: StageGroup[], now: number): Stages {
+  return stagesOf(
+    groups.map((g) => ({
+      reached: g.items.map((c) => (c ? Math.min(STAGES - 1, c.step) : undefined)),
+      since: g.since ?? startedAt(g.items, now),
+    })),
+    now,
+    SRS_STAGE_DAYS,
+  );
+}
+
+/**
+ * Conjugation stages, one group per tense: a form's streak is its stage
+ * (answered, right once, then right again after each rest). A tense's clock
+ * starts at its first answer on this device; streaks from other devices
+ * still count, and keep their stages open.
+ */
+export function formStages(groups: SprintCard[][], forms: Record<string, number>, seen: Record<string, number>, now: number): Stages {
+  return stagesOf(
+    groups.map((cards) => {
+      let first: number | null = null;
+      for (const c of cards) if (seen[c.key] !== undefined) first = Math.min(first ?? Infinity, seen[c.key]! * 60_000);
+      return { reached: cards.map((c) => (forms[c.key] === undefined ? undefined : Math.min(STAGES - 1, forms[c.key]!))), since: first };
+    }),
+    now,
+    FORM_STAGE_DAYS,
+  );
 }
 
 /** A lesson's stages, timed from when it was first finished. */

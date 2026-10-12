@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { availableStars, compareLevels, conjugationRating, courseRating, indexCards, isPerfect, nextStarOpensIn, itemCredit, lessonDue, lessonStages, lessonStars, levelProgress, levelStages, stageProgress, toRating, vocabRating } from '../src/speedrun/mastery';
+import { availableStars, compareLevels, conjugationRating, courseRating, indexCards, isPerfect, nextStarOpensIn, itemCredit, lessonDue, formStages, lessonStages, lessonStars, levelProgress, levelStages, stageProgress, toRating, vocabRating } from '../src/speedrun/mastery';
 import { DAY, interleave, planLessonReview, planToday, startOfDay, type SrsCard } from '../src/speedrun/srs';
-import { conjugation, conjugationPool, formKey, openTenses, sprintQueue, sprintRound, tenseStats } from '../src/speedrun/sprint';
+import { conjugation, conjugationPool, formKey, nextStreak, openTenses, sprintQueue, sprintRound, tenseStats } from '../src/speedrun/sprint';
 import { loadSpeedrun } from '../src/speedrun/content';
 import { isVocabCard, planVocab, planVocabSet, setDue, unlockedSets, vocab, vocabPattern, vocabStats } from '../src/speedrun/vocab';
 import { checkAnswer } from '../src/speedrun/check';
@@ -384,5 +384,33 @@ describe('conjugation by tense', () => {
     expect(p.pct).toBeCloseTo(3 / pres.length);
     expect(p.due).toBe(3); // the three misses; the right ones rest
     expect(stats.find((s) => s.tense.id === 'futur')!.open).toBe(false);
+  });
+});
+
+describe('form stages', () => {
+  const minute = Math.floor(NOW / 60_000);
+  const DAY_MIN = 24 * 60;
+
+  it('climbs only after a full rest, and resets on a miss', () => {
+    expect(nextStreak(undefined, true, undefined, minute)).toBe(1);
+    expect(nextStreak(1, true, minute - 5, minute)).toBe(1); // same sitting
+    expect(nextStreak(1, true, minute - DAY_MIN, minute)).toBe(2);
+    expect(nextStreak(2, true, minute - 3 * DAY_MIN, minute)).toBe(2);
+    expect(nextStreak(2, true, minute - 4 * DAY_MIN, minute)).toBe(3);
+    expect(nextStreak(4, true, minute - 90 * DAY_MIN, minute)).toBe(4);
+    expect(nextStreak(3, false, minute - 90 * DAY_MIN, minute)).toBe(0);
+    expect(nextStreak(0, true, minute, minute)).toBe(1); // a miss can be fixed at once
+  });
+
+  it('opens form stages by days since the tense was first answered', () => {
+    const cards = conjugationPool().filter((c) => c.tense === 'pres').slice(0, 4);
+    const forms = Object.fromEntries(cards.map((c, i) => [c.key, i < 2 ? 1 : 0]));
+    const seen = Object.fromEntries(cards.map((c) => [c.key, minute]));
+    const s = formStages([cards], forms, seen, NOW);
+    expect(s.open).toEqual([true, true, false, false, false]);
+    expect(s.pct).toBeCloseTo((4 + 2) / 8);
+    expect(s.nextIn).toBe(1);
+    const later = formStages([cards], forms, seen, NOW + 6 * DAY);
+    expect(later.open).toEqual([true, true, true, true, false]);
   });
 });

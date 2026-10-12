@@ -118,7 +118,22 @@ export function openTenses(finished: Set<string>, data: ConjData = conjugation):
 export const FORM_KNOWN = 2;
 
 /** Minutes a form rests after its last answer, by streak: a miss can come straight back; right answers space out. */
-export const FORM_REST_MINUTES = [0, 24 * 60, 4 * 24 * 60, 10 * 24 * 60];
+export const FORM_REST_MINUTES = [0, 24 * 60, 4 * 24 * 60, 10 * 24 * 60, 30 * 24 * 60];
+
+/** The top of a form's streak: right after a 10-day rest. */
+export const FORM_TOP = 4;
+
+/**
+ * A form's streak after an answer. A miss resets it; a right answer climbs
+ * only once the form has rested its full time, so repeats inside one sitting
+ * never count twice.
+ */
+export function nextStreak(n: number | undefined, correct: boolean, seenMinute: number | undefined, minute: number): number {
+  if (!correct) return 0;
+  const cur = n ?? 0;
+  if (n !== undefined && seenMinute !== undefined && minute - seenMinute < FORM_REST_MINUTES[Math.min(cur, FORM_REST_MINUTES.length - 1)]!) return cur;
+  return Math.min(FORM_TOP, cur + 1);
+}
 
 export interface SprintQueue {
   /** Missed last time: first, to fix them while fresh. */

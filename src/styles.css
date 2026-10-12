@@ -779,3 +779,12 @@ body[data-mode="speedrun"] .sr-modal {
 
 .sr-copy { margin-top: 14px; }
 .sr-copy-note { margin: 0; color: var(--sr-fail); font-size: 0.86rem; }
+
+.sr-ladder { display: flex; flex-direction: column; gap: 6px; width: min(420px, 100%); }
+.sr-ladder .sr-pills.large { width: 100%; }
+.sr-stage-labels { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
+.sr-stage-label { display: flex; flex-direction: column; gap: 1px; font-size: 0.72rem; line-height: 1.25; color: var(--sr-muted); font-variant-numeric: tabular-nums; min-width: 0; }
+.sr-stage-label strong { color: var(--sr-text); font-weight: 600; font-size: 0.74rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sr-stage-label.locked, .sr-stage-label.locked strong { color: var(--sr-faint); }
+.sr-hero-meter .sr-section-label { margin: 0; }
+.sr-quest .sr-set-stages .sr-pills { flex: 1; }
