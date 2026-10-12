@@ -587,6 +587,43 @@ details.sr-level[open] { padding-bottom: 28px; }
 .sr-working strong { color: var(--sr-text); font-weight: 600; }
 
 /* voice answers */
+body[data-mode="speedrun"] [hidden] { display: none !important; }
+.sr-voice-dock {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 5;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 28px 16px calc(22px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--sr-bg) 62%, color-mix(in srgb, var(--sr-bg) 0%, transparent));
+  pointer-events: none;
+}
+.sr-voice-dock > * { pointer-events: auto; }
+.sr-drill.has-dock { padding-bottom: 200px; }
+.sr-mic-big {
+  width: 96px; height: 96px; border-radius: 50%; border: none; cursor: pointer;
+  display: grid; place-items: center; background: var(--sr-text); color: var(--sr-bg);
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--sr-text) 22%, transparent);
+  transition: background 0.15s, transform 0.12s;
+}
+.sr-mic-big:active { transform: scale(0.96); }
+.sr-mic-big:focus-visible { outline: 3px solid var(--sr-accent); outline-offset: 4px; }
+.sr-mic-big.is-listening { background: var(--sr-fail); color: #fff; animation: sr-ring 1.4s ease-out infinite; }
+.sr-mic-big.is-processing { opacity: 0.7; cursor: progress; }
+@keyframes sr-ring {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--sr-fail) 45%, transparent); }
+  100% { box-shadow: 0 0 0 22px transparent; }
+}
+@media (prefers-reduced-motion: reduce) { .sr-mic-big.is-listening { animation: none; } }
+.sr-mic-label { color: var(--sr-muted); font-size: 0.92rem; }
+.sr-heard-words {
+  margin: 14px 0 0; font-family: var(--sr-display); font-weight: 500;
+  font-size: clamp(1.5rem, 3.2vw, 2.1rem); line-height: 1.25; letter-spacing: -0.01em;
+}
+.sr-hw-wait { color: var(--sr-faint); }
+.sr-heard-words:empty { display: none; }
+.sr-hw-ok { color: var(--sr-pass); }
+.sr-hw-spelling { color: var(--sr-slip); text-decoration: underline dotted 2px; text-underline-offset: 5px; }
+.sr-hw-miss { color: var(--sr-faint); }
+
+.sr-type-box[hidden] { display: none; }
 .sr-heard { margin: 10px 0 0; min-height: 1.3em; color: var(--sr-muted); font-size: 0.86rem; }
 .sr-heard:empty { display: none; }
 .sr-btn.sr-mic.is-listening, .sr-btn.sr-mic.is-listening:hover { background: var(--sr-fail); border-color: var(--sr-fail); color: #fff; }
