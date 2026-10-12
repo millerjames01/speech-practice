@@ -166,6 +166,57 @@ export function listen(events: ListenEvents = {}, lang = 'ca-ES'): Listening {
   };
 }
 
+/**
+ * How a word sounds in Central Catalan, roughly: what a recogniser cannot tell
+ * apart. Unstressed a/e (and o/u) merge, b = v, h is silent, the p of compte
+ * and temps and most final r's are silent, ll and l, ss and s and so on.
+ * Only ever compared against the words of the expected answer, so it decides
+ * between spellings of the same sound, never between different words.
+ */
+export function soundFold(word: string): string {
+  return fold(word.toLowerCase())
+    .replace(/'/g, '')
+    .replace(/h/g, '')
+    .replace(/v/g, 'b')
+    .replace(/ç/g, 's')
+    .replace(/qu(?=[ei])/g, 'k')
+    .replace(/c(?=[ei])/g, 's')
+    .replace(/c/g, 'k')
+    .replace(/g(?=[ei])/g, 'j')
+    .replace(/t[jg]/g, 'j')
+    .replace(/[it]x/g, 'x')
+    .replace(/z/g, 's')
+    .replace(/mpt?(?=s?$)/g, 'm')
+    .replace(/mpt/g, 'mt')
+    .replace(/nt(?=s?$)/g, 'n')
+    .replace(/([aeiou])r(?=s?$)/g, '$1')
+    .replace(/[ae]/g, 'a')
+    .replace(/[ou]/g, 'u')
+    .replace(/(.)\1+/g, '$1');
+}
+
+const SUBJECT_PRONOUNS = ['jo', 'tu', 'ell', 'ella', 'nosaltres', 'vosaltres', 'ells', 'elles'];
+
+/**
+ * Rewrites what was heard into the answer's spelling wherever a word sounds
+ * the same as one in the closest accepted answer ("saps nadar" → "saps
+ * nedar", "què veus" → "què beus"). Words that sound different stay as heard.
+ */
+export function respell(pattern: string, text: string): string {
+  const target = normalize(checkAnswer(pattern, text).target);
+  const bySound = new Map<string, string>();
+  for (const w of [...SUBJECT_PRONOUNS, ...target]) bySound.set(soundFold(w), w);
+  const exact = new Set(target);
+  return text
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((word) => {
+      const n = normalize(word)[0] ?? word;
+      return exact.has(n) ? word : bySound.get(soundFold(n)) ?? word;
+    })
+    .join(' ');
+}
+
 const RANK = { exact: 0, spelling: 1, wrong: 2 } as const;
 
 /**
@@ -176,7 +227,8 @@ const RANK = { exact: 0, spelling: 1, wrong: 2 } as const;
  */
 export function bestHearing(pattern: string, heard: string[]): { text: string; result: CheckResult } | null {
   let best: { text: string; result: CheckResult } | null = null;
-  for (const text of heard) {
+  for (const raw of heard) {
+    const text = respell(pattern, raw);
     const result = checkAnswer(pattern, text);
     if (!best || RANK[result.verdict] < RANK[best.result.verdict]) best = { text, result };
   }
@@ -185,19 +237,40 @@ export function bestHearing(pattern: string, heard: string[]): { text: string; r
 
 export type HeardMark = 'ok' | 'spelling' | 'miss';
 
+/** Edit distance, for "close but not the same" words. */
+function distance(a: string, b: string): number {
+  const row = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i += 1) {
+    let prev = row[0]!;
+    row[0] = i;
+    for (let j = 1; j <= b.length; j += 1) {
+      const cur = row[j]!;
+      row[j] = Math.min(row[j]! + 1, row[j - 1]! + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1));
+      prev = cur;
+    }
+  }
+  return row[b.length]!;
+}
+
 /**
  * Colours what was heard against the closest accepted answer, word by word:
- * a match, a spelling-level miss (accents, ç, l·l), or a word not in the answer.
+ * green for a match (sound-alikes are respelled first, so "nadar" shows as
+ * "nedar"), yellow for a word one sound away from an answer word ("cars" for
+ * "cares"), grey for a word not in the answer.
  */
-export function markHeard(pattern: string, text: string): { word: string; mark: HeardMark }[] {
+export function markHeard(pattern: string, heard: string): { word: string; mark: HeardMark }[] {
+  const text = respell(pattern, heard);
   const target = normalize(checkAnswer(pattern, text).target);
-  const exact = new Set(target);
-  const loose = new Set(target.map(fold));
+  const exact = new Set([...target, ...SUBJECT_PRONOUNS]);
+  const sounds = target.map(soundFold);
   return text
     .split(/\s+/)
     .filter(Boolean)
     .map((word) => {
       const n = normalize(word)[0] ?? '';
-      return { word, mark: exact.has(n) ? 'ok' : loose.has(fold(n)) ? 'spelling' : 'miss' };
+      if (exact.has(n)) return { word, mark: 'ok' as const };
+      const sound = soundFold(n);
+      const close = sound.length >= 3 && sounds.some((t) => distance(sound, t) <= 1);
+      return { word, mark: close ? ('spelling' as const) : ('miss' as const) };
     });
 }

@@ -99,6 +99,9 @@ const LEVEL_INFO: Record<SpeedrunLevel, { name: string; blurb: string }> = {
 
 const REQUEUE_GAP = 3;
 
+/** Seconds before moving on after a perfect answer, when auto-advance is on. */
+const AUTO_ADVANCE_SECONDS = 3;
+
 let cleanups: (() => void)[] = [];
 
 function resetView(root: HTMLElement): void {
@@ -400,6 +403,8 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
   autoplay.addEventListener('change', () => setPrefs({ ...getPrefs(), autoplay: autoplay.checked }));
   const dictation = el('input', { type: 'checkbox', checked: prefs.dictation });
   dictation.addEventListener('change', () => setPrefs({ ...getPrefs(), dictation: dictation.checked }));
+  const autoAdvance = el('input', { type: 'checkbox', checked: prefs.autoAdvance });
+  autoAdvance.addEventListener('change', () => setPrefs({ ...getPrefs(), autoAdvance: autoAdvance.checked }));
   const voiceAnswers = el('input', { type: 'checkbox', checked: prefs.voiceAnswers });
   voiceAnswers.addEventListener('change', () => setPrefs({ ...getPrefs(), voiceAnswers: voiceAnswers.checked }));
   const voicePicker = el('label', { class: 'sr-toggle sr-voice-pick' });
@@ -631,6 +636,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
         el('label', { class: 'sr-toggle' }, autoplay, el('span', {}, 'Auto-play the answer after each check')),
         el('label', { class: 'sr-toggle' }, dictation, el('span', {}, 'Dictation: hear the Catalan and write it')),
         canListen() ? el('label', { class: 'sr-toggle' }, voiceAnswers, el('span', {}, 'Voice: say the answer instead of typing')) : null,
+        el('label', { class: 'sr-toggle' }, autoAdvance, el('span', {}, `Auto-advance after a perfect answer (${AUTO_ADVANCE_SECONDS} s)`)),
         voicePicker,
               ),
       el(
@@ -1262,7 +1268,18 @@ function runSession(
         stopSpeaking();
         const mine = listen({
           onInterim: (text) => {
-            if (listening === mine) showHeard(text);
+            if (listening !== mine) return;
+            showHeard(text);
+            // The whole answer heard right: no need to wait for the pause.
+            const best = bestHearing(pattern, [text]);
+            if (best?.result.verdict === 'exact') {
+              listening = null;
+              mine.abort();
+              showHeard(best.text);
+              heardWords.classList.add('is-perfect');
+              input.value = best.text;
+              resolve(best.result);
+            }
           },
           onProcessing: () => {
             if (listening === mine) setMic('processing');
@@ -1281,6 +1298,7 @@ function runSession(
             if (!best) return missed('Didn’t catch anything. Tap to try again.');
             showHeard(best.text);
             input.value = best.text;
+            if (best.result.verdict === 'exact') heardWords.classList.add('is-perfect');
             if (best.result.verdict !== 'wrong') return resolve(best.result);
             missed('Not quite. Tap to try again, or Show answer.');
           })
@@ -1386,8 +1404,38 @@ function runSession(
       if (!correct) queue.splice(Math.min(REQUEUE_GAP, queue.length), 0, entry);
 
       const answer = result?.target ?? canonical(pattern);
-      replay = (slow) => void speak(answer, slow);
       const next = iconButton(queue.length ? 'Continue' : 'Finish', ICONS.arrow, showItem, 'sr-btn primary');
+      // Auto-advance (a setting): after a perfect answer, Continue counts down and moves on.
+      // Replaying the audio stops the countdown; Continue still goes straight away.
+      const nextLabel = next.querySelector('span')!;
+      const baseLabel = nextLabel.textContent ?? '';
+      let countdown: ReturnType<typeof setInterval> | undefined;
+      const cancelAdvance = () => {
+        if (countdown === undefined) return;
+        clearInterval(countdown);
+        countdown = undefined;
+        nextLabel.textContent = baseLabel;
+      };
+      itemCleanups.push(cancelAdvance);
+      if (getPrefs().autoAdvance && result?.verdict === 'exact') {
+        let left = AUTO_ADVANCE_SECONDS;
+        nextLabel.textContent = `${baseLabel} · ${left}`;
+        countdown = setInterval(() => {
+          left -= 1;
+          if (left > 0) nextLabel.textContent = `${baseLabel} · ${left}`;
+          else {
+            cancelAdvance();
+            showItem();
+          }
+        }, 1000);
+      }
+      replay = (slow) => {
+        cancelAdvance();
+        void speak(answer, slow);
+      };
+      const listenNormal = listenButton(answer);
+      const listenSlow = listenButton(answer, true);
+      for (const b of [listenNormal, listenSlow]) b.addEventListener('click', cancelAdvance);
       feedback.className = `sr-feedback ${verdictClass(result)}`;
       feedback.append(
         renderFeedback(result, pattern, input.value),
@@ -1396,8 +1444,8 @@ function runSession(
           'div',
           { class: 'sr-drill-actions' },
           next,
-          listenButton(answer),
-          listenButton(answer, true),
+          listenNormal,
+          listenSlow,
           el('span', { class: 'sr-keys' }, kbd('Enter'), ' next', kbd('L'), ' listen', kbd('S'), ' slow'),
         ),
       );

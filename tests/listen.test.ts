@@ -97,7 +97,36 @@ describe('colouring what was heard', () => {
   it('marks matches green, near misses yellow and the rest grey', async () => {
     const { markHeard } = await import('../src/speedrun/listen');
     expect(markHeard('Sóc de Barcelona.', 'soc de girona').map((w) => w.mark)).toEqual(['ok', 'ok', 'miss']);
-    expect(markHeard('Està cansat.', 'esta cansat').map((w) => w.mark)).toEqual(['spelling', 'ok']);
+    // An accent can't be heard: respelled and green. One sound off: yellow.
+    expect(markHeard('Està cansat.', 'esta cansat')).toEqual([{ word: 'està', mark: 'ok' }, { word: 'cansat', mark: 'ok' }]);
+    expect(markHeard('El nen menja.', 'el nen menjo').map((w) => w.mark)).toEqual(['ok', 'ok', 'spelling']);
+    expect(markHeard('El nen menja.', 'el nen dorm').map((w) => w.mark)).toEqual(['ok', 'ok', 'miss']);
     expect(markHeard('[No he estat mai|Mai (no) he estat] a Londres.', 'mai he estat a londres').every((w) => w.mark === 'ok')).toBe(true);
+  });
+});
+
+describe('sound-alikes the recogniser cannot tell apart', () => {
+  it('accepts what you said when the recogniser picked another spelling of the same sound', async () => {
+    const { bestHearing, markHeard } = await import('../src/speedrun/listen');
+    const cases: [string, string][] = [
+      ['Saps nedar?', 'saps nadar'],
+      ['Què beus?', 'què veus'],
+      ['El compte, si us plau.', 'el comte si us plau'],
+      ['(Ells) volen menjar.', 'els volen menjar'],
+      ['Aquestes sabates són cares.', 'aquestes sabates son caras'],
+    ];
+    for (const [pattern, heard] of cases) {
+      expect(bestHearing(pattern, [heard])?.result.verdict, heard).not.toBe('wrong');
+    }
+    expect(markHeard('Saps nedar?', 'saps nadar')).toEqual([{ word: 'saps', mark: 'ok' }, { word: 'nedar', mark: 'ok' }]);
+  });
+
+  it('still rejects a different word', async () => {
+    const { bestHearing, markHeard } = await import('../src/speedrun/listen');
+    expect(bestHearing('Aquestes sabates són cares.', ['aquestes zapatas son caras'])?.result.verdict).toBe('wrong');
+    // Close (one sound off) shows yellow, but it is still not the word.
+    expect(markHeard('Aquestes sabates són cares.', 'aquestes zapatas són cares').map((w) => w.mark)).toEqual(['ok', 'spelling', 'ok', 'ok']);
+    expect(bestHearing('Tinc por.', ['tinc pa'])?.result.verdict).toBe('wrong');
+    expect(bestHearing('Ellos quieren comer.', ['eis volen menjar'])?.result.verdict).toBe('wrong');
   });
 });
