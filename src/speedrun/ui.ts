@@ -1123,6 +1123,13 @@ function runSession(
     l?.abort();
   };
   cleanups.push(cancelListening);
+  /** Things one item puts outside the stage (the mic dock), undone when the item ends. */
+  let itemCleanups: (() => void)[] = [];
+  const endItem = () => {
+    for (const fn of itemCleanups) fn();
+    itemCleanups = [];
+  };
+  cleanups.push(endItem);
   onKey((ev) => {
     if (ev.key === 'Escape') return backToMap();
     if (ev.metaKey || ev.ctrlKey) return;
@@ -1151,6 +1158,7 @@ function runSession(
     replay = null;
     mic = null;
     cancelListening();
+    endItem();
     const entry = queue[0];
     if (!entry) return finish();
     const [es, pattern, hint] = entry.item;
@@ -1208,8 +1216,15 @@ function runSession(
           ? el('span', { class: 'sr-keys' }, kbd('Enter'), ' check', kbd('Alt'), kbd('L'), ' replay')
           : el('span', { class: 'sr-keys' }, kbd('Enter'), ' check', kbd('Esc'), ' map'),
     );
-    const voicePanel = micBtn ? el('div', { class: 'sr-voice' }, micBtn, micLabel, heardWords, heardLine) : null;
-    const form = el('form', { class: 'sr-form' }, voicePanel, typeBox, actions);
+    // The mic docks at the bottom of the screen, in the same place for every item.
+    // It lives outside the drill card: the card's entrance animation uses a
+    // transform, which would pin a fixed child to the card instead of the screen.
+    const voicePanel = micBtn ? el('div', { class: 'sr-voice-dock' }, micLabel, micBtn) : null;
+    if (voicePanel) {
+      root.append(voicePanel);
+      itemCleanups.push(() => voicePanel.remove());
+    }
+    const form = el('form', { class: 'sr-form' }, typeBox, actions);
     let answered = false;
 
     if (voice && micBtn) {
@@ -1255,6 +1270,7 @@ function runSession(
         });
         listening = mine;
         clear(heardWords);
+        heardWords.append(el('span', { class: 'sr-hw-wait' }, '…'));
         heardLine.textContent = '';
         setMic('listening');
         void mine.result
@@ -1333,17 +1349,22 @@ function runSession(
         { class: 'sr-card-prompt' },
         ...promptBlock,
         ...(hint && !dictation ? [el('p', { class: 'sr-hint' }, hint)] : []),
+        // What is heard sits right under the prompt, in the same type, coloured as it comes.
+        ...(voice ? [heardWords, heardLine] : []),
         form,
       ),
       feedback,
     );
+    stage.classList.toggle('has-dock', voice);
     input.focus();
 
     const resolve = (result: CheckResult | null) => {
       answered = true;
       mic = null;
       cancelListening();
-      voicePanel?.remove();
+      endItem();
+      heardLine.remove();
+      stage.classList.remove('has-dock');
       input.disabled = true;
       accents.remove();
       actions.remove();
