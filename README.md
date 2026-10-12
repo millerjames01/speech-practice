@@ -178,9 +178,11 @@ accurate production of the core; listening hours build the ear.
 **Voice answers.** A toggle on the map (shown when the browser has speech
 recognition: Chrome and Edge on desktop and Android, Safari where it supports
 Catalan) lets you say the answer instead of typing it, in lessons, Today,
-lesson reviews and vocab. The mic starts when each item appears (or press
-Speak / Alt+M); the recogniser's guesses are all checked and any right one
-counts. If none is right, the box shows what was heard so you can try again,
+lesson reviews and vocab. Tap Speak (or Alt+M) and say it: the words show as
+they are heard, and it stops on a pause, or tap Done (or Check). The
+recogniser's guesses are all checked and any right one counts. Phones that
+never end a recognition by themselves settle within a few seconds of Done,
+using what was heard. If none is right, the box shows what was heard so you can try again,
 correct it, or show the answer. Typing takes over at any time. Recognition is
 done by the browser's speech service; the app stores nothing.
 
