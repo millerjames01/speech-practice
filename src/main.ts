@@ -51,7 +51,7 @@ function openSpeedrun(incomingSync?: string): void {
       history.replaceState(null, '', location.pathname);
       renderUnitList();
     },
-    onSettings: (back) => openSettings(back),
+    onSettings: (back, extra) => openSettings(back, extra),
   }, incomingSync);
 }
 
