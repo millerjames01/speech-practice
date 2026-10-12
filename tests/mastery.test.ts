@@ -165,8 +165,11 @@ describe('conjugation sprint', () => {
     expect(ser).toHaveLength(18);
     const seen = Object.fromEntries(ser.map((k) => [k, Math.floor(NOW / 60_000)]));
     const forms = Object.fromEntries(ser.map((k) => [k, 2]));
-    const next = sprintRound(new Set(['a2-21', 'a2-23']), forms, seen, NOW, { maxLevel: 'A2' }).slice(0, 20);
-    expect(new Set(next.map((c) => c.verb))).toEqual(new Set(['estar', 'tenir', 'fer', 'anar', 'venir']));
+    // Seeded too, and checked as membership: which of the five a few random picks hit is luck.
+    const next = sprintRound(new Set(['a2-21', 'a2-23']), forms, seen, NOW, { maxLevel: 'A2', random }).slice(0, 20);
+    const working = new Set(['estar', 'tenir', 'fer', 'anar', 'venir']);
+    expect(next.every((c) => working.has(c.verb))).toBe(true);
+    expect(next.some((c) => c.verb === 'venir')).toBe(true);
   });
 
   it('mixes due reviews in among new forms', () => {
