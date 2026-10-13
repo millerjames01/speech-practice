@@ -113,8 +113,12 @@ const RESET_PAUSE_MS = 1500;
 /** How long a wrong try stays on screen before it clears for the next. */
 const RETRY_SHOW_MS = 900;
 
-/** Pause before the mic starts by itself on a new phrase, when auto-start is on. */
-const AUTO_LISTEN_MS = 1000;
+/**
+ * Seconds before listening on a new phrase: time to read it. The mic starts
+ * by itself after this (when auto-start is on), and a mic still on from the
+ * last phrase ignores what it hears until then.
+ */
+const NEW_PHRASE_SECONDS = 3;
 
 /** Seconds before moving on after a perfect answer, when auto-advance is on. */
 const AUTO_ADVANCE_SECONDS = 3;
@@ -1356,6 +1360,7 @@ function runSession(
     let introAudio: Promise<void> = Promise.resolve();
     /** Opens the text box; choosing to type stops the mic, unless keepMic (after three misses). */
     const openTyping = (keepMic = false) => {
+      if (autoArmed) setStatus('idle', 'Tap the mic to speak');
       autoArmed = false;
       if (!keepMic && stream?.active) stream.stop();
       typeBox.hidden = false;
@@ -1400,12 +1405,16 @@ function runSession(
       let decideTimer: ReturnType<typeof setTimeout> | undefined;
       let retryTimer: ReturnType<typeof setTimeout> | undefined;
       let idleTimer: ReturnType<typeof setTimeout> | undefined;
+      /** A new phrase with the mic already on: a short countdown before it listens. */
+      let holdTimer: ReturnType<typeof setInterval> | undefined;
+      let holding = false;
       /** The app spoke while the mic was on: what it heard is set aside once it stops. */
       let heardTheApp = false;
       itemCleanups.push(() => {
         clearTimeout(decideTimer);
         clearTimeout(retryTimer);
         clearTimeout(idleTimer);
+        clearInterval(holdTimer);
         voiceHandlers.text = undefined;
         voiceHandlers.state = undefined;
         voiceHandlers.error = undefined;
@@ -1414,7 +1423,7 @@ function runSession(
         micBtn.classList.toggle('is-listening', on);
         micBtn.setAttribute('aria-label', on ? 'Done' : 'Speak');
         if (!on) setStatus('idle', misses ? 'Tap the mic to try again' : 'Tap the mic to speak');
-        else if (!current) setStatus('listening', 'Listening…');
+        else if (!current && !holding) setStatus('listening', 'Listening…');
       };
       const showHeard = (text: string) => {
         clear(heardWords);
@@ -1501,6 +1510,7 @@ function runSession(
           stream.reset();
           return;
         }
+        if (holding) return; // still reading the new phrase: set aside when the countdown ends
         clearTimeout(retryTimer);
         const p = bestProgress(pattern, '', candidates);
         if (!p) return;
@@ -1509,16 +1519,36 @@ function runSession(
         showMic(true);
         armIdle();
       };
+      /** The countdown is over (or the mic was tapped): listen from here. */
+      const endHold = () => {
+        clearInterval(holdTimer);
+        if (!holding) return;
+        holding = false;
+        stream.reset();
+        showHeard('');
+        showMic(stream.active);
+        if (stream.active) armIdle();
+      };
       // A new phrase: same recognition, fresh attempt, nudged toward this answer.
       stream.hint(voiceHints(expand(pattern)));
       stream.reset();
+      if (stream.active) {
+        holding = true;
+        let left = NEW_PHRASE_SECONDS;
+        setStatus('starting', `Listening in ${left}…`);
+        holdTimer = setInterval(() => {
+          left -= 1;
+          if (left > 0) setStatus('starting', `Listening in ${left}…`);
+          else endHold();
+        }, 1000);
+      }
       showMic(stream.active);
       showHeard('');
-      if (stream.active) armIdle();
       micBtn.addEventListener('click', () => mic?.());
       mic = () => {
         autoArmed = false;
         if (answered) return;
+        if (holding) return endHold(); // a tap skips the countdown
         if (!stream.active) {
           stopSpeaking();
           stream.start();
@@ -1602,14 +1632,22 @@ function runSession(
     stage.classList.toggle('has-dock', voice);
     // Auto-start: the mic turns on by itself a moment after a new phrase appears
     // (after the Catalan audio, in dictation, so it doesn't hear the app).
-    if (voice && getPrefs().autoListen) {
+    if (voice && getPrefs().autoListen && !stream?.active) {
       autoArmed = true;
-      setStatus('starting', 'Starting…');
+      setStatus('starting', `Mic on in ${NEW_PHRASE_SECONDS}…`);
       void introAudio.then(() => {
-        const timer = setTimeout(() => {
-          if (autoArmed && !answered && !stream?.active) mic?.();
-        }, AUTO_LISTEN_MS);
-        itemCleanups.push(() => clearTimeout(timer));
+        if (!autoArmed || answered) return;
+        let left = NEW_PHRASE_SECONDS;
+        const timer = setInterval(() => {
+          left -= 1;
+          if (!autoArmed || answered || stream?.active) return clearInterval(timer);
+          if (left > 0) setStatus('starting', `Mic on in ${left}…`);
+          else {
+            clearInterval(timer);
+            mic?.();
+          }
+        }, 1000);
+        itemCleanups.push(() => clearInterval(timer));
       });
     }
     input.focus();
