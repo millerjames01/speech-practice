@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { bestHearing , respell, voiceHints } from '../src/speedrun/listen';
+import { bestHearing, markHeard, respell, voiceHints, voiceProgress, voiceState } from '../src/speedrun/listen';
 
 describe('voice answers', () => {
   it('credits the answer if any of the recogniser’s guesses is right', () => {
@@ -308,5 +308,29 @@ describe('short words the recogniser mishears', () => {
     expect(voiceHints(['El gos és gran.', 'El gos és molt gran.'])).toEqual([
       'El gos és gran', 'El gos és molt gran', 'El', 'gos', 'és', 'gran', 'molt',
     ]);
+  });
+});
+
+describe('short words blurring together', () => {
+  it('joins or splits words that sound the same, as a full match', () => {
+    expect(bestHearing('Vaig a les botigues.', ['vaig ales botigues'])?.result.verdict).toBe('exact');
+    expect(bestHearing('Parlo de la casa.', ['parlo dela casa'])?.result.verdict).toBe('exact');
+    expect(bestHearing('Anem al cine.', ['anem a l cine'])?.result.verdict).toBe('exact');
+  });
+
+  it('accepts a vowel lost between merged words, or a dropped "a", as a near miss', () => {
+    expect(bestHearing('Vaig a les botigues.', ['vaig als botigues'])?.result.verdict).toBe('spelling');
+    expect(bestHearing('Vaig a casa.', ['vaig casa'])?.result.verdict).toBe('spelling');
+    const marks = markHeard('Vaig a les botigues.', 'vaig als botigues');
+    expect(marks.map((m) => m.word)).toEqual(['vaig', 'a', 'les', 'botigues']);
+    expect(marks.map((m) => m.mark)).toEqual(['ok', 'spelling', 'spelling', 'ok']);
+  });
+
+  it('still catches a real one-for-one swap, and lines up half an answer', () => {
+    expect(bestHearing('El gos és gran.', ['la gos és gran'])?.result.verdict).toBe('wrong');
+    expect(bestHearing('Vaig a casa.', ['vaig a escola'])?.result.verdict).toBe('wrong');
+    const half = voiceProgress('Vaig a les botigues del centre.', 'vaig ales');
+    expect(half.text).toBe('vaig a les');
+    expect(voiceState(half)).toBe('onTrack');
   });
 });

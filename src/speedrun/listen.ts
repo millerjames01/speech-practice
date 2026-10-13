@@ -6,6 +6,7 @@
 
 import { checkAnswer, fold, normalize, type CheckResult } from './check';
 import { numberToken } from './numbers';
+import { expand } from './pattern';
 
 /** The slice of the Web Speech API the app uses (not in every TypeScript DOM lib). */
 interface RecognitionResult extends ArrayLike<{ transcript: string }> {
@@ -239,7 +240,7 @@ export const MISHEARD: Record<string, string[]> = {
  * the same as one in the closest accepted answer ("saps nadar" → "saps
  * nedar", "què veus" → "què beus"). Words that sound different stay as heard.
  */
-export function respell(pattern: string, heard: string): string {
+function respellWords(pattern: string, heard: string): string {
   const target = normalize(checkAnswer(pattern, heard).target);
   const targetSet = new Set(target);
   // Digits become words, in whichever form the answer uses ("a les 11:00" → "a les onze").
@@ -274,6 +275,109 @@ export function respell(pattern: string, heard: string): string {
       return bySound.get(sound) ?? pronouns.get(sound) ?? word;
     })
     .join(' ');
+}
+
+/**
+ * Short words said quickly blur into their neighbours, and the recogniser
+ * writes them however it likes: "a les" as "ales" or "als", "de la" as
+ * "dela", a lone "a" dropped altogether. This lines what was heard up with an
+ * accepted answer by sound, ignoring where the spaces fall:
+ *  - groups of up to three words that sound the same joined up are the
+ *    answer's words ("ales" → "a les"), and count as a match;
+ *  - short words whose consonants match once vowels are set aside ("als" for
+ *    "a les") and a dropped one-vowel word ("vaig casa" for "vaig a casa")
+ *    are accepted but marked as near misses.
+ * The answer may run on past what was heard, so a half-said answer lines up too.
+ */
+const TINY = new Set(['a', 'i', 'o', 'e', 'y', 'ha', 'hi', 'he', 'ho']);
+const MAX_GROUP = 3;
+const skeleton = (sound: string) => sound.replace(/[aiu]/g, '');
+const isShort = (w: string) => w.length <= 3;
+
+interface Blend {
+  tokens: string[];
+  /** Indices into tokens accepted loosely (near misses). */
+  loose: number[];
+  cost: number;
+}
+
+function blend(heard: string[], target: string[]): Blend {
+  const m = heard.length;
+  const n = target.length;
+  const hs = heard.map((w) => soundFold(normalize(w)[0] ?? w));
+  const ts = target.map(soundFold);
+  // best[i][j]: cheapest way to line up target[i..] with heard[j..]
+  const best: (Blend | null)[][] = Array.from({ length: n + 1 }, () => Array<Blend | null>(m + 1).fill(null));
+  const at = (i: number, j: number): Blend => {
+    const memo = best[i]![j];
+    if (memo) return memo;
+    let out: Blend;
+    if (j === m) out = { tokens: [], loose: [], cost: 0 }; // the answer may run on
+    else {
+      const options: Blend[] = [];
+      const push = (rest: Blend, tokens: string[], loose: boolean, cost: number) =>
+        options.push({
+          tokens: [...tokens, ...rest.tokens],
+          loose: [...(loose ? tokens.map((_, k) => k) : []), ...rest.loose.map((k) => k + tokens.length)],
+          cost: cost + rest.cost,
+        });
+      if (i < n) {
+        for (let k = 1; k <= MAX_GROUP && j + k <= m; k += 1) {
+          const heardSound = hs.slice(j, j + k).join('');
+          for (let l = 1; l <= MAX_GROUP && i + l <= n; l += 1) {
+            const group = target.slice(i, i + l);
+            const sound = ts.slice(i, i + l).join('');
+            if (heardSound === sound) push(at(i + l, j + k), group, false, k === 1 && l === 1 ? 0 : 0.1);
+            // Only where words merged or split: one word for one is a real choice ("el" or "la").
+            else if (k !== l && group.every(isShort) && heardSound.length <= 5 && skeleton(sound) && skeleton(sound) === skeleton(heardSound))
+              push(at(i + l, j + k), group, true, 1);
+          }
+        }
+        if (TINY.has(target[i]!)) push(at(i + 1, j), [target[i]!], true, 1.5); // a dropped one-vowel word
+        push(at(i + 1, j), [], false, 3); // an answer word not said
+      }
+      push(at(i, j + 1), [heard[j]!], false, 3); // a heard word not in the answer
+      out = options.reduce((a, b) => (b.cost < a.cost ? b : a));
+    }
+    best[i]![j] = out;
+    return out;
+  };
+  return at(0, 0);
+}
+
+/** The first few accepted answers, as words; recognition asks many times a second, so they're kept. */
+const answerCache = new Map<string, string[][]>();
+function answersOf(pattern: string): string[][] {
+  let answers = answerCache.get(pattern);
+  if (!answers) {
+    answers = expand(pattern).slice(0, 8).map((a) => normalize(a));
+    if (answerCache.size > 200) answerCache.clear();
+    answerCache.set(pattern, answers);
+  }
+  return answers;
+}
+
+/** What was heard, respelled into the answer's words, with the near misses marked. */
+export function respellDetail(pattern: string, heard: string): { text: string; loose: number[] } {
+  const words = respellWords(pattern, heard).split(/\s+/).filter(Boolean);
+  if (!words.length) return { text: '', loose: [] };
+  let pick: Blend | null = null;
+  for (const answer of answersOf(pattern)) {
+    const b = blend(words, answer);
+    if (!pick || b.cost < pick.cost) pick = b;
+  }
+  // Keep the word-by-word reading when lining up gains nothing.
+  if (!pick || pick.cost >= words.length * 3) return { text: words.join(' '), loose: [] };
+  return { text: pick.tokens.join(' '), loose: pick.loose };
+}
+
+export function respell(pattern: string, heard: string): string {
+  return respellDetail(pattern, heard).text;
+}
+
+/** A near miss anywhere turns an exact check into a forgiven slip. */
+function softened(result: CheckResult, loose: number[]): CheckResult {
+  return loose.length && result.verdict === 'exact' ? { ...result, verdict: 'spelling' } : result;
 }
 
 /* ---------- continuous listening ---------- */
@@ -459,8 +563,8 @@ const RANK = { exact: 0, spelling: 1, wrong: 2 } as const;
 export function bestHearing(pattern: string, heard: string[]): { text: string; result: CheckResult } | null {
   let best: { text: string; result: CheckResult } | null = null;
   for (const raw of heard) {
-    const text = respell(pattern, raw);
-    const result = checkAnswer(pattern, text);
+    const { text, loose } = respellDetail(pattern, raw);
+    const result = softened(checkAnswer(pattern, text), loose);
     if (!best || RANK[result.verdict] < RANK[best.result.verdict]) best = { text, result };
   }
   return best;
@@ -490,16 +594,21 @@ function distance(a: string, b: string): number {
  * "cares"), grey for a word not in the answer.
  */
 export function markHeard(pattern: string, heard: string): { word: string; mark: HeardMark }[] {
-  const text = respell(pattern, heard);
-  const target = normalize(checkAnswer(pattern, text).target);
+  const detail = respellDetail(pattern, heard);
+  return marksFor(detail, checkAnswer(pattern, detail.text));
+}
+
+function marksFor({ text, loose }: { text: string; loose: number[] }, check: CheckResult): { word: string; mark: HeardMark }[] {
+  const target = normalize(check.target);
   const exact = new Set([...target, ...SUBJECT_PRONOUNS]);
   const sounds = target.map(soundFold);
+  const near = new Set(loose);
   return text
     .split(/\s+/)
     .filter(Boolean)
-    .map((word) => {
+    .map((word, i) => {
       const n = normalize(word)[0] ?? '';
-      if (exact.has(n)) return { word, mark: 'ok' as const };
+      if (exact.has(n)) return { word, mark: near.has(i) ? ('spelling' as const) : ('ok' as const) };
       const sound = soundFold(n);
       const close = sound.length >= 3 && sounds.some((t) => distance(sound, t) <= 1);
       return { word, mark: close ? ('spelling' as const) : ('miss' as const) };
@@ -517,14 +626,17 @@ export interface VoiceProgress {
 
 /** Where a spoken attempt stands: right, on track (right so far, unfinished), or off. */
 export function voiceProgress(pattern: string, heard: string): VoiceProgress {
-  const text = respell(pattern, heard);
-  const result = checkAnswer(pattern, text);
-  const marks = markHeard(pattern, heard);
+  const detail = respellDetail(pattern, heard);
+  const { text, loose } = detail;
+  const checked = checkAnswer(pattern, text);
+  const result = softened(checked, loose);
+  const marks = marksFor(detail, checked);
   const target = normalize(result.target);
   // A leading subject pronoun the answer leaves optional ("ella és…") doesn't count toward its length.
   const first = normalize(marks[0]?.word ?? '')[0];
   const counted = first && SUBJECT_PRONOUNS.includes(first) && target[0] !== first ? marks.length - 1 : marks.length;
-  const onTrack = result.verdict === 'wrong' && counted > 0 && counted < target.length && marks.every((m) => m.mark === 'ok');
+  const near = new Set(loose);
+  const onTrack = result.verdict === 'wrong' && counted > 0 && counted < target.length && marks.every((m, i) => m.mark === 'ok' || near.has(i));
   return { text, result, marks, onTrack };
 }
 
