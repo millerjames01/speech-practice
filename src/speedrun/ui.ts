@@ -56,7 +56,7 @@ import {
   setPrefs,
   xpStats,
 } from './progress';
-import { VoiceStream, bestProgress, canListen, markHeard, voiceState, type VoiceProgress } from './listen';
+import { VoiceStream, bestProgress, canListen, markHeard, voiceHints, voiceState, type VoiceProgress } from './listen';
 import { buildMigrationPlan } from './migrate';
 import { SPRINT_SECONDS, conjugation, conjugationPool, openTenses, roundFrom, sprintQueue, workingVerbs, type SprintCard } from './sprint';
 import { planLessonReview, planToday, type SrsCard } from './srs';
@@ -1499,7 +1499,8 @@ function runSession(
         showMic(true);
         armIdle();
       };
-      // A new phrase: same recognition, fresh attempt.
+      // A new phrase: same recognition, fresh attempt, nudged toward this answer.
+      stream.hint(voiceHints(expand(pattern)));
       stream.reset();
       showMic(stream.active);
       showHeard('');

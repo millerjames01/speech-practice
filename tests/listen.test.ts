@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { bestHearing } from '../src/speedrun/listen';
+import { bestHearing , respell, voiceHints } from '../src/speedrun/listen';
 
 describe('voice answers', () => {
   it('credits the answer if any of the recogniser’s guesses is right', () => {
@@ -289,5 +289,24 @@ describe('continuous listening', () => {
     last().onerror!({ error: 'not-allowed' });
     expect(stream.active).toBe(false);
     expect(errors[0]).toMatch(/blocked/);
+  });
+});
+
+describe('short words the recogniser mishears', () => {
+  it('takes "heu" or "hel" for "el", and "hi" for "i", when the answer has them', () => {
+    expect(bestHearing('El gos és gran.', ['heu gos és gran'])?.result.verdict).toBe('exact');
+    expect(bestHearing('El gos és gran.', ['hel gos és gran'])?.result.verdict).toBe('exact');
+    expect(bestHearing('Pa i vi.', ['pa hi vi'])?.result.verdict).toBe('exact');
+  });
+
+  it('leaves a real word alone when the answer uses it', () => {
+    expect(respell('Heu menjat?', 'heu menjat')).toBe('heu menjat');
+    expect(bestHearing('Tinc el llibre.', ['tinc a llibre'])?.result.verdict).toBe('wrong');
+  });
+
+  it('builds hints from the accepted wordings and their words', () => {
+    expect(voiceHints(['El gos és gran.', 'El gos és molt gran.'])).toEqual([
+      'El gos és gran', 'El gos és molt gran', 'El', 'gos', 'és', 'gran', 'molt',
+    ]);
   });
 });

@@ -36,6 +36,21 @@ export function canListen(): boolean {
   return ctor() !== null;
 }
 
+/** Contextual biasing (SpeechRecognitionPhrase), so far only in recent Chrome. */
+function canBias(): boolean {
+  return typeof window !== 'undefined' && 'SpeechRecognitionPhrase' in window;
+}
+
+/** How strongly hints are favoured: about e^2.5 ≈ 12× more likely; high values make the recogniser hear them everywhere. */
+const PHRASE_BOOST = 2.5;
+
+/** Hints for one answer: its accepted wordings (a few) and their words. */
+export function voiceHints(variants: string[]): string[] {
+  const phrases = variants.slice(0, 3).map((v) => v.replace(/[.,!?;:¿¡…«»"]/g, '').trim());
+  const words = phrases.flatMap((p) => p.split(/\s+/));
+  return [...new Set([...phrases, ...words])].filter(Boolean).slice(0, 40);
+}
+
 const ERRORS: Record<string, string> = {
   'not-allowed': 'Microphone access is blocked. Allow it for this site in the browser settings.',
   'service-not-allowed': 'Speech recognition is turned off in this browser.',
@@ -200,6 +215,26 @@ export function soundFold(word: string): string {
 const SUBJECT_PRONOUNS = ['jo', 'tu', 'ell', 'ella', 'nosaltres', 'vosaltres', 'ells', 'elles'];
 
 /**
+ * What recognisers write for short, unstressed words said alone or quickly:
+ * "el" comes back as "heu" or "hel", "i" as "hi" or "y". These count as the
+ * answer's word when the answer has it and the heard word isn't in the answer
+ * itself. Kept to pairs that are never a real choice between two answers.
+ */
+export const MISHEARD: Record<string, string[]> = {
+  el: ['heu', 'hel', 'l'],
+  els: ['hels', 'heus', 'eus', 'ls'],
+  la: ['l'],
+  i: ['hi', 'y', 'ii'],
+  hi: ['i', 'y'],
+  a: ['ha', 'ah'],
+  ha: ['a', 'ah'],
+  de: ['d'],
+  que: ['k'],
+  un: ['hum', 'um'],
+  en: ['n'],
+};
+
+/**
  * Rewrites what was heard into the answer's spelling wherever a word sounds
  * the same as one in the closest accepted answer ("saps nadar" → "saps
  * nedar", "què veus" → "què beus"). Words that sound different stay as heard.
@@ -219,6 +254,8 @@ export function respell(pattern: string, heard: string): string {
     .join(' ');
   const bySound = new Map<string, string>();
   for (const w of target) bySound.set(soundFold(w), w);
+  // Known mis-hearings of short words, where they don't clash with another answer word.
+  for (const w of target) for (const m of MISHEARD[w] ?? []) if (!bySound.has(soundFold(m)) && !targetSet.has(m)) bySound.set(soundFold(m), w);
   const pronouns = new Map(SUBJECT_PRONOUNS.map((w) => [soundFold(w), w]));
   const exact = new Set(target);
   return text
@@ -229,7 +266,7 @@ export function respell(pattern: string, heard: string): string {
       const sound = soundFold(n);
       // An answer may open with an optional subject pronoun: "ells" (or "els",
       // as the recogniser may write it) there is the pronoun, not the article.
-      if (i === 0 && target[0] !== n) {
+      if (i === 0 && target[0] !== n && soundFold(target[0] ?? '') !== sound) {
         const pronoun = pronouns.get(sound);
         if (pronoun && !target.includes(pronoun)) return pronoun;
       }
@@ -282,6 +319,9 @@ export class VoiceStream {
   private carried = '';
   private finals = '';
   private restarts: number[] = [];
+  /** Words and phrases the recogniser is nudged toward, where the browser supports it. */
+  private phrases: string[] = [];
+  private phrasesOff = false;
 
   constructor(private readonly events: StreamEvents, private readonly lang = 'ca-ES') {}
 
@@ -312,6 +352,24 @@ export class VoiceStream {
     this.events.onState?.(false);
   }
 
+  /**
+   * Nudges recognition toward the expected answer (Chrome's contextual
+   * biasing, where available; other browsers ignore it). New hints apply from
+   * the next recognition, so an open one is restarted quietly to pick them up.
+   */
+  hint(phrases: string[]): void {
+    const next = [...new Set(phrases.map((p) => p.trim()).filter(Boolean))];
+    if (next.join('|') === this.phrases.join('|')) return;
+    this.phrases = next;
+    if (!this.on || !this.rec || !canBias() || this.phrasesOff) return;
+    this.carried = '';
+    try {
+      this.rec.stop(); // onend reopens it with the new phrases
+    } catch {
+      // already ending
+    }
+  }
+
   /** Starts a new attempt: what was heard so far is set aside. */
   reset(): void {
     this.base = this.seen;
@@ -327,6 +385,14 @@ export class VoiceStream {
     rec.continuous = true;
     rec.interimResults = true;
     rec.maxAlternatives = 5;
+    if (this.phrases.length && canBias() && !this.phrasesOff) {
+      try {
+        const Phrase = (window as unknown as { SpeechRecognitionPhrase: new (p: string, boost: number) => unknown }).SpeechRecognitionPhrase;
+        (rec as unknown as { phrases: unknown[] }).phrases = this.phrases.map((p) => new Phrase(p, PHRASE_BOOST));
+      } catch {
+        this.phrasesOff = true;
+      }
+    }
     this.base = 0;
     this.seen = 0;
     this.finals = this.carried;
@@ -353,6 +419,10 @@ export class VoiceStream {
     rec.onerror = (ev) => {
       if (rec !== this.rec) return;
       if (ev.error === 'no-speech' || ev.error === 'aborted') return; // onend restarts
+      if (ev.error === 'phrases-not-supported') {
+        this.phrasesOff = true; // onend reopens without them
+        return;
+      }
       this.fail(new Error(ERRORS[ev.error] ?? `Speech recognition failed (${ev.error}).`));
     };
     rec.onend = () => {
