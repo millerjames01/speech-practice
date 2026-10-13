@@ -274,6 +274,32 @@ describe('continuous listening', () => {
     expect(heard.at(-1)).toEqual(['al carrer hi ha gent']); // a new answer that starts like the last one ended
   });
 
+  it('wipes a wrong try even when Android keeps adding to the same open result', async () => {
+    const { stream, heard, last } = await setup();
+    stream.start();
+    const rec = last();
+    rec.push(res(false, 'de petit jugava a'));
+    stream.reset(); // wrong word: "Try again", the result is still open
+    rec.update(res(false, 'de petit jugava a'));
+    expect(heard).toHaveLength(1); // nothing new yet
+    rec.update(res(false, 'de petit jugava a de petit jugava'));
+    expect(heard.at(-1)).toEqual(['de petit jugava']);
+    rec.update(res(true, 'de petit jugava a de petit jugava al carrer'));
+    expect(heard.at(-1)?.[0]).toBe('de petit jugava al carrer');
+    rec.push(res(false, 'molt'));
+    expect(heard.at(-1)?.[0]).toBe('de petit jugava al carrer molt');
+  });
+
+  it('wipes a wrong try that Android restates in a new result', async () => {
+    const { stream, heard, last } = await setup();
+    stream.start();
+    const rec = last();
+    rec.push(res(true, 'de petit jugava a carrer'));
+    stream.reset();
+    rec.push(res(false, 'de petit jugava a carrer de petit jugava al carrer'));
+    expect(heard.at(-1)).toEqual(['de petit jugava al carrer']);
+  });
+
   it('leaves a new answer alone when only one word lines up', async () => {
     const { dropStale } = await import('../src/speedrun/listen');
     expect(dropStale('tard de petit', ['vaig', 'sopar', 'tard'])).toBe('tard de petit');

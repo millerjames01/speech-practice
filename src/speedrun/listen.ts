@@ -419,6 +419,14 @@ export function dropStale(text: string, stale: string[], min = 2): string {
   return text;
 }
 
+/** The text after an exact opening of these words, or null when it doesn't open with them. */
+function dropPrefix(text: string, prefix: string[]): string | null {
+  const tokens = text.split(/\s+/).filter(Boolean);
+  const plain = tokens.map((t) => normalize(t)[0] ?? '');
+  if (prefix.length === 0 || plain.length < prefix.length || !prefix.every((w, i) => plain[i] === w)) return null;
+  return tokens.slice(prefix.length).join(' ');
+}
+
 export interface StreamEvents {
   /** Everything heard since the last reset: the recogniser's readings, best first. */
   onText: (candidates: string[]) => void;
@@ -450,6 +458,10 @@ export class VoiceStream {
   /** The words heard before the last reset, which Android may repeat at the start of later results. */
   private stale: string[] = [];
   private staleMin = 2;
+  /** Index of the last result while it is still interim, or -1. */
+  private openIndex = -1;
+  /** A result that was open at the last reset, and the words it held then. */
+  private pending: { index: number; prefix: string[] } | null = null;
   /** Words and phrases the recogniser is nudged toward, where the browser supports it. */
   private phrases: string[] = [];
   private phrasesOff = false;
@@ -507,7 +519,15 @@ export class VoiceStream {
     // A restatement repeats the whole last answer; a shorter overlap is a new answer that happens to start the same way.
     const attempt = words(this.finals || this.latest).split(' ').filter(Boolean).length;
     this.staleMin = Math.max(2, Math.min(4, attempt));
-    this.base = this.seen;
+    // A result still open at the reset keeps growing with the new attempt's words
+    // (Android hadn't closed it yet): keep reading it, minus what it held so far.
+    if (this.openIndex >= 0) {
+      this.base = this.openIndex;
+      this.pending = { index: this.openIndex, prefix: words(this.latest).split(' ').filter(Boolean) };
+    } else {
+      this.base = this.seen;
+      this.pending = null;
+    }
     this.carried = '';
     this.finals = '';
   }
@@ -531,10 +551,13 @@ export class VoiceStream {
     this.base = 0;
     this.seen = 0;
     this.finalsSeen = 0;
+    this.openIndex = -1;
+    this.pending = null;
     this.finals = this.carried;
     rec.onresult = (ev) => {
       if (rec !== this.rec) return;
       this.seen = ev.results.length;
+      this.openIndex = ev.results[ev.results.length - 1]?.isFinal === false ? ev.results.length - 1 : -1;
       let acc = this.carried;
       let candidates: string[] = [];
       for (let i = this.base; i < ev.results.length; i += 1) {
@@ -548,7 +571,9 @@ export class VoiceStream {
           this.finalsSeen = i + 1;
         }
         // Android may restate the whole session in a new result, the last answer included.
-        const alts = raw.map((a) => dropStale(a, this.stale, this.staleMin)).filter(Boolean);
+        const alts = raw
+          .map((a) => (this.pending?.index === i ? dropPrefix(a, this.pending.prefix) ?? dropStale(a, this.stale, 2) : dropStale(a, this.stale, this.staleMin)))
+          .filter(Boolean);
         if (!alts.length) continue;
         const before = acc;
         // Each reading as a continuation, then on its own: the speaker may have
