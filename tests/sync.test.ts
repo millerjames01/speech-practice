@@ -41,6 +41,15 @@ describe('sync codes', () => {
   it('carries XP, sprint best and conjugation forms', async () => {
     const code = await encodeSync({}, [], NOW, { xp: { '2026-10-09': 40 }, sprintBest: 17, forms: { abc12: 2, zz: 0 } });
     expect(await decodeSync(code)).toMatchObject({ xp: { '2026-10-09': 40 }, sprintBest: 17, forms: { abc12: 2 } });
+    expect((await decodeSync(code)).forms).not.toHaveProperty('zz'); // a miss with no date stays home
+  });
+
+  it('carries when each form was last answered, misses included', async () => {
+    const minute = Math.floor(NOW / 60_000);
+    const code = await encodeSync({}, [], NOW, { forms: { abc12: 2, zz: 0 }, formsSeen: { abc12: minute - 90, zz: minute - 5 } });
+    const back = await decodeSync(code);
+    expect(back.forms).toEqual({ abc12: 2, zz: 0 });
+    expect(back.formsSeen).toEqual({ abc12: minute - 90, zz: minute - 5 });
   });
 
   it('finds the code inside whatever was pasted', () => {
@@ -199,5 +208,28 @@ describe('migration from older progress', () => {
     expect(p.allForms().k1).toBe(2);
     p.resetProgress();
     expect(p.needsMigration()).toBe(false);
+  });
+});
+
+describe('merging conjugation forms', () => {
+  it('takes the more recent answer, misses included, and falls back to the better streak for undated codes', async () => {
+    const store = new Map<string, string>();
+    (globalThis as { localStorage?: unknown }).localStorage = {
+      getItem: (k: string) => store.get(k) ?? null,
+      setItem: (k: string, v: string) => void store.set(k, v),
+      removeItem: (k: string) => void store.delete(k),
+    };
+    const p = await import('../src/speedrun/progress');
+    p.resetProgress();
+    p.recordForms([['a', true], ['b', true], ['c', true]], NOW - 60 * 60_000);
+    const minute = Math.floor(NOW / 60_000);
+    p.mergeProgress({
+      lessons: {}, cards: [],
+      forms: { a: 0, b: 3, c: 4 },
+      formsSeen: { a: minute, b: minute - 24 * 60 }, // a: missed later on the other device; b: older there
+    });
+    expect(p.allForms()).toMatchObject({ a: 0, b: 1, c: 4 }); // c had no date: the better streak
+    expect(p.allFormsSeen().a).toBe(minute);
+    p.resetProgress();
   });
 });

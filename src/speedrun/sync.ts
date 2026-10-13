@@ -18,6 +18,8 @@ export interface SyncPayload {
   sprintBest: number;
   /** Conjugation form key → consecutive right answers. */
   forms: Record<string, number>;
+  /** Conjugation form key → when it was last answered (epoch minutes); absent in older codes. */
+  formsSeen: Record<string, number>;
 }
 
 const PREFIX = 'ca1.';
@@ -51,7 +53,7 @@ function fromBase64Url(text: string): Uint8Array<ArrayBuffer> {
 /* ---------- encoding ----------
  * v1|<base: start of export day, epoch minutes>|<lessons>|<cards>|<xp>|<sprintBest>|<forms>
  * xp:     YYYYMMDD:points  (the last three fields are optional, so older codes still decode)
- * forms:  key:streak       (only forms with a streak)
+ * forms:  key:streak[:minutesAgo]   (minutes before base it was last answered; older codes lack it)
  * lesson: id:bestSeconds:scorePercent:runs[:firstDay]   (firstDay relative to base, usually negative)
  * card:   lessonId.index.step.dueDays.lapses.lastHours   (relative to base; due is always
  *         a midnight, last answer keeps hour precision so same-day merges order correctly)
@@ -61,7 +63,7 @@ export async function encodeSync(
   lessons: Record<string, LessonRecord>,
   cards: SrsCard[],
   now = Date.now(),
-  extras: { xp?: Record<string, number>; sprintBest?: number; forms?: Record<string, number> } = {},
+  extras: { xp?: Record<string, number>; sprintBest?: number; forms?: Record<string, number>; formsSeen?: Record<string, number> } = {},
 ): Promise<string> {
   const base = startOfDay(now);
   const days = (t: number) => Math.round((t - base) / DAY);
@@ -76,11 +78,14 @@ export async function encodeSync(
     .filter(([, n]) => n > 0)
     .map(([day, n]) => `${day.replace(/-/g, '')}:${n}`)
     .join(',');
+  const baseMin = Math.round(base / MINUTE);
+  const seen = extras.formsSeen ?? {};
+  // A missed form (streak 0) travels too when its date is known, so a miss on one device reaches the other.
   const fs = Object.entries(extras.forms ?? {})
-    .filter(([k, n]) => n > 0 && /^[a-z0-9]+$/.test(k))
-    .map(([k, n]) => `${k}:${n}`)
+    .filter(([k, n]) => (n > 0 || seen[k] !== undefined) && /^[a-z0-9]+$/.test(k))
+    .map(([k, n]) => (seen[k] !== undefined ? `${k}:${n}:${baseMin - seen[k]!}` : `${k}:${n}`))
     .join(',');
-  const text = `v1|${Math.round(base / MINUTE)}|${ls}|${cs}|${xs}|${extras.sprintBest ?? 0}|${fs}`;
+  const text = `v1|${baseMin}|${ls}|${cs}|${xs}|${extras.sprintBest ?? 0}|${fs}`;
   return PREFIX + toBase64Url(await deflate(text));
 }
 
@@ -140,12 +145,14 @@ export async function decodeSync(input: string): Promise<SyncPayload> {
   }
   const sprintBest = Number.isFinite(Number(sprintRaw)) ? Number(sprintRaw) : 0;
   const forms: Record<string, number> = {};
+  const formsSeen: Record<string, number> = {};
   for (const part of fs ? fs.split(',') : []) {
-    const [k, n] = part.split(':');
-    if (!k || !Number.isFinite(Number(n))) throw new Error('The sync code is damaged.');
+    const [k, n, ago] = part.split(':');
+    if (!k || !Number.isFinite(Number(n)) || (ago !== undefined && !Number.isFinite(Number(ago)))) throw new Error('The sync code is damaged.');
     forms[k] = Number(n);
+    if (ago !== undefined) formsSeen[k] = baseMin - Number(ago);
   }
-  return { createdAt: base, lessons, cards, xp, sprintBest, forms };
+  return { createdAt: base, lessons, cards, xp, sprintBest, forms, formsSeen };
 }
 
 /* ---------- merging ---------- */
