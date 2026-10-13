@@ -19,6 +19,7 @@ import {
   GRADES,
   GRADE_INFO,
   formsRating,
+  heldShare,
   indexCards,
   isLessonCard,
   isPerfect,
@@ -308,7 +309,7 @@ function stat(value: string, label: string): HTMLElement {
 }
 
 /**
- * The graded bar: hardened, settling, new and fading, strongest on the left,
+ * The graded bar: strong, growing, new and fading, strongest on the left,
  * then the space not yet met. Every lesson, set, tense and level uses it.
  */
 function gradedBar(t: Tally, size: 'thin' | 'tall' | '' = '', rules: Record<Grade, string> = GRADE_RULES): HTMLElement {
@@ -430,7 +431,7 @@ function strandTiles(list: Strand[], level: SpeedrunLevel, current?: Strand['nam
         st.go && st.name !== current ? 'button' : 'div',
         { class: `sr-strand${st === low ? ' low' : ''}${st.name === current ? ' current' : ''}`, ...(st.go && st.name !== current ? { type: 'button', title: `Open the ${STRAND_SOURCE[st.name].toLowerCase()}` } : {}) },
         el('span', { class: 'sr-strand-name' }, st.name),
-        el('span', { class: 'sr-strand-level', title: `Your ${st.name.toLowerCase()} level: ${pct(st.rating.pct)} of the way through ${st.rating.level}` }, st.rating.level, el('small', {}, pct(st.rating.pct))),
+        el('span', { class: 'sr-strand-level', title: `Your ${st.name.toLowerCase()} level. ${pct(st.rating.pct)} of ${st.rating.level} is held (strong or growing); at 80% it moves up.` }, st.rating.level, el('small', {}, `${pct(st.rating.pct)} held`)),
         gradedBar(st.tally, 'thin', st.rules),
         el('span', { class: 'sr-strand-meta' }, `${level} · ${met(st.tally)}/${st.tally.total} · ${STRAND_SOURCE[st.name]}`),
       );
@@ -684,7 +685,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
             'div',
             { class: 'sr-level-text' },
             el('h2', {}, info.name),
-            el('p', {}, `${levelDone}/${lessons.length} lessons · ${met(lessonTally)}/${lessonTally.total} phrases${levelDue ? ` · ${levelDue} due` : ''}`),
+            el('p', {}, `${levelDone}/${lessons.length} lessons · ${met(lessonTally)}/${lessonTally.total} phrases · ${pct(heldShare(lessonTally))} held${levelDue ? ` · ${levelDue} due` : ''}`),
           ),
         ),
         el('p', { class: 'sr-level-blurb' }, info.blurb),
@@ -763,7 +764,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
           ),
         ),
       ),
-      el('p', { class: 'sr-fineprint' }, 'Each strand rates at the first level where less than 80% is held. Your level is the lowest of the three.'),
+      el('p', { class: 'sr-fineprint' }, 'A strand moves up a level once 80% of it is held: strong or growing, the green part of the bar. Your level is the lowest of the three.'),
     ),
   );
 
@@ -809,7 +810,7 @@ function modal(...children: (Node | null)[]): { overlay: HTMLElement; close: () 
 
 /** Everything a device carries to another: lessons, review cards, XP, sprint best and conjugation forms. */
 const currentSyncCode = () =>
-  encodeSync(allLessonRecords(), allCards(), Date.now(), { xp: allXp(), sprintBest: getSprintBest(), forms: allForms() });
+  encodeSync(allLessonRecords(), allCards(), Date.now(), { xp: allXp(), sprintBest: getSprintBest(), forms: allForms(), formsSeen: allFormsSeen() });
 
 async function syncLink(): Promise<string> {
   const code = await currentSyncCode();

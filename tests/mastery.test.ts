@@ -20,20 +20,20 @@ describe('grades', () => {
 
   it('grades a card by its step, and anything due as fading', () => {
     expect(cardGrade(card('x', 0, 0), NOW)).toBe('new');
-    expect(cardGrade(card('x', 0, 1), NOW)).toBe('settling');
-    expect(cardGrade(card('x', 0, 2), NOW)).toBe('settling');
-    expect(cardGrade(card('x', 0, 3), NOW)).toBe('hard');
+    expect(cardGrade(card('x', 0, 1), NOW)).toBe('growing');
+    expect(cardGrade(card('x', 0, 2), NOW)).toBe('growing');
+    expect(cardGrade(card('x', 0, 3), NOW)).toBe('strong');
     expect(cardGrade(card('x', 0, 5, today - DAY), NOW)).toBe('fading');
   });
 
   it('tallies a lesson, counting items not met in the total only', () => {
     const cs = indexCards([card('a2-01', 0, 4), card('a2-01', 1, 1), card('a2-01', 2, 0, today, 1)]);
     const t = tallyLessons([l], cs, NOW);
-    expect(t).toEqual({ hard: 1, settling: 1, new: 0, fading: 1, total: 4 });
+    expect(t).toEqual({ strong: 1, growing: 1, new: 0, fading: 1, total: 4 });
     expect(met(t)).toBe(3);
     expect(lessonDue(l, cs, NOW)).toBe(1);
-    expect(heldShare(t)).toBeCloseTo((1 + 0.6 + 0.3) / 4);
-    expect(addTallies(t, tallyCards([undefined], NOW))).toMatchObject({ total: 5, hard: 1 });
+    expect(heldShare(t)).toBe(2 / 4); // strong and growing: the green part of the bar
+    expect(addTallies(t, tallyCards([undefined], NOW))).toMatchObject({ total: 5, strong: 1 });
   });
 
   it('grades verb forms by streak, with misses and rested forms as fading', () => {
@@ -42,11 +42,11 @@ describe('grades', () => {
     expect(formGrade(0, minute, NOW)).toBe('fading');
     expect(formGrade(1, minute - 5, NOW)).toBe('new');
     expect(formGrade(1, minute - 24 * 60, NOW)).toBe('fading'); // rested a day: due again
-    expect(formGrade(2, minute - 60, NOW)).toBe('settling');
-    expect(formGrade(3, minute - 60, NOW)).toBe('hard');
-    expect(formGrade(3, undefined, NOW)).toBe('hard'); // synced without a date
+    expect(formGrade(2, minute - 60, NOW)).toBe('growing');
+    expect(formGrade(3, minute - 60, NOW)).toBe('strong');
+    expect(formGrade(3, undefined, NOW)).toBe('strong'); // synced without a date
     const cards = conjugationPool().slice(0, 3);
-    expect(tallyForms(cards, { [cards[0]!.key]: 3 }, { [cards[0]!.key]: minute }, NOW)).toEqual({ hard: 1, settling: 0, new: 0, fading: 0, total: 3 });
+    expect(tallyForms(cards, { [cards[0]!.key]: 3 }, { [cards[0]!.key]: minute }, NOW)).toEqual({ strong: 1, growing: 0, new: 0, fading: 0, total: 3 });
   });
 });
 
@@ -230,7 +230,8 @@ describe('ratings', () => {
     const a2 = pool.filter((c) => c.level === 'A2');
     const minute = Math.floor(NOW / 60_000);
     const seen = Object.fromEntries(a2.map((c) => [c.key, minute]));
-    expect(formsRating(Object.fromEntries(a2.map((c) => [c.key, 1])), seen, NOW).byLevel.A2).toBeCloseTo(0.3);
+    expect(formsRating(Object.fromEntries(a2.map((c) => [c.key, 1])), seen, NOW).byLevel.A2).toBe(0); // new, not held yet
+    expect(formsRating(Object.fromEntries(a2.map((c) => [c.key, 2])), seen, NOW).byLevel.A2).toBe(1);
     const all = formsRating(Object.fromEntries(a2.map((c) => [c.key, 3])), seen, NOW);
     expect(all).toMatchObject({ level: 'B1', pct: 0 });
     expect(all.overall).toBeCloseTo(a2.length / pool.length);

@@ -233,7 +233,7 @@ export function importProgress(text: string): { lessons: number; cards: number }
 
 /** Merges another device's progress into this one, newest state of every item wins. */
 export function mergeProgress(
-  incoming: Pick<SyncPayload, 'lessons' | 'cards'> & Partial<Pick<SyncPayload, 'xp' | 'sprintBest' | 'forms'>>,
+  incoming: Pick<SyncPayload, 'lessons' | 'cards'> & Partial<Pick<SyncPayload, 'xp' | 'sprintBest' | 'forms' | 'formsSeen'>>,
 ): { lessons: number; cards: number } {
   const store = read();
   let lessons = 0;
@@ -253,8 +253,17 @@ export function mergeProgress(
   // Per day the larger tally wins: syncing twice never double-counts.
   for (const [day, n] of Object.entries(incoming.xp ?? {})) store.xp[day] = Math.max(store.xp[day] ?? 0, n);
   store.sprintBest = Math.max(store.sprintBest, incoming.sprintBest ?? 0);
-  // Forms carry no timestamp; the better of the two counts wins.
-  for (const [k, n] of Object.entries(incoming.forms ?? {})) store.forms[k] = Math.max(store.forms[k] ?? 0, n);
+  // A form answered more recently on the other device wins, misses included. Codes
+  // without dates (older versions) fall back to the better of the two streaks.
+  for (const [k, n] of Object.entries(incoming.forms ?? {})) {
+    const theirs = incoming.formsSeen?.[k];
+    const mine = store.formsSeen[k];
+    if (theirs === undefined) store.forms[k] = Math.max(store.forms[k] ?? 0, n);
+    else if (mine === undefined || theirs > mine) {
+      store.forms[k] = n;
+      store.formsSeen[k] = theirs;
+    }
+  }
   write(store);
   return { lessons, cards };
 }
