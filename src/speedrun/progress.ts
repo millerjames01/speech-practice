@@ -7,6 +7,7 @@
 
 import { DAY, INTERVALS, LONG_TERM_STEP, enroll, isDue, review, type SrsCard } from './srs';
 import { mergeLessons, newerCard, type SyncPayload } from './sync';
+import { nextStreak } from './sprint';
 
 const KEY = 'sr.progress.v1';
 
@@ -377,14 +378,16 @@ export function allFormsSeen(): Record<string, number> {
   return read().formsSeen;
 }
 
-/** Records sprint answers in one write: a right answer climbs (to 3), a miss resets. */
+/** Records sprint answers in one write: a right answer climbs once rested (see nextStreak), a miss resets. */
 export function recordForms(results: [key: string, correct: boolean][], now = Date.now()): void {
   if (results.length === 0) return;
   const store = read();
   const minute = Math.floor(now / 60_000);
   for (const [k, correct] of results) {
-    store.forms[k] = correct ? Math.min(3, (store.forms[k] ?? 0) + 1) : 0;
-    store.formsSeen[k] = minute;
+    const n = nextStreak(store.forms[k], correct, store.formsSeen[k], minute);
+    // An early right answer leaves the rest clock alone, like early practice of lesson items.
+    if (n !== store.forms[k] || !correct || store.formsSeen[k] === undefined) store.formsSeen[k] = minute;
+    store.forms[k] = n;
   }
   write(store);
 }
