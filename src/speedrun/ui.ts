@@ -113,8 +113,12 @@ const RESET_PAUSE_MS = 1500;
 /** How long a wrong try stays on screen before it clears for the next. */
 const RETRY_SHOW_MS = 900;
 
-/** Pause before the mic starts by itself on a new phrase, when auto-start is on. */
-const AUTO_LISTEN_MS = 1000;
+/**
+ * Seconds before listening on a new phrase: time to read it. The mic starts
+ * by itself after this (when auto-start is on), and a mic still on from the
+ * last phrase ignores what it hears until then.
+ */
+const NEW_PHRASE_SECONDS = 3;
 
 /** Seconds before moving on after a perfect answer, when auto-advance is on. */
 const AUTO_ADVANCE_SECONDS = 3;
@@ -440,6 +444,9 @@ function strandTiles(list: Strand[], level: SpeedrunLevel, current?: Strand['nam
     }),
   );
 }
+
+/** What the mic status pill is showing; each has its own dot. */
+type VoiceStatus = 'idle' | 'starting' | 'listening' | 'thinking' | 'checking' | 'retry' | 'paused' | 'error' | 'right' | 'done';
 
 /* ---------- practice preferences ----------
  * The same switches show at the bottom of the map and in Settings; each
@@ -1333,13 +1340,19 @@ function runSession(
     // Voice mode: a big mic button leads; the text box waits behind "Type instead".
     // Tap and say it; it stops on a pause, or tap again when done. What is heard
     // shows word by word against the answer: green match, yellow near miss, grey no match.
-    const heardLine = el('p', { class: 'sr-heard', role: 'status' });
-    const retryNote = el('p', { class: 'sr-retry', role: 'status' });
+    // One status pill, always in the same place above the phrase: what the mic is doing
+    // (tap to speak, listening, checking, try again…). It changes text, never the layout.
+    const statusText = el('span', { class: 'sr-vs-text' });
+    const status = el('p', { class: 'sr-voice-status', role: 'status' }, el('span', { class: 'sr-vs-dot' }), statusText);
+    const setStatus = (kind: VoiceStatus, text: string) => {
+      status.dataset.kind = kind;
+      statusText.textContent = text;
+    };
+    setStatus('idle', 'Tap the mic to speak');
     const heardWords = el('p', { class: 'sr-heard-words', lang: 'ca' });
     heardWords.setAttribute('aria-live', 'polite');
     const micBtn = voice ? el('button', { class: 'sr-mic-big', type: 'button', title: 'Speak (Alt+M)' }, icon(ICONS.mic, 36)) : null;
     micBtn?.setAttribute('aria-label', 'Speak');
-    const micLabel = el('span', { class: 'sr-mic-label' }, 'Tap to speak');
     const typeBox = el('div', { class: 'sr-type-box' }, input, accents);
     const typeToggle = voice ? button('Type instead', () => openTyping(), 'sr-btn ghost') : null;
     /** Auto-start (a setting) is armed until it fires, the mic is tapped, or typing takes over. */
@@ -1347,7 +1360,7 @@ function runSession(
     let introAudio: Promise<void> = Promise.resolve();
     /** Opens the text box; choosing to type stops the mic, unless keepMic (after three misses). */
     const openTyping = (keepMic = false) => {
-      if (autoArmed) micLabel.textContent = 'Tap to speak';
+      if (autoArmed) setStatus('idle', 'Tap the mic to speak');
       autoArmed = false;
       if (!keepMic && stream?.active) stream.stop();
       typeBox.hidden = false;
@@ -1374,7 +1387,7 @@ function runSession(
     // The mic docks at the bottom of the screen, in the same place for every item.
     // It lives outside the drill card: the card's entrance animation uses a
     // transform, which would pin a fixed child to the card instead of the screen.
-    const voicePanel = micBtn ? el('div', { class: 'sr-voice-dock' }, micLabel, micBtn) : null;
+    const voicePanel = micBtn ? el('div', { class: 'sr-voice-dock' }, micBtn) : null;
     if (voicePanel) {
       root.append(voicePanel);
       itemCleanups.push(() => voicePanel.remove());
@@ -1392,19 +1405,25 @@ function runSession(
       let decideTimer: ReturnType<typeof setTimeout> | undefined;
       let retryTimer: ReturnType<typeof setTimeout> | undefined;
       let idleTimer: ReturnType<typeof setTimeout> | undefined;
+      /** A new phrase with the mic already on: a short countdown before it listens. */
+      let holdTimer: ReturnType<typeof setInterval> | undefined;
+      let holding = false;
       /** The app spoke while the mic was on: what it heard is set aside once it stops. */
       let heardTheApp = false;
       itemCleanups.push(() => {
         clearTimeout(decideTimer);
         clearTimeout(retryTimer);
         clearTimeout(idleTimer);
+        clearInterval(holdTimer);
         voiceHandlers.text = undefined;
         voiceHandlers.state = undefined;
         voiceHandlers.error = undefined;
       });
       const showMic = (on: boolean) => {
         micBtn.classList.toggle('is-listening', on);
-        micLabel.textContent = on ? (current ? 'Listening… tap when done' : 'Listening…') : misses ? 'Tap to try again' : 'Tap to speak';
+        micBtn.setAttribute('aria-label', on ? 'Done' : 'Speak');
+        if (!on) setStatus('idle', misses ? 'Tap the mic to try again' : 'Tap the mic to speak');
+        else if (!current && !holding) setStatus('listening', 'Listening…');
       };
       const showHeard = (text: string) => {
         clear(heardWords);
@@ -1425,7 +1444,7 @@ function runSession(
           if (answered || current || !stream.active) return;
           stream.stop();
           showHeard('');
-          heardLine.textContent = 'Mic paused. Tap to speak.';
+          setStatus('paused', 'Mic paused · tap to speak');
         }, prefs.holdOpen ? VOICE_IDLE_MS : VOICE_SHORT_IDLE_MS);
       };
       const accept = (text: string, result: CheckResult) => {
@@ -1441,32 +1460,33 @@ function runSession(
         clearTimeout(decideTimer);
         current = null;
         misses += 1;
-        if (misses >= 3 && typeBox.hidden) {
-          openTyping(true);
-          heardLine.textContent = 'Having trouble? Type it instead, or keep trying.';
-        }
+        const trouble = misses >= 3;
+        if (trouble && typeBox.hidden) openTyping(true);
         if (prefs.autoRetry && stream.active) {
           // Clear and listen again; the mic never went off.
           showHeard(text);
-          retryNote.textContent = 'Try again';
           stream.reset();
           retryTimer = setTimeout(() => {
             if (!answered && !current) showHeard('');
           }, RETRY_SHOW_MS);
           showMic(true);
+          setStatus('retry', trouble ? 'Try again · or type it below' : 'Try again');
           armIdle();
           return;
         }
         stream.stop();
         showHeard(text);
         input.value = text;
-        if (!heardLine.textContent) heardLine.textContent = 'Not quite. Tap to try again, or Show answer.';
+        setStatus('retry', 'Not quite · tap the mic to try again');
       };
       const decide = (p: VoiceProgress) => {
         clearTimeout(decideTimer);
         current = p;
         const state = voiceState(p);
-        const wait = state === 'right' ? ACCEPT_PAUSE_MS : state === 'onTrack' && prefs.waitForRest ? THINKING_PAUSE_MS : RESET_PAUSE_MS;
+        const thinking = state === 'onTrack' && prefs.waitForRest;
+        const wait = state === 'right' ? ACCEPT_PAUSE_MS : thinking ? THINKING_PAUSE_MS : RESET_PAUSE_MS;
+        if (thinking) setStatus('thinking', 'Listening… take your time');
+        else setStatus('checking', 'Checking…');
         decideTimer = setTimeout(() => {
           if (answered || current !== p) return;
           if (state === 'right') accept(p.text, p.result);
@@ -1476,7 +1496,7 @@ function runSession(
       voiceHandlers.state = showMic;
       voiceHandlers.error = (err) => {
         showMic(false);
-        heardLine.textContent = err.message;
+        setStatus('error', err.message);
         openTyping();
       };
       voiceHandlers.text = (candidates) => {
@@ -1490,9 +1510,8 @@ function runSession(
           stream.reset();
           return;
         }
+        if (holding) return; // still reading the new phrase: set aside when the countdown ends
         clearTimeout(retryTimer);
-        retryNote.textContent = '';
-        heardLine.textContent = '';
         const p = bestProgress(pattern, '', candidates);
         if (!p) return;
         showHeard(p.text);
@@ -1500,19 +1519,38 @@ function runSession(
         showMic(true);
         armIdle();
       };
+      /** The countdown is over (or the mic was tapped): listen from here. */
+      const endHold = () => {
+        clearInterval(holdTimer);
+        if (!holding) return;
+        holding = false;
+        stream.reset();
+        showHeard('');
+        showMic(stream.active);
+        if (stream.active) armIdle();
+      };
       // A new phrase: same recognition, fresh attempt, nudged toward this answer.
       stream.hint(voiceHints(expand(pattern)));
       stream.reset();
+      if (stream.active) {
+        holding = true;
+        let left = NEW_PHRASE_SECONDS;
+        setStatus('starting', `Listening in ${left}…`);
+        holdTimer = setInterval(() => {
+          left -= 1;
+          if (left > 0) setStatus('starting', `Listening in ${left}…`);
+          else endHold();
+        }, 1000);
+      }
       showMic(stream.active);
       showHeard('');
-      if (stream.active) armIdle();
       micBtn.addEventListener('click', () => mic?.());
       mic = () => {
         autoArmed = false;
         if (answered) return;
+        if (holding) return endHold(); // a tap skips the countdown
         if (!stream.active) {
           stopSpeaking();
-          heardLine.textContent = '';
           stream.start();
           stream.reset();
           showHeard('');
@@ -1540,7 +1578,7 @@ function runSession(
       if (answered) return;
       if (stream?.active && voice) return mic?.(); // Check while listening means "done"
       if (!input.value.trim()) {
-        if (voice) heardLine.textContent = 'Nothing to check yet: tap the mic and say it, or type it.';
+        if (voice) setStatus('idle', 'Nothing to check yet · say it or type it');
         return;
       }
       resolve(checkAnswer(pattern, input.value));
@@ -1582,10 +1620,11 @@ function runSession(
       el(
         'section',
         { class: 'sr-card-prompt' },
-        ...promptBlock,
+        // In voice mode the eyebrow row carries the mic status on its right.
+        ...(voice ? [el('div', { class: 'sr-prompt-head' }, promptBlock[0]!, status), ...promptBlock.slice(1)] : promptBlock),
         ...(hint && !dictation ? [el('p', { class: 'sr-hint' }, hint)] : []),
         // What is heard sits right under the prompt, in the same type, coloured as it comes.
-        ...(voice ? [retryNote, heardWords, heardLine] : []),
+        ...(voice ? [heardWords] : []),
         form,
       ),
       feedback,
@@ -1593,14 +1632,22 @@ function runSession(
     stage.classList.toggle('has-dock', voice);
     // Auto-start: the mic turns on by itself a moment after a new phrase appears
     // (after the Catalan audio, in dictation, so it doesn't hear the app).
-    if (voice && getPrefs().autoListen) {
+    if (voice && getPrefs().autoListen && !stream?.active) {
       autoArmed = true;
-      micLabel.textContent = 'Starting…';
+      setStatus('starting', `Mic on in ${NEW_PHRASE_SECONDS}…`);
       void introAudio.then(() => {
-        const timer = setTimeout(() => {
-          if (autoArmed && !answered && !stream?.active) mic?.();
-        }, AUTO_LISTEN_MS);
-        itemCleanups.push(() => clearTimeout(timer));
+        if (!autoArmed || answered) return;
+        let left = NEW_PHRASE_SECONDS;
+        const timer = setInterval(() => {
+          left -= 1;
+          if (!autoArmed || answered || stream?.active) return clearInterval(timer);
+          if (left > 0) setStatus('starting', `Mic on in ${left}…`);
+          else {
+            clearInterval(timer);
+            mic?.();
+          }
+        }, 1000);
+        itemCleanups.push(() => clearInterval(timer));
       });
     }
     input.focus();
@@ -1609,7 +1656,7 @@ function runSession(
       answered = true;
       mic = null;
       endItem();
-      heardLine.remove();
+      if (voice) setStatus(result !== null && result.verdict !== 'wrong' ? 'right' : 'done', result !== null && result.verdict !== 'wrong' ? 'Got it' : 'See the answer below');
       stage.classList.remove('has-dock');
       input.disabled = true;
       accents.remove();
