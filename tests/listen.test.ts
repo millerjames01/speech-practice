@@ -257,9 +257,60 @@ describe('continuous listening', () => {
     expect(rec.started).toBe(1);
   });
 
+  it('drops the last answer when Android repeats it at the start of a new result', async () => {
+    const { stream, heard, last } = await setup();
+    stream.start();
+    const rec = last();
+    rec.push(res(true, 'a nit vaig sopar tard'));
+    stream.reset(); // next item
+    rec.push(res(false, 'a nit vaig sopar tard de petit'));
+    expect(heard.at(-1)).toEqual(['de petit']);
+    rec.update(res(true, 'a nit vaig sopar tard de petit jugava al carrer', 'de petit jugava al carrer'));
+    expect(heard.at(-1)?.[0]).toBe('de petit jugava al carrer');
+    stream.reset();
+    rec.push(res(false, 'a nit vaig sopar tard de petit jugava al carrer'));
+    expect(heard.at(-1)).toEqual(['de petit jugava al carrer']); // nothing new yet: unchanged
+    rec.update(res(false, 'al carrer hi ha gent'));
+    expect(heard.at(-1)).toEqual(['al carrer hi ha gent']); // a new answer that starts like the last one ended
+  });
+
+  it('wipes a wrong try even when Android keeps adding to the same open result', async () => {
+    const { stream, heard, last } = await setup();
+    stream.start();
+    const rec = last();
+    rec.push(res(false, 'de petit jugava a'));
+    stream.reset(); // wrong word: "Try again", the result is still open
+    rec.update(res(false, 'de petit jugava a'));
+    expect(heard).toHaveLength(1); // nothing new yet
+    rec.update(res(false, 'de petit jugava a de petit jugava'));
+    expect(heard.at(-1)).toEqual(['de petit jugava']);
+    rec.update(res(true, 'de petit jugava a de petit jugava al carrer'));
+    expect(heard.at(-1)?.[0]).toBe('de petit jugava al carrer');
+    rec.push(res(false, 'molt'));
+    expect(heard.at(-1)?.[0]).toBe('de petit jugava al carrer molt');
+  });
+
+  it('wipes a wrong try that Android restates in a new result', async () => {
+    const { stream, heard, last } = await setup();
+    stream.start();
+    const rec = last();
+    rec.push(res(true, 'de petit jugava a carrer'));
+    stream.reset();
+    rec.push(res(false, 'de petit jugava a carrer de petit jugava al carrer'));
+    expect(heard.at(-1)).toEqual(['de petit jugava al carrer']);
+  });
+
+  it('leaves a new answer alone when only one word lines up', async () => {
+    const { dropStale } = await import('../src/speedrun/listen');
+    expect(dropStale('tard de petit', ['vaig', 'sopar', 'tard'])).toBe('tard de petit');
+    expect(dropStale('sopar tard de petit', ['vaig', 'sopar', 'tard'])).toBe('de petit');
+    expect(dropStale("D'on ets?", [])).toBe("D'on ets?");
+  });
+
   it('does not double Android’s repeated finals', async () => {
     const { mergeHeard } = await import('../src/speedrun/listen');
     expect(mergeHeard('som', 'som estudiants')).toBe('som estudiants');
+    expect(mergeHeard('de petit jugava al carrer', 'de petit')).toBe('de petit jugava al carrer');
     expect(mergeHeard('som estudiants', 'som estudiants')).toBe('som estudiants');
     expect(mergeHeard('som', 'estudiants')).toBe('som estudiants');
     const { stream, heard, last } = await setup();
