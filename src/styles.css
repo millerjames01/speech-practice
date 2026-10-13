@@ -790,3 +790,11 @@ button.sr-strand:hover { border-color: var(--sr-line-strong); background: var(--
 @media (max-width: 560px) {
   .sr-prompt-head { flex-direction: column; align-items: flex-start; gap: 6px; }
 }
+
+/* New-phrase countdown: a line drawn once around the mic button. */
+.sr-mic-wrap { position: relative; display: grid; place-items: center; }
+.sr-mic-ring { position: absolute; inset: -10px; width: calc(100% + 20px); height: calc(100% + 20px); transform: rotate(-90deg); pointer-events: none; overflow: visible; }
+.sr-mic-ring circle { fill: none; stroke: var(--sr-accent); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; opacity: 0; }
+.sr-mic-ring.is-counting circle { opacity: 1; animation: sr-ring-draw var(--sr-ring-time, 3s) linear forwards; }
+@keyframes sr-ring-draw { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) { .sr-mic-ring.is-counting circle { animation-timing-function: steps(3, end); } }

@@ -1370,6 +1370,7 @@ function runSession(
     const openTyping = (keepMic = false) => {
       if (autoArmed) setStatus('idle');
       autoArmed = false;
+      stopRing();
       if (!keepMic && stream?.active) stream.stop();
       typeBox.hidden = false;
       checkBtn.hidden = false;
@@ -1395,7 +1396,22 @@ function runSession(
     // The mic docks at the bottom of the screen, in the same place for every item.
     // It lives outside the drill card: the card's entrance animation uses a
     // transform, which would pin a fixed child to the card instead of the screen.
-    const voicePanel = micBtn ? el('div', { class: 'sr-voice-dock' }, micBtn) : null;
+    // The new-phrase countdown is a line drawn around the mic button.
+    const ring = document.createElementNS(SVG_NS, 'svg');
+    ring.setAttribute('class', 'sr-mic-ring');
+    ring.setAttribute('viewBox', '0 0 100 100');
+    ring.setAttribute('aria-hidden', 'true');
+    const ringPath = document.createElementNS(SVG_NS, 'circle');
+    for (const [k, v] of Object.entries({ cx: '50', cy: '50', r: '47', pathLength: '100' })) ringPath.setAttribute(k, v);
+    ring.append(ringPath);
+    const startRing = (seconds: number) => {
+      ring.style.setProperty('--sr-ring-time', `${seconds}s`);
+      ring.classList.remove('is-counting');
+      void ring.getBoundingClientRect(); // restart the drawing
+      ring.classList.add('is-counting');
+    };
+    const stopRing = () => ring.classList.remove('is-counting');
+    const voicePanel = micBtn ? el('div', { class: 'sr-voice-dock' }, el('div', { class: 'sr-mic-wrap' }, ring, micBtn)) : null;
     if (voicePanel) {
       root.append(voicePanel);
       itemCleanups.push(() => voicePanel.remove());
@@ -1529,6 +1545,7 @@ function runSession(
       /** The countdown is over (or the mic was tapped): listen from here. */
       const endHold = () => {
         clearInterval(holdTimer);
+        stopRing();
         if (!holding) return;
         holding = false;
         stream.reset();
@@ -1543,6 +1560,7 @@ function runSession(
         holding = true;
         let left = NEW_PHRASE_SECONDS;
         setStatus('idle'); // a click skips the countdown
+        startRing(NEW_PHRASE_SECONDS);
         holdTimer = setInterval(() => {
           left -= 1;
           if (left <= 0) endHold();
@@ -1553,6 +1571,7 @@ function runSession(
       micBtn.addEventListener('click', () => mic?.());
       mic = () => {
         autoArmed = false;
+        stopRing();
         if (answered) return;
         if (holding) return endHold(); // a tap skips the countdown
         if (!stream.active) {
@@ -1644,9 +1663,13 @@ function runSession(
       void introAudio.then(() => {
         if (!autoArmed || answered) return;
         let left = NEW_PHRASE_SECONDS;
+        startRing(NEW_PHRASE_SECONDS);
         const timer = setInterval(() => {
           left -= 1;
-          if (!autoArmed || answered || stream?.active) return clearInterval(timer);
+          if (!autoArmed || answered || stream?.active) {
+            stopRing();
+            return clearInterval(timer);
+          }
           if (left <= 0) {
             clearInterval(timer);
             mic?.();
