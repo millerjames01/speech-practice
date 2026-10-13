@@ -778,36 +778,15 @@ button.sr-strand:hover { border-color: var(--sr-line-strong); background: var(--
 }
 
 /* ---------- mic status ----------
- * A pill on the eyebrow row, always there in voice mode: only its dot and
- * text change, so the phrase and what is heard never move.
+ * Plain grey text on the eyebrow row (its own line on phones), always there in
+ * voice mode: only its words change, so the phrase and what is heard never move.
  */
-.sr-prompt-head { display: flex; flex-wrap: nowrap; align-items: center; justify-content: space-between; gap: 16px; min-height: 30px; margin-bottom: 8px; }
+.sr-prompt-head { display: flex; flex-wrap: nowrap; align-items: baseline; justify-content: space-between; gap: 16px; min-height: 1.4em; margin-bottom: 18px; }
 .sr-prompt-head .sr-eyebrow { margin: 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.sr-prompt-head .sr-voice-status { flex: none; white-space: nowrap; }
-.sr-vs-text { overflow: hidden; text-overflow: ellipsis; }
-/* Phones: eyebrow and status on two fixed lines, so a longer status never reflows the phrase. */
-@media (max-width: 560px) {
-  .sr-prompt-head { flex-direction: column; align-items: flex-start; gap: 8px; }
-  .sr-prompt-head .sr-voice-status { flex: none; max-width: 100%; }
-}
 .sr-voice-status {
-  display: inline-flex; align-items: center; gap: 8px; margin: 0; padding: 5px 12px 5px 10px; min-height: 30px; max-width: 100%;
-  border: 1px solid var(--sr-line); border-radius: 999px; background: var(--sr-surface);
-  color: var(--sr-muted); font-size: 0.84rem; line-height: 1.2; font-variant-numeric: tabular-nums;
-  transition: color 0.15s, border-color 0.15s;
+  flex: none; margin: 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: var(--sr-muted); font-size: 0.9rem; line-height: 1.4;
 }
-.sr-vs-text { min-width: 0; }
-.sr-vs-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--sr-line-strong); transition: background 0.15s; }
-.sr-voice-status[data-kind="listening"] .sr-vs-dot,
-.sr-voice-status[data-kind="thinking"] .sr-vs-dot { background: var(--sr-fail); animation: sr-pulse 1.1s ease-in-out infinite; }
-.sr-voice-status[data-kind="listening"], .sr-voice-status[data-kind="thinking"] { color: var(--sr-text); }
-.sr-voice-status[data-kind="starting"] .sr-vs-dot { background: var(--sr-accent); animation: sr-pulse 1.1s ease-in-out infinite; }
-.sr-voice-status[data-kind="checking"] .sr-vs-dot { background: var(--sr-accent); }
-.sr-voice-status[data-kind="checking"] { color: var(--sr-text); }
-.sr-voice-status[data-kind="retry"] { color: var(--sr-slip); border-color: color-mix(in srgb, var(--sr-slip) 45%, var(--sr-line)); font-style: italic; }
-.sr-voice-status[data-kind="retry"] .sr-vs-dot { background: var(--sr-slip); }
-.sr-voice-status[data-kind="error"] { color: var(--sr-fail); }
-.sr-voice-status[data-kind="error"] .sr-vs-dot { background: var(--sr-fail); }
-.sr-voice-status[data-kind="right"] { color: var(--sr-pass); border-color: color-mix(in srgb, var(--sr-pass) 45%, var(--sr-line)); }
-.sr-voice-status[data-kind="right"] .sr-vs-dot { background: var(--sr-pass); }
-@media (prefers-reduced-motion: reduce) { .sr-vs-dot { animation: none !important; } }
+@media (max-width: 560px) {
+  .sr-prompt-head { flex-direction: column; align-items: flex-start; gap: 6px; }
+}
