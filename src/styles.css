@@ -801,3 +801,9 @@ button.sr-strand:hover { border-color: var(--sr-line-strong); background: var(--
 
 /* End now: a quiet text button at the end of the drill header. */
 .sr-drill-top .sr-end-now { padding: 4px 10px; font-size: 0.82rem; min-height: 0; white-space: nowrap; }
+
+/* Say it after a miss (voice mode). */
+.sr-say { display: grid; gap: 6px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--sr-line); }
+.sr-say-label { margin: 0; font-weight: 600; font-size: 0.92rem; }
+.sr-say .sr-voice-status { margin: 0; }
+.sr-say-heard { margin: 4px 0 0; }
