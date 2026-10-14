@@ -1629,6 +1629,105 @@ function runSession(
     }
     input.focus();
 
+    /**
+     * After a miss in voice mode: the answer is on screen, and saying it once
+     * moves on. Not knowing a phrase is different from not being able to say
+     * it, so this practises the saying. A wrong try, or "Type instead", falls
+     * back to typing it out. Silence doesn't use up the try.
+     */
+    const sayItOnce = (typeIt: (note?: string) => void, anchor: Element) => {
+      if (!turn) return typeIt();
+      const status = el('p', { class: 'sr-voice-status', role: 'status' }, VOICE_STATUS.idle);
+      const heard = el('p', { class: 'sr-heard-words sr-say-heard', lang: 'ca' });
+      const typeBtn = button('Type instead', () => toTyping(), 'sr-btn ghost');
+      const box = el('div', { class: 'sr-say' }, el('p', { class: 'sr-say-label' }, 'Say it to continue'), status, heard, el('div', { class: 'sr-drill-actions' }, typeBtn));
+      anchor.before(box);
+      const micBtn = el('button', { class: 'sr-mic-big', type: 'button', title: 'Speak (Alt+M)' }, icon(ICONS.mic, 36));
+      micBtn.setAttribute('aria-label', 'Speak');
+      const dock = el('div', { class: 'sr-voice-dock' }, el('div', { class: 'sr-mic-wrap' }, micBtn));
+      root.append(dock);
+      stage.classList.add('has-dock');
+      let checking = false;
+      let current: VoiceProgress | null = null;
+      let waitTimer: ReturnType<typeof setTimeout> | undefined;
+      let checkTimer: ReturnType<typeof setTimeout> | undefined;
+      const setSay = (kind: VoiceStatus) => {
+        status.textContent = VOICE_STATUS[kind];
+      };
+      const showSaid = (text: string) => {
+        clear(heard);
+        markHeard(pattern, text).forEach(({ word, mark }, i) => {
+          if (i > 0) heard.append(' ');
+          heard.append(el('span', { class: `sr-hw-${mark}` }, word));
+        });
+      };
+      const close = () => {
+        clearTimeout(waitTimer);
+        clearTimeout(checkTimer);
+        turn.cancel();
+        dock.remove();
+        stage.classList.remove('has-dock');
+        voiceHandlers.text = voiceHandlers.mic = voiceHandlers.end = voiceHandlers.error = undefined;
+        mic = null;
+      };
+      itemCleanups.push(close);
+      const toTyping = (note = '') => {
+        close();
+        box.remove();
+        typeIt(note);
+      };
+      const start = (tapped: boolean) => {
+        clearTimeout(waitTimer);
+        if (checking || turn.running) return;
+        if (tapped) stopSpeaking();
+        else if (isSpeaking()) {
+          waitTimer = setTimeout(() => start(false), 200); // let the answer finish playing
+          return;
+        }
+        current = null;
+        clear(heard);
+        turn.start();
+      };
+      voiceHandlers.mic = (open) => {
+        micBtn.classList.toggle('is-listening', open);
+        micBtn.setAttribute('aria-label', open ? 'Done' : 'Speak');
+        if (open) setSay('listening');
+      };
+      voiceHandlers.text = (readings) => {
+        if (checking || isSpeaking()) return;
+        const p = bestProgress(pattern, '', readings);
+        if (!p) return;
+        current = p;
+        showSaid(p.text);
+        if (voiceState(p) === 'right') turn.stop();
+      };
+      voiceHandlers.end = (readings) => {
+        const p = (readings.length ? bestProgress(pattern, '', readings) : null) ?? current;
+        current = null;
+        if (!p) return setSay('idle'); // silence: the try is still there
+        checking = true;
+        showSaid(p.text);
+        setSay('checking');
+        checkTimer = setTimeout(() => {
+          if (voiceState(p) !== 'right') return toTyping('Not quite. Type it instead.');
+          heard.classList.add('is-perfect');
+          setSay('done');
+          checkTimer = setTimeout(showItem, 600);
+        }, CHECK_BEAT_MS);
+      };
+      voiceHandlers.error = (err) => toTyping(err.message);
+      const tap = () => {
+        if (checking) return;
+        if (turn.running) return turn.stop();
+        start(true);
+      };
+      micBtn.addEventListener('click', tap);
+      mic = tap;
+      advance = tap;
+      // Auto-start once the answer has been read out (it starts just after this).
+      if (getPrefs().autoListen) waitTimer = setTimeout(() => start(false), 500);
+    };
+
     const resolve = (result: CheckResult | null) => {
       answered = true;
       voiceStop?.(); // the mic is never on between phrases
@@ -1704,29 +1803,34 @@ function runSession(
       );
       next.focus();
       advance = () => next.click();
-      // A miss (or "Show answer"): type the answer out before moving on.
+      // A miss (or "Show answer"): say it (voice mode, one try) or type it out before moving on.
       if (!correct && getPrefs().copyMisses) {
-        advance = () => copy.focus();
         next.hidden = true;
-        const copy = el('input', { class: 'sr-input', type: 'text', autocomplete: 'off', spellcheck: false, placeholder: 'Type the answer to continue' });
-        noSuggestions(copy);
-        copy.setAttribute('aria-label', 'Type the answer to continue');
-        const note = el('p', { class: 'sr-copy-note', role: 'status' });
-        const copyForm = el(
-          'form',
-          { class: 'sr-form sr-copy' },
-          el('div', { class: 'sr-type-box' }, copy, accentBar(copy)),
-          el('div', { class: 'sr-drill-actions' }, el('button', { class: 'sr-btn primary', type: 'submit' }, 'Continue'), note),
-        );
-        copyForm.addEventListener('submit', (ev) => {
-          ev.preventDefault();
-          if (!copy.value.trim()) return;
-          if (checkAnswer(pattern, copy.value).verdict !== 'wrong') return showItem();
-          note.textContent = 'Not quite: copy it from above.';
-          copy.select();
-        });
-        feedback.querySelector('.sr-drill-actions')!.before(copyForm);
-        copy.focus();
+        const anchor = feedback.querySelector('.sr-drill-actions')!;
+        const typeIt = (note = '') => {
+          const copy = el('input', { class: 'sr-input', type: 'text', autocomplete: 'off', spellcheck: false, placeholder: 'Type the answer to continue' });
+          noSuggestions(copy);
+          copy.setAttribute('aria-label', 'Type the answer to continue');
+          const noteEl = el('p', { class: 'sr-copy-note', role: 'status' }, note);
+          const copyForm = el(
+            'form',
+            { class: 'sr-form sr-copy' },
+            el('div', { class: 'sr-type-box' }, copy, accentBar(copy)),
+            el('div', { class: 'sr-drill-actions' }, el('button', { class: 'sr-btn primary', type: 'submit' }, 'Continue'), noteEl),
+          );
+          copyForm.addEventListener('submit', (ev) => {
+            ev.preventDefault();
+            if (!copy.value.trim()) return;
+            if (checkAnswer(pattern, copy.value).verdict !== 'wrong') return showItem();
+            noteEl.textContent = 'Not quite: copy it from above.';
+            copy.select();
+          });
+          anchor.before(copyForm);
+          advance = () => copy.focus();
+          copy.focus();
+        };
+        if (voice && turn) sayItOnce(typeIt, anchor);
+        else typeIt();
       }
       // In dictation the learner has just heard it; replay only when they missed it.
       if (getPrefs().autoplay && (!dictation || result?.verdict !== 'exact')) void speak(answer);
