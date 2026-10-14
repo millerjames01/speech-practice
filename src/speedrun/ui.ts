@@ -1803,7 +1803,7 @@ function runSession(
       );
       next.focus();
       advance = () => next.click();
-      // A miss (or "Show answer"): say it (voice mode, one try) or type it out before moving on.
+      // A miss (or "Show answer"): type it out before moving on, or after Show answer in voice mode, say it once.
       if (!correct && getPrefs().copyMisses) {
         next.hidden = true;
         const anchor = feedback.querySelector('.sr-drill-actions')!;
@@ -1829,7 +1829,8 @@ function runSession(
           advance = () => copy.focus();
           copy.focus();
         };
-        if (voice && turn) sayItOnce(typeIt, anchor);
+        // Saying it is for Show answer in voice mode; a typed miss is copied out by typing.
+        if (voice && turn && result === null) sayItOnce(typeIt, anchor);
         else typeIt();
       }
       // In dictation the learner has just heard it; replay only when they missed it.
