@@ -57,7 +57,7 @@ import {
   setPrefs,
   xpStats,
 } from './progress';
-import { VoiceStream, bestProgress, canListen, markHeard, voiceHints, voiceState, type VoiceProgress } from './listen';
+import { VoiceTurn, bestProgress, canListen, markHeard, voiceHints, voiceState, type VoiceProgress } from './listen';
 import { buildMigrationPlan } from './migrate';
 import { SPRINT_SECONDS, conjugation, conjugationPool, openTenses, roundFrom, sprintQueue, workingVerbs, type SprintCard } from './sprint';
 import { planLessonReview, planToday, type SrsCard } from './srs';
@@ -103,13 +103,6 @@ const LEVEL_INFO: Record<SpeedrunLevel, { name: string; blurb: string }> = {
 
 const REQUEUE_GAP = 3;
 
-/** Voice answers: with nothing said, the mic pauses after this long (battery), or the short one. */
-const VOICE_IDLE_MS = 60_000;
-const VOICE_SHORT_IDLE_MS = 8000;
-/** Silence before deciding, by where the attempt stands: right, right so far (thinking), wrong. */
-const ACCEPT_PAUSE_MS = 600;
-const THINKING_PAUSE_MS = 3000;
-const RESET_PAUSE_MS = 1500;
 /** After a wrong try: seconds (a ring round the mic) before it listens again. */
 const RETRY_SECONDS = 2;
 /** How long "Checking…" shows, with the mic off, before the verdict. */
@@ -478,8 +471,6 @@ type PrefSwitch =
 /** The voice options, nested under Voice and greyed out while it is off. */
 const VOICE_OPTIONS: [PrefSwitch, string][] = [
   ['autoListen', 'Start the mic by itself on each new phrase'],
-  ['holdOpen', 'Keep listening until you speak'],
-  ['waitForRest', 'Wait while the phrase is right so far'],
   ['autoRetry', 'After a wrong try, clear and listen again'],
 ];
 
@@ -1247,6 +1238,9 @@ function runSession(
 
   const quit = el('button', { class: 'sr-icon-btn', type: 'button', title: 'Back to map (Esc)' }, icon(ICONS.close, 18));
   quit.addEventListener('click', backToMap);
+  // End now: stop here and see the summary of what was answered (every answer is already saved).
+  const endNow = button('End now', () => finish(true), 'sr-btn ghost sr-end-now');
+  endNow.title = 'Stop here and see how it went; answers so far are kept';
 
   root.append(
     el(
@@ -1256,6 +1250,7 @@ function runSession(
       el('span', { class: 'sr-progress' }, fill),
       counter,
       timer,
+      endNow,
     ),
   );
   const stage = el('main', { class: 'sr-drill' });
@@ -1270,15 +1265,21 @@ function runSession(
   // Voice answers: one recognition for the whole session (VoiceStream). Each item
   // points these handlers at itself and resets the attempt, so the mic stays on
   // from phrase to phrase instead of switching off and on.
-  const voiceHandlers: { text?: (candidates: string[]) => void; state?: (on: boolean) => void; error?: (err: Error) => void } = {};
-  const stream = canListen()
-    ? new VoiceStream({
-        onText: (c) => voiceHandlers.text?.(c),
-        onState: (on) => voiceHandlers.state?.(on),
+  const voiceHandlers: {
+    text?: (readings: string[]) => void;
+    mic?: (open: boolean) => void;
+    end?: (readings: string[]) => void;
+    error?: (err: Error) => void;
+  } = {};
+  const turn = canListen()
+    ? new VoiceTurn({
+        onText: (r) => voiceHandlers.text?.(r),
+        onMic: (open) => voiceHandlers.mic?.(open),
+        onEnd: (r) => voiceHandlers.end?.(r),
         onError: (err) => voiceHandlers.error?.(err),
       })
     : null;
-  cleanups.push(() => stream?.stop());
+  cleanups.push(() => turn?.cancel());
   /** Things one item puts outside the stage (the mic dock), undone when the item ends. */
   let itemCleanups: (() => void)[] = [];
   const endItem = () => {
@@ -1426,42 +1427,38 @@ function runSession(
     /** Turns the mic off and clears any countdown when the item is answered. */
     let voiceStop: (() => void) | null = null;
 
-    if (voice && micBtn && stream) {
-      // One attempt at a time: listen → (a pause) → mic off, "Checking…" → done,
-      // or "Try again" and a short countdown before the mic comes back on. The
-      // mic is never on between phrases, and the button and ring follow its real
-      // state. Nothing is decided while the learner speaks: every word restarts
-      // the clock, and the pause before checking depends on where the attempt stands.
+    if (voice && micBtn && turn) {
+      // One turn at a time, as the recogniser itself works: a tap (or the
+      // auto-start countdown) opens one recognition session; it ends when the
+      // learner pauses, taps again, or says the answer cleanly. Then the mic is
+      // off, "Checking…", and either Done or "Try again" (and, with auto-retry,
+      // a two-second ring before the next turn). Nothing restarts the mic behind
+      // the learner's back, and the button shows only what the recogniser reports.
       const prefs = getPrefs();
       let misses = 0;
       let current: VoiceProgress | null = null;
       let checking = false;
-      let decideTimer: ReturnType<typeof setTimeout> | undefined;
       let checkTimer: ReturnType<typeof setTimeout> | undefined;
       let countTimer: ReturnType<typeof setTimeout> | undefined;
-      let idleTimer: ReturnType<typeof setTimeout> | undefined;
-      let counting = false;
-      /** The app spoke while the mic was on: what it heard is set aside once it stops. */
-      let heardTheApp = false;
+      let waitTimer: ReturnType<typeof setTimeout> | undefined;
       const cancelCountdown = () => {
         clearTimeout(countTimer);
-        counting = false;
+        clearTimeout(waitTimer);
         stopRing();
       };
       itemCleanups.push(() => {
-        clearTimeout(decideTimer);
         clearTimeout(checkTimer);
-        clearTimeout(idleTimer);
         cancelCountdown();
         voiceHandlers.text = undefined;
-        voiceHandlers.state = undefined;
+        voiceHandlers.mic = undefined;
+        voiceHandlers.end = undefined;
         voiceHandlers.error = undefined;
       });
       const showHeard = (text: string) => {
         clear(heardWords);
         heardWords.classList.remove('is-perfect');
         if (!text) {
-          if (stream.active) heardWords.append(el('span', { class: 'sr-hw-wait' }, '…'));
+          if (turn.listening) heardWords.append(el('span', { class: 'sr-hw-wait' }, '…'));
           return;
         }
         markHeard(pattern, text).forEach(({ word, mark }, i) => {
@@ -1469,54 +1466,42 @@ function runSession(
           heardWords.append(el('span', { class: `sr-hw-${mark}` }, word));
         });
       };
-      /** The mic's real state drives the button, and a running mic clears any countdown. */
-      const showMic = (on: boolean) => {
-        micBtn.classList.toggle('is-listening', on);
-        micBtn.setAttribute('aria-label', on ? 'Done' : 'Speak');
-        if (on) {
+      /** Mic open or closed, as the recogniser reports it. */
+      voiceHandlers.mic = (open) => {
+        micBtn.classList.toggle('is-listening', open);
+        micBtn.setAttribute('aria-label', open ? 'Done' : 'Speak');
+        if (open) {
           cancelCountdown();
           setStatus('listening');
-        } else if (!checking && !answered && !counting && status.dataset.kind !== 'retry') setStatus('idle');
+          if (!current) showHeard('');
+        }
       };
-      /** Nothing said for a long while: turn the mic off (battery); a tap starts it again. */
-      const armIdle = () => {
-        clearTimeout(idleTimer);
-        idleTimer = setTimeout(() => {
-          if (answered || current || !stream.active) return;
-          stream.stop();
-          showHeard('');
-        }, prefs.holdOpen ? VOICE_IDLE_MS : VOICE_SHORT_IDLE_MS);
-      };
-      /** Mic on, fresh attempt. */
-      const listen = () => {
+      /** Starts a turn. A tap starts at once (cutting off the app's audio); auto-start waits for the audio to finish. */
+      const listen = (tapped: boolean) => {
         cancelCountdown();
-        if (answered || checking) return;
-        clearTimeout(decideTimer);
+        if (answered || checking || turn.running) return;
+        if (tapped) stopSpeaking();
+        else if (isSpeaking()) {
+          waitTimer = setTimeout(() => listen(false), 200);
+          return;
+        }
         current = null;
-        stopSpeaking();
-        if (!stream.active) stream.start();
-        stream.reset();
         showHeard('');
-        armIdle();
+        turn.start();
       };
-      /** The ring runs for `seconds` with the mic off, then the mic comes on. */
+      /** The ring runs for `seconds` with the mic off, then a turn starts. */
       const countdown = (seconds: number) => {
         if (answered) return;
         cancelCountdown();
-        counting = true;
         startRing(seconds);
         countTimer = setTimeout(() => {
-          counting = false;
-          listen();
+          stopRing();
+          listen(false);
         }, seconds * 1000);
       };
-      /** The attempt is over: mic off, "Checking…", then the verdict. */
+      /** The turn is over and heard something: "Checking…", then the verdict. */
       const check = (p: VoiceProgress) => {
-        clearTimeout(decideTimer);
-        clearTimeout(idleTimer);
-        current = null;
         checking = true;
-        stream.stop();
         showHeard(p.text);
         setStatus('checking');
         checkTimer = setTimeout(() => {
@@ -1534,72 +1519,53 @@ function runSession(
           if (prefs.autoRetry) countdown(RETRY_SECONDS);
         }, CHECK_BEAT_MS);
       };
-      const decide = (p: VoiceProgress) => {
-        clearTimeout(decideTimer);
+      voiceHandlers.text = (readings) => {
+        if (answered || checking || isSpeaking()) return; // the app's own voice is not an answer
+        const p = bestProgress(pattern, '', readings);
+        if (!p) return;
         current = p;
-        const state = voiceState(p);
-        const wait = state === 'right' ? ACCEPT_PAUSE_MS : state === 'onTrack' && prefs.waitForRest ? THINKING_PAUSE_MS : RESET_PAUSE_MS;
-        decideTimer = setTimeout(() => {
-          if (!answered && current === p) check(p);
-        }, wait);
+        showHeard(p.text);
+        // A clean match ends the turn now; the final reading arrives with onEnd.
+        if (voiceState(p) === 'right') turn.stop();
       };
-      voiceHandlers.state = showMic;
+      voiceHandlers.end = (readings) => {
+        if (answered) return;
+        const p = (readings.length ? bestProgress(pattern, '', readings) : null) ?? current;
+        current = null;
+        if (p) return check(p);
+        // Nothing heard: the recogniser gave up. Wait for a tap rather than restarting.
+        showHeard('');
+        if (!checking && status.dataset.kind !== 'retry') setStatus('idle');
+      };
       voiceHandlers.error = (err) => {
         cancelCountdown();
-        showMic(false);
         setStatus('idle', err.message); // a problem with the mic says what it is
         openTyping();
       };
-      voiceHandlers.text = (candidates) => {
-        if (answered || checking || !stream.active) return;
-        if (isSpeaking()) {
-          heardTheApp = true; // the mic hears the app reading Catalan; not an answer
-          return;
-        }
-        if (heardTheApp) {
-          heardTheApp = false;
-          stream.reset();
-          return;
-        }
-        const p = bestProgress(pattern, '', candidates);
-        if (!p) return;
-        showHeard(p.text);
-        decide(p);
-        armIdle();
-      };
-      // A new phrase: the mic is off; recognition will be nudged toward this answer.
-      if (stream.active) stream.stop();
-      stream.hint(voiceHints(expand(pattern)));
-      showMic(false);
+      turn.hint(voiceHints(expand(pattern)));
+      setStatus('idle');
       showHeard('');
       micBtn.addEventListener('click', () => mic?.());
       mic = () => {
         autoArmed = false;
         if (answered || checking) return;
-        if (!stream.active) return listen(); // also skips a running countdown
-        if (current) return check(current); // "Done": check now
-        stream.stop(); // nothing said: a tap turns the mic off
-        showHeard('');
+        if (turn.running) return turn.stop(); // done: check what was said
+        listen(true); // also skips a running countdown
       };
       voiceStart = () => countdown(NEW_PHRASE_SECONDS);
       voiceStop = () => {
-        clearTimeout(decideTimer);
         clearTimeout(checkTimer);
-        clearTimeout(idleTimer);
         cancelCountdown();
-        stream.stop();
+        turn.cancel();
       };
       // Typing takes over from the mic.
-      input.addEventListener('input', () => {
-        cancelCountdown();
-        if (stream.active) stream.stop();
-      });
+      input.addEventListener('input', () => voiceStop?.());
     }
 
     form.addEventListener('submit', (ev) => {
       ev.preventDefault();
       if (answered) return;
-      if (stream?.active && voice) return mic?.(); // Check while listening means "done"
+      if (turn?.running && voice) return mic?.(); // Check while listening means "done"
       if (!input.value.trim()) {
         if (voice) setStatus('idle');
         return;
@@ -1767,17 +1733,27 @@ function runSession(
     };
   };
 
-  const finish = () => {
+  /**
+   * The summary. Ended early, it covers the items answered so far: their
+   * answers are already in the review schedule, but a lesson only counts as
+   * finished (and opens the next one) when it is run to the end.
+   */
+  const finish = (early = false) => {
     clearInterval(tick);
     replay = null;
-    stream?.stop(); // the session is over: mic off
+    advance = null;
+    endItem();
+    turn?.cancel(); // the session is over: mic off
+    endNow.remove();
+    const done = firstTry.size;
+    if (early && done === 0) return backToMap();
     const ms = Date.now() - started;
     const hits = [...firstTry.values()].filter(Boolean).length;
-    const score = unique ? hits / unique : 0;
+    const score = early ? hits / done : unique ? hits / unique : 0;
     clear(stage);
 
     const wasPerfect = lesson ? isPerfect(allLessonRecords()[lesson.id]) : false;
-    const rec = lesson ? recordLesson(lesson.id, ms, score) : null;
+    const rec = lesson && !early ? recordLesson(lesson.id, ms, score) : null;
     const content = loadSpeedrun();
     const records = allLessonRecords();
     const perfectRun = unique > 0 && score >= 1;
@@ -1823,6 +1799,18 @@ function runSession(
       title = 'Reviews done.';
     }
 
+    if (early) {
+      title = 'Ended early.';
+      if (mode.kind === 'lesson') {
+        const l = mode.lesson;
+        nextBtn = iconButton('Back to the lesson', ICONS.back, () => renderIntro(root, nav, l), 'sr-btn primary');
+        extra = [];
+        badge = el('p', { class: 'sr-muted' }, 'Your answers are saved for review. Run the lesson to the end to finish it.');
+      } else {
+        badge = el('p', { class: 'sr-muted' }, 'Your answers are saved for review.');
+      }
+    }
+
     stage.append(
       el(
         'section',
@@ -1832,6 +1820,7 @@ function runSession(
         el(
           'div',
           { class: 'sr-hero-stats' },
+          ...(early ? [stat(`${done}/${unique}`, 'Answered')] : []),
           stat(formatMs(ms), 'Time'),
           stat(`${Math.round(score * 100)}%`, 'First try'),
           stat(`+${earned}`, 'XP'),
