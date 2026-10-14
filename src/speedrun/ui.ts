@@ -110,8 +110,10 @@ const VOICE_SHORT_IDLE_MS = 8000;
 const ACCEPT_PAUSE_MS = 600;
 const THINKING_PAUSE_MS = 3000;
 const RESET_PAUSE_MS = 1500;
-/** How long a wrong try stays on screen before it clears for the next. */
-const RETRY_SHOW_MS = 900;
+/** After a wrong try: seconds (a ring round the mic) before it listens again. */
+const RETRY_SECONDS = 2;
+/** How long "Checking…" shows, with the mic off, before the verdict. */
+const CHECK_BEAT_MS = 500;
 
 /**
  * Seconds before listening on a new phrase: time to read it. The mic starts
@@ -1366,12 +1368,12 @@ function runSession(
     /** Auto-start (a setting) is armed until it fires, the mic is tapped, or typing takes over. */
     let autoArmed = false;
     let introAudio: Promise<void> = Promise.resolve();
-    /** Opens the text box; choosing to type stops the mic, unless keepMic (after three misses). */
-    const openTyping = (keepMic = false) => {
+    /** Opens the text box; typing takes over from the mic. */
+    const openTyping = () => {
       if (autoArmed) setStatus('idle');
       autoArmed = false;
       stopRing();
-      if (!keepMic && stream?.active) stream.stop();
+      voiceStop?.();
       typeBox.hidden = false;
       checkBtn.hidden = false;
       typeToggle?.remove();
@@ -1419,36 +1421,42 @@ function runSession(
     const form = el('form', { class: 'sr-form' }, typeBox, actions);
     let answered = false;
 
+    /** Starts the voice flow for this phrase once its audio is done (auto-start). */
+    let voiceStart: (() => void) | null = null;
+    /** Turns the mic off and clears any countdown when the item is answered. */
+    let voiceStop: (() => void) | null = null;
+
     if (voice && micBtn && stream) {
-      // The mic stays on (one recognition for the session). Nothing is decided
-      // while the learner speaks: every word restarts the clock, and the decision
-      // comes after a silence whose length depends on where the attempt stands.
+      // One attempt at a time: listen → (a pause) → mic off, "Checking…" → done,
+      // or "Try again" and a short countdown before the mic comes back on. The
+      // mic is never on between phrases, and the button and ring follow its real
+      // state. Nothing is decided while the learner speaks: every word restarts
+      // the clock, and the pause before checking depends on where the attempt stands.
       const prefs = getPrefs();
       let misses = 0;
       let current: VoiceProgress | null = null;
+      let checking = false;
       let decideTimer: ReturnType<typeof setTimeout> | undefined;
-      let retryTimer: ReturnType<typeof setTimeout> | undefined;
+      let checkTimer: ReturnType<typeof setTimeout> | undefined;
+      let countTimer: ReturnType<typeof setTimeout> | undefined;
       let idleTimer: ReturnType<typeof setTimeout> | undefined;
-      /** A new phrase with the mic already on: a short countdown before it listens. */
-      let holdTimer: ReturnType<typeof setInterval> | undefined;
-      let holding = false;
+      let counting = false;
       /** The app spoke while the mic was on: what it heard is set aside once it stops. */
       let heardTheApp = false;
+      const cancelCountdown = () => {
+        clearTimeout(countTimer);
+        counting = false;
+        stopRing();
+      };
       itemCleanups.push(() => {
         clearTimeout(decideTimer);
-        clearTimeout(retryTimer);
+        clearTimeout(checkTimer);
         clearTimeout(idleTimer);
-        clearInterval(holdTimer);
+        cancelCountdown();
         voiceHandlers.text = undefined;
         voiceHandlers.state = undefined;
         voiceHandlers.error = undefined;
       });
-      const showMic = (on: boolean) => {
-        micBtn.classList.toggle('is-listening', on);
-        micBtn.setAttribute('aria-label', on ? 'Done' : 'Speak');
-        if (!on) setStatus('idle');
-        else if (!current && !holding) setStatus('listening');
-      };
       const showHeard = (text: string) => {
         clear(heardWords);
         heardWords.classList.remove('is-perfect');
@@ -1461,69 +1469,89 @@ function runSession(
           heardWords.append(el('span', { class: `sr-hw-${mark}` }, word));
         });
       };
-      /** Nothing said for a long while: pause the mic (battery); a tap resumes it. */
+      /** The mic's real state drives the button, and a running mic clears any countdown. */
+      const showMic = (on: boolean) => {
+        micBtn.classList.toggle('is-listening', on);
+        micBtn.setAttribute('aria-label', on ? 'Done' : 'Speak');
+        if (on) {
+          cancelCountdown();
+          setStatus('listening');
+        } else if (!checking && !answered && !counting && status.dataset.kind !== 'retry') setStatus('idle');
+      };
+      /** Nothing said for a long while: turn the mic off (battery); a tap starts it again. */
       const armIdle = () => {
         clearTimeout(idleTimer);
         idleTimer = setTimeout(() => {
           if (answered || current || !stream.active) return;
           stream.stop();
           showHeard('');
-          setStatus('idle');
         }, prefs.holdOpen ? VOICE_IDLE_MS : VOICE_SHORT_IDLE_MS);
       };
-      const accept = (text: string, result: CheckResult) => {
+      /** Mic on, fresh attempt. */
+      const listen = () => {
+        cancelCountdown();
+        if (answered || checking) return;
         clearTimeout(decideTimer);
         current = null;
-        showHeard(text);
-        if (result.verdict === 'exact') heardWords.classList.add('is-perfect');
-        input.value = text;
-        resolve(result);
+        stopSpeaking();
+        if (!stream.active) stream.start();
+        stream.reset();
+        showHeard('');
+        armIdle();
       };
-      /** A finished attempt that is not right. */
-      const missed = (text: string) => {
+      /** The ring runs for `seconds` with the mic off, then the mic comes on. */
+      const countdown = (seconds: number) => {
+        if (answered) return;
+        cancelCountdown();
+        counting = true;
+        startRing(seconds);
+        countTimer = setTimeout(() => {
+          counting = false;
+          listen();
+        }, seconds * 1000);
+      };
+      /** The attempt is over: mic off, "Checking…", then the verdict. */
+      const check = (p: VoiceProgress) => {
         clearTimeout(decideTimer);
+        clearTimeout(idleTimer);
         current = null;
-        misses += 1;
-        const trouble = misses >= 3;
-        if (trouble && typeBox.hidden) openTyping(true);
-        if (prefs.autoRetry && stream.active) {
-          // Clear and listen again; the mic never went off.
-          showHeard(text);
-          stream.reset();
-          retryTimer = setTimeout(() => {
-            if (!answered && !current) showHeard('');
-          }, RETRY_SHOW_MS);
-          showMic(true);
-          setStatus('retry');
-          armIdle();
-          return;
-        }
+        checking = true;
         stream.stop();
-        showHeard(text);
-        input.value = text;
-        setStatus('retry');
+        showHeard(p.text);
+        setStatus('checking');
+        checkTimer = setTimeout(() => {
+          checking = false;
+          if (answered) return;
+          if (voiceState(p) === 'right') {
+            if (p.result.verdict === 'exact') heardWords.classList.add('is-perfect');
+            input.value = p.text;
+            return resolve(p.result);
+          }
+          misses += 1;
+          input.value = p.text;
+          if (misses >= 3 && typeBox.hidden) openTyping();
+          setStatus('retry');
+          if (prefs.autoRetry) countdown(RETRY_SECONDS);
+        }, CHECK_BEAT_MS);
       };
       const decide = (p: VoiceProgress) => {
         clearTimeout(decideTimer);
         current = p;
         const state = voiceState(p);
-        const thinking = state === 'onTrack' && prefs.waitForRest;
-        const wait = state === 'right' ? ACCEPT_PAUSE_MS : thinking ? THINKING_PAUSE_MS : RESET_PAUSE_MS;
-        setStatus(thinking ? 'listening' : 'checking');
+        const wait = state === 'right' ? ACCEPT_PAUSE_MS : state === 'onTrack' && prefs.waitForRest ? THINKING_PAUSE_MS : RESET_PAUSE_MS;
         decideTimer = setTimeout(() => {
-          if (answered || current !== p) return;
-          if (state === 'right') accept(p.text, p.result);
-          else missed(p.text);
+          if (!answered && current === p) check(p);
         }, wait);
       };
       voiceHandlers.state = showMic;
       voiceHandlers.error = (err) => {
+        cancelCountdown();
         showMic(false);
         setStatus('idle', err.message); // a problem with the mic says what it is
         openTyping();
       };
       voiceHandlers.text = (candidates) => {
-        if (answered) return;
+        if (answered || checking || !stream.active) return;
         if (isSpeaking()) {
           heardTheApp = true; // the mic hears the app reading Catalan; not an answer
           return;
@@ -1533,67 +1561,37 @@ function runSession(
           stream.reset();
           return;
         }
-        if (holding) return; // still reading the new phrase: set aside when the countdown ends
-        clearTimeout(retryTimer);
         const p = bestProgress(pattern, '', candidates);
         if (!p) return;
         showHeard(p.text);
         decide(p);
-        showMic(true);
         armIdle();
       };
-      /** The countdown is over (or the mic was tapped): listen from here. */
-      const endHold = () => {
-        clearInterval(holdTimer);
-        stopRing();
-        if (!holding) return;
-        holding = false;
-        stream.reset();
-        showHeard('');
-        showMic(stream.active);
-        if (stream.active) armIdle();
-      };
-      // A new phrase: same recognition, fresh attempt, nudged toward this answer.
+      // A new phrase: the mic is off; recognition will be nudged toward this answer.
+      if (stream.active) stream.stop();
       stream.hint(voiceHints(expand(pattern)));
-      stream.reset();
-      if (stream.active) {
-        holding = true;
-        let left = NEW_PHRASE_SECONDS;
-        setStatus('idle'); // a click skips the countdown
-        startRing(NEW_PHRASE_SECONDS);
-        holdTimer = setInterval(() => {
-          left -= 1;
-          if (left <= 0) endHold();
-        }, 1000);
-      }
-      showMic(stream.active);
+      showMic(false);
       showHeard('');
       micBtn.addEventListener('click', () => mic?.());
       mic = () => {
         autoArmed = false;
-        stopRing();
-        if (answered) return;
-        if (holding) return endHold(); // a tap skips the countdown
-        if (!stream.active) {
-          stopSpeaking();
-          stream.start();
-          stream.reset();
-          showHeard('');
-          armIdle();
-          return;
-        }
-        if (current) {
-          // "Done": decide now.
-          const p = current;
-          if (p.result.verdict !== 'wrong') accept(p.text, p.result);
-          else missed(p.text);
-          return;
-        }
+        if (answered || checking) return;
+        if (!stream.active) return listen(); // also skips a running countdown
+        if (current) return check(current); // "Done": check now
         stream.stop(); // nothing said: a tap turns the mic off
         showHeard('');
       };
+      voiceStart = () => countdown(NEW_PHRASE_SECONDS);
+      voiceStop = () => {
+        clearTimeout(decideTimer);
+        clearTimeout(checkTimer);
+        clearTimeout(idleTimer);
+        cancelCountdown();
+        stream.stop();
+      };
       // Typing takes over from the mic.
       input.addEventListener('input', () => {
+        cancelCountdown();
         if (stream.active) stream.stop();
       });
     }
@@ -1657,31 +1655,17 @@ function runSession(
     stage.classList.toggle('has-dock', voice);
     // Auto-start: the mic turns on by itself a moment after a new phrase appears
     // (after the Catalan audio, in dictation, so it doesn't hear the app).
-    if (voice && getPrefs().autoListen && !stream?.active) {
+    if (voice && getPrefs().autoListen) {
       autoArmed = true;
-      setStatus('idle');
       void introAudio.then(() => {
-        if (!autoArmed || answered) return;
-        let left = NEW_PHRASE_SECONDS;
-        startRing(NEW_PHRASE_SECONDS);
-        const timer = setInterval(() => {
-          left -= 1;
-          if (!autoArmed || answered || stream?.active) {
-            stopRing();
-            return clearInterval(timer);
-          }
-          if (left <= 0) {
-            clearInterval(timer);
-            mic?.();
-          }
-        }, 1000);
-        itemCleanups.push(() => clearInterval(timer));
+        if (autoArmed && !answered) voiceStart?.();
       });
     }
     input.focus();
 
     const resolve = (result: CheckResult | null) => {
       answered = true;
+      voiceStop?.(); // the mic is never on between phrases
       mic = null;
       endItem();
       if (voice) setStatus('done');
