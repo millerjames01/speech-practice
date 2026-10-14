@@ -24,6 +24,8 @@ interface Recognition {
   onerror: ((ev: { error: string }) => void) | null;
   onend: (() => void) | null;
   onspeechend: (() => void) | null;
+  onaudiostart?: (() => void) | null;
+  onaudioend?: (() => void) | null;
 }
 type RecognitionCtor = new () => Recognition;
 
@@ -380,15 +382,23 @@ function softened(result: CheckResult, loose: number[]): CheckResult {
   return loose.length && result.verdict === 'exact' ? { ...result, verdict: 'spelling' } : result;
 }
 
-/* ---------- continuous listening ---------- */
+/* ---------- one turn at a time ----------
+ * On Android, Chrome hands recognition to the system speech service, which is
+ * built for one request: it opens the mic, waits for speech, and ends the
+ * session itself after a pause (or after a few seconds of silence). Keeping it
+ * "continuous" by restarting it makes the mic flicker and drops the first words
+ * said during each restart. So a turn is exactly one session: it starts when
+ * asked, ends when the speaker pauses, the page calls stop(), or the recogniser
+ * gives up, and is never restarted behind the learner's back.
+ */
 
 const words = (s: string) => normalize(s).join(' ');
 
 /**
- * Adds a final result to what was already heard. Android repeats itself in
- * continuous mode: a final result may hold the whole utterance so far, repeat
- * the last one, or restate its opening words. Each time the longer reading
- * wins instead of doubling.
+ * Adds a result to what was already heard in this turn. Android sometimes
+ * repeats itself: a result may hold the whole utterance so far, repeat the last
+ * one, or restate its opening words. Each time the longer reading wins instead
+ * of doubling.
  */
 export function mergeHeard(sofar: string, next: string): string {
   const a = words(sofar);
@@ -397,147 +407,67 @@ export function mergeHeard(sofar: string, next: string): string {
   if (!b) return sofar;
   if (b.startsWith(a)) return next.trim();
   if (a.endsWith(b)) return sofar;
-  // Android also restates how the phrase began ("de petit jugava al carrer" + "de petit").
   if (a.startsWith(`${b} `)) return sofar;
   return `${sofar.trim()} ${next.trim()}`;
 }
 
-/**
- * Removes words from the start of a result that repeat the end of what was
- * heard before the reset ("a nit vaig sopar tard de petit jugava" → "de petit
- * jugava"). At least `min` words must line up (two or more), so a new answer
- * that merely opens like the previous one ended is left alone.
- */
-export function dropStale(text: string, stale: string[], min = 2): string {
-  if (stale.length === 0) return text;
-  const tokens = text.split(/\s+/).filter(Boolean);
-  const plain = tokens.map((t) => normalize(t)[0] ?? '');
-  for (let k = Math.min(tokens.length, stale.length); k >= Math.max(2, min); k -= 1) {
-    const tail = stale.slice(stale.length - k);
-    if (plain.slice(0, k).every((w, i) => w === tail[i])) return tokens.slice(k).join(' ');
+/** Every reading of a turn so far: the earlier results' best guesses, then each guess for the latest. */
+export function turnReadings(results: ArrayLike<RecognitionResult>): string[] {
+  let before = '';
+  let latest: string[] = [];
+  for (let i = 0; i < results.length; i += 1) {
+    const res = results[i];
+    if (!res) continue;
+    const alts = Array.from({ length: res.length }, (_, k) => res[k]?.transcript.trim() ?? '').filter(Boolean);
+    if (!alts.length) continue;
+    if (latest.length) before = mergeHeard(before, latest[0]!);
+    latest = alts;
   }
-  return text;
+  return [...new Set(latest.map((a) => mergeHeard(before, a)))];
 }
 
-/** The text after an exact opening of these words, or null when it doesn't open with them. */
-function dropPrefix(text: string, prefix: string[]): string | null {
-  const tokens = text.split(/\s+/).filter(Boolean);
-  const plain = tokens.map((t) => normalize(t)[0] ?? '');
-  if (prefix.length === 0 || plain.length < prefix.length || !prefix.every((w, i) => plain[i] === w)) return null;
-  return tokens.slice(prefix.length).join(' ');
+export interface TurnEvents {
+  /** What has been heard so far in this turn, best reading first. */
+  onText: (readings: string[]) => void;
+  /** The mic is really open (true) or closed (false): from the recogniser, not from the request. */
+  onMic: (open: boolean) => void;
+  /** The turn is over, with everything it heard (empty if nothing). */
+  onEnd: (readings: string[]) => void;
+  onError: (err: Error) => void;
 }
 
-export interface StreamEvents {
-  /** Everything heard since the last reset: the recogniser's readings, best first. */
-  onText: (candidates: string[]) => void;
-  onState?: (on: boolean) => void;
-  onError?: (err: Error) => void;
-}
-
-/**
- * One recognition that stays open across pauses and across items, so the mic
- * doesn't switch off and on with every phrase. reset() starts a new attempt
- * without restarting anything. Browsers still end a continuous recognition
- * after a long silence (Android after several seconds); it is restarted at once,
- * keeping what was heard.
- */
-export class VoiceStream {
+export class VoiceTurn {
   private rec: Recognition | null = null;
-  private on = false;
-  /** Index in the current recognition's results where the current attempt starts. */
-  private base = 0;
-  private seen = 0;
-  private finalsSeen = 0;
-  /** Final text of the current attempt from before a restart. */
-  private carried = '';
-  private finals = '';
-  private restarts: number[] = [];
-  /** Everything this recognition has written, finals and the latest guess: what a reset sets aside. */
-  private heardAll = '';
-  private latest = '';
-  /** The words heard before the last reset, which Android may repeat at the start of later results. */
-  private stale: string[] = [];
-  private staleMin = 2;
-  /** Index of the last result while it is still interim, or -1. */
-  private openIndex = -1;
-  /** A result that was open at the last reset, and the words it held then. */
-  private pending: { index: number; prefix: string[] } | null = null;
+  private heard: string[] = [];
+  private open = false;
   /** Words and phrases the recogniser is nudged toward, where the browser supports it. */
   private phrases: string[] = [];
   private phrasesOff = false;
 
-  constructor(private readonly events: StreamEvents, private readonly lang = 'ca-ES') {}
+  constructor(private readonly events: TurnEvents, private readonly lang = 'ca-ES') {}
 
-  get active(): boolean {
-    return this.on;
+  /** A turn has been asked for and hasn't ended yet. */
+  get running(): boolean {
+    return this.rec !== null;
+  }
+
+  /** The recogniser has opened the mic. */
+  get listening(): boolean {
+    return this.open;
+  }
+
+  /** Nudges recognition toward the expected answer (Chrome's contextual biasing, where available). */
+  hint(phrases: string[]): void {
+    this.phrases = [...new Set(phrases.map((p) => p.trim()).filter(Boolean))];
   }
 
   start(): void {
-    if (this.on) return;
-    this.on = true;
-    this.carried = '';
-    this.finals = '';
-    this.restarts = [];
-    this.spawn();
-    this.events.onState?.(true);
-  }
-
-  stop(): void {
-    if (!this.on && !this.rec) return;
-    this.on = false;
-    const rec = this.rec;
-    this.rec = null;
-    try {
-      rec?.abort();
-    } catch {
-      // already ended
-    }
-    this.events.onState?.(false);
-  }
-
-  /**
-   * Nudges recognition toward the expected answer (Chrome's contextual
-   * biasing, where available; other browsers ignore it). New hints apply from
-   * the next recognition, so an open one is restarted quietly to pick them up.
-   */
-  hint(phrases: string[]): void {
-    const next = [...new Set(phrases.map((p) => p.trim()).filter(Boolean))];
-    if (next.join('|') === this.phrases.join('|')) return;
-    this.phrases = next;
-    if (!this.on || !this.rec || !canBias() || this.phrasesOff) return;
-    this.carried = '';
-    try {
-      this.rec.stop(); // onend reopens it with the new phrases
-    } catch {
-      // already ending
-    }
-  }
-
-  /** Starts a new attempt: what was heard so far is set aside. */
-  reset(): void {
-    this.stale = words(mergeHeard(this.heardAll, this.latest)).split(' ').filter(Boolean).slice(-40);
-    // A restatement repeats the whole last answer; a shorter overlap is a new answer that happens to start the same way.
-    const attempt = words(this.finals || this.latest).split(' ').filter(Boolean).length;
-    this.staleMin = Math.max(2, Math.min(4, attempt));
-    // A result still open at the reset keeps growing with the new attempt's words
-    // (Android hadn't closed it yet): keep reading it, minus what it held so far.
-    if (this.openIndex >= 0) {
-      this.base = this.openIndex;
-      this.pending = { index: this.openIndex, prefix: words(this.latest).split(' ').filter(Boolean) };
-    } else {
-      this.base = this.seen;
-      this.pending = null;
-    }
-    this.carried = '';
-    this.finals = '';
-  }
-
-  private spawn(): void {
+    if (this.rec) return;
     const Ctor = ctor();
-    if (!Ctor) return this.fail(new Error('Speech recognition isn’t available in this browser.'));
+    if (!Ctor) return this.events.onError(new Error('Speech recognition isn’t available in this browser.'));
     const rec = new Ctor();
     rec.lang = this.lang;
-    rec.continuous = true;
+    rec.continuous = false;
     rec.interimResults = true;
     rec.maxAlternatives = 5;
     if (this.phrases.length && canBias() && !this.phrasesOff) {
@@ -548,72 +478,75 @@ export class VoiceStream {
         this.phrasesOff = true;
       }
     }
-    this.base = 0;
-    this.seen = 0;
-    this.finalsSeen = 0;
-    this.openIndex = -1;
-    this.pending = null;
-    this.finals = this.carried;
+    this.heard = [];
+    const setOpen = (open: boolean) => {
+      if (rec !== this.rec || this.open === open) return;
+      this.open = open;
+      this.events.onMic(open);
+    };
+    rec.onaudiostart = () => setOpen(true);
+    rec.onaudioend = () => setOpen(false);
     rec.onresult = (ev) => {
       if (rec !== this.rec) return;
-      this.seen = ev.results.length;
-      this.openIndex = ev.results[ev.results.length - 1]?.isFinal === false ? ev.results.length - 1 : -1;
-      let acc = this.carried;
-      let candidates: string[] = [];
-      for (let i = this.base; i < ev.results.length; i += 1) {
-        const res = ev.results[i];
-        if (!res) continue;
-        const raw = Array.from({ length: res.length }, (_, k) => res[k]?.transcript.trim() ?? '').filter(Boolean);
-        if (!raw.length) continue;
-        this.latest = raw[0]!;
-        if (res.isFinal && i >= this.finalsSeen) {
-          this.heardAll = mergeHeard(this.heardAll, raw[0]!);
-          this.finalsSeen = i + 1;
-        }
-        // Android may restate the whole session in a new result, the last answer included.
-        const alts = raw
-          .map((a) => (this.pending?.index === i ? dropPrefix(a, this.pending.prefix) ?? dropStale(a, this.stale, 2) : dropStale(a, this.stale, this.staleMin)))
-          .filter(Boolean);
-        if (!alts.length) continue;
-        const before = acc;
-        // Each reading as a continuation, then on its own: the speaker may have
-        // started the sentence again ("ella és professora… ella és metgessa").
-        candidates = [...alts.map((a) => mergeHeard(before, a)), ...(before ? alts : [])];
-        if (res.isFinal) acc = mergeHeard(acc, alts[0]!);
-      }
-      this.finals = acc;
-      if (candidates.length) this.events.onText([...new Set(candidates)]);
+      setOpen(true); // some browsers skip audiostart
+      const readings = turnReadings(ev.results);
+      if (!readings.length) return;
+      this.heard = readings;
+      this.events.onText(readings);
     };
     rec.onspeechend = null;
     rec.onerror = (ev) => {
       if (rec !== this.rec) return;
-      if (ev.error === 'no-speech' || ev.error === 'aborted') return; // onend restarts
       if (ev.error === 'phrases-not-supported') {
-        this.phrasesOff = true; // onend reopens without them
+        this.phrasesOff = true;
         return;
       }
-      this.fail(new Error(ERRORS[ev.error] ?? `Speech recognition failed (${ev.error}).`));
+      // Silence, or our own stop/abort: the turn just ends with what it has.
+      if (ev.error === 'no-speech' || ev.error === 'aborted') return;
+      this.finish();
+      this.events.onError(new Error(ERRORS[ev.error] ?? `Speech recognition failed (${ev.error}).`));
     };
     rec.onend = () => {
-      if (rec !== this.rec || !this.on) return;
-      // The browser closed it (a long silence, a time limit): reopen, keeping the words.
-      const now = Date.now();
-      this.restarts = [...this.restarts.filter((t) => now - t < 5000), now];
-      if (this.restarts.length > 6) return this.fail(new Error('Speech recognition keeps stopping. Tap the mic to try again.'));
-      this.carried = this.finals;
-      this.spawn();
+      if (rec !== this.rec) return;
+      const heard = this.heard;
+      this.finish();
+      this.events.onEnd(heard);
     };
     this.rec = rec;
     try {
       rec.start();
     } catch (err) {
-      this.fail(err instanceof Error ? err : new Error(String(err)));
+      this.finish();
+      this.events.onError(err instanceof Error ? err : new Error(String(err)));
     }
   }
 
-  private fail(err: Error): void {
-    this.stop();
-    this.events.onError?.(err);
+  /** Ends the turn and keeps what was heard: onEnd follows once the recogniser has finished. */
+  stop(): void {
+    try {
+      this.rec?.stop();
+    } catch {
+      // already ending
+    }
+  }
+
+  /** Ends the turn and throws away what was heard: no onEnd. */
+  cancel(): void {
+    const rec = this.rec;
+    this.finish();
+    try {
+      rec?.abort();
+    } catch {
+      // already ended
+    }
+  }
+
+  private finish(): void {
+    this.rec = null;
+    if (this.open) {
+      this.open = false;
+      this.events.onMic(false);
+    }
   }
 }
 

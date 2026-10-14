@@ -798,3 +798,6 @@ button.sr-strand:hover { border-color: var(--sr-line-strong); background: var(--
 .sr-mic-ring.is-counting circle { opacity: 1; animation: sr-ring-draw var(--sr-ring-time, 3s) linear forwards; }
 @keyframes sr-ring-draw { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
 @media (prefers-reduced-motion: reduce) { .sr-mic-ring.is-counting circle { animation-timing-function: steps(3, end); } }
+
+/* End now: a quiet text button at the end of the drill header. */
+.sr-drill-top .sr-end-now { padding: 4px 10px; font-size: 0.82rem; min-height: 0; white-space: nowrap; }
