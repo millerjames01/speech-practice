@@ -2,7 +2,9 @@
  * Spaced repetition for Speedrun items, kept pure so it can be tested.
  *
  * Deliberately simple (a Leitner ladder, no ease factors): an item climbs one
- * step per first-try hit and drops to the bottom on a miss. Intervals are in
+ * step per first-try hit. A miss doesn't drop it: it has to be refreshed twice
+ * (right again later in the same set, then right the next day) before it goes
+ * back to its gap. Intervals are in
  * whole days from the start of today, so an item learned at 21:00 is due
  * tomorrow morning, not tomorrow at 21:00.
  */
@@ -30,6 +32,11 @@ export interface SrsCard {
    * being picked as a filler again for a while. Kept on this device only.
    */
   practiced?: number;
+  /**
+   * Missed at step 1 or above and not yet refreshed: due the next day, and back
+   * on its own gap (at the same step) once answered right then.
+   */
+  relearn?: boolean;
 }
 
 /** How long a card answered right as an early filler stays out of the filler picks. */
@@ -57,17 +64,35 @@ export function enroll(lessonId: string, index: number, correct: boolean, now: n
 }
 
 /**
- * A first-try answer in review: climb one step, or drop to the bottom.
+ * A first-try answer in review.
+ *
+ * Right: climb one step. Missed: the item keeps its step but must be refreshed:
+ * the session brings it back until it is answered right, and it is due again
+ * the next day (relearn). Right that day, it returns to its step's gap without
+ * climbing; missed again, it comes back the next day once more. A step-0 item
+ * simply stays at the bottom, due tomorrow.
  *
  * Gaps of a week and longer are jittered ±15%, so a lesson's items, all
  * learned on the same day, drift apart instead of returning as one block.
  */
 export function review(card: SrsCard, correct: boolean, now: number, random: () => number = Math.random): SrsCard {
-  if (!correct) return { ...card, step: 0, due: dueIn(INTERVALS[0]!, now), lapses: card.lapses + 1, last: now };
+  const gap = (step: number) => {
+    const base = INTERVALS[step]!;
+    return base >= 7 ? Math.max(1, Math.round(base * (0.85 + 0.3 * random()))) : base;
+  };
+  if (!correct) {
+    const missed = { ...card, due: dueIn(INTERVALS[0]!, now), lapses: card.lapses + 1, last: now };
+    if (card.step > 0) return { ...missed, relearn: true };
+    delete missed.relearn;
+    return missed;
+  }
+  if (card.relearn) {
+    const refreshed = { ...card, due: dueIn(gap(card.step), now), last: now };
+    delete refreshed.relearn;
+    return refreshed;
+  }
   const step = Math.min(card.step + 1, INTERVALS.length - 1);
-  const base = INTERVALS[step]!;
-  const days = base >= 7 ? Math.max(1, Math.round(base * (0.85 + 0.3 * random()))) : base;
-  return { ...card, step, due: dueIn(days, now), last: now };
+  return { ...card, step, due: dueIn(gap(step), now), last: now };
 }
 
 export const isDue = (card: SrsCard, now: number): boolean => card.due <= now;

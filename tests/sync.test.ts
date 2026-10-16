@@ -38,6 +38,15 @@ describe('sync codes', () => {
     expect((await decodeSync(code)).cards).toHaveLength(cards.length);
   });
 
+  it('carries a missed card\'s refresh flag', async () => {
+    const missed = review(review(enroll('a2-01', 0, true, NOW - 3 * DAY), true, NOW - DAY), false, NOW);
+    expect(missed.relearn).toBe(true);
+    const back = await decodeSync(await encodeSync({}, [missed], NOW));
+    expect(back.cards[0]).toMatchObject({ step: 1, relearn: true });
+    const plain = await decodeSync(await encodeSync({}, [enroll('a2-01', 1, true, NOW)], NOW));
+    expect(plain.cards[0]!.relearn).toBeUndefined();
+  });
+
   it('carries XP, sprint best and conjugation forms', async () => {
     const code = await encodeSync({}, [], NOW, { xp: { '2026-10-09': 40 }, sprintBest: 17, forms: { abc12: 2, zz: 0 } });
     expect(await decodeSync(code)).toMatchObject({ xp: { '2026-10-09': 40 }, sprintBest: 17, forms: { abc12: 2 } });

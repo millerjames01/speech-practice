@@ -46,9 +46,9 @@ export const FORM_GRADE_RULES: Record<Grade, string> = {
   fading: 'Missed, or due again now',
 };
 
-/** Review card: due now is fading; otherwise by step (step 3 = survived a week's gap). */
+/** Review card: due now, or missed and waiting for its refresh, is fading; otherwise by step (step 3 = survived a week's gap). */
 export function cardGrade(card: SrsCard, now: number): Grade {
-  if (isDue(card, now)) return 'fading';
+  if (isDue(card, now) || card.relearn) return 'fading';
   if (card.step >= 3) return 'strong';
   if (card.step >= 1) return 'growing';
   return 'new';

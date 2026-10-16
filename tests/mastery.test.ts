@@ -24,6 +24,7 @@ describe('grades', () => {
     expect(cardGrade(card('x', 0, 2), NOW)).toBe('growing');
     expect(cardGrade(card('x', 0, 3), NOW)).toBe('strong');
     expect(cardGrade(card('x', 0, 5, today - DAY), NOW)).toBe('fading');
+    expect(cardGrade({ ...card('x', 0, 4), relearn: true }, NOW)).toBe('fading'); // missed, waiting for its refresh
   });
 
   it('tallies a lesson, counting items not met in the total only', () => {
