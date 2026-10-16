@@ -55,7 +55,8 @@ function fromBase64Url(text: string): Uint8Array<ArrayBuffer> {
  * xp:     YYYYMMDD:points  (the last three fields are optional, so older codes still decode)
  * forms:  key:streak[:minutesAgo]   (minutes before base it was last answered; older codes lack it)
  * lesson: id:bestSeconds:scorePercent:runs[:firstDay]   (firstDay relative to base, usually negative)
- * card:   lessonId.index.step.dueDays.lapses.lastHours   (relative to base; due is always
+ * card:   lessonId.index.step.dueDays.lapses.lastHours[.r]   (.r: missed, waiting for its refresh;
+ *         relative to base; due is always
  *         a midnight, last answer keeps hour precision so same-day merges order correctly)
  */
 
@@ -72,7 +73,7 @@ export async function encodeSync(
     .map(([id, r]) => `${id}:${Math.round(r.bestMs / 1000)}:${Math.round(r.bestScore * 100)}:${r.runs}${r.firstAt !== undefined ? `:${Math.floor((r.firstAt - base) / DAY)}` : ''}`)
     .join(',');
   const cs = cards
-    .map((c) => `${c.lessonId}.${c.index}.${c.step}.${days(c.due)}.${c.lapses}.${c.last ? hours(c.last) : ''}`)
+    .map((c) => `${c.lessonId}.${c.index}.${c.step}.${days(c.due)}.${c.lapses}.${c.last ? hours(c.last) : ''}${c.relearn ? '.r' : ''}`)
     .join(',');
   const xs = Object.entries(extras.xp ?? {})
     .filter(([, n]) => n > 0)
@@ -124,7 +125,7 @@ export async function decodeSync(input: string): Promise<SyncPayload> {
   }
   const cards: SrsCard[] = [];
   for (const part of cs ? cs.split(',') : []) {
-    const [lessonId, index, step, due, lapses, last] = part.split('.');
+    const [lessonId, index, step, due, lapses, last, flag] = part.split('.');
     if (!lessonId || [index, step, due, lapses].some((n) => !Number.isFinite(Number(n)))) {
       throw new Error('The sync code is damaged.');
     }
@@ -135,6 +136,7 @@ export async function decodeSync(input: string): Promise<SyncPayload> {
       due: at(due!),
       lapses: Number(lapses),
       ...(last ? { last: base + Number(last) * HOUR } : {}),
+      ...(flag === 'r' ? { relearn: true } : {}),
     });
   }
   const xp: Record<string, number> = {};

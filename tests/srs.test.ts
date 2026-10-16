@@ -32,9 +32,17 @@ describe('scheduling', () => {
     expect(lows[2]).toBe(69);
   });
 
-  it('drops to the bottom on a miss and counts the lapse', () => {
+  it('keeps the step on a miss but needs a refresh the next day, and counts the lapse', () => {
     const c = review({ lessonId: 'b1-04', index: 2, step: 4, due: 0, lapses: 0 }, false, NOW);
-    expect(c).toMatchObject({ step: 0, lapses: 1, due: today + DAY });
+    expect(c).toMatchObject({ step: 4, lapses: 1, due: today + DAY, relearn: true }); // keeps its step, refresh tomorrow
+    const refreshed = review(c, true, NOW + DAY, () => 0.5);
+    expect(refreshed).toMatchObject({ step: 4, due: today + DAY + 30 * DAY });
+    expect(refreshed.relearn).toBeUndefined();
+    const again = review(c, false, NOW + DAY);
+    expect(again).toMatchObject({ step: 4, lapses: 2, relearn: true, due: today + 2 * DAY }); // missed again: still no drop
+    const fresh = review({ lessonId: 'b1-04', index: 3, step: 0, due: 0, lapses: 0 }, false, NOW);
+    expect(fresh).toMatchObject({ step: 0, due: today + DAY });
+    expect(fresh.relearn).toBeUndefined();
   });
 });
 
@@ -74,8 +82,8 @@ describe('recordAnswer', () => {
     expect(allCards()[0]!.step).toBe(0);
     recordAnswer('a2-01', 0, true, 'review', NOW);
     expect(allCards()[0]!.step).toBe(1);
-    recordAnswer('a2-01', 0, false, 'lesson', NOW); // a miss anywhere sends it back
-    expect(allCards()[0]).toMatchObject({ step: 0, lapses: 1 });
+    recordAnswer('a2-01', 0, false, 'lesson', NOW); // a miss anywhere: refresh tomorrow, same step
+    expect(allCards()[0]).toMatchObject({ step: 1, lapses: 1, relearn: true });
   });
 
   it('migrates the old missed-items list into due cards', async () => {
