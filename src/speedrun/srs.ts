@@ -39,14 +39,19 @@ export interface SrsCard {
   relearn?: boolean;
 }
 
-/** How long a card answered right as an early filler stays out of the filler picks. */
+/** How long a card answered (a review, or an early filler) stays out of the filler picks. */
 export const FILLER_REST_MS = 20 * 3_600_000;
 
-/** Fillers: not-due cards, weakest first, the least recently practised first, none practised in the last FILLER_REST_MS. */
+/**
+ * Fillers: not-due cards, weakest first, the least recently seen first. A card
+ * answered in the last FILLER_REST_MS, as a filler or as a due review, is left
+ * out: a review just answered right is still one of the weakest (it only
+ * climbed a step), and would otherwise come straight back in the next round.
+ */
 function fillers(cards: SrsCard[], now: number): SrsCard[] {
   const seenAt = (c: SrsCard) => Math.max(c.practiced ?? 0, c.last ?? 0);
   return cards
-    .filter((c) => !isDue(c, now) && !(c.practiced !== undefined && now - c.practiced < FILLER_REST_MS))
+    .filter((c) => !isDue(c, now) && now - seenAt(c) >= FILLER_REST_MS)
     .sort((a, b) => a.step - b.step || seenAt(a) - seenAt(b));
 }
 
