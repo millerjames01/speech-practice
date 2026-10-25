@@ -289,6 +289,18 @@ describe('Today fillers do not repeat', () => {
     expect(planLessonReview(cs, NOW, 8).mix.map((c) => c.index)).not.toContain(0);
   });
 
+  it('rests a due review just answered right, so it does not come straight back as a filler', async () => {
+    const { review } = await import('../src/speedrun/srs');
+    const hour = 3_600_000;
+    const due = card('a2-25', 0, 0, today - DAY);
+    const answered = review(due, true, NOW - hour); // right in this morning's Today: step 1, due in 3 days
+    const cs = [answered, card('a2-25', 1, 1), card('a2-25', 2, 2)];
+    const mix = planToday(cs, NOW, { mix: 6 }).mix.map((c) => c.index);
+    expect(mix).not.toContain(0); // it would be the weakest filler, but it was just answered
+    expect(mix).toEqual([1, 2]);
+    expect(planToday(cs, NOW + 21 * hour, { mix: 6 }).mix.map((c) => c.index)).toContain(0); // fine again tomorrow
+  });
+
   it('records an early right answer as practice without moving the schedule', async () => {
     const store = new Map<string, string>();
     (globalThis as { localStorage?: unknown }).localStorage = {
