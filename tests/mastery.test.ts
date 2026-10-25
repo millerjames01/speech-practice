@@ -62,11 +62,12 @@ describe('review plans', () => {
     expect(planToday(cs, NOW, { mix: 0 }).due.map((c) => c.lessonId)).toEqual(['a2-02', 'a2-03', 'a2-01']);
   });
 
-  it('targets one lesson: everything due, topped up with its weakest', () => {
+  it('targets one lesson: everything due, or its weakest when nothing is', () => {
     const cs = [card('a2-01', 0, 3, today - DAY), card('a2-01', 1, 4), card('a2-01', 2, 1), card('a2-01', 3, 1, today + 9 * DAY, 2)];
     const plan = planLessonReview(cs, NOW, 3);
     expect(plan.due.map((c) => c.index)).toEqual([0]);
-    expect(plan.mix.map((c) => c.index)).toEqual([3, 2]);
+    expect(plan.mix).toEqual([]);
+    expect(planLessonReview(cs.slice(1), NOW, 2).mix.map((c) => c.index)).toEqual([3, 2]);
   });
 });
 

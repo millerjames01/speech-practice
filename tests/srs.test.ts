@@ -56,11 +56,14 @@ describe('planToday', () => {
     expect(plan.overflow).toBe(1);
   });
 
-  it('mixes in not-yet-due cards from the lowest steps', () => {
+  it('spends every slot on due cards, and mixes in not-yet-due ones only when nothing is due', () => {
     const cards = [card(0, today + 9 * DAY, 4), card(1, today + 3 * DAY, 1), card(2, today + DAY, 0), card(3, today - DAY)];
     const plan = planToday(cards, NOW, { mix: 2, random: () => 0.5 });
     expect(plan.due.map((c) => c.index)).toEqual([3]);
-    expect(plan.mix.map((c) => c.step)).toEqual([0, 1]);
+    expect(plan.mix).toEqual([]);
+    const caughtUp = planToday(cards.slice(0, 3), NOW, { mix: 2, random: () => 0.5 });
+    expect(caughtUp.due).toEqual([]);
+    expect(caughtUp.mix.map((c) => c.step)).toEqual([0, 1]); // weakest first
   });
 });
 
