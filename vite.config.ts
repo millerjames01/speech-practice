@@ -14,9 +14,17 @@ const proxyTarget = (target: string, prefix: string) => ({
   rewrite: (path: string) => path.replace(prefix, ''),
 });
 
+/** Which build is running, shown in the app: the commit (GitHub Actions sets GITHUB_SHA) and when it was built. */
+const version = (process.env.GITHUB_SHA ?? 'dev').slice(0, 7);
+const builtAt = new Date().toISOString();
+
 export default defineConfig({
   // GitHub Pages serves the site from /<repo>/; the deploy workflow sets this.
   base: process.env.BASE_PATH ?? '/',
+  define: {
+    __APP_VERSION__: JSON.stringify(version),
+    __BUILT_AT__: JSON.stringify(builtAt),
+  },
   plugins: [serviceWorker()],
   server: {
     port: 5173,

@@ -807,3 +807,7 @@ button.sr-strand:hover { border-color: var(--sr-line-strong); background: var(--
 .sr-say-label { margin: 0; font-weight: 600; font-size: 0.92rem; }
 .sr-say .sr-voice-status { margin: 0; }
 .sr-say-heard { margin: 4px 0 0; }
+
+/* Which build is running: bottom of the map footer and of Settings. */
+.sr-version { margin: 18px 0 0; color: var(--sr-faint); font-size: 0.76rem; font-variant-numeric: tabular-nums; }
+.settings-version { margin-top: 14px; }

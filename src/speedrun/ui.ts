@@ -10,6 +10,8 @@
  * leaks into the conversation trainer.
  */
 
+import { updateReady } from '../pwa';
+import { versionLabel } from '../version';
 import { button, clear, el, errorBox } from '../ui/dom';
 import { checkAnswer, normalize, type CheckResult } from './check';
 import { loadSpeedrun } from './content';
@@ -587,6 +589,8 @@ function migrateIfNeeded(): string | null {
 }
 
 export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync?: string): void {
+  // A new version arrived while the app was open: load it now, between sessions.
+  if (updateReady() && !incomingSync) return location.reload();
   resetView(root);
   if (incomingSync) queueMicrotask(() => void receiveSync(root, nav, incomingSync));
   const migrated = migrateIfNeeded();
@@ -800,6 +804,7 @@ export function renderSpeedrun(root: HTMLElement, nav: SpeedrunNav, incomingSync
           }
         }, 'sr-btn ghost small'),
       ),
+      el('p', { class: 'sr-version' }, versionLabel()),
     ),
   );
 }

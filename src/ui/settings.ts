@@ -6,6 +6,7 @@
 import { config } from '../config';
 import { getSettings, isRemembering, setSettings, type LlmProvider } from '../keys';
 import { button, el } from './dom';
+import { versionLabel } from '../version';
 
 /**
  * `extra` adds a section of settings that save themselves (the speedrun's
@@ -118,6 +119,7 @@ export function openSettings(onSaved: () => void, extra?: HTMLElement): void {
         el('span', {}, 'Route calls through the dev proxy (use if a call is blocked by CORS)'),
       ),
       el('div', { class: 'row' }, button('Save', save, 'btn primary'), button('Cancel', close)),
+      el('p', { class: 'hint settings-version' }, versionLabel()),
     ),
   );
 
