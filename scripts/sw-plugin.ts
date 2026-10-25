@@ -61,10 +61,12 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET' || new URL(request.url).origin !== self.location.origin) return;
 
-  // Pages: network first so updates arrive, cached shell when offline.
+  // Pages: network first so updates arrive, cached shell when offline. The page
+  // skips the browser's HTTP cache too (GitHub Pages lets it keep a page for
+  // ten minutes), so a reopen after a deploy never loads the previous build.
   if (request.mode === 'navigate') {
     event.respondWith(
-      fetch(request)
+      fetch(request.url, { cache: 'no-store', credentials: 'same-origin' })
         .then((response) => {
           const copy = response.clone();
           caches.open(CACHE).then((cache) => cache.put('./index.html', copy));
