@@ -39,7 +39,13 @@ Before practising, replace the `REPLACE_WITH_VOICE_ID` placeholders in
 
 ## Speedrun mode — Castellano → Català
 
-**Use it:** https://millerjames01.github.io/speech-practice/#speedrun
+**Use it:** https://trainer.jimmiller.dev/#speedrun (behind the Homestead login)
+
+- **Moving from the old address.** It used to live at
+  `millerjames01.github.io/speech-practice/`. The new address starts empty: on
+  each device, open the old one → *Sync devices* → put the progress in a link,
+  then open or paste that link at the new address. Reinstall the home-screen
+  app from the new address.
 
 - **Install it.** On iPhone: open the link in Safari → Share → *Add to Home
   Screen*. On Android: Chrome menu → *Install app*. It opens full-screen.
@@ -77,7 +83,7 @@ Before practising, replace the `REPLACE_WITH_VOICE_ID` placeholders in
 - **Backups.** *Export progress* saves a file; *Import progress* replaces
   this device's progress with one.
 - **Deploys automatically** from `main` (`.github/workflows/deploy.yml`: test,
-  build with the Pages base path, publish).
+  build, publish to a Cloudflare Worker, check it is not public).
 
 
 A second, written mode for Castellano speakers: a speedrun to C1 built on the
