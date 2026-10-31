@@ -26,7 +26,7 @@ jobs:
       - name: Refuse to publish before the login is in front
         if: vars.WILDCARD_ACCESS != 'true' || vars.CLOUDFLARE_ACCOUNT_ID == ''
         run: |
-          echo "::error::Needs the organization variables CLOUDFLARE_ACCOUNT_ID and WILDCARD_ACCESS=true (Homestead README, 'Setup')."
+          echo "::error::Needs CLOUDFLARE_ACCOUNT_ID and WILDCARD_ACCESS=true on this repo. Run Homestead's provision.yml (mode secrets, repo all)."
           exit 1
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
