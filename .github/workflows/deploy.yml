@@ -1,5 +1,8 @@
-# Tests, builds and publishes the app to GitHub Pages on every push to main.
-name: Deploy to GitHub Pages
+# Tests, builds and publishes the app to https://trainer.jimmiller.dev/ on every
+# push to main: a Worker serving the built files, behind the Homestead login
+# (Cloudflare Access). The token and account id are set on this repo by
+# Homestead's provision.yml (mode secrets).
+name: Deploy to Cloudflare
 
 on:
   push:
@@ -8,17 +11,23 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: deploy
   cancel-in-progress: false
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
     steps:
+      - name: Refuse to publish before the login is in front
+        if: vars.WILDCARD_ACCESS != 'true' || vars.CLOUDFLARE_ACCOUNT_ID == ''
+        run: |
+          echo "::error::Needs CLOUDFLARE_ACCOUNT_ID and WILDCARD_ACCESS=true on this repo. Run Homestead's provision.yml (mode secrets, repo all)."
+          exit 1
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
@@ -28,21 +37,19 @@ jobs:
       - run: npm test
       - run: npm run build
         env:
-          BASE_PATH: /${{ github.event.repository.name }}/
-      - uses: actions/configure-pages@v5
-        with:
-          # Turns Pages on (source: GitHub Actions) if it isn't already.
-          enablement: true
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          BASE_PATH: /
+      - run: npx --yes wrangler@4 deploy
+      - name: Assert the app is not public
+        run: |
+          url=https://trainer.jimmiller.dev/
+          for i in 1 2 3 4 5 6; do
+            code=$(curl -s -o /dev/null -m 10 -w '%{http_code}' "$url" || true)
+            [ "$code" != 000 ] && break; sleep 10
+          done
+          echo "anonymous GET $url -> $code"
+          case "$code" in
+            2??) echo "::error::$url answered $code without login. Taking it down."; npx --yes wrangler@4 delete --force; exit 1 ;;
+            30?) ;;
+            000) echo "::warning::$url did not answer yet; re-run to check." ;;
+            *) echo "::error::$url answered $code."; exit 1 ;;
+          esac
