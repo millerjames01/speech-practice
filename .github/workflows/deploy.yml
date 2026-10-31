@@ -1,6 +1,7 @@
 # Tests, builds and publishes the app to https://trainer.jimmiller.dev/ on every
 # push to main: a Worker serving the built files, behind the Homestead login
-# (Cloudflare Access). The token and account id come from the organization.
+# (Cloudflare Access). The token and account id are set on this repo by
+# Homestead's provision.yml (mode secrets).
 name: Deploy to Cloudflare
 
 on:
