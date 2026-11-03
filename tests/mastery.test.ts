@@ -181,14 +181,13 @@ describe('conjugation sprint', () => {
     expect(next.some((c) => c.verb === 'venir')).toBe(true);
   });
 
-  it('mixes due reviews in among new forms', () => {
+  it('asks every due review before any new form, so a backlog is cleared first', () => {
     const pres = pool.filter((c) => c.tense === 'pres' && c.verb === 'parlar');
     const forms = Object.fromEntries(pres.map((c) => [c.key, 1]));
     const round = sprintRound(new Set(), forms, {}, NOW, { maxLevel: 'A2' });
     const at = round.map((c, i) => (forms[c.key] ? i : -1)).filter((i) => i >= 0);
-    expect(at).toHaveLength(6);
-    expect(at[0]).toBeGreaterThan(0);
-    expect(at.at(-1)).toBeLessThan(25);
+    expect(at).toEqual([0, 1, 2, 3, 4, 5]);
+    expect(round[6]!.key in forms).toBe(false); // then the new forms
   });
 
   it('brings misses straight back but rests right answers, so the next round is new', () => {

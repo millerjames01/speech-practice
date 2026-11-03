@@ -239,18 +239,6 @@ function spreadVerbs(cards: SprintCard[]): SprintCard[] {
   return out;
 }
 
-/** Due reviews go between new forms (about one in three) rather than in a block. */
-function interleave(review: SprintCard[], fresh: SprintCard[]): SprintCard[] {
-  const out: SprintCard[] = [];
-  let r = 0;
-  let f = 0;
-  while (r < review.length || f < fresh.length) {
-    const reviewTurn = f >= fresh.length || (r < review.length && out.length % 3 === 2);
-    out.push(reviewTurn ? review[r++]! : fresh[f++]!);
-  }
-  return out;
-}
-
 /** The cards for a round, in the order they are asked. */
 export function sprintRound(
   finished: Set<string>,
@@ -262,9 +250,13 @@ export function sprintRound(
   return roundFrom(sprintQueue(finished, forms, seen, now, options));
 }
 
-/** A queue in asking order: misses, then reviews mixed into new forms, then (if ever reached) resting ones. */
+/**
+ * A queue in asking order: misses, then every due review, then new forms, then
+ * (if ever reached) resting ones. New forms only start once nothing is due, so
+ * a backlog is cleared before more material is added to it.
+ */
 export function roundFrom(q: SprintQueue): SprintCard[] {
-  return [...q.missed, ...spreadVerbs(interleave(q.review, q.fresh)), ...q.resting];
+  return [...q.missed, ...spreadVerbs(q.review), ...q.fresh, ...q.resting];
 }
 
 /** The verbs new forms are coming from right now. */
