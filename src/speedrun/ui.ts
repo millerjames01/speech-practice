@@ -2087,7 +2087,16 @@ function runSprint(root: HTMLElement, nav: SpeedrunNav, tense?: string): void {
   const clock = el('span', { class: 'sr-timer' }, `${SPRINT_SECONDS}s`);
   const scoreEl = el('span', { class: 'sr-counter' }, '0');
   const quit = el('button', { class: 'sr-icon-btn', type: 'button', title: 'Back to map (Esc)' }, icon(ICONS.close, 18));
-  quit.addEventListener('click', toMap);
+  // Leaving before the timer ends keeps the answers given so far: they count like any other.
+  const leave = () => {
+    if (!over) {
+      over = true;
+      recordForms(results.map(([c, ok]) => [c.key, ok]));
+      addXp(results.filter(([, ok]) => ok).length * 2);
+    }
+    toMap();
+  };
+  quit.addEventListener('click', leave);
   root.append(el('header', { class: 'sr-drill-top' }, quit, el('span', { class: 'sr-progress' }, fill), scoreEl, clock));
 
   const context = el('p', { class: 'sr-eyebrow' });
@@ -2133,7 +2142,7 @@ function runSprint(root: HTMLElement, nav: SpeedrunNav, tense?: string): void {
     }, 900);
   });
   onKey((ev) => {
-    if (ev.key === 'Escape') toMap();
+    if (ev.key === 'Escape') leave();
   });
 
   const tick = setInterval(() => {

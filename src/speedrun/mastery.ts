@@ -54,12 +54,16 @@ export function cardGrade(card: SrsCard, now: number): Grade {
   return 'new';
 }
 
-/** Verb form by streak: missed or rested long enough is fading; 3+ in a row (after a 4-day rest) strong. */
+/**
+ * Verb form by streak: missed, rested long enough, or with no date (from before
+ * dates were kept: the sprint asks it as due) is fading; 3+ in a row (after a
+ * 4-day rest) strong.
+ */
 export function formGrade(streak: number | undefined, seenMinute: number | undefined, now: number): Grade | null {
   if (streak === undefined) return null;
-  if (streak === 0) return 'fading';
+  if (streak === 0 || seenMinute === undefined) return 'fading';
   const rest = FORM_REST_MINUTES[Math.min(streak, FORM_REST_MINUTES.length - 1)]!;
-  if (seenMinute !== undefined && Math.floor(now / 60_000) - seenMinute >= rest) return 'fading';
+  if (Math.floor(now / 60_000) - seenMinute >= rest) return 'fading';
   if (streak >= 3) return 'strong';
   if (streak >= 2) return 'growing';
   return 'new';
