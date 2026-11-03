@@ -7,7 +7,7 @@
 
 import { DAY, INTERVALS, LONG_TERM_STEP, enroll, isDue, review, type SrsCard } from './srs';
 import { mergeLessons, newerCard, type SyncPayload } from './sync';
-import { nextStreak } from './sprint';
+import { answeredEarly, nextStreak } from './sprint';
 
 const KEY = 'sr.progress.v1';
 
@@ -393,10 +393,11 @@ export function recordForms(results: [key: string, correct: boolean][], now = Da
   const store = read();
   const minute = Math.floor(now / 60_000);
   for (const [k, correct] of results) {
-    const n = nextStreak(store.forms[k], correct, store.formsSeen[k], minute);
+    const early = correct && answeredEarly(store.forms[k], store.formsSeen[k], minute);
+    store.forms[k] = nextStreak(store.forms[k], correct, store.formsSeen[k], minute);
     // An early right answer leaves the rest clock alone, like early practice of lesson items.
-    if (n !== store.forms[k] || !correct || store.formsSeen[k] === undefined) store.formsSeen[k] = minute;
-    store.forms[k] = n;
+    // Any answer that counts restarts it, even at the top of the streak where the streak can't grow.
+    if (!early) store.formsSeen[k] = minute;
   }
   write(store);
 }

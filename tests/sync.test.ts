@@ -242,3 +242,33 @@ describe('merging conjugation forms', () => {
     p.resetProgress();
   });
 });
+
+describe('recording sprint answers', () => {
+  it('rests a top-streak form answered right when due, instead of leaving it due', async () => {
+    const store = new Map<string, string>();
+    (globalThis as { localStorage?: unknown }).localStorage = {
+      getItem: (k: string) => store.get(k) ?? null,
+      setItem: (k: string, v: string) => void store.set(k, v),
+      removeItem: (k: string) => void store.delete(k),
+    };
+    const p = await import('../src/speedrun/progress');
+    const { sprintQueue, conjugationPool } = await import('../src/speedrun/sprint');
+    p.resetProgress();
+    const form = conjugationPool().find((c) => c.tense === 'pres')!;
+    const DAY_MS = 86_400_000;
+    // Four right answers, each after its rest: day 0, 1, 5, 15. The streak is now at the top (4).
+    for (const d of [0, 1, 5, 15]) p.recordForms([[form.key, true]], NOW + d * DAY_MS);
+    expect(p.allForms()[form.key]).toBe(4);
+    const later = NOW + 46 * DAY_MS; // 31 days after the last: due again
+    const due = (t: number) => sprintQueue(new Set(), p.allForms(), p.allFormsSeen(), t, { maxLevel: 'A2', tense: 'pres' }).review.some((c) => c.key === form.key);
+    expect(due(later)).toBe(true);
+    p.recordForms([[form.key, true]], later);
+    expect(p.allForms()[form.key]).toBe(4);
+    expect(due(later + 60_000)).toBe(false); // answered: resting another 30 days
+    // An early right answer still leaves the clock alone.
+    const seen = p.allFormsSeen()[form.key];
+    p.recordForms([[form.key, true]], later + DAY_MS);
+    expect(p.allFormsSeen()[form.key]).toBe(seen);
+    p.resetProgress();
+  });
+});

@@ -130,9 +130,13 @@ export const FORM_TOP = 4;
  */
 export function nextStreak(n: number | undefined, correct: boolean, seenMinute: number | undefined, minute: number): number {
   if (!correct) return 0;
-  const cur = n ?? 0;
-  if (n !== undefined && seenMinute !== undefined && minute - seenMinute < FORM_REST_MINUTES[Math.min(cur, FORM_REST_MINUTES.length - 1)]!) return cur;
-  return Math.min(FORM_TOP, cur + 1);
+  if (answeredEarly(n, seenMinute, minute)) return n!;
+  return Math.min(FORM_TOP, (n ?? 0) + 1);
+}
+
+/** A form answered before it has rested its full time: the answer doesn't count toward its streak. */
+export function answeredEarly(n: number | undefined, seenMinute: number | undefined, minute: number): boolean {
+  return n !== undefined && seenMinute !== undefined && minute - seenMinute < FORM_REST_MINUTES[Math.min(n, FORM_REST_MINUTES.length - 1)]!;
 }
 
 export interface SprintQueue {
