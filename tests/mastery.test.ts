@@ -45,7 +45,7 @@ describe('grades', () => {
     expect(formGrade(1, minute - 24 * 60, NOW)).toBe('fading'); // rested a day: due again
     expect(formGrade(2, minute - 60, NOW)).toBe('growing');
     expect(formGrade(3, minute - 60, NOW)).toBe('strong');
-    expect(formGrade(3, undefined, NOW)).toBe('strong'); // synced without a date
+    expect(formGrade(3, undefined, NOW)).toBe('fading'); // no date: the sprint asks it as due, so it shows as due
     const cards = conjugationPool().slice(0, 3);
     expect(tallyForms(cards, { [cards[0]!.key]: 3 }, { [cards[0]!.key]: minute }, NOW)).toEqual({ strong: 1, growing: 0, new: 0, fading: 0, total: 3 });
   });
